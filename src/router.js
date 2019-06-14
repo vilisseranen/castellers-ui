@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+
+// Views
+import Layout from './views/Layout.vue'
+import Login from './views/Login.vue'
 
 Vue.use(Router)
 
@@ -10,16 +13,56 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+      component: Layout,
+      redirect: '/login',
+      children: [
+        {
+          path: 'login',
+          name: 'Login',
+          component: Login
+        }/* ,
+        {
+          path: 'initialize',
+          name: 'Initialize',
+          component: Initialize
+        },
+        {
+          path: 'members',
+          name: 'Members',
+          component: Members
+        },
+        {
+          path: 'memberEdit',
+          name: 'MemberAdd',
+          component: MemberEdit
+        },
+        {
+          path: 'memberEdit/:uuid',
+          name: 'MemberEdit',
+          component: MemberEdit
+        },
+        {
+          path: 'practices',
+          name: 'Practices',
+          component: Practices
+        },
+        {
+          path: 'practiceEdit',
+          name: 'PracticeAdd',
+          component: PracticeEdit
+        },
+        {
+          path: 'practiceEdit/:uuid',
+          name: 'practiceEdit',
+          component: PracticeEdit
+        },
+        {
+          path: 'events',
+          name: 'Events',
+          component: Events
+        } */
+      ]
     }
-  ]
+    /*     { path: '*', component: NotFound }
+ */ ]
 })
