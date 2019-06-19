@@ -1,0 +1,21 @@
+{
+  "bannerLayout": {
+    "title": "Les castellers de Montréal"
+  },
+  "general": {
+    "required_fields": "Els camps amb l'asterisc són obligatoris.",
+    "admin_zone": "Admin",
+    "profile_zone": "Perfil",
+    "login": "Iniciar Sessió",
+    "for_castellers": "Creat per als Castellers per "
+  },
+  "routes": {
+    "members": "Membres",
+    "memberadd": "Membres",
+    "memberedit": "Membres",
+    "login": "Iniciar Sessió",
+    "initialize": "Initialitzar",
+    "practices": "Pràtiques",
+    "practiceedit": "Pràtiques"
+}
+}

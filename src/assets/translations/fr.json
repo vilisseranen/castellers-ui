@@ -1,0 +1,22 @@
+{
+  "bannerLayout": {
+    "title": "Les castellers de Montréal",
+    "subtitle": "Planification des évènements et des pratiques"
+  },
+  "general": {
+    "required_fields": "Les champs marqués d'un astérisque rouge sont obligatoires.",
+    "admin_zone": "Admin",
+    "profile_zone": "Profil",
+    "login": "Se connecter",
+    "for_castellers": "Créé pour les Castellers par "
+  },
+  "routes": {
+    "members": "Les membres",
+    "memberadd": "Les membres",
+    "memberedit": "Les membres",
+    "login": "Se connecter",
+    "initialize": "Initialiser",
+    "practices": "Les pratiques",
+    "practiceedit": "Les pratiques"
+  }
+}
