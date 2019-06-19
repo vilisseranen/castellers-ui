@@ -14,11 +14,11 @@
 </template>
 
 <script>
-  export default {
-    methods: {
-      changeLanguage: function (lang) {
-        this.$root.setLocale(lang)
-      }
+export default {
+  methods: {
+    changeLanguage: function (lang) {
+      this.$root.setLocale(lang)
     }
   }
+}
 </script>
