@@ -37,21 +37,7 @@
         </div>
       </div>
     </section>
-
-    <div class="hero is-hidden-desktop">
-      <nav class="tabs">
-        <div class="container">
-          <ul>
-            <li class="is-active">
-              <a>Membres</a>
-            </li>
-            <li>
-              <a>Évènements</a>
-            </li>
-          </ul>
-        </div>
-      </nav>
-    </div>
+    <Menu class="hero is-hidden-desktop"></Menu>
   </div>
 </template>
 
@@ -72,7 +58,12 @@
 </style>
 
 <script>
+import Menu from '../components/Menu.vue'
+
 export default {
+  components: {
+    Menu
+  },
   mounted () {
     document.addEventListener('DOMContentLoaded', () => {
       // Get all "navbar-burger" elements

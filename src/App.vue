@@ -14,4 +14,9 @@ $footer-padding: 1.5rem 1rem 1.5rem;
 
 // Loading bulma
 @import "../node_modules/bulma/bulma";
+
+html {
+  overflow-y: auto
+}
+
 </style>

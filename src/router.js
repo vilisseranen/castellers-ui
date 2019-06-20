@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-// Views
-import Layout from './views/Layout.vue'
+import Layout from './layout/Layout.vue'
 import Login from './views/Login.vue'
+import Temp from './views/Temp.vue'
 
 Vue.use(Router)
 
@@ -20,6 +20,11 @@ export default new Router({
           path: 'login',
           name: 'Login',
           component: Login
+        },
+        {
+          path: 'temp',
+          name: 'Temp',
+          component: Temp
         }/* ,
         {
           path: 'initialize',

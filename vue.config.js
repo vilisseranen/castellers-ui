@@ -6,5 +6,10 @@ module.exports = {
       localeDir: 'assets/translations',
       enableInSFC: true
     }
+  },
+  chainWebpack: config => {
+    config.resolve
+      .symlinks(true)
+    return config
   }
 }

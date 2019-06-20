@@ -4,7 +4,11 @@
     <bannerLayout></bannerLayout>
     <section class="main-content columns">
       <!-- Menu on the left on desktop -->
-      <menuLayout></menuLayout>
+      <aside
+        class="section column is-one-fifth-desktop is-fullheight is-hidden-mobile is-hidden-tablet-only"
+      >
+        <Menu></Menu>
+      </aside>
       <div class="container column is-fluid" style="padding: 48px; margin: 0px;">
         <!-- This is the content of the page -->
         <router-view></router-view>
@@ -15,15 +19,18 @@
 </template>
 
 <script>
-import BannerLayout from '../components/BannerLayout.vue'
-import MenuLayout from '../components/MenuLayout.vue'
-import FooterLayout from '../components/FooterLayout.vue'
+import BannerLayout from './BannerLayout.vue'
+import FooterLayout from './FooterLayout.vue'
+import Menu from '../components/Menu.vue'
 
 export default {
   components: {
     BannerLayout,
-    MenuLayout,
-    FooterLayout
+    FooterLayout,
+    Menu
   }
 }
 </script>
+
+<style>
+</style>
