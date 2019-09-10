@@ -10,6 +10,13 @@
         </router-link>
       </li>
       <li>
+        <router-link to="/events" v-bind:class="{ 'is-active': routeName === 'events'}">
+          <span class="icon">
+            <i class="fa fa-thermometer"></i>
+          </span> {{ $t('routes.events') }}
+        </router-link>
+      </li>
+      <li>
         <router-link to="/temp" v-bind:class="{ 'is-active': routeName === 'temp'}">
           <span class="icon">
             <i class="fa fa-thermometer"></i>
@@ -23,6 +30,9 @@
           <ul>
             <li v-bind:class="{ 'is-active': routeName === 'login'}">
               <router-link to="/login">Login</router-link>
+            </li>
+            <li v-bind:class="{ 'is-active': routeName === 'events'}">
+              <router-link to="/events">Temp</router-link>
             </li>
             <li v-bind:class="{ 'is-active': routeName === 'temp'}">
               <router-link to="/temp">Temp</router-link>

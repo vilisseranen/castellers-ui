@@ -3,6 +3,7 @@ import Router from 'vue-router'
 
 import Layout from './layout/Layout.vue'
 import Login from './views/Login.vue'
+import Events from './views/Events.vue'
 import Temp from './views/Temp.vue'
 
 Vue.use(Router)
@@ -25,6 +26,11 @@ export default new Router({
           path: 'temp',
           name: 'Temp',
           component: Temp
+        },
+        {
+          path: 'events',
+          name: 'Events',
+          component: Events
         }/* ,
         {
           path: 'initialize',

@@ -18,5 +18,8 @@
     "initialize": "Initialize",
     "practices": "Practices",
     "practiceedit": "Practives"
+  },
+  "loginForm": {
+    "howTo": "How to connect?"
   }
 }

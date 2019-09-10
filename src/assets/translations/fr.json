@@ -17,6 +17,14 @@
     "login": "Se connecter",
     "initialize": "Initialiser",
     "practices": "Les pratiques",
-    "practiceedit": "Les pratiques"
+    "practiceedit": "Les pratiques",
+    "events": "Évènements et pratiques"
+  },
+  "loginForm": {
+    "howTo": "Comment se connecter ?",
+    "howToDescription": "La façon la plus simple de s'authentifier est de cliquer sur le lien dans le courriel que tu as reçu lors de l'activation de ton compte: il va t'amener sur cette page et te connecter automatiquement.",
+    "id": "Identifiant",
+    "code": "Code",
+    "loginButton": "Se connecter"
   }
 }
