@@ -1,13 +1,32 @@
 #banner {
-	background:  url(../img/castells_bg_header.jpg) center / cover;
+  background: url(assets/castells_bg_header.jpg) center / cover;
 }
 
 #banner-overlay {
-  height:100%;
-  width:100%;
-  background-color:black;
-  position:absolute;
-  top:0;
-  left:0;
-  opacity:0.2
+  height: 100%;
+  width: 100%;
+  background-color: black;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0.3;
+}
+
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 1em 0;
+  padding: 0;
+}
+
+.member-icon {
+  margin-left: 8px;
+}
+
+.required:after {
+  content:" *";
+  color:#c91414;
+  margin-right: 5px;
 }

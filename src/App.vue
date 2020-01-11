@@ -3,20 +3,10 @@
 </template>
 
 <style lang="scss">
-// Overrides must come before we load bulma
-@import "../node_modules/bulma/sass/utilities/initial-variables";
-$link: hsl(217,71%, 53%);
-$navbar-item-color: $white-ter;
-$navbar-item-active-color: $link;
-$navbar-item-active-background-color: $white-bis;
-$navbar-background-color: rgba(0,0,0,0.3);
-$footer-padding: 1.5rem 1rem 1.5rem;
-
-// Loading bulma
+@import "scss/main.scss";
 @import "../node_modules/bulma/bulma";
 
 html {
-  overflow-y: auto
+  overflow-y: auto;
 }
-
 </style>

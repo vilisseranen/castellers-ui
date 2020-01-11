@@ -1,49 +1,77 @@
 <template>
-  <div>
-    <div class="column">
-          <div class="box">
-            <article class="media">
-              <div class="media-content">
-                <div class="content">
-                  <p>
-                    <strong>Relais pour la vie</strong>
-                    <br>
-                    <small>Parc Angrignon</small>
-                    <small>31/05/2019</small>
-                    <br>On présente dans un parc de Montréal pour la bonne cause !
-                    <br>
-                    <span class="tag is-success">Je viens</span>
-                    <span class="tag is-warning">Présentation</span>
-                    <br>
-                  </p>
-                </div>
-                <nav class="level is-mobile">
-                  <div class="level-left">
-                    <a href="#" class="level-item">
-                      <span class="icon has-text-info">
-                        <i class="fas fa-edit"></i>
-                      </span>
-                    </a>
-                    <a href="#" class="level-item">
-                      <span class="icon has-text-danger">
-                        <i class="fas fa-trash"></i>
-                      </span>
-                    </a>
-                    <a href="#" class="level-item">
-                      <span class="icon">
-                        <i class="far fa-thumbs-up"></i>
-                      </span>
-                    </a>
-                    <a href="#" class="level-item">
-                      <span class="icon">
-                        <i class="far fa-thumbs-down"></i>
-                      </span>
-                    </a>
-                  </div>
-                </nav>
+  <div class="column is-3">
+    <div class="card">
+      <article class="card-content">
+          <div class="content">
+            <div>
+              <strong>{{event.name}}</strong>
+              <br />
+              <small>{{$t('events.onThe')}} {{event.date}} {{$t('events.from')}} {{event.start}} {{$t('events.to')}} {{event.end}}</small>
+              <br />
+              {{event.description}}
+              <br />
+              <div class="tags">
+                <span
+                  class="tag is-success"
+                  v-if="event.participation == 'yes'"
+                >{{$t('events.participationYes')}}</span>
+                <span
+                  class="tag is-danger"
+                  v-if="event.participation == 'no'"
+                >{{$t('events.participationNo')}}</span>
+                <span class="tag is-warning" v-if="event.type=='presentation'">{{$t('events.presentation')}}</span>
+                <span class="tag is-info" v-if="event.type=='practice'">{{$t('events.practice')}}</span>
               </div>
-            </article>
+            </div>
           </div>
-        </div>
+          <nav class="level is-mobile" v-if="memberType==='admin'">
+            <div class="level-left">
+              <a class="level-item" v-on:click="edit(event.uuid)">
+                <span class="icon has-text-info">
+                  <i class="fas fa-edit"></i>
+                </span>
+              </a>
+              <a class="level-item" v-on:click="remove(event)">
+                <span class="icon has-text-danger">
+                  <i class="fas fa-trash"></i>
+                </span>
+              </a>
+            </div>
+          </nav>
+      </article>
+      <footer class="card-footer">
+        <a class="card-footer-item"  v-on:click="participate(event.uuid, 'yes')">
+          <span class="icon">
+            <i class="far fa-thumbs-up"></i>
+          </span>
+        </a>
+        <a class="card-footer-item"  v-on:click="participate(event.uuid, 'no')">
+          <span class="icon">
+            <i class="far fa-thumbs-down"></i>
+          </span>
+        </a>
+      </footer>
+    </div>
   </div>
 </template>
+
+<script>
+
+export default {
+  props: {
+    event: Object,
+    memberType: String
+  },
+  methods: {
+    participate (eventUuid, participation) {
+      this.$emit('participate', eventUuid, participation)
+    },
+    edit (eventUuid) {
+      this.$emit('edit', eventUuid)
+    },
+    remove (event) {
+      this.$emit('remove', event)
+    }
+  }
+}
+</script>

@@ -4,7 +4,10 @@ import Router from 'vue-router'
 import Layout from './layout/Layout.vue'
 import Login from './views/Login.vue'
 import Events from './views/Events.vue'
-import Temp from './views/Temp.vue'
+import Members from './views/Members.vue'
+import MemberEdit from './views/MemberEdit.vue'
+import EventEdit from './views/EventEdit.vue'
+import Initialize from './views/Initialize.vue'
 
 Vue.use(Router)
 
@@ -18,24 +21,19 @@ export default new Router({
       redirect: '/login',
       children: [
         {
+          path: 'initialize',
+          name: 'Initialize',
+          component: Initialize
+        },
+        {
           path: 'login',
           name: 'Login',
           component: Login
         },
         {
-          path: 'temp',
-          name: 'Temp',
-          component: Temp
-        },
-        {
           path: 'events',
           name: 'Events',
           component: Events
-        }/* ,
-        {
-          path: 'initialize',
-          name: 'Initialize',
-          component: Initialize
         },
         {
           path: 'members',
@@ -53,25 +51,15 @@ export default new Router({
           component: MemberEdit
         },
         {
-          path: 'practices',
-          name: 'Practices',
-          component: Practices
+          path: 'eventEdit',
+          name: 'EventAdd',
+          component: EventEdit
         },
         {
-          path: 'practiceEdit',
-          name: 'PracticeAdd',
-          component: PracticeEdit
-        },
-        {
-          path: 'practiceEdit/:uuid',
-          name: 'practiceEdit',
-          component: PracticeEdit
-        },
-        {
-          path: 'events',
-          name: 'Events',
-          component: Events
-        } */
+          path: 'eventEdit/:uuid',
+          name: 'eventEdit',
+          component: EventEdit
+        }
       ]
     }
     /*     { path: '*', component: NotFound }

@@ -11,5 +11,13 @@ module.exports = {
     config.resolve
       .symlinks(true)
     return config
+  },
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8080',
+        changeOrigin: true
+      }
+    }
   }
 }

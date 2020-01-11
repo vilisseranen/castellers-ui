@@ -15,11 +15,20 @@
             </div>
             <div id="navbarMenuHeroA" class="navbar-menu">
               <div class="navbar-end">
-                <a class="navbar-item is-active">Mon Profil</a>
-                <span class="navbar-item">
-                  <a class="button is-primary is-inverted">
-                    <span>Déconnection</span>
+                <router-link
+                  v-if="this.uuid"
+                  class="navbar-item is-active"
+                  :to="{ name: 'MemberEdit', params: { uuid: uuid}}"
+                >{{ $t('bannerLayout.profile') }}</router-link>
+                <span class="navbar-item" v-if="this.uuid">
+                  <a v-on:click="disconnect()" class="button is-success is-inverted">
+                    <span>{{ $t('bannerLayout.disconnect') }}</span>
                   </a>
+                </span>
+                <span class="navbar-item" v-if="!this.uuid">
+                  <router-link class="button is-primary is-inverted" :to="{name: 'Login'}">
+                    <span>{{ $t('bannerLayout.connect') }}</span>
+                  </router-link>
                 </span>
               </div>
             </div>
@@ -41,26 +50,20 @@
   </div>
 </template>
 
-<style lang="scss">
-#banner {
-  background: url(../assets/castells_bg_header.jpg) center / cover;
-}
-
-#banner-overlay {
-  height: 100%;
-  width: 100%;
-  background-color: black;
-  position: absolute;
-  top: 0;
-  left: 0;
-  opacity: 0.3;
-}
-</style>
-
 <script>
+import { mapGetters, mapMutations } from 'vuex'
+
 import Menu from '../components/Menu.vue'
 
 export default {
+  computed: {
+    ...mapGetters(['uuid', 'code', 'type'])
+  },
+  methods: {
+    ...mapMutations({
+      disconnect: 'disconnect'
+    })
+  },
   components: {
     Menu
   },

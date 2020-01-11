@@ -3,17 +3,19 @@
     <p class="menu-label is-hidden-touch is-hidden-mobile is-hidden-tablet-only">Menu</p>
     <ul class="menu-list is-hidden-mobile is-hidden-tablet-only">
       <li>
-        <router-link to="/login" v-bind:class="{ 'is-active': routeName === 'login'}">
+        <router-link to="/events" v-bind:class="{ 'is-active': routeName === 'events'}">
           <span class="icon">
-            <i class="fa fa-table"></i>
-          </span> Login
+            <i class="fa fa-calendar-check"></i>
+          </span>
+          {{ $t('routes.events') }}
         </router-link>
       </li>
       <li>
-        <router-link to="/events" v-bind:class="{ 'is-active': routeName === 'events'}">
+        <router-link to="/members" v-bind:class="{ 'is-active': routeName === 'members'}">
           <span class="icon">
-            <i class="fa fa-thermometer"></i>
-          </span> {{ $t('routes.events') }}
+            <i class="fa fa-address-card"></i>
+          </span>
+          {{ $t('routes.members') }}
         </router-link>
       </li>
       <li>
@@ -28,11 +30,19 @@
       <nav class="tabs">
         <div class="container">
           <ul>
-            <li v-bind:class="{ 'is-active': routeName === 'login'}">
-              <router-link to="/login">Login</router-link>
-            </li>
             <li v-bind:class="{ 'is-active': routeName === 'events'}">
-              <router-link to="/events">Temp</router-link>
+              <router-link to="/events">
+                <span class="icon">
+                  <i class="fa fa-calendar-check"></i>
+                </span>
+              </router-link>
+            </li>
+            <li v-bind:class="{ 'is-active': routeName === 'members'}">
+              <router-link to="/members">
+                <span class="icon">
+                  <i class="fa fa-address-card"></i>
+                </span>
+              </router-link>
             </li>
             <li v-bind:class="{ 'is-active': routeName === 'temp'}">
               <router-link to="/temp">Temp</router-link>

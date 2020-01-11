@@ -1,22 +1,62 @@
 <template>
-  <div>
-    <h1>{{ $t('loginForm.howTo') }}</h1>
-    <p>{{ $t('loginForm.howToDescription') }}</p>
+  <div class="box">
+    <p class="title is-4">{{ $t('loginForm.howTo') }}</p>
+    <p class="subtitle is-6">{{ $t('loginForm.howToDescription') }}</p>
     <form>
-      <p>{{ $t('loginForm.id') }}</p><input type='text' value='335b9fba95a1578baa5a2b9560e3566f174ed3a7'/>
-      <p>{{ $t('loginForm.code') }}</p><input type='text' value='335b9fba95a1'/>
-      <button type='submit' @click.prevent="login">{{ $t('loginForm.loginButton') }}</button>
+      <div class="field">
+        <label class="label">{{ $t('loginForm.id') }}</label>
+        <input
+          class="input"
+          type="text"
+          placeholder="335b9fba95a1578baa5a2b9560e3566f174ed3a7"
+          v-model="member.uuid"
+        />
+      </div>
+      <div class="field">
+        <label class="label">{{ $t('loginForm.code') }}</label>
+        <input class="input" type="text" placeholder="335b9fba95a1" v-model="member.code" />
+      </div>
+      <div class="field is-grouped is-grouped-right">
+        <button
+          class="button is-primary"
+          type="submit"
+          @click.prevent="login"
+        >{{ $t('loginForm.loginButton') }}</button>
+      </div>
     </form>
   </div>
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+import axios from 'axios'
+
 export default {
+  data () {
+    return {
+      member: {}
+    }
+  },
   methods: {
+    ...mapMutations({
+      authenticate: 'authenticate'
+    }),
     login () {
-      console.log('login in')
+      var self = this
+      axios
+        .get('/api/members/' + this.member.uuid, {
+          headers: { 'X-Member-Code': this.member.code }
+        })
+        .then(function (response) {
+          self.member.type = response.data.type
+          self.authenticate(self.member)
+          self.$root.setLocale(response.data.language)
+        })
+        .catch(err => {
+          console.log(err)
+          self.$notifyNOK(self.$t('loginForm.notifyError'))
+        })
     }
   }
 }
-
 </script>
