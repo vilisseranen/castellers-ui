@@ -18,13 +18,6 @@
           {{ $t('routes.members') }}
         </router-link>
       </li>
-      <li>
-        <router-link to="/temp" v-bind:class="{ 'is-active': routeName === 'temp'}">
-          <span class="icon">
-            <i class="fa fa-thermometer"></i>
-          </span> Temp
-        </router-link>
-      </li>
     </ul>
     <div class="hero is-hidden-desktop">
       <nav class="tabs">
@@ -43,9 +36,6 @@
                   <i class="fa fa-address-card"></i>
                 </span>
               </router-link>
-            </li>
-            <li v-bind:class="{ 'is-active': routeName === 'temp'}">
-              <router-link to="/temp">Temp</router-link>
             </li>
           </ul>
         </div>
