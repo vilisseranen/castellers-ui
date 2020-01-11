@@ -14,3 +14,8 @@ before_install:
 script:
 - npm run lint
 - npm run build
+
+deploy:
+  skip_cleanup: true
+  provider: script
+  script: bash deploy.sh
