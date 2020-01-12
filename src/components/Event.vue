@@ -39,7 +39,7 @@
             </div>
           </nav>
       </article>
-      <footer class="card-footer">
+      <footer class="card-footer" v-if="memberType==='admin' || memberType ==='member'">
         <a class="card-footer-item"  v-on:click="participate(event.uuid, 'yes')">
           <span class="icon">
             <i class="fas fa-check has-text-success"></i>

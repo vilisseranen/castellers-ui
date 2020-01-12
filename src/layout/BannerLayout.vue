@@ -46,7 +46,7 @@
         </div>
       </div>
     </section>
-    <Menu class="hero is-hidden-desktop"></Menu>
+    <Menu class="hero is-hidden-desktop" :type="type"></Menu>
   </div>
 </template>
 

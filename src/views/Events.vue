@@ -2,7 +2,7 @@
   <div>
     <p class="title is-5">{{ $t('events.title') }}</p>
     <div class="columns">
-      <b-field class="column">
+      <b-field class="column"  v-if="type==='admin'">
         <button class="button field is-info" @click="addEvent">
           <span class="icon">
             <i class="fa fa-calendar-plus"></i>
