@@ -2,19 +2,27 @@
   <div>
     <p class="title is-5">{{ $t('events.title') }}</p>
     <div class="columns">
-    <b-field class="column">
-      <button class="button field is-info" @click="addEvent">
-        <span class="icon">
-          <i class="fa fa-calendar-plus"></i>
-        </span>
-        <span>{{ $t('events.addEvent')}}</span>
-      </button>
-    </b-field>
-    <b-field grouped class="column" position="is-right">
-            <b-switch v-model="showPractices" type="is-info" v-on:input="filterEvents('practices')">{{$t('events.showPractices')}}</b-switch>
-            <b-switch v-model="showPresentations" type="is-warning" v-on:input="filterEvents('presentations')">{{$t('events.showPresentations')}}</b-switch>
-        </b-field>
-        </div>
+      <b-field class="column">
+        <button class="button field is-info" @click="addEvent">
+          <span class="icon">
+            <i class="fa fa-calendar-plus"></i>
+          </span>
+          <span>{{ $t('events.addEvent')}}</span>
+        </button>
+      </b-field>
+      <b-field grouped class="column" position="is-right">
+        <b-switch
+          v-model="showPractices"
+          type="is-info"
+          v-on:input="filterEvents('practices')"
+        >{{$t('events.showPractices')}}</b-switch>
+        <b-switch
+          v-model="showPresentations"
+          type="is-warning"
+          v-on:input="filterEvents('presentations')"
+        >{{$t('events.showPresentations')}}</b-switch>
+      </b-field>
+    </div>
     <div class="columns is-multiline">
       <event
         v-for="event in filteredEvents"
@@ -58,7 +66,7 @@ export default {
     return {
       events: [],
       filteredEvents: [],
-      allEvents: true,
+      allEvents: false,
       showPractices: true,
       showPresentations: true
     }
@@ -106,9 +114,13 @@ export default {
       }
       // Filter results
       if (this.showPractices === false) {
-        this.filteredEvents = this.events.filter(event => event.type !== 'practice')
+        this.filteredEvents = this.events.filter(
+          event => event.type !== 'practice'
+        )
       } else if (this.showPresentations === false) {
-        this.filteredEvents = this.events.filter(event => event.type !== 'presentation')
+        this.filteredEvents = this.events.filter(
+          event => event.type !== 'presentation'
+        )
       } else {
         this.filteredEvents = this.events
       }

@@ -35,6 +35,15 @@ new Vue({
         this.$router.push(this.$route.query.next)
       }
     },
+    checkAction () {
+      if ('action' in this.$route.query) {
+        var action = {}
+        action.type = this.$route.query.action
+        action.objectUUID = this.$route.query.objectUUID
+        action.payload = this.$route.query.payload
+        this.$store.commit('setAction', action)
+      }
+    },
     checkCredentials () {
       var self = this
       var cookieMember = this.getCookie('member')
@@ -77,6 +86,7 @@ new Vue({
     }
   },
   mounted () {
+    this.checkAction() // check for an action to perform
     this.checkCredentials() // log in and go to next page
   }
 }).$mount('#app')
