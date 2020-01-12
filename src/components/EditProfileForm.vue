@@ -1,6 +1,7 @@
 <template>
   <div class="box">
-    <p class="title is-3">{{ $t('members.' + actionLabel) }}</p>
+    <p class="title is-3" v-if="actionLabel==='update'">{{ $t('members.update') }}</p>
+    <p class="title is-3" v-if="actionLabel==='create'">{{ $t('members.create') }}</p>
     <div class="columns is-multiline">
       <div class="field column is-4">
         <fieldset disabled>
@@ -179,7 +180,14 @@
                 type="submit"
                 class="button is-info"
                 @click.prevent="memberEdit"
-              >{{ $t('members.' + actionLabel + 'Button') }}</button>
+                v-if="actionLabel==='update'"
+              >{{ $t('members.updateButton') }}</button>
+              <button
+                type="submit"
+                class="button is-info"
+                @click.prevent="memberEdit"
+                v-if="actionLabel==='create'"
+              >{{ $t('members.createButton') }}</button>
             </p>
           </div>
           <div class="field">
@@ -337,10 +345,10 @@ export default {
         { headers: { 'X-Member-Code': this.code } }
       ).then(function (response) {
         self.updating = false
-        self.$notifyOK(self.$t('members.notify_success'))
+        self.$notifyOK(self.$t('members.notifySuccess'))
       }).catch(function (error) {
         self.updating = false
-        self.$notifyNOK(self.$t('members.notify_error'))
+        self.$notifyNOK(self.$t('members.notifyFailure'))
         console.log(error)
       })
     },

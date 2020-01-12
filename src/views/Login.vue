@@ -28,7 +28,10 @@
       <PrettyCheck
         class="p-default p-curve"
         v-model="autoconnect"
-      >{{ $t('login.autoconnect_' + autoconnectLabel) }}</PrettyCheck>
+      >
+        <span v-if="autoconnectLabel==='yes'">{{ $t('login.autoconnectYes') }}</span>
+        <span v-if="autoconnectLabel==='no'">{{ $t('login.autoconnectNo') }}</span>
+      </PrettyCheck>
       <hr />
       <div slot="footer">
         <p>{{ $t('login.cookie_warning') }}</p>

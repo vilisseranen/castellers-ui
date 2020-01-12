@@ -1,6 +1,7 @@
 <template>
   <div class="box">
-    <p class="title is-3">{{ $t('events.' + actionLabel) }}</p>
+    <p class="title is-3" v-if="actionLabel==='update'">{{ $t('events.update') }}</p>
+    <p class="title is-3" v-if="actionLabel==='create'">{{ $t('events.create') }}</p>
     <div class="columns is-multiline">
       <div class="field column is-3">
         <fieldset disabled>
@@ -105,7 +106,14 @@
                 type="submit"
                 class="button is-info"
                 @click.prevent="eventEdit"
-              >{{ $t('events.' + actionLabel + 'Button') }}</button>
+                v-if="actionLabel==='update'">
+              >{{ $t('events.updateButton') }}</button>
+              <button
+                type="submit"
+                class="button is-info"
+                @click.prevent="eventEdit"
+                v-if="actionLabel==='create'">
+              >{{ $t('events.createButton') }}</button>
             </p>
           </div>
         </div>

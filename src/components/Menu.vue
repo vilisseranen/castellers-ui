@@ -10,7 +10,7 @@
           {{ $t('routes.events') }}
         </router-link>
       </li>
-      <li>
+      <li v-if="this.type==='admin'">
         <router-link to="/members" v-bind:class="{ 'is-active': routeName === 'members'}">
           <span class="icon">
             <i class="fa fa-address-card"></i>
@@ -30,7 +30,7 @@
                 </span>
               </router-link>
             </li>
-            <li v-bind:class="{ 'is-active': routeName === 'members'}">
+            <li v-bind:class="{ 'is-active': routeName === 'members'}"  v-if="this.type==='admin'">
               <router-link to="/members">
                 <span class="icon">
                   <i class="fa fa-address-card"></i>
@@ -46,11 +46,17 @@
 
 <script>
 export default {
+  props: {
+    type: String
+  },
   computed: {
     routeName () {
       const { path } = this.$route
       return path.split('/')[1].toLowerCase()
     }
+  },
+  mounted () {
+    console.log(this.type)
   }
 }
 </script>

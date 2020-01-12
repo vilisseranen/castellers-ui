@@ -44,8 +44,10 @@
           field="type"
           :label="$t('members.type')"
           searchable
-        >{{props.row.type}}</b-table-column>
-
+        >
+          <span v-if="props.row.type==='member'">{{$t('members.memberType')}}</span>
+          <span v-if="props.row.type==='admin'">{{$t('members.adminType')}}</span>
+        </b-table-column>
         <b-table-column key="actions" :label="$t('members.actions')">
           <a href="#">
             <span class="icon has-text-info" v-on:click="editMemberUuid(props.row.uuid)">
@@ -96,7 +98,6 @@ export default {
       ).then(function (response) {
         self.members = response.data
         for (var i = 0; i < self.members.length; i++) {
-          self.members[i].type = self.$t('members.' + self.members[i].type + 'Type')
           self.members[i].roles = self.members[i].roles.join(', ')
         }
       }).catch(err => console.log(err))
