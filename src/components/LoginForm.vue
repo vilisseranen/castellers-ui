@@ -1,10 +1,10 @@
 <template>
   <div class="box">
-    <p class="title is-4">{{ $t('loginForm.howTo') }}</p>
-    <p class="subtitle is-6">{{ $t('loginForm.howToDescription') }}</p>
+    <p class="title is-4">{{ $t('login.howTo') }}</p>
+    <p class="subtitle is-6">{{ $t('login.howToDescription') }}</p>
     <form>
       <div class="field">
-        <label class="label">{{ $t('loginForm.id') }}</label>
+        <label class="label">{{ $t('login.id') }}</label>
         <input
           class="input"
           type="text"
@@ -13,7 +13,7 @@
         />
       </div>
       <div class="field">
-        <label class="label">{{ $t('loginForm.code') }}</label>
+        <label class="label">{{ $t('login.code') }}</label>
         <input class="input" type="text" placeholder="335b9fba95a1" v-model="member.code" />
       </div>
       <div class="field is-grouped is-grouped-right">
@@ -21,7 +21,7 @@
           class="button is-primary"
           type="submit"
           @click.prevent="login"
-        >{{ $t('loginForm.loginButton') }}</button>
+        >{{ $t('login.loginButton') }}</button>
       </div>
     </form>
   </div>
@@ -54,7 +54,7 @@ export default {
         })
         .catch(err => {
           console.log(err)
-          self.$notifyNOK(self.$t('loginForm.notifyError'))
+          self.$notifyNOK(self.$t('login.notifyError'))
         })
     }
   }

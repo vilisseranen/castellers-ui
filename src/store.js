@@ -28,6 +28,9 @@ export default new Vuex.Store({
       state.action.type = payload.type
       state.action.objectUUID = payload.objectUUID
       state.action.payload = payload.payload
+    },
+    setLanguage (state, locale) {
+      state.locale = locale
     }
   },
   getters: {

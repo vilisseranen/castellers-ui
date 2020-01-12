@@ -7,7 +7,7 @@
         <a v-bind:class="[ this.$i18n.locale == 'cat' ? 'button is-focused' : 'button' ]" v-on:click="changeLanguage('cat')">Català</a>
     </div>
     <div class="column has-text-right">
-      <p>Créé pour les Castellers par <a href='https://github.com/vilisseranen'>Clément Contini</a></p>
+      <p>{{$t('general.forCastellers')}}<a href='https://github.com/vilisseranen'>Clément Contini</a></p>
     </div>
     </div>
   </footer>

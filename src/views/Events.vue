@@ -7,7 +7,7 @@
           <span class="icon">
             <i class="fa fa-calendar-plus"></i>
           </span>
-          <span>{{ $t('events.addEvent')}}</span>
+          <span>{{ $t('events.create')}}</span>
         </button>
       </b-field>
       <b-field grouped class="column" position="is-right">

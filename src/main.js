@@ -29,6 +29,7 @@ new Vue({
   methods: {
     setLocale: function (locale) {
       this.$i18n.locale = locale
+      this.$store.commit('setLanguage', locale)
     },
     globalRedirect () {
       if ('next' in this.$route.query) {

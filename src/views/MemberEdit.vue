@@ -44,7 +44,10 @@ export default {
         ).then(function (response) {
           self.updating = false
           self.$notifyOK(self.$t('members.notifySuccess'))
-          self.$emit('updateUser', response.data.uuid)
+          // If changing own profile, update language settings
+          if (response.data.uuid === self.uuid) {
+            self.$root.setLocale(response.data.language)
+          }
         }).catch(function (error) {
           self.updating = false
           self.$notifyNOK(self.$t('members.notifyFailure'))
@@ -58,7 +61,6 @@ export default {
         ).then(function (response) {
           self.updating = false
           self.$notifyOK(self.$t('members.notifySuccess'))
-          self.$emit('updateUser', response.data.uuid)
         }).catch(function (error) {
           self.updating = false
           self.$notifyNOK(self.$t('members.notifyFailure'))
