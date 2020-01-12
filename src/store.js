@@ -23,6 +23,11 @@ export default new Vuex.Store({
       state.auth.uuid = ''
       state.auth.code = ''
       state.auth.type = ''
+    },
+    setAction (state, payload) {
+      state.action.type = payload.type
+      state.action.objectUUID = payload.objectUUID
+      state.action.payload = payload.payload
     }
   },
   getters: {

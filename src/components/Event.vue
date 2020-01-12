@@ -42,12 +42,12 @@
       <footer class="card-footer">
         <a class="card-footer-item"  v-on:click="participate(event.uuid, 'yes')">
           <span class="icon">
-            <i class="far fa-thumbs-up"></i>
+            <i class="fas fa-check has-text-success"></i>
           </span>
         </a>
         <a class="card-footer-item"  v-on:click="participate(event.uuid, 'no')">
           <span class="icon">
-            <i class="far fa-thumbs-down"></i>
+            <i class="fas fa-times has-text-danger"></i>
           </span>
         </a>
       </footer>
