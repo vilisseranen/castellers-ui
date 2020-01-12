@@ -107,13 +107,13 @@
                 class="button is-info"
                 @click.prevent="eventEdit"
                 v-if="actionLabel==='update'">
-              >{{ $t('events.updateButton') }}</button>
+              {{ $t('events.updateButton') }}</button>
               <button
                 type="submit"
                 class="button is-info"
                 @click.prevent="eventEdit"
                 v-if="actionLabel==='create'">
-              >{{ $t('events.createButton') }}</button>
+              {{ $t('events.createButton') }}</button>
             </p>
           </div>
         </div>
