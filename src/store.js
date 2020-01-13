@@ -10,6 +10,11 @@ export default new Vuex.Store({
       code: '',
       type: ''
     },
+    action: {
+      type: '',
+      objectUUID: '',
+      payload: ''
+    },
     locale: ''
   },
   mutations: {
@@ -37,6 +42,7 @@ export default new Vuex.Store({
     uuid: (state) => state.auth.uuid,
     code: (state) => state.auth.code,
     type: (state) => state.auth.type,
-    language: (state) => state.locale
+    language: (state) => state.locale,
+    action: (state) => state.action
   }
 })

@@ -40,7 +40,7 @@
 <script>
 import Event from '../components/Event.vue'
 import axios from 'axios'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import { eventMixin } from '../mixins/events.js'
 
 export default {
@@ -56,6 +56,7 @@ export default {
   },
   mounted () {
     this.listEvents()
+    this.checkAction()
   },
   watch: {
     uuid: function (uuid) {
@@ -72,16 +73,23 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['setAction']),
+    checkAction () {
+      if (this.action.type === 'participateEvent') {
+        this.participate(this.action.objectUUID, this.action.payload)
+        this.setAction({ type: '', objectUUID: '', payload: '' })
+      }
+    },
     listEvents () {
       var self = this
       var url
       // If admin we will see attendance
       if (this.uuid && this.type === 'admin') {
         url = `/api/admins/${self.uuid}/events?start=${this.startTimestamp}`
-        // If user we will see our participation
+      // If user we will see our participation
       } else if (this.uuid) {
         url = `/api/members/${self.uuid}/events?start=${this.startTimestamp}`
-        // We will just see events
+      // We will just see events
       } else {
         url = `/api/events?start=${this.startTimestamp}`
       }
@@ -103,7 +111,7 @@ export default {
         .catch(err => console.log(err))
     },
     filterEvents (type) {
-      // Prevent from displaying neither practices nor events
+    // Prevent from displaying neither practices nor events
       if (this.showPractices === false && this.showPresentations === false) {
         if (type === 'practices') {
           this.showPresentations = true

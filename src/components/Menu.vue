@@ -54,9 +54,6 @@ export default {
       const { path } = this.$route
       return path.split('/')[1].toLowerCase()
     }
-  },
-  mounted () {
-    console.log(this.type)
   }
 }
 </script>
