@@ -143,14 +143,18 @@ export default {
     PrettyRadio
   },
   data () {
-    var now = new Date(Date.now())
+    var s = new Date(Date.now())
+    s.setDate(s.getDate() + (4 + 7 - s.getDay()) % 7) // next thursday
+    s.setHours(18, 45) // at 6:45PM
+    var e = new Date(s)
+    e.setHours(21, 30)
     var table = {
       data: []
     }
     return {
       event: {
-        'startDate': Math.trunc(now.valueOf() / 1000),
-        'endDate': Math.trunc(now.valueOf() / 1000),
+        'startDate': Math.trunc(s.valueOf() / 1000),
+        'endDate': Math.trunc(e.valueOf() / 1000),
         'recurring': {
           'interval': '1w',
           'until': 0
