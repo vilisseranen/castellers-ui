@@ -25,15 +25,15 @@
           <ul>
             <li v-bind:class="{ 'is-active': routeName === 'events'}">
               <router-link to="/events">
-                <span class="icon">
-                  <i class="fa fa-calendar-check"></i>
+                <span class="icon is-medium">
+                  <i class="fa fa-2x fa-calendar-check"></i>
                 </span>
               </router-link>
             </li>
             <li v-bind:class="{ 'is-active': routeName === 'members'}"  v-if="this.type==='admin'">
               <router-link to="/members">
-                <span class="icon">
-                  <i class="fa fa-address-card"></i>
+                <span class="icon is-medium">
+                  <i class="fa fa-2x fa-address-card"></i>
                 </span>
               </router-link>
             </li>
