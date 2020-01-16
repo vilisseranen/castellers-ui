@@ -118,6 +118,11 @@
     "type": "Type",
     "practiceType": "Pratique",
     "presentationType": "Présentation",
-    "selectDate": "Choisir la date"
+    "selectDate": "Choisir la date",
+    "location": "Lieu",
+    "locationDescription": "Lieu de la pratique (exemple: Palestre du collège Brébeuf)",
+    "description": "Description de l'évènement",
+    "descriptionDescription": "Ajouter une description à l'évènement, par exemple:\n- Ce que nous allons pratiquer\n- Un évènement notable",
+    "noteLocation": "La position sur la carte ne sera enregistrée que si un lieu est spécifier dans le champ de texte."
   }
 }

@@ -30,3 +30,9 @@ hr {
   color:#c91414;
   margin-right: 5px;
 }
+
+.note:after {
+  content: " *";
+  color: hsl(204, 86%, 53%);
+  margin-right: 5px;
+}

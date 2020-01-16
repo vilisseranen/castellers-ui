@@ -98,6 +98,36 @@
           :minute-step="15"
         ></datetime>
       </div>
+      <div class="column is-12">
+        <div class="columns">
+          <div class="field is-6 column">
+          <label class="label note">{{$t('events.location')}}</label>
+          <div class="control is-expanded" style="margin-bottom: 10px;">
+            <input
+              class="input"
+              type="text"
+              :placeholder="$t('events.locationDescription')"
+              v-model="currentEvent.locationName"
+            />
+          </div>
+          <l-map :zoom="zoom" :center="currentEvent.location"  @click="setLocation" style="height:400px;margin: 0;">
+            <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
+            <l-marker :lat-lng="currentEvent.location"></l-marker>
+          </l-map>
+        </div>
+        <div class="field is-6 column">
+          <label class="label">{{$t('events.description')}}</label>
+          <div class="control is-expanded" style="margin-bottom: 10px;">
+            <textarea
+              class="textarea"
+              type="text"
+              :placeholder="$t('events.descriptionDescription')"
+              v-model="currentEvent.description"
+            ></textarea>
+          </div>
+          </div>
+        </div>
+      </div>
       <div class="field is-12 column">
         <div class="field-body">
           <div class="field">
@@ -124,6 +154,10 @@
       <span class="required"></span>
       {{ $t('general.requiredFields') }}
     </div>
+    <div>
+      <span class="note"></span>
+      {{ $t('events.noteLocation') }}
+    </div>
     <b-loading :is-full-page="true" :active.sync="isLoading" :can-cancel="false"></b-loading>
   </div>
 </template>
@@ -133,14 +167,32 @@ import axios from 'axios'
 import { mapGetters } from 'vuex'
 import { Datetime } from 'vue-datetime'
 import PrettyRadio from 'pretty-checkbox-vue/radio'
+import { LMap, LTileLayer, LMarker } from 'vue2-leaflet'
 
 import 'vue-datetime/dist/vue-datetime.css'
 import 'pretty-checkbox/dist/pretty-checkbox.min.css'
 
+import { Icon } from 'leaflet'
+import 'leaflet/dist/leaflet.css'
+
+// this part resolve an issue where the markers would not appear
+delete Icon.Default.prototype._getIconUrl
+
+Icon.Default.mergeOptions({
+  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+  iconUrl: require('leaflet/dist/images/marker-icon.png'),
+  shadowUrl: require('leaflet/dist/images/marker-shadow.png')
+})
+
+var L = window.L
+
 export default {
   components: {
     Datetime,
-    PrettyRadio
+    PrettyRadio,
+    LMap,
+    LTileLayer,
+    LMarker
   },
   data () {
     var s = new Date(Date.now())
@@ -159,12 +211,22 @@ export default {
           'interval': '1w',
           'until': 0
         },
-        'type': 'practice'
+        'type': 'practice',
+        'location': { // defaults to college Brebeuf
+          'lat': 45.50073714334654,
+          'lng': -73.6241186484186
+        },
+        'locationName': '',
+        'description': ''
       }, // defaults are set here
       isLoading: false,
       table,
       displayAllMembers: false,
-      recurring: false
+      recurring: false,
+      // map
+      zoom: 16,
+      url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
+      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }
   },
   watch: {
@@ -226,12 +288,13 @@ export default {
       set: function (newDate) {
         this.currentEvent.recurring.until = this.dateFromCalendar(newDate)
       }
-    },
-    selectDateLabel: function () {
-      return this.$t('events.selectDate')
     }
   },
   methods: {
+    // map
+    setLocation (event) {
+      this.currentEvent.location = L.latLng(event.latlng.lat, event.latlng.lng)
+    },
     dateFromCalendar (dateToConvert) {
       if (dateToConvert) {
         var date = new Date(dateToConvert)
@@ -292,6 +355,10 @@ export default {
         axios.get(
           url, { headers: { 'X-Member-Code': this.code } }
         ).then(function (response) {
+          // If locationName is not set, use default coordinates
+          if (response.data.locationName === '') {
+            response.data.location = self.event.location
+          }
           self.event = response.data
           self.$router.push({ path: `/eventEdit/${self.event.uuid}` })
         }).catch(err => console.log(err))

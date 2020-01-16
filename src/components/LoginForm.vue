@@ -14,7 +14,7 @@
       </div>
       <div class="field">
         <label class="label">{{ $t('login.code') }}</label>
-        <input class="input" type="text" placeholder="335b9fba95a1" v-model="member.code" />
+        <input class="input" type="password" placeholder="335b9fba95a1" v-model="member.code" />
       </div>
       <div class="field is-grouped is-grouped-right">
         <button
