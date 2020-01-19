@@ -15,7 +15,7 @@ import { cookieMixin } from './mixins/cookies'
 
 Vue.config.productionTip = false
 
-Vue.use(cookieMixin) // TODO: Replace with https://buefy.org/documentation/snackbar
+Vue.use(cookieMixin)
 Vue.use(VuejsDialog) // TODO: Replace with https://buefy.org/documentation/dialog
 
 new Vue({
