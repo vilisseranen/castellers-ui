@@ -75,7 +75,10 @@
     "title": "Liste des membres",
     "confirmDelete": "Veux-tu vraiment retirer ce membre",
     "okDelete": "Oui",
-    "cancelDelete": "Non"
+    "cancelDelete": "Non",
+    "subscribeEmails": "J'accepte de recevoir les courriels",
+    "yes": "Oui",
+    "no": "Non"
   },
   "multiselect": {
     "selectLabel": "Appuyer sur entrer pour sélectionner",

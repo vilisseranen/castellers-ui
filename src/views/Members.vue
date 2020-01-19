@@ -1,6 +1,3 @@
-// TODO: use https://buefy.org/documentation/table#searchable
-// See also https://github.com/buefy/buefy/issues/322
-
 <template>
   <div class="box">
     <p class="title is-5">{{ $t('members.title') }}</p>
