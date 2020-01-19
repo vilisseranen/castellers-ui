@@ -3,7 +3,7 @@
     <p class="title is-3" v-if="actionLabel==='update'">{{ $t('members.update') }}</p>
     <p class="title is-3" v-if="actionLabel==='create'">{{ $t('members.create') }}</p>
     <div class="columns is-multiline">
-      <div class="field column is-4">
+      <div class="field column is-3">
         <fieldset disabled>
           <label class="label">ID</label>
           <div class="control is-expanded">
@@ -11,7 +11,7 @@
           </div>
         </fieldset>
       </div>
-      <div class="field column is-4">
+      <div class="field column is-3">
         <label class="label required">{{$t('members.type')}}</label>
         <div class="control is-expanded">
           <PrettyRadio
@@ -30,7 +30,7 @@
           >{{ $t('members.adminType') }}</PrettyRadio>
         </div>
       </div>
-      <div class="field column is-4">
+      <div class="field column is-3">
         <label class="label required">{{ $t('members.language') }}</label>
         <div class="control is-expanded">
           <PrettyRadio
@@ -51,6 +51,25 @@
             value="cat"
             v-model="current_user.language"
           >{{ $t('members.languageCAT') }}</PrettyRadio>
+        </div>
+      </div>
+      <div class="field column is-3">
+        <label class="label">{{ $t('members.subscribeEmails') }}</label>
+        <div class="control is-expanded">
+          <PrettyRadio
+            v-bind="{'disabled': !this.user.uuid}"
+            class="p-default p-curve"
+            name="subscribed"
+            :value=0
+            v-model="current_user.subscribed"
+          >{{ $t('members.no') }}</PrettyRadio>
+          <PrettyRadio
+            v-bind="{'disabled': !this.user.uuid}"
+            class="p-default p-curve"
+            name="subscribed"
+            :value=1
+            v-model="current_user.subscribed"
+          >{{ $t('members.yes') }}</PrettyRadio>
         </div>
       </div>
       <div class="field column is-4">

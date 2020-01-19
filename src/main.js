@@ -5,18 +5,14 @@ import store from './store'
 import i18n from './i18n'
 import buefy from './buefy'
 import axios from 'axios'
-import VuejsDialog from 'vuejs-dialog'
 
 import notifications from './notifications'
-
-import 'vuejs-dialog/dist/vuejs-dialog.min.css'
 
 import { cookieMixin } from './mixins/cookies'
 
 Vue.config.productionTip = false
 
-Vue.use(cookieMixin) // TODO: Replace with https://buefy.org/documentation/snackbar
-Vue.use(VuejsDialog) // TODO: Replace with https://buefy.org/documentation/dialog
+Vue.use(cookieMixin)
 
 new Vue({
   router,

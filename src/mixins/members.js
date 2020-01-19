@@ -5,10 +5,12 @@ export var memberMixin = {
     deleteUser: function (member) {
       var self = this
       return new Promise((resolve, reject) => {
-        this.$dialog
-          .confirm(this.$t('members.confirmDelete') + ' ' + member.firstName + ' ' + member.lastName + ' ?',
-            { okText: this.$t('members.okDelete'), cancelText: this.$t('members.cancelDelete') })
-          .then(function () {
+        this.$buefy.dialog.confirm({
+          message: this.$t('members.confirmDelete') + ' <b>' + member.firstName + ' ' + member.lastName + '</b> ?',
+          confirmText: this.$t('members.okDelete'),
+          cancelText: this.$t('members.cancelDelete'),
+          type: 'is-danger',
+          onConfirm: () => {
             axios.delete(
               `api/admins/${self.uuid}/members/${member.uuid}`,
               { headers: { 'X-Member-Code': self.code } }
@@ -19,10 +21,8 @@ export var memberMixin = {
               .catch(function (err) {
                 reject(err)
               })
-          })
-          .catch(function (err) {
-            reject(err)
-          })
+          }
+        })
       })
     }
   }
