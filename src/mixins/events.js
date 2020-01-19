@@ -8,10 +8,12 @@ export var eventMixin = {
       var date = new Date(event.startDate * 1000)
       var startDate = Intl.DateTimeFormat('fr-FR', options).format(date)
       return new Promise((resolve, reject) => {
-        this.$dialog
-          .confirm(this.$t('events.confirmDelete') + ' ' + event.name + ' du ' + startDate + ' ?',
-            { okText: this.$t('events.deleteOK'), cancelText: this.$t('events.deleteCancel') })
-          .then(function () {
+        this.$buefy.dialog.confirm({
+          message: this.$t('events.confirmDelete') + ' <b>' + event.name + '</b> (' + startDate + ')',
+          confirmText: this.$t('events.deleteOK'),
+          cancelText: this.$t('events.deleteCancel'),
+          type: 'is-danger',
+          onConfirm: () => {
             axios.delete(
               `api/admins/${self.uuid}/events/${event.uuid}`,
               { headers: { 'X-Member-Code': self.code } }
@@ -22,10 +24,8 @@ export var eventMixin = {
               .catch(function (err) {
                 reject(err)
               })
-          })
-          .catch(function (err) {
-            reject(err)
-          })
+          }
+        })
       })
     }
   }
