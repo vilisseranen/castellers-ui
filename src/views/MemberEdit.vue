@@ -17,7 +17,7 @@ export default {
   },
   data () {
     return {
-      user: { roles: [], type: 'member', language: 'fr', subscribed: '0' } // defaults are set here
+      user: { roles: [], type: 'member', language: 'fr', subscribed: 0 } // defaults are set here
     }
   },
   mounted () {
