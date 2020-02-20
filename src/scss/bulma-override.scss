@@ -1,14 +1,10 @@
 @import "../node_modules/bulma/sass/utilities/initial-variables";
 
 $link: hsl(217,71%, 53%);
-$navbar-item-color: $white-ter;
-$navbar-item-active-color: $link;
-$navbar-item-active-background-color: $white-bis;
-
-$navbar-background-color: rgba(0,0,0,0.3);
 
 $footer-padding: 1.5rem 1rem 1.5rem;
+$footer-background-color: rgba(224, 218, 197, 0.3);
 
-// .navbar-brand a {
-//     padding: 2px;
-// }
+$colors: (
+    "beige": (rgba(224, 218, 197, 1), rgba(0, 0, 0, 1))
+);

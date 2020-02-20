@@ -1,130 +1,69 @@
 <template>
   <div>
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-      <div class="navbar-brand">
-        <a class="navbar-item" href="https://bulma.io">
-          <img src="static/icons/logo_oficial_512_512.jpg" width="30px" >
-        </a>
-
-        <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-        </a>
-      </div>
-
-      <!-- <div id="navbarBasicExample" class="navbar-menu">
-        <div class="navbar-start">
-          <a class="navbar-item">
-            Home
-          </a>
-
-          <a class="navbar-item">
-            Documentation
-          </a>
-
-          <div class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link">
-              More
-            </a>
-
-            <div class="navbar-dropdown">
-              <a class="navbar-item">
-                About
-              </a>
-              <a class="navbar-item">
-                Jobs
-              </a>
-              <a class="navbar-item">
-                Contact
-              </a>
-              <hr class="navbar-divider">
-              <a class="navbar-item">
-                Report an issue
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div class="navbar-end">
-          <div class="navbar-item">
-            <div class="buttons">
-              <a class="button is-primary">
-                <strong>Sign up</strong>
-              </a>
-              <a class="button is-light">
-                Log in
-              </a>
-            </div>
-          </div>
-        </div>
-      </div> -->
-    </nav>
-
-    <!-- <section class="hero is-medium" id="banner" style="position:relative">
-      <div id="banner-overlay"></div>
-      <div class="hero-head">
-        <nav class="navbar">
-          <div class="container">
-            <div class="navbar-brand">
-              <span class="navbar-burger burger" data-target="navbarMenuHeroA">
-                <span></span>
-                <span></span>
-                <span></span>
+    <b-navbar fixed-top type="is-beige">
+       <template slot="brand">
+            <b-navbar-item tag="div">
+                <img
+                    src="static/icons/icon-72x72.png"
+                    alt="logo Castellers de Montreal"
+                >
+                <strong id="menuTitle">{{ $t('bannerLayout.title') }}</strong>
+            </b-navbar-item>
+        </template>
+        <template slot="start">
+            <b-navbar-item tag="router-link" to="/events">
+                <span class="icon">
+                  <i class="fa fa-calendar-check"></i>
+                </span>
+                <span>
+                  {{ $t('routes.events') }}
+                </span>
+            </b-navbar-item>
+            <b-navbar-item tag="router-link" to="/members">
+              <span class="icon">
+                <i class="fa fa-address-card"></i>
               </span>
-            </div>
-            <div id="navbarMenuHeroA" class="navbar-menu">
-              <div class="navbar-end">
-                <router-link
+              <span>
+                {{ $t('routes.members') }}
+              </span>
+            </b-navbar-item>
+        </template>
+        <template slot="end">
+          <b-navbar-item tag="div">
+            <div class="buttons">
+              <router-link v-if="!this.uuid" class="button is-primary" :to="{name: 'Login'}">
+                <strong>{{ $t('bannerLayout.connect') }}</strong>
+              </router-link>
+              <router-link
                   v-if="this.uuid"
-                  class="navbar-item is-active"
+                  class="button is-info"
                   :to="{ name: 'MemberEdit', params: { uuid: uuid}}"
-                >{{ $t('bannerLayout.profile') }}</router-link>
-                <span class="navbar-item" v-if="this.uuid">
-                  <a v-on:click="disconnect()" class="button is-success is-inverted">
-                    <span>{{ $t('bannerLayout.disconnect') }}</span>
-                  </a>
-                </span>
-                <span class="navbar-item" v-if="!this.uuid">
-                  <router-link class="button is-primary is-inverted" :to="{name: 'Login'}">
-                    <span>{{ $t('bannerLayout.connect') }}</span>
-                  </router-link>
-                </span>
-              </div>
+              ><strong>{{ $t('bannerLayout.profile') }}</strong></router-link>
+              <a v-on:click="disconnect()" class="button is-primary" v-if="this.uuid">
+                <strong>{{ $t('bannerLayout.disconnect') }}</strong>
+              </a>
             </div>
-          </div>
-        </nav>
-      </div>
-
-      <div class="hero-body">
-        <div class="container has-text-centered">
-          <h1 class="title has-text-light">{{ $t('bannerLayout.title') }}</h1>
-          <h2
-            class="subtitle has-text-white-ter has-text-weight-bold"
-          >{{ $t('bannerLayout.subtitle') }}</h2>
-        </div>
-      </div>
-    </section> -->
-    <Menu class="hero is-hidden-desktop" :type="type"></Menu>
+          </b-navbar-item>
+        </template>
+    </b-navbar>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 
-import Menu from '../components/Menu.vue'
-
 export default {
   computed: {
-    ...mapGetters(['uuid', 'code', 'type'])
+    ...mapGetters(['uuid', 'code', 'type']),
+    routeName () {
+      const { path } = this.$route
+      return path.split('/')[1].toLowerCase()
+    }
   },
   methods: {
     ...mapMutations({
       disconnect: 'disconnect'
     })
-  },
-  components: {
-    Menu
   },
   mounted () {
     document.addEventListener('DOMContentLoaded', () => {

@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer has-background-white-ter">
+  <footer class="footer">
     <div class="columns">
     <div class="column buttons has-addons">
         <a v-bind:class="[ this.$i18n.locale == 'fr' ? 'button is-focused' : 'button']" v-on:click="changeLanguage('fr')">Français</a>
