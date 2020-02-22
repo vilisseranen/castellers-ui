@@ -1,48 +1,48 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from "vue";
+import Vuex from "vuex";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     auth: {
-      uuid: '',
-      code: '',
-      type: ''
+      uuid: "",
+      code: "",
+      type: ""
     },
     action: {
-      type: '',
-      objectUUID: '',
-      payload: ''
+      type: "",
+      objectUUID: "",
+      payload: ""
     },
-    locale: ''
+    locale: ""
   },
   mutations: {
-    authenticate (state, payload) {
-      state.auth.uuid = payload.uuid
-      state.auth.code = payload.code
-      state.auth.type = payload.type
-      state.locale = payload.language
+    authenticate(state, payload) {
+      state.auth.uuid = payload.uuid;
+      state.auth.code = payload.code;
+      state.auth.type = payload.type;
+      state.locale = payload.language;
     },
-    disconnect (state) {
-      state.auth.uuid = ''
-      state.auth.code = ''
-      state.auth.type = ''
+    disconnect(state) {
+      state.auth.uuid = "";
+      state.auth.code = "";
+      state.auth.type = "";
     },
-    setAction (state, payload) {
-      state.action.type = payload.type
-      state.action.objectUUID = payload.objectUUID
-      state.action.payload = payload.payload
+    setAction(state, payload) {
+      state.action.type = payload.type;
+      state.action.objectUUID = payload.objectUUID;
+      state.action.payload = payload.payload;
     },
-    setLanguage (state, locale) {
-      state.locale = locale
+    setLanguage(state, locale) {
+      state.locale = locale;
     }
   },
   getters: {
-    uuid: (state) => state.auth.uuid,
-    code: (state) => state.auth.code,
-    type: (state) => state.auth.type,
-    language: (state) => state.locale,
-    action: (state) => state.action
+    uuid: state => state.auth.uuid,
+    code: state => state.auth.code,
+    type: state => state.auth.type,
+    language: state => state.locale,
+    action: state => state.action
   }
-})
+});
