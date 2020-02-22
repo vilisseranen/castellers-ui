@@ -9,6 +9,7 @@ import axios from 'axios'
 import notifications from './notifications'
 
 import { cookieMixin } from './mixins/cookies'
+import './registerServiceWorker'
 
 Vue.config.productionTip = false
 
