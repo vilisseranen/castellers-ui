@@ -4,7 +4,7 @@
       <article class="card-content">
           <div class="content">
             <div>
-              <strong>{{event.name}}</strong> <span v-if="memberType==='admin'">({{event.attendance}} {{$t('events.registered')}})</span>
+              <strong>{{event.name}}</strong> <span v-if="memberType==='admin'">({{event.attendance}} {{registeredLabel}})</span>
               <br />
               <small>{{$t('events.onThe')}} {{event.date}} {{$t('events.from')}} {{event.start}} {{$t('events.to')}} {{event.end}}</small>
               <br />
@@ -61,6 +61,15 @@ export default {
   props: {
     event: Object,
     memberType: String
+  },
+  computed: {
+    registeredLabel () {
+      if (this.event.attendance >= 2) {
+        return this.$t('events.registered_plural')
+      } else {
+        return this.$t('events.registered')
+      }
+    }
   },
   methods: {
     participate (eventUuid, participation) {
