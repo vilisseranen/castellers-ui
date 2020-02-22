@@ -18,6 +18,7 @@ script:
 - npm run build
 
 deploy:
+  edge: true
   provider: script
   script: bash deploy.sh
   on:
