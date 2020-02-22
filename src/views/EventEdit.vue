@@ -1,164 +1,172 @@
 <template>
-  <div class="box">
-    <p class="title is-3" v-if="actionLabel==='update'">{{ $t('events.update') }}</p>
-    <p class="title is-3" v-if="actionLabel==='create'">{{ $t('events.create') }}</p>
-    <div class="columns is-multiline">
-      <div class="field column is-3">
-        <fieldset disabled>
-          <label class="label">ID</label>
+  <div>
+    <div class="box">
+      <p class="title is-3" v-if="actionLabel==='update'">{{ $t('events.update') }}</p>
+      <p class="title is-3" v-if="actionLabel==='create'">{{ $t('events.create') }}</p>
+      <div class="columns is-multiline">
+        <div class="field column is-3">
+          <fieldset disabled>
+            <label class="label">ID</label>
+            <div class="control is-expanded">
+              <input class="input" type="text" v-model="currentEvent.uuid" />
+            </div>
+          </fieldset>
+        </div>
+        <div class="field column is-7">
+          <label class="label required">{{$t('events.name')}}</label>
           <div class="control is-expanded">
-            <input class="input" type="text" v-model="currentEvent.uuid" />
-          </div>
-        </fieldset>
-      </div>
-      <div class="field column is-7">
-        <label class="label required">{{$t('events.name')}}</label>
-        <div class="control is-expanded">
-          <input
-            class="input"
-            type="text"
-            :placeholder="$t('events.nameDescription')"
-            v-model="currentEvent.name"
-          />
-        </div>
-      </div>
-      <div class="field column is-2">
-        <label class="label required">{{$t('events.type')}}</label>
-        <div class="control is-expanded">
-          <PrettyRadio
-            class="p-default p-curve"
-            name="type"
-            color="primary-o"
-            value="practice"
-            v-model="event.type"
-          >{{ $t('events.practiceType') }}</PrettyRadio>
-          <PrettyRadio
-            class="p-default p-curve"
-            name="type"
-            color="warning-o"
-            value="presentation"
-            v-model="event.type"
-          >{{ $t('events.presentationType') }}</PrettyRadio>
-        </div>
-      </div>
-      <div class="field column is-6">
-        <label class="label required">{{$t('events.start')}}</label>
-        <div class="control is-expanded">
-          <datetime
-            input-id="startDate"
-            type="datetime"
-            v-model="startDateForCalendar"
-            input-class="input"
-            :minute-step="15"
-          ></datetime>
-        </div>
-      </div>
-      <div class="field column is-6">
-        <label class="label required">{{$t('events.end')}}</label>
-        <div class="control is-expanded">
-          <datetime
-            input-id="endDate"
-            type="datetime"
-            v-model="endDateForCalendar"
-            input-class="input"
-            :minute-step="15"
-          ></datetime>
-        </div>
-      </div>
-      <div class="field column is-2" v-if="currentEvent.uuid === undefined">
-        <label class="label">{{$t('events.recurringEvent')}}</label>
-        <div class="field">
-          <b-switch v-model="recurring" type="is-info"></b-switch>
-        </div>
-      </div>
-      <div class="field column is-4" v-if="currentEvent.uuid === undefined && recurring">
-        <label class="label required">{{$t('events.interval')}}</label>
-        <PrettyRadio
-          class="p-default p-curve"
-          name="interval"
-          color="primary-o"
-          value="1w"
-          v-model="currentEvent.recurring.interval"
-        >{{ $t('events.1w') }}</PrettyRadio>
-        <PrettyRadio
-          class="p-default p-curve"
-          name="interval"
-          color="info-o"
-          value="1d"
-          v-model="currentEvent.recurring.interval"
-        >{{ $t('events.1d') }}</PrettyRadio>
-      </div>
-      <div class="field column is-6" v-if="currentEvent.uuid === undefined && recurring">
-        <label class="label required">{{$t('events.until')}}</label>
-        <datetime
-          type="datetime"
-          v-model="untilDateForCalendar"
-          input-class="input"
-          input-id="until"
-          :minute-step="15"
-        ></datetime>
-      </div>
-      <div class="column is-12">
-        <div class="columns">
-          <div class="field is-6 column">
-          <label class="label note">{{$t('events.location')}}</label>
-          <div class="control is-expanded" style="margin-bottom: 10px;">
             <input
               class="input"
               type="text"
-              :placeholder="$t('events.locationDescription')"
-              v-model="currentEvent.locationName"
+              :placeholder="$t('events.nameDescription')"
+              v-model="currentEvent.name"
             />
           </div>
-          <l-map :zoom="zoom" :center="currentEvent.location"  @click="setLocation" style="height:400px;margin: 0;">
-            <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
-            <l-marker :lat-lng="currentEvent.location"></l-marker>
-          </l-map>
         </div>
-        <div class="field is-6 column">
-          <label class="label">{{$t('events.description')}}</label>
-          <div class="control is-expanded" style="margin-bottom: 10px;">
-            <textarea
-              class="textarea"
-              type="text"
-              :placeholder="$t('events.descriptionDescription')"
-              v-model="currentEvent.description"
-            ></textarea>
-          </div>
+        <div class="field column is-2">
+          <label class="label required">{{$t('events.type')}}</label>
+          <div class="control is-expanded">
+            <PrettyRadio
+              class="p-default p-curve"
+              name="type"
+              color="primary-o"
+              value="practice"
+              v-model="event.type"
+            >{{ $t('events.practiceType') }}</PrettyRadio>
+            <PrettyRadio
+              class="p-default p-curve"
+              name="type"
+              color="warning-o"
+              value="presentation"
+              v-model="event.type"
+            >{{ $t('events.presentationType') }}</PrettyRadio>
           </div>
         </div>
-      </div>
-      <div class="field is-12 column">
-        <div class="field-body">
+        <div class="field column is-6">
+          <label class="label required">{{$t('events.start')}}</label>
+          <div class="control is-expanded">
+            <datetime
+              input-id="startDate"
+              type="datetime"
+              v-model="startDateForCalendar"
+              input-class="input"
+              :minute-step="15"
+            ></datetime>
+          </div>
+        </div>
+        <div class="field column is-6">
+          <label class="label required">{{$t('events.end')}}</label>
+          <div class="control is-expanded">
+            <datetime
+              input-id="endDate"
+              type="datetime"
+              v-model="endDateForCalendar"
+              input-class="input"
+              :minute-step="15"
+            ></datetime>
+          </div>
+        </div>
+        <div class="field column is-2" v-if="currentEvent.uuid === undefined">
+          <label class="label">{{$t('events.recurringEvent')}}</label>
           <div class="field">
-            <p class="control">
-              <button
-                type="submit"
-                class="button is-info"
-                @click.prevent="eventEdit"
-                v-if="actionLabel==='update'">
-              {{ $t('events.updateButton') }}</button>
-              <button
-                type="submit"
-                class="button is-info"
-                @click.prevent="eventEdit"
-                v-if="actionLabel==='create'">
-              {{ $t('events.createButton') }}</button>
-            </p>
+            <b-switch v-model="recurring" type="is-info"></b-switch>
+          </div>
+        </div>
+        <div class="field column is-4" v-if="currentEvent.uuid === undefined && recurring">
+          <label class="label required">{{$t('events.interval')}}</label>
+          <PrettyRadio
+            class="p-default p-curve"
+            name="interval"
+            color="primary-o"
+            value="1w"
+            v-model="currentEvent.recurring.interval"
+          >{{ $t('events.1w') }}</PrettyRadio>
+          <PrettyRadio
+            class="p-default p-curve"
+            name="interval"
+            color="info-o"
+            value="1d"
+            v-model="currentEvent.recurring.interval"
+          >{{ $t('events.1d') }}</PrettyRadio>
+        </div>
+        <div class="field column is-6" v-if="currentEvent.uuid === undefined && recurring">
+          <label class="label required">{{$t('events.until')}}</label>
+          <datetime
+            type="datetime"
+            v-model="untilDateForCalendar"
+            input-class="input"
+            input-id="until"
+            :minute-step="15"
+          ></datetime>
+        </div>
+        <div class="column is-12">
+          <div class="columns">
+            <div class="field is-6 column">
+            <label class="label note">{{$t('events.location')}}</label>
+            <div class="control is-expanded" style="margin-bottom: 10px;">
+              <input
+                class="input"
+                type="text"
+                :placeholder="$t('events.locationDescription')"
+                v-model="currentEvent.locationName"
+              />
+            </div>
+            <l-map :zoom="zoom" :center="currentEvent.location"  @click="setLocation" style="height:400px;margin: 0;z-index:0;">
+              <l-tile-layer :url="url" :attribution="attribution"></l-tile-layer>
+              <l-marker :lat-lng="currentEvent.location"></l-marker>
+            </l-map>
+          </div>
+          <div class="field is-6 column">
+            <label class="label">{{$t('events.description')}}</label>
+            <div class="control is-expanded" style="margin-bottom: 10px;">
+              <textarea
+                class="textarea"
+                type="text"
+                :placeholder="$t('events.descriptionDescription')"
+                v-model="currentEvent.description"
+              ></textarea>
+            </div>
+            </div>
+          </div>
+        </div>
+        <div class="field is-12 column">
+          <div class="field-body">
+            <div class="field">
+              <p class="control">
+                <button
+                  type="submit"
+                  class="button is-info"
+                  @click.prevent="eventEdit"
+                  v-if="actionLabel==='update'">
+                {{ $t('events.updateButton') }}</button>
+                <button
+                  type="submit"
+                  class="button is-info"
+                  @click.prevent="eventEdit"
+                  v-if="actionLabel==='create'">
+                {{ $t('events.createButton') }}</button>
+              </p>
+            </div>
           </div>
         </div>
       </div>
+      <hr />
+      <div>
+        <span class="required"></span>
+        {{ $t('general.requiredFields') }}
+      </div>
+      <div>
+        <span class="note"></span>
+        {{ $t('events.noteLocation') }}
+      </div>
+      <b-loading :is-full-page="true" :active.sync="isLoading" :can-cancel="false"></b-loading>
     </div>
-    <hr />
-    <div>
-      <span class="required"></span>
-      {{ $t('general.requiredFields') }}
+    <div class="box" v-if="this.type==='admin'">
+      <label class="label">{{$t('events.registered').replace(/^\w/, c => c.toUpperCase())}} ({{this.countRegistered()}})</label>
+      <template>
+        <b-table :data="this.participation" :columns="registeredColumns"></b-table>
+      </template>
     </div>
-    <div>
-      <span class="note"></span>
-      {{ $t('events.noteLocation') }}
-    </div>
-    <b-loading :is-full-page="true" :active.sync="isLoading" :can-cancel="false"></b-loading>
   </div>
 </template>
 
@@ -226,7 +234,26 @@ export default {
       // map
       zoom: 16,
       url: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
-      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+      attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+      registeredColumns: [
+        {
+          field: 'firstName',
+          label: this.$t('members.firstName')
+        },
+        {
+          field: 'lastName',
+          label: this.$t('members.lastName')
+        },
+        {
+          field: 'roles',
+          label: this.$t('members.roles')
+        },
+        {
+          field: 'participationLabel',
+          label: this.$t('events.participation')
+        }
+      ],
+      participation: []
     }
   },
   watch: {
@@ -345,9 +372,6 @@ export default {
         })
       }
     },
-    countParticipants (participation) {
-      return this.table.data.filter(participant => participant.participation === participation).length
-    },
     loadEvent (uuid) {
       if (uuid) {
         var self = this
@@ -364,27 +388,42 @@ export default {
         }).catch(err => console.log(err))
       }
     },
-    listParticipants (uuid) {
-      if (uuid) {
+    listParticipants (eventUuid) {
+      if (this.uuid) {
         var self = this
-        var url = `/api/admins/${this.uuid}/events/${uuid}/members`
+        var url = `/api/admins/${this.uuid}/events/${eventUuid}/members`
         axios.get(
           url, { headers: { 'X-Member-Code': this.code } }
         ).then(function (response) {
-          self.table.data = response.data
-          for (var i = 0; i < self.table.data.length; i++) {
-            if (self.table.data[i]['participation'] === 'yes') {
-              self.table.data[i]['style'] = { background: 'rgba(174, 224, 127, 0.25)' }
-            } else if (self.table.data[i]['participation'] === 'no') {
-              self.table.data[i]['style'] = { background: 'rgba(232, 78, 78, 0.25)' }
-            } else if (self.table.data[i]['participation'] === 'maybe') {
-              self.table.data[i]['style'] = { background: 'rgba(232, 178, 8, 0.25)' }
+          self.participation = response.data
+          for (var i = 0; i < self.participation.length; i++) {
+            if (self.participation[i]['participation'] === 'yes') {
+              self.participation[i]['participationLabel'] = self.$t('events.participationYes')
+            } else if (self.participation[i]['participation'] === 'no') {
+              self.participation[i]['participationLabel'] = self.$t('events.participationNo')
             } else {
-              self.table.data[i]['style'] = { background: 'rgba(7, 124, 232, 0.25)' }
+              self.participation[i]['participationLabel'] = self.$t('events.participationNoAnswer')
             }
+            self.participation[i]['roles'] = self.participation[i]['roles'].sort().join(', ')
           }
+          self.participation.sort(function (a, b) {
+            if (a.participation === b.participation) {
+              return 0
+            } else if (a.participation === 'yes') {
+              return -1
+            } else if (a.participation === 'no') {
+              return 1
+            } else if (a.participation === '' && b.participation === 'yes') {
+              return 1
+            } else if (a.participation === '' && b.participation === 'no') {
+              return -1
+            }
+          })
         }).catch(err => console.log(err))
       }
+    },
+    countRegistered () {
+      return this.participation.filter(member => member.participation === 'yes').length
     }
   }
 }
