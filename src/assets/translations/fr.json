@@ -1,7 +1,6 @@
 {
   "bannerLayout": {
     "title": "Les castellers de Montréal",
-    "subtitle": "Planification des présentations et des pratiques",
     "profile": "Mon profil",
     "disconnect": "Déconnection",
     "connect": "Se connecter"
@@ -125,7 +124,6 @@
     "type": "Type",
     "practiceType": "Pratique",
     "presentationType": "Présentation",
-    "selectDate": "Choisir la date",
     "location": "Lieu",
     "locationDescription": "Lieu de la pratique (exemple: Palestre du collège Brébeuf)",
     "description": "Description de l'évènement",
