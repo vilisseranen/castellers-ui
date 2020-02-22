@@ -1,7 +1,6 @@
-import Vue from 'vue'
-import Buefy from 'buefy'
+import Vue from "vue";
+import Buefy from "buefy";
 
-Vue.use(Buefy)
+Vue.use(Buefy);
 
-export default {
-}
+export default {};
