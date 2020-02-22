@@ -4,7 +4,7 @@
       <template slot="brand">
         <b-navbar-item tag="div">
           <img
-            src="/img/icons/icon-72x72.png"
+            src="/static/icons/icon-72x72.png"
             alt="logo Castellers de Montreal"
           />
           <strong id="menuTitle">{{ $t("bannerLayout.title") }}</strong>

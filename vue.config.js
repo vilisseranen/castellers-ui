@@ -31,14 +31,38 @@ module.exports = {
       description:
         "Organiser les pratiques et présentations des castellers de Montréal",
       dir: "ltr",
-      scope: "/"
+      scope: "/",
+      icons: [
+        {
+          src: "static/icons/android-chrome-192x192.png",
+          sizes: "192x192",
+          type: "image/png"
+        },
+        {
+          src: "static/icons/android-chrome-512x512.png",
+          sizes: "512x512",
+          type: "image/png"
+        },
+        {
+          src: "static/icons/android-chrome-maskable-192x192.png",
+          sizes: "192x192",
+          type: "image/png",
+          purpose: "maskable"
+        },
+        {
+          src: "static/icons/android-chrome-maskable-512x512.png",
+          sizes: "512x512",
+          type: "image/png",
+          purpose: "maskable"
+        }
+      ]
     },
     iconPaths: {
-      favicon32: "img/icons/favicon-32x32.png",
-      favicon16: "img/icons/favicon-16x16.png",
-      appleTouchIcon: "img/icons/apple-touch-icon.png",
-      maskIcon: "img/icons/safari-pinned-tab.svg",
-      msTileImage: "img/icons/mstile-150x150.png"
+      favicon32: "static/icons/favicon-32x32.png",
+      favicon16: "static/icons/favicon-16x16.png",
+      appleTouchIcon: "static/icons/apple-touch-icon.png",
+      maskIcon: "static/icons/safari-pinned-tab.svg",
+      msTileImage: "static/icons/mstile-150x150.png"
     },
     // configure the workbox plugin
     workboxPluginMode: "GenerateSW"
