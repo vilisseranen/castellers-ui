@@ -4,7 +4,7 @@
       <article class="card-content">
           <div class="content">
             <div>
-              <strong>{{event.name}}</strong>
+              <strong>{{event.name}}</strong> <span v-if="memberType==='admin'">({{event.attendance}} {{$t('events.registered')}})</span>
               <br />
               <small>{{$t('events.onThe')}} {{event.date}} {{$t('events.from')}} {{event.start}} {{$t('events.to')}} {{event.end}}</small>
               <br />

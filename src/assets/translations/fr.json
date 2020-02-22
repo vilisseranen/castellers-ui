@@ -108,6 +108,8 @@
     "participationNOK": "Un problème est survenu.",
     "participationYes": "Je viens",
     "participationNo": "Je ne viens pas",
+    "participationNoAnswer": "Pas de réponse",
+    "participation": "Participation",
     "onThe": "Le",
     "from": "de",
     "to": "à",
@@ -126,6 +128,7 @@
     "locationDescription": "Lieu de la pratique (exemple: Palestre du collège Brébeuf)",
     "description": "Description de l'évènement",
     "descriptionDescription": "Ajouter une description à l'évènement, par exemple:\n- Ce que nous allons pratiquer\n- Un évènement notable",
-    "noteLocation": "La position sur la carte ne sera enregistrée que si un lieu est spécifier dans le champ de texte."
+    "noteLocation": "La position sur la carte ne sera enregistrée que si un lieu est spécifier dans le champ de texte.",
+    "registered": "inscrits"
   }
 }
