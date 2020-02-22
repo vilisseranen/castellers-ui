@@ -78,7 +78,9 @@
     "cancelDelete": "Non",
     "subscribeEmails": "J'accepte de recevoir les courriels",
     "yes": "Oui",
-    "no": "Non"
+    "no": "Non",
+    "contact": "Contact en cas d'urgence",
+    "contactDescription": "Téléphone (ex: 514-111-1111)"
   },
   "multiselect": {
     "selectLabel": "Appuyer sur entrer pour sélectionner",

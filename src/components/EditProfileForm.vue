@@ -72,13 +72,13 @@
           >{{ $t('members.yes') }}</PrettyRadio>
         </div>
       </div>
-      <div class="field column is-4">
+      <div class="field column is-3">
         <label class="label required">{{ $t('members.firstName') }}</label>
         <div class="control is-expanded">
           <input class="input" type="text" v-model="current_user.firstName" />
         </div>
       </div>
-      <div class="field column is-4">
+      <div class="field column is-3">
         <label class="label required">{{ $t('members.lastName') }}</label>
         <div class="control is-expanded">
           <input class="input" type="text" v-model="current_user.lastName" />
@@ -88,6 +88,13 @@
         <label class="label required">{{ $t('members.email') }}</label>
         <div class="control is-expanded">
           <input class="input" type="text" v-model="current_user.email" />
+        </div>
+      </div>
+      <div class="field column is-2">
+        <label class="label">{{ $t('members.contact') }}</label>
+        <div class="control is-expanded">
+          <input class="input" type="text" v-model="current_user.contact"
+                 :placeholder="$t('members.contactDescription')"/>
         </div>
       </div>
       <div class="field column is-3">
