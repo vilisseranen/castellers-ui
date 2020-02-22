@@ -3,8 +3,7 @@
     "connect": "Iniciar sessió",
     "profile": "Perfil",
     "disconnect": "Tancar sessió",
-    "title": "Castellers de Mont-real",
-    "subtitle": "Calendari d'actuacions i assajos"
+    "title": "Castellers de Mont-real"
   },
   "general": {
     "requiredFields": "Els camps amb l'asterisc són obligatoris.",
@@ -117,7 +116,6 @@
     "deleteCancel": "Anul·lar",
     "type": "Tipus",
     "practiceType": "Assaig",
-    "presentationType": "Actuació",
-    "selectDate": "Triar la data"
+    "presentationType": "Actuació"
   }
 }

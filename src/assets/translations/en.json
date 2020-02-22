@@ -1,7 +1,6 @@
 {
   "bannerLayout": {
     "title": "Montreal castellers",
-    "subtitle": "Presentations and practices schedule",
     "profile": "My profile",
     "disconnect": "Log out",
     "connect": "Log in"
@@ -48,7 +47,7 @@
     "language": "Language",
     "firstName": "First name",
     "lastName": "Last name",
-    "email": "email",
+    "email": "Email",
     "height": "height",
     "cm": "cm",
     "ft": "ft",
@@ -75,7 +74,12 @@
     "title": "Member list",
     "confirmDelete": "Do you really want to remove this member?",
     "okDelete": "Yes",
-    "cancelDelete": "No"
+    "cancelDelete": "No",
+    "subscribeEmails": "I accept to receive emails",
+    "yes": "Yes",
+    "no": "No",
+    "contact": "Emergency contact",
+    "contactDescription": "Phone number (ex: 514-111-1111)"
   },
   "multiselect": {
     "selectLabel": "Press enter to select",
@@ -105,6 +109,8 @@
     "participationNOK": "There was a problem.",
     "participationYes": "I will be there",
     "participationNo": "I won't be there",
+    "participationNoAnswer": "No answer",
+    "participation": "Participation",
     "onThe": "On the",
     "from": "from",
     "to": "to",
@@ -118,6 +124,12 @@
     "type": "Type",
     "practiceType": "Practice",
     "presentationType": "Presentation",
-    "selectDate": "Pick a date"
+    "location": "Lieu",
+    "locationDescription": "Location of the training (exemple: Collège Brébeuf)",
+    "description": "Description of the event",
+    "descriptionDescription": "Add a description to the event, for example:\n- What we will practice\n- A special event",
+    "noteLocation": "The position on the map will only be saved if a location is specified in the associated textbox.",
+    "registered": "registered",
+    "registered_plural": "registered"
   }
 }
