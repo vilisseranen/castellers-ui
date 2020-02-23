@@ -11,7 +11,8 @@
   },
   "routes": {
     "members": "Les membres",
-    "events": "Présentations et pratiques"
+    "events": "Présentations et pratiques",
+    "castells": "Castells"
   },
   "login": {
     "status": "Statut",
@@ -131,5 +132,14 @@
     "noteLocation": "La position sur la carte ne sera enregistrée que si un lieu est spécifié dans le champ de texte.",
     "registered": "inscrit",
     "registered_plural": "inscrits"
+  },
+  "castells": {
+    "list": "Liste des castells",
+    "create": "Créer un nouveau castell",
+    "update": "Modifier un castell",
+    "selectType": "Sélectionner le type de castell",
+    "type": "Type",
+    "selectCastell": "Sélectionner le castell",
+    "castell": "Castell"
   }
 }

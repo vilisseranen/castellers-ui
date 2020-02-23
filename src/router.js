@@ -8,6 +8,7 @@ import Members from "./views/Members.vue";
 import MemberEdit from "./views/MemberEdit.vue";
 import EventEdit from "./views/EventEdit.vue";
 import Initialize from "./views/Initialize.vue";
+import Castells from "./views/Castells.vue";
 
 Vue.use(Router);
 
@@ -60,6 +61,11 @@ export default new Router({
           path: "eventEdit/:uuid",
           name: "eventEdit",
           component: EventEdit
+        },
+        {
+          path: "castells",
+          name: "castells",
+          component: Castells
         }
       ]
     }

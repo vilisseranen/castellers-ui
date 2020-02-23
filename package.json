@@ -18,6 +18,7 @@
     "leaflet": "^1.6.0",
     "luxon": "^1.22.0",
     "pretty-checkbox-vue": "^1.1.9",
+    "raphael": "^2.3.0",
     "register-service-worker": "^1.6.2",
     "velocity-animate": "^1.5.2",
     "vue": "^2.6.11",
