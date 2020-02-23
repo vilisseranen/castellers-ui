@@ -19,7 +19,11 @@
             {{ $t("routes.events") }}
           </span>
         </b-navbar-item>
-        <b-navbar-item tag="router-link" to="/members">
+        <b-navbar-item
+          tag="router-link"
+          to="/members"
+          v-if="this.type === 'admin'"
+        >
           <span class="icon">
             <i class="fa fa-address-card"></i>
           </span>
