@@ -5,8 +5,8 @@
         <div class="content">
           <div>
             <strong>{{ event.name }}</strong>
-            <span v-if="memberType === 'admin'"
-              >({{ event.attendance }} {{ registeredLabel }})</span
+            <span v-if="memberType === 'admin'">
+              ({{ event.attendance }} {{ registeredLabel }})</span
             >
             <br />
             <small
