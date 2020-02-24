@@ -79,7 +79,13 @@
     "yes": "Oui",
     "no": "Non",
     "contact": "Contact en cas d'urgence",
-    "contactDescription": "Téléphone (ex: 514-111-1111)"
+    "contactDescription": "Téléphone (ex: 514-111-1111)",
+    "name": "Nom",
+    "setPresence": "Indiquer présence",
+    "present": "Présent",
+    "absent": "Absent",
+    "participation": "Participation",
+    "presence": "Présence"
   },
   "multiselect": {
     "selectLabel": "Appuyer sur entrer pour sélectionner",
@@ -130,6 +136,9 @@
     "descriptionDescription": "Ajouter une description à l'évènement, par exemple:\n- Ce que nous allons pratiquer\n- Un évènement notable",
     "noteLocation": "La position sur la carte ne sera enregistrée que si un lieu est spécifié dans le champ de texte.",
     "registered": "inscrit",
-    "registered_plural": "inscrits"
+    "registered_plural": "inscrits",
+    "presence": "Présence",
+    "filterMembers": "Filtrer les membres",
+    "presentRegistered": "Présents / Inscrits"
   }
 }
