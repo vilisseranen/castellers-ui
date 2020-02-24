@@ -193,16 +193,100 @@
     </div>
     <div class="box" v-if="this.type === 'admin'">
       <label class="label"
-        >{{ $t("events.registered").replace(/^\w/, c => c.toUpperCase()) }} ({{
-          this.countRegistered()
-        }})</label
+        >{{
+          $t("events.presentRegistered").replace(/^\w/, c => c.toUpperCase())
+        }}
+        ({{ this.countPresent() }} / {{ this.countRegistered() }})</label
       >
-      <template>
-        <b-table
-          :data="this.participation"
-          :columns="registeredColumns"
-        ></b-table>
-      </template>
+      <span class="has-text-weight-bold">{{ $t("events.filterMembers") }}</span>
+      <b-field grouped group-multiline>
+        <div v-for="(column, index) in filters" :key="index" class="control">
+          <b-checkbox v-model="column.display">
+            {{ column.title }}
+          </b-checkbox>
+        </div>
+      </b-field>
+
+      <b-table
+        :data="this.participation"
+        ref="table"
+        :default-sort="['participation', 'asc']"
+        icon-pack="fas"
+        :row-class="
+          (row, index) =>
+            (row.presence === 'yes' && !filters.present.display) ||
+            (row.presence === 'no' && !filters.absent.display) ||
+            (row.participation === 'yes' &&
+              !filters.participationYes.display) ||
+            (row.participation === 'no' && !filters.participationNo.display)
+              ? 'is-hidden'
+              : ''
+        "
+      >
+        <template slot-scope="props">
+          <b-table-column field="name" :label="participationColumns['name']">
+            {{ props.row.firstName }} {{ props.row.lastName }}
+          </b-table-column>
+          <b-table-column field="roles" :label="participationColumns['roles']">
+            {{ props.row.roles }}
+          </b-table-column>
+          <b-table-column
+            field="participation"
+            :label="participationColumns['participation']"
+            sortable
+          >
+            <div class="tags">
+              <span
+                class="tag is-success"
+                v-if="props.row.participation == 'yes'"
+                >{{ $t("events.participationYes") }}</span
+              >
+              <span
+                class="tag is-danger"
+                v-if="props.row.participation == 'no'"
+                >{{ $t("events.participationNo") }}</span
+              >
+            </div>
+          </b-table-column>
+          <b-table-column
+            field="presence"
+            :label="participationColumns['presence']"
+            sortable
+          >
+            <div class="tags">
+              <span class="tag is-success" v-if="props.row.presence == 'yes'">{{
+                $t("members.present")
+              }}</span>
+              <span class="tag is-danger" v-if="props.row.presence == 'no'">{{
+                $t("members.absent")
+              }}</span>
+            </div>
+          </b-table-column>
+
+          <b-table-column
+            field="setPresence"
+            :label="participationColumns['setPresence']"
+            centered
+            width="50"
+          >
+            <a v-on:click="presence(currentEvent.uuid, props.row.uuid, 'yes')">
+              <span class="icon">
+                <i class="fas fa-check has-text-success"></i>
+              </span>
+            </a>
+            <a v-on:click="presence(currentEvent.uuid, props.row.uuid, 'no')">
+              <span class="icon">
+                <i class="fas fa-times has-text-danger"></i>
+              </span>
+            </a>
+            <a v-on:click="presence(currentEvent.uuid, props.row.uuid, '')">
+              <span class="icon">
+                <i class="fas fa-minus has-text-info"></i>
+              </span>
+            </a>
+          </b-table-column>
+        </template>
+      </b-table>
     </div>
   </div>
 </template>
@@ -274,24 +358,25 @@ export default {
       url: "http://{s}.tile.osm.org/{z}/{x}/{y}.png",
       attribution:
         '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-      registeredColumns: [
-        {
-          field: "firstName",
-          label: this.$t("members.firstName")
+      participationColumns: {
+        name: this.$t("members.name"),
+        roles: this.$t("members.roles"),
+        participation: this.$t("members.participation"),
+        presence: this.$t("members.presence"),
+        setPresence: this.$t("members.setPresence")
+      },
+      filters: {
+        present: { title: this.$t("members.present"), display: true },
+        absent: { title: this.$t("members.absent"), display: true },
+        participationYes: {
+          title: this.$t("events.participationYes"),
+          display: true
         },
-        {
-          field: "lastName",
-          label: this.$t("members.lastName")
-        },
-        {
-          field: "roles",
-          label: this.$t("members.roles")
-        },
-        {
-          field: "participationLabel",
-          label: this.$t("events.participation")
+        participationNo: {
+          title: this.$t("events.participationNo"),
+          display: true
         }
-      ],
+      },
       participation: []
     };
   },
@@ -428,7 +513,6 @@ export default {
               response.data.location = self.event.location;
             }
             self.event = response.data;
-            self.$router.push({ path: `/eventEdit/${self.event.uuid}` });
           })
           .catch(err => console.log(err));
       }
@@ -442,36 +526,10 @@ export default {
           .then(function(response) {
             self.participation = response.data;
             for (var i = 0; i < self.participation.length; i++) {
-              if (self.participation[i].participation === "yes") {
-                self.participation[i].participationLabel = self.$t(
-                  "events.participationYes"
-                );
-              } else if (self.participation[i].participation === "no") {
-                self.participation[i].participationLabel = self.$t(
-                  "events.participationNo"
-                );
-              } else {
-                self.participation[i].participationLabel = self.$t(
-                  "events.participationNoAnswer"
-                );
-              }
               self.participation[i].roles = self.participation[i].roles
                 .sort()
                 .join(", ");
             }
-            self.participation.sort(function(a, b) {
-              if (a.participation === b.participation) {
-                return 0;
-              } else if (a.participation === "yes") {
-                return -1;
-              } else if (a.participation === "no") {
-                return 1;
-              } else if (a.participation === "" && b.participation === "yes") {
-                return 1;
-              } else if (a.participation === "" && b.participation === "no") {
-                return -1;
-              }
-            });
           })
           .catch(err => console.log(err));
       }
@@ -479,6 +537,21 @@ export default {
     countRegistered() {
       return this.participation.filter(member => member.participation === "yes")
         .length;
+    },
+    countPresent() {
+      return this.participation.filter(member => member.presence === "yes")
+        .length;
+    },
+    presence(eventUuid, memberUuid, presence) {
+      if (this.uuid) {
+        var url = `/api/admins/${this.uuid}/events/${eventUuid}/members/${memberUuid}`;
+        axios.post(
+          url,
+          { presence: presence },
+          { headers: { "X-Member-Code": this.code } }
+        );
+      }
+      this.listParticipants(eventUuid);
     }
   }
 };
