@@ -55,6 +55,7 @@ export default {
   data() {
     return {
       eventsParticipants: [],
+      events: [],
       selected: null
     };
   },
@@ -74,16 +75,11 @@ export default {
             subheading: this.$t("summary.total")
           }
         ];
-        for (var id in this.eventsParticipants) {
+        for (var id in this.events) {
           columns.push({
-            field: this.eventsParticipants[id].uuid,
-            label: [
-              this.eventsParticipants[id].name,
-              this.eventsParticipants[id].date
-            ].join(" "),
-            subheading: this.countEventParticipants(
-              this.eventsParticipants[id].uuid
-            ),
+            field: this.events[id].uuid,
+            label: [this.events[id].name, this.events[id].date].join(" "),
+            subheading: this.countEventParticipants(this.events[id].uuid),
             width: 25
           });
         }
@@ -168,6 +164,7 @@ export default {
             events[i].start = self.extractTime(events[i].startDate);
             events[i].end = self.extractTime(events[i].endDate);
           }
+          self.events = events;
           for (var id in events) {
             const event = events[id];
             var url = `/api/admins/${self.uuid}/events/${events[id].uuid}/members`;
