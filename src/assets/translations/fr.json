@@ -11,7 +11,8 @@
   },
   "routes": {
     "members": "Les membres",
-    "events": "Présentations et pratiques"
+    "events": "Présentations et pratiques",
+    "summary": "Participation"
   },
   "login": {
     "status": "Statut",
@@ -140,5 +141,13 @@
     "presence": "Présence",
     "filterMembers": "Filtrer les membres",
     "presentRegistered": "Présents / Inscrits"
+  },
+  "summary": {
+    "title": "Participation pour les évènements à venir",
+    "name": "Nom",
+    "yes": "Oui",
+    "no": "Non",
+    "total": "Total",
+    "summary": "Participation"
   }
 }

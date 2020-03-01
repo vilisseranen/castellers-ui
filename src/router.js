@@ -8,6 +8,7 @@ import Members from "./views/Members.vue";
 import MemberEdit from "./views/MemberEdit.vue";
 import EventEdit from "./views/EventEdit.vue";
 import Initialize from "./views/Initialize.vue";
+import SummaryParticipation from "./views/SummaryParticipation.vue";
 
 Vue.use(Router);
 
@@ -60,6 +61,11 @@ export default new Router({
           path: "eventEdit/:uuid",
           name: "eventEdit",
           component: EventEdit
+        },
+        {
+          path: "summary",
+          name: "summary",
+          component: SummaryParticipation
         }
       ]
     }

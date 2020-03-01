@@ -31,6 +31,18 @@
             {{ $t("routes.members") }}
           </span>
         </b-navbar-item>
+        <b-navbar-item
+          tag="router-link"
+          to="/summary"
+          v-if="this.type === 'admin'"
+        >
+          <span class="icon">
+            <i class="fa fa-table"></i>
+          </span>
+          <span>
+            {{ $t("routes.summary") }}
+          </span>
+        </b-navbar-item>
       </template>
       <template slot="end">
         <b-navbar-item tag="div">
