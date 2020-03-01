@@ -4,14 +4,46 @@
       {{ $t("summary.title") }}
     </p>
     <b-table
-      class="summaryTable"
+      class="summaryTable table-is-narrow"
       :data="summaryParticipants"
-      :columns="columns"
       :mobile-cards="false"
-      :row-class="
-        row => row.name == this.$t('summary.total') && 'has-text-weight-bold'
-      "
+      :selected.sync="selected"
+      icon-pack="fa"
+      sticky-header
+      style="height: 80vh;"
     >
+      <template slot-scope="props">
+        <b-table-column
+          v-for="column in columns"
+          v-bind:key="column.field"
+          :field="column.field"
+          :label="column.label"
+          :width="column.width"
+          :sortable="column.sortable"
+          :subheading="column.subheading"
+          class="is-size-7"
+        >
+          <template slot="header" slot-scope="{ column }">
+            <span class="is-size-7">
+              {{ column.label }}
+            </span>
+          </template>
+
+          <template slot="subheading" slot-scope="{ column }">
+            <span class="is-size-7">
+              {{ column.subheading }}
+            </span>
+          </template>
+
+          <span
+            v-bind:class="{
+              'has-text-weight-bold': props.row['name'] === $t('summary.total')
+            }"
+          >
+            {{ props.row[column.field] }}
+          </span>
+        </b-table-column>
+      </template>
     </b-table>
   </div>
 </template>
@@ -22,7 +54,8 @@ import axios from "axios";
 export default {
   data() {
     return {
-      eventsParticipants: []
+      eventsParticipants: [],
+      selected: null
     };
   },
   mounted() {
@@ -36,7 +69,9 @@ export default {
           {
             field: "name",
             label: this.$t("summary.name"),
-            width: 150
+            width: 150,
+            sortable: true,
+            subheading: this.$t("summary.total")
           }
         ];
         for (var id in this.eventsParticipants) {
@@ -46,14 +81,12 @@ export default {
               this.eventsParticipants[id].name,
               this.eventsParticipants[id].date
             ].join(" "),
-            width: 50
+            subheading: this.countEventParticipants(
+              this.eventsParticipants[id].uuid
+            ),
+            width: 25
           });
         }
-        columns.push({
-          field: "summary",
-          label: this.$t("summary.summary"),
-          width: 25
-        });
         return columns;
       }
     },
@@ -64,7 +97,6 @@ export default {
         const events = this.eventsParticipants;
         for (var e = 0; e < events.length; e++) {
           const eventUuid = events[e].uuid;
-          var total = 0;
           for (var m = 0; m < events[e].members.length; m++) {
             participantsById[events[e].members[m].uuid] = participantsById[
               events[e].members[m].uuid
@@ -77,16 +109,11 @@ export default {
             var answer = "-";
             if (events[e].members[m].participation === "yes") {
               answer = this.$t("summary.yes");
-              total += 1;
             } else if (events[e].members[m].participation === "no") {
               answer = this.$t("summary.no");
             }
             participantsById[events[e].members[m].uuid][eventUuid] = answer;
           }
-          participantsById.total = participantsById.total || {
-            name: this.$t("summary.total")
-          };
-          participantsById.total[eventUuid] = total;
         }
         for (var participant in participantsById) {
           participantsArray.push(participantsById[participant]);
@@ -103,7 +130,6 @@ export default {
             }
           }
           if (p === participantsArray.length - 1) {
-            console.log(p);
             participantsArray[p].summary = "";
           } else {
             participantsArray[p].summary = participation + "/" + totalEvents;
@@ -114,6 +140,20 @@ export default {
     }
   },
   methods: {
+    countEventParticipants(eventUuid) {
+      var total = 0;
+      const events = this.eventsParticipants;
+      for (var e = 0; e < events.length; e++) {
+        if (events[e].uuid === eventUuid) {
+          for (var m = 0; m < events[e].members.length; m++) {
+            if (events[e].members[m].participation === "yes") {
+              total++;
+            }
+          }
+        }
+      }
+      return total;
+    },
     listEventsParticipants() {
       this.eventsParticipants = [];
       var self = this;
