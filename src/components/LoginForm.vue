@@ -32,7 +32,6 @@
 
 <script>
 import { mapMutations } from "vuex";
-import axios from "axios";
 
 export default {
   data() {
@@ -46,17 +45,14 @@ export default {
     }),
     login() {
       var self = this;
-      axios
-        .get("/api/members/" + this.member.uuid, {
-          headers: { "X-Member-Code": this.member.code }
-        })
+      this.$login(this.member.uuid, this.member.code)
         .then(function(response) {
           self.member.type = response.data.type;
           self.authenticate(self.member);
           self.$root.setLocale(response.data.language);
         })
-        .catch(err => {
-          console.log(err);
+        .catch(function(error) {
+          console.log(error);
           self.$notifyNOK(self.$t("login.notifyError"));
         });
     }

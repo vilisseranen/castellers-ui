@@ -5,15 +5,17 @@ import store from "./store";
 import i18n from "./i18n";
 import buefy from "./buefy";
 import axios from "axios";
+import "./registerServiceWorker";
 
 import notifications from "./notifications";
-
 import { cookieMixin } from "./mixins/cookies";
-import "./registerServiceWorker";
+
+import Api from "./plugins/api";
 
 Vue.config.productionTip = false;
 
 Vue.use(cookieMixin);
+Vue.use(Api);
 
 new Vue({
   router,

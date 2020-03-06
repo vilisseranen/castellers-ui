@@ -292,7 +292,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import { mapGetters } from "vuex";
 import { Datetime } from "vue-datetime";
 import PrettyRadio from "pretty-checkbox-vue/radio";
@@ -468,71 +467,41 @@ export default {
     eventEdit() {
       var self = this;
       self.isLoading = true;
-      if (self.currentEvent.uuid !== undefined) {
-        var url = `/api/admins/${self.uuid}/events/${this.currentEvent.uuid}`;
-        axios
-          .put(url, this.currentEvent, {
-            headers: { "X-Member-Code": this.code }
-          })
-          .then(function(response) {
-            self.isLoading = false;
-            self.$notifyOK(self.$t("events.notify_success"));
-            self.$emit("updatePractice", response.data.uuid);
-          })
-          .catch(function(error) {
-            self.isLoading = false;
-            self.$notifyNOK(self.$t("events.notify_error"));
-            console.log(error);
-          });
-      } else {
-        axios
-          .post(`/api/admins/${this.uuid}/events`, this.currentEvent, {
-            headers: { "X-Member-Code": this.code }
-          })
-          .then(function(response) {
-            self.isLoading = false;
-            self.$notifyOK(self.$t("events.notify_success"));
-            self.$emit("updatePractice", response.data.uuid);
-          })
-          .catch(function(error) {
-            self.isLoading = false;
-            self.$notifyNOK(self.$t("events.notify_error"));
-            console.log(error);
-          });
-      }
+      this.$editEvent(self.currentEvent)
+        .then(function() {
+          self.isLoading = false;
+          self.$notifyOK(self.$t("events.notify_success"));
+        })
+        .catch(function(error) {
+          self.isLoading = false;
+          self.$notifyNOK(self.$t("events.notify_error"));
+          console.log(error);
+        });
     },
     loadEvent(uuid) {
-      if (uuid) {
-        var self = this;
-        var url = `/api/events/${uuid}`;
-        axios
-          .get(url, { headers: { "X-Member-Code": this.code } })
-          .then(function(response) {
-            // If locationName is not set, use default coordinates
-            if (response.data.locationName === "") {
-              response.data.location = self.event.location;
-            }
-            self.event = response.data;
-          })
-          .catch(err => console.log(err));
-      }
+      var self = this;
+      this.$getEvent(uuid)
+        .then(function(response) {
+          // If locationName is not set, use default coordinates
+          if (response.data.locationName === "") {
+            response.data.location = self.event.location;
+          }
+          self.event = response.data;
+        })
+        .catch(err => console.log(err));
     },
     listParticipants(eventUuid) {
-      if (this.uuid) {
-        var self = this;
-        var url = `/api/admins/${this.uuid}/events/${eventUuid}/members`;
-        axios
-          .get(url, { headers: { "X-Member-Code": this.code } })
-          .then(function(response) {
-            self.participation = response.data;
-            for (var i = 0; i < self.participation.length; i++) {
-              self.participation[i].roles = self.participation[i].roles
-                .sort()
-                .join(", ");
-            }
-          })
-          .catch(err => console.log(err));
-      }
+      var self = this;
+      this.$getEventParticipation(eventUuid)
+        .then(function(response) {
+          self.participation = response.data;
+          for (var i = 0; i < self.participation.length; i++) {
+            self.participation[i].roles = self.participation[i].roles
+              .sort()
+              .join(", ");
+          }
+        })
+        .catch(err => console.log(err));
     },
     countRegistered() {
       return this.participation.filter(member => member.participation === "yes")
@@ -543,15 +512,9 @@ export default {
         .length;
     },
     presence(eventUuid, memberUuid, presence) {
-      if (this.uuid) {
-        var url = `/api/admins/${this.uuid}/events/${eventUuid}/members/${memberUuid}`;
-        axios.post(
-          url,
-          { presence: presence },
-          { headers: { "X-Member-Code": this.code } }
-        );
-      }
-      this.listParticipants(eventUuid);
+      this.$presenceEvent(eventUuid, memberUuid, presence).then(
+        this.listParticipants(eventUuid)
+      );
     }
   }
 };

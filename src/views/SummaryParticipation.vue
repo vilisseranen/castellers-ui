@@ -49,7 +49,6 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
-import axios from "axios";
 
 export default {
   data() {
@@ -153,31 +152,23 @@ export default {
     listEventsParticipants() {
       this.eventsParticipants = [];
       var self = this;
-      var url = `/api/admins/${self.uuid}/events`;
       let events;
-      axios
-        .get(url, { headers: { "X-Member-Code": self.code } })
-        .then(function(response) {
-          events = response.data;
-          for (var i = 0; i < response.data.length; i++) {
-            events[i].date = self.extractDate(events[i].startDate);
-            events[i].start = self.extractTime(events[i].startDate);
-            events[i].end = self.extractTime(events[i].endDate);
-          }
-          self.events = events;
-          for (var id in events) {
-            const event = events[id];
-            var url = `/api/admins/${self.uuid}/events/${events[id].uuid}/members`;
-            axios
-              .get(url, { headers: { "X-Member-Code": self.code } })
-              .then(function(response) {
-                event.members = response.data;
-                self.eventsParticipants.push(event);
-              })
-              .catch(err => console.log(err));
-          }
-        })
-        .catch(err => console.log(err));
+      this.$getEvents().then(function(response) {
+        events = response.data;
+        for (var i = 0; i < response.data.length; i++) {
+          events[i].date = self.extractDate(events[i].startDate);
+          events[i].start = self.extractTime(events[i].startDate);
+          events[i].end = self.extractTime(events[i].endDate);
+        }
+        self.events = events;
+        for (var id in events) {
+          const event = events[id];
+          self.$getEventParticipation(events[id].uuid).then(function(response) {
+            event.members = response.data;
+            self.eventsParticipants.push(event);
+          });
+        }
+      });
     },
     extractDate(timestamp) {
       var options = { year: "numeric", month: "2-digit", day: "2-digit" };
