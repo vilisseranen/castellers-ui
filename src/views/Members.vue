@@ -77,7 +77,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import { mapGetters } from "vuex";
 import { memberMixin } from "../mixins/members.js";
 
@@ -103,10 +102,7 @@ export default {
   methods: {
     listMembers() {
       var self = this;
-      axios
-        .get(`/api/admins/${this.uuid}/members`, {
-          headers: { "X-Member-Code": this.code }
-        })
+      this.$getMembers()
         .then(function(response) {
           self.members = response.data;
           for (var i = 0; i < self.members.length; i++) {

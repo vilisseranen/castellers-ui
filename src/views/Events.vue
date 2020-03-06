@@ -41,7 +41,6 @@
 
 <script>
 import Event from "../components/Event.vue";
-import axios from "axios";
 import { mapGetters, mapMutations } from "vuex";
 import { eventMixin } from "../mixins/events.js";
 
@@ -84,19 +83,7 @@ export default {
     },
     listEvents() {
       var self = this;
-      var url;
-      // If admin we will see attendance
-      if (this.uuid && this.type === "admin") {
-        url = `/api/admins/${self.uuid}/events?start=${this.startTimestamp}`;
-        // If user we will see our participation
-      } else if (this.uuid) {
-        url = `/api/members/${self.uuid}/events?start=${this.startTimestamp}`;
-        // We will just see events
-      } else {
-        url = `/api/events?start=${this.startTimestamp}`;
-      }
-      axios
-        .get(url, { headers: { "X-Member-Code": self.code } })
+      this.$getEvents()
         .then(function(response) {
           self.events = response.data;
           for (var i = 0; i < response.data.length; i++) {
@@ -143,12 +130,7 @@ export default {
     },
     participate(eventUuid, participation) {
       var self = this;
-      axios
-        .post(
-          `/api/events/${eventUuid}/members/${this.uuid}`,
-          { answer: participation },
-          { headers: { "X-Member-Code": this.code } }
-        )
+      this.$participateEvent(eventUuid, participation)
         .then(function() {
           self.listEvents();
           self.$notifyOK(self.$t("events.participationOK"));

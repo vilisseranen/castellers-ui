@@ -271,7 +271,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import { mapGetters } from "vuex";
 import Multiselect from "vue-multiselect";
 import "vue-multiselect/dist/vue-multiselect.min.css";
@@ -386,12 +385,9 @@ export default {
   },
   mounted() {
     var self = this;
-    axios
-      .get("/api/roles")
-      .then(function(response) {
-        self.available_roles = response.data.sort();
-      })
-      .catch(err => console.log(err));
+    this.$getRoles().then(function(response) {
+      self.available_roles = response.data.sort();
+    });
   },
   methods: {
     heightExemple() {
@@ -407,11 +403,7 @@ export default {
     resendEmail() {
       var self = this;
       self.updating = true;
-      axios
-        .get(
-          `/api/admins/${self.uuid}/members/${this.current_user.uuid}/registration`,
-          { headers: { "X-Member-Code": this.code } }
-        )
+      this.$resendEmail(this.current_user.uuid)
         .then(function(response) {
           self.updating = false;
           self.$notifyOK(self.$t("members.notifySuccess"));
