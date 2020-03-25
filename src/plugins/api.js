@@ -228,7 +228,7 @@ const Api = {
       if (user.uuid !== undefined) {
         method = "put";
         url += `/${user.uuid}`;
-        if (type === "admin") {
+        if (type === "member") {
           url = `/api/members/${user.uuid}`;
         }
       }
