@@ -176,7 +176,7 @@
           >
         </div>
       </div>
-      <div class="field column is-8">
+      <div class="field column is-8" v-if="type === 'admin'">
         <label class="label">{{ $t("members.roles") }}</label>
         <div class="control is-expanded">
           <multiselect
@@ -193,7 +193,7 @@
           ></multiselect>
         </div>
       </div>
-      <div class="field column is-4">
+      <div class="field column is-4" v-if="type === 'admin'">
         <label class="label">{{ $t("members.extra") }}</label>
         <div class="control is-expanded">
           <input class="input" type="text" v-model="current_user.extra" />
