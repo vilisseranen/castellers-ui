@@ -41,6 +41,10 @@ export default {
           if (response.data.uuid === self.uuid) {
             self.$root.setLocale(response.data.language);
           }
+          if (!user.uuid) {
+            self.$router.push({ path: `/memberEdit/${response.data.uuid}` });
+            self.loadUser(response.data.uuid);
+          }
         })
         .catch(function(error) {
           self.updating = false;
