@@ -1,11 +1,15 @@
 import axios from "axios";
 
 const Api = {
-  install(Vue, options) {
-    Vue.prototype.$getInitialize = function() {
+  install(Vue, opts) {
+    const apiCall = function(method, url, headers, data) {
       return new Promise((resolve, reject) => {
-        axios
-          .get("/api/initialize")
+        axios({
+          method: method,
+          url: url,
+          headers: headers,
+          data: data
+        })
           .then(function(response) {
             resolve(response);
           })
@@ -14,17 +18,11 @@ const Api = {
           });
       });
     };
+    Vue.prototype.$getInitialize = function() {
+      return apiCall("GET", "/api/initialize", null, null);
+    };
     Vue.prototype.$initialize = function(user) {
-      return new Promise((resolve, reject) => {
-        axios
-          .post("/api/initialize", user)
-          .then(function(response) {
-            resolve(response);
-          })
-          .catch(function(error) {
-            reject(error);
-          });
-      });
+      return apiCall("POST", "/api/initialize", null, user);
     };
     Vue.prototype.$getEvents = function() {
       const uuid = this.$store.getters.uuid;
@@ -38,87 +36,47 @@ const Api = {
       } else {
         url = `/api/events`;
       }
-      return new Promise((resolve, reject) => {
-        axios
-          .get(url, { headers: { "X-Member-Code": code } })
-          .then(function(response) {
-            resolve(response);
-          })
-          .catch(function(error) {
-            reject(error);
-          });
-      });
+      return apiCall("GET", url, { "X-Member-Code": code }, null);
     };
     Vue.prototype.$getEventParticipation = function(uuid) {
       const admin = this.$store.getters.uuid;
       const code = this.$store.getters.code;
-      return new Promise((resolve, reject) => {
-        axios
-          .get(`/api/admins/${admin}/events/${uuid}/members`, {
-            headers: { "X-Member-Code": code }
-          })
-          .then(function(response) {
-            resolve(response);
-          })
-          .catch(function(error) {
-            reject(error);
-          });
-      });
+      return apiCall(
+        "GET",
+        `/api/admins/${admin}/events/${uuid}/members`,
+        { "X-Member-Code": code },
+        null
+      );
     };
     Vue.prototype.$resendEmail = function(user) {
       const admin = this.$store.getters.uuid;
       const code = this.$store.getters.code;
-      return new Promise((resolve, reject) => {
-        axios
-          .get(`/api/admins/${admin}/members/${user}/registration`, {
-            headers: { "X-Member-Code": code }
-          })
-          .then(function(response) {
-            resolve(response);
-          })
-          .catch(function(error) {
-            reject(error);
-          });
-      });
+      return apiCall(
+        "GET",
+        `/api/admins/${admin}/members/${user}/registration`,
+        { "X-Member-Code": code },
+        null
+      );
     };
     Vue.prototype.$login = function(uuid, code) {
-      return new Promise((resolve, reject) => {
-        axios
-          .get("/api/members/" + uuid, {
-            headers: { "X-Member-Code": code }
-          })
-          .then(function(response) {
-            resolve(response);
-          })
-          .catch(function(error) {
-            reject(error);
-          });
-      });
+      return apiCall(
+        "GET",
+        `/api/members/${uuid}`,
+        { "X-Member-Code": code },
+        null
+      );
     };
     Vue.prototype.$getRoles = function() {
-      return new Promise((resolve, reject) => {
-        axios
-          .get("/api/roles")
-          .then(function(response) {
-            resolve(response);
-          })
-          .catch(function(error) {
-            reject(error);
-          });
-      });
+      return apiCall("GET", "/api/roles", null, null);
     };
     Vue.prototype.$getEvent = function(uuid) {
       const code = this.$store.getters.code;
-      return new Promise((resolve, reject) => {
-        axios
-          .get(`/api/events/${uuid}`, { headers: { "X-Member-Code": code } })
-          .then(function(response) {
-            resolve(response);
-          })
-          .catch(function(error) {
-            reject(error);
-          });
-      });
+      return apiCall(
+        "GET",
+        `/api/events/${uuid}`,
+        { "X-Member-Code": code },
+        null
+      );
     };
     Vue.prototype.$editEvent = function(event) {
       const admin = this.$store.getters.uuid;
@@ -129,56 +87,27 @@ const Api = {
         method = "put";
         url += `/${event.uuid}`;
       }
-      return new Promise((resolve, reject) => {
-        axios({
-          method: method,
-          url: url,
-          headers: { "X-Member-Code": code },
-          data: event
-        })
-          .then(function(response) {
-            resolve(response);
-          })
-          .catch(function(error) {
-            reject(error);
-          });
-      });
+      return apiCall(method, url, { "X-Member-Code": code }, event);
     };
     Vue.prototype.$presenceEvent = function(eventUuid, memberUuid, presence) {
       const admin = this.$store.getters.uuid;
       const code = this.$store.getters.code;
-      return new Promise((resolve, reject) => {
-        axios
-          .post(
-            `/api/admins/${admin}/events/${eventUuid}/members/${memberUuid}`,
-            { presence: presence },
-            { headers: { "X-Member-Code": code } }
-          )
-          .then(function(response) {
-            resolve(response);
-          })
-          .catch(function(error) {
-            reject(error);
-          });
-      });
+      return apiCall(
+        "POST",
+        `/api/admins/${admin}/events/${eventUuid}/members/${memberUuid}`,
+        { "X-Member-Code": code },
+        { presence: presence }
+      );
     };
     Vue.prototype.$participateEvent = function(eventUuid, participation) {
       const uuid = this.$store.getters.uuid;
       const code = this.$store.getters.code;
-      return new Promise((resolve, reject) => {
-        axios
-          .post(
-            `/api/events/${eventUuid}/members/${uuid}`,
-            { answer: participation },
-            { headers: { "X-Member-Code": code } }
-          )
-          .then(function(response) {
-            resolve(response);
-          })
-          .catch(function(error) {
-            reject(error);
-          });
-      });
+      return apiCall(
+        "POST",
+        `/api/events/${eventUuid}/members/${uuid}`,
+        { "X-Member-Code": code },
+        { answer: participation }
+      );
     };
     Vue.prototype.$getMember = function(uuid) {
       const admin = this.$store.getters.uuid;
@@ -188,39 +117,20 @@ const Api = {
       if (type === "admin") {
         url = `/api/admins/${admin}/members/${uuid}`;
       }
-      return new Promise((resolve, reject) => {
-        axios({
-          method: "get",
-          url: url,
-          headers: { "X-Member-Code": code }
-        })
-          .then(function(response) {
-            resolve(response);
-          })
-          .catch(function(error) {
-            reject(error);
-          });
-      });
+      return apiCall("GET", url, { "X-Member-Code": code }, null);
     };
     Vue.prototype.$getMembers = function() {
       const admin = this.$store.getters.uuid;
       const code = this.$store.getters.code;
-      return new Promise((resolve, reject) => {
-        axios({
-          method: "get",
-          url: `/api/admins/${admin}/members`,
-          headers: { "X-Member-Code": code }
-        })
-          .then(function(response) {
-            resolve(response);
-          })
-          .catch(function(error) {
-            reject(error);
-          });
-      });
+      return apiCall(
+        "GET",
+        `/api/admins/${admin}/members`,
+        { "X-Member-Code": code },
+        null
+      );
     };
     Vue.prototype.$editMember = function(user) {
-      const admin = this.$store.getters.admin;
+      const admin = this.$store.getters.uuid;
       const code = this.$store.getters.code;
       const type = this.$store.getters.type;
       let method = "post";
@@ -228,24 +138,11 @@ const Api = {
       if (user.uuid !== undefined) {
         method = "put";
         url += `/${user.uuid}`;
-        if (type === "admin") {
+        if (type === "member") {
           url = `/api/members/${user.uuid}`;
         }
       }
-      return new Promise((resolve, reject) => {
-        axios({
-          method: method,
-          url: url,
-          headers: { "X-Member-Code": code },
-          data: user
-        })
-          .then(function(response) {
-            resolve(response);
-          })
-          .catch(function(error) {
-            reject(error);
-          });
-      });
+      return apiCall(method, url, { "X-Member-Code": code }, user);
     };
   }
 };
