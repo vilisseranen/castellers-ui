@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@babel/core": "^7.8.4",
-    "@types/leaflet": "^1.5.8",
+    "@types/leaflet": "^1.5.17",
     "axios": "^0.19.2",
     "buefy": "^0.8.12",
     "bulma": "^0.8.0",
