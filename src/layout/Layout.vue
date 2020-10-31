@@ -1,16 +1,15 @@
 <template>
   <div id="app">
-    <!-- Banner with background -->
-    <bannerLayout></bannerLayout>
-    <section class="main-content columns">
-      <div
-        class="container column is-fluid"
-        style="padding: 48px; margin: 0px;"
-      >
-        <!-- This is the content of the page -->
-        <router-view></router-view>
+    <div id="wrapper">
+      <!-- Banner with background -->
+      <bannerLayout></bannerLayout>
+      <div id="middle" class="container columns is-fluid tosefsef">
+        <section class="main-content columns sfse">
+          <!-- This is the content of the page -->
+          <router-view></router-view>
+        </section>
       </div>
-    </section>
+    </div>
     <footerLayout></footerLayout>
   </div>
 </template>
