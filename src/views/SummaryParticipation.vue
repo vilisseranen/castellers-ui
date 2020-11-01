@@ -9,10 +9,8 @@
       :mobile-cards="false"
       :selected.sync="selected"
       icon-pack="fa"
-      sticky-header
-      style="height: 80vh;"
     >
-      <template slot-scope="props">
+      <template>
         <b-table-column
           v-for="column in columns"
           v-bind:key="column.field"
@@ -35,13 +33,16 @@
             </span>
           </template>
 
-          <span
-            v-bind:class="{
-              'has-text-weight-bold': props.row['name'] === $t('summary.total')
-            }"
-          >
-            {{ props.row[column.field] }}
-          </span>
+          <template v-slot="props">
+            <span
+              v-bind:class="{
+                'has-text-weight-bold':
+                  props.row['name'] === $t('summary.total')
+              }"
+            >
+              {{ props.row[column.field] }}
+            </span>
+          </template>
         </b-table-column>
       </template>
     </b-table>
@@ -79,7 +80,8 @@ export default {
             field: this.events[id].uuid,
             label: [this.events[id].name, this.events[id].date].join(" "),
             subheading: this.countEventParticipants(this.events[id].uuid),
-            width: 25
+            width: 25,
+            sortable: true
           });
         }
         return columns;

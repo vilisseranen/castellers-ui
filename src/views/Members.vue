@@ -11,67 +11,71 @@
     </b-field>
 
     <b-table :data="members" striped>
-      <template slot-scope="props">
-        <b-table-column
-          key="firstName"
-          field="firstName"
-          :label="$t('members.firstName')"
-          searchable
-          >{{ props.row.firstName }}</b-table-column
-        >
-        <b-table-column
-          key="lastName"
-          field="lastName"
-          :label="$t('members.lastName')"
-          searchable
-          >{{ props.row.lastName }}</b-table-column
-        >
-        <b-table-column
-          key="roles"
-          field="roles"
-          :label="$t('members.roles')"
-          searchable
-          >{{ props.row.roles }}</b-table-column
-        >
-        <b-table-column
-          key="extra"
-          field="extra"
-          :label="$t('members.extra')"
-          searchable
-          >{{ props.row.extra }}</b-table-column
-        >
-        <b-table-column
-          key="type"
-          field="type"
-          :label="$t('members.type')"
-          searchable
-        >
-          <span v-if="props.row.type === 'member'">{{
-            $t("members.memberType")
-          }}</span>
-          <span v-if="props.row.type === 'admin'">{{
-            $t("members.adminType")
-          }}</span>
-        </b-table-column>
-        <b-table-column key="actions" :label="$t('members.actions')">
-          <a href="#">
-            <span
-              class="icon has-text-info"
-              v-on:click="editMemberUuid(props.row.uuid)"
-            >
-              <i class="fa fa-edit"></i>
-            </span>
-          </a>
-          <a href="#">
-            <span
-              class="icon has-text-danger"
-              v-on:click="removeUser(props.row)"
-            >
-              <i class="fa fa-user-slash"></i>
-            </span>
-          </a>
-        </b-table-column>
-      </template>
+      <b-table-column
+        key="firstName"
+        field="firstName"
+        :label="$t('members.firstName')"
+        searchable
+        v-slot="props"
+        >{{ props.row.firstName }}
+      </b-table-column>
+      <b-table-column
+        key="lastName"
+        field="lastName"
+        :label="$t('members.lastName')"
+        searchable
+        v-slot="props"
+        >{{ props.row.lastName }}</b-table-column
+      >
+      <b-table-column
+        key="roles"
+        field="roles"
+        :label="$t('members.roles')"
+        searchable
+        v-slot="props"
+        >{{ props.row.roles }}</b-table-column
+      >
+      <b-table-column
+        key="extra"
+        field="extra"
+        :label="$t('members.extra')"
+        searchable
+        v-slot="props"
+        >{{ props.row.extra }}</b-table-column
+      >
+      <b-table-column
+        key="type"
+        field="type"
+        :label="$t('members.type')"
+        searchable
+        v-slot="props"
+      >
+        <span v-if="props.row.type === 'member'">{{
+          $t("members.memberType")
+        }}</span>
+        <span v-if="props.row.type === 'admin'">{{
+          $t("members.adminType")
+        }}</span>
+      </b-table-column>
+      <b-table-column
+        key="actions"
+        :label="$t('members.actions')"
+        v-slot="props"
+      >
+        <a href="#">
+          <span
+            class="icon has-text-info"
+            v-on:click="editMemberUuid(props.row.uuid)"
+          >
+            <i class="fa fa-edit"></i>
+          </span>
+        </a>
+        <a href="#">
+          <span class="icon has-text-danger" v-on:click="removeUser(props.row)">
+            <i class="fa fa-user-slash"></i>
+          </span>
+        </a>
+      </b-table-column>
     </b-table>
   </div>
 </template>

@@ -7,6 +7,23 @@ html,body
     overflow-x: hidden; 
 }
 
+#wrapper {
+  flex: 1;
+}
+
+#app {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  margin-top: -3.5em; // default size of navbar
+}
+
+#middle {
+  padding-top: 3.5em + 2em;
+  padding-bottom: 2em;
+  margin: 0px;
+}
+
 hr {
   display: block;
   height: 1px;
