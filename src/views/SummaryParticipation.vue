@@ -9,7 +9,6 @@
       :mobile-cards="false"
       :selected.sync="selected"
       icon-pack="fa"
-      sticky-header
     >
       <template>
         <b-table-column
@@ -81,7 +80,8 @@ export default {
             field: this.events[id].uuid,
             label: [this.events[id].name, this.events[id].date].join(" "),
             subheading: this.countEventParticipants(this.events[id].uuid),
-            width: 25
+            width: 25,
+            sortable: true
           });
         }
         return columns;
