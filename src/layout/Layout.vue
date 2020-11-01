@@ -3,8 +3,8 @@
     <div id="wrapper">
       <!-- Banner with background -->
       <bannerLayout></bannerLayout>
-      <div id="middle" class="container columns is-fluid tosefsef">
-        <section class="main-content columns sfse">
+      <div id="middle" class="container columns is-fluid">
+        <section class="main-content columns">
           <!-- This is the content of the page -->
           <router-view></router-view>
         </section>
