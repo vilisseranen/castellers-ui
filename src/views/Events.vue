@@ -50,7 +50,7 @@ export default {
     Event
   },
   computed: {
-    ...mapGetters(["uuid", "code", "type", "action"]),
+    ...mapGetters(["uuid", "type", "action"]),
     startTimestamp: function() {
       return this.allEvents ? 1 : 0;
     }

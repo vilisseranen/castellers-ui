@@ -79,7 +79,7 @@ import { mapGetters, mapMutations } from "vuex";
 
 export default {
   computed: {
-    ...mapGetters(["uuid", "code", "type"]),
+    ...mapGetters(["uuid", "type"]),
     routeName() {
       const { path } = this.$route;
       return path.split("/")[1].toLowerCase();

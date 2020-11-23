@@ -393,7 +393,7 @@ export default {
     this.listParticipants(this.$route.params.uuid);
   },
   computed: {
-    ...mapGetters(["uuid", "code", "type"]),
+    ...mapGetters(["uuid", "type"]),
     columns: function() {
       return ["participant_name", "roles", "participation"];
     },

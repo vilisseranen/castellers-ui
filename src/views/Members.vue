@@ -87,7 +87,7 @@ import { memberMixin } from "../mixins/members.js";
 export default {
   mixins: [memberMixin],
   computed: {
-    ...mapGetters(["uuid", "code", "type"])
+    ...mapGetters(["uuid", "type"])
   },
   data() {
     var members = [];
@@ -97,11 +97,6 @@ export default {
   },
   mounted() {
     this.listMembers();
-  },
-  watch: {
-    code: function() {
-      this.listMembers();
-    }
   },
   methods: {
     listMembers() {

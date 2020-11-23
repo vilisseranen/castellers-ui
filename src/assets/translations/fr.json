@@ -34,7 +34,19 @@
     "id": "Identifiant",
     "code": "Code",
     "loginButton": "Se connecter",
-    "notifyError": "Il y a eu une erreur, veuillez vérifier les informations fournies."
+    "notifyError": "Il y a eu une erreur, veuillez vérifier les informations fournies.",
+    "username": "Identifiant",
+    "usernamePlaceholder": "Votre identifiant",
+    "password": "Mot de passe",
+    "passwordPlaceholder": "Votre mot de passe",
+    "passwordConfirm": "Mot de passe à nouveau",
+    "resetButton": "Réinitialiser",
+    "resetPassword": "Réinitialisation du mot de passe",
+    "forgotPassword": "Mot de passe oublié?",
+    "title": "Connection",
+    "email": "Courriel",
+    "emailPlaceholder": "Votre courriel",
+    "resetPasswordButton": "Réinitialiser votre mot de passe"
   },
   "members": {
     "create": "Créer un nouveau membre",

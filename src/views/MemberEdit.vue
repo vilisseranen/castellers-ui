@@ -27,7 +27,7 @@ export default {
     this.loadUser(this.$route.params.uuid);
   },
   computed: {
-    ...mapGetters(["uuid", "code", "type"])
+    ...mapGetters(["uuid", "type"])
   },
   methods: {
     editUser(user) {

@@ -63,7 +63,7 @@ export default {
     this.listEventsParticipants();
   },
   computed: {
-    ...mapGetters(["uuid", "code", "type"]),
+    ...mapGetters(["uuid", "type"]),
     columns: {
       get: function() {
         var columns = [

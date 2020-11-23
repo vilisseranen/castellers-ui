@@ -3,6 +3,7 @@ import Router from "vue-router";
 
 import Layout from "./layout/Layout.vue";
 import Login from "./views/Login.vue";
+import ResetPassword from "./views/ResetPassword.vue";
 import Events from "./views/Events.vue";
 import Members from "./views/Members.vue";
 import MemberEdit from "./views/MemberEdit.vue";
@@ -31,6 +32,11 @@ export default new Router({
           path: "login",
           name: "Login",
           component: Login
+        },
+        {
+          path: "reset",
+          name: "Reset",
+          component: ResetPassword
         },
         {
           path: "events",

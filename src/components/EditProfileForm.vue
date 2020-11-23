@@ -287,7 +287,7 @@ export default {
     user: Object
   },
   computed: {
-    ...mapGetters(["uuid", "code", "type"]),
+    ...mapGetters(["uuid", "type"]),
     actionLabel: function() {
       return this.user.uuid ? "update" : "create";
     },
