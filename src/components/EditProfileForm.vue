@@ -271,7 +271,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import Multiselect from "vue-multiselect";
 import "vue-multiselect/dist/vue-multiselect.min.css";
 import PrettyRadio from "pretty-checkbox-vue/radio";
@@ -385,11 +385,15 @@ export default {
   },
   mounted() {
     var self = this;
-    this.$getRoles().then(function(response) {
+    this.getRoles().then(function(response) {
       self.available_roles = response.data.sort();
     });
   },
   methods: {
+    ...mapActions({
+      resendEmaiCall: "resendEmail",
+      getRoles: "getRoles"
+    }),
     heightExemple() {
       return this.height_unit === "cm"
         ? this.$t("members.exempleCM")
@@ -403,7 +407,7 @@ export default {
     resendEmail() {
       var self = this;
       self.updating = true;
-      this.$resendEmail(this.current_user.uuid)
+      this.resendEmaiCall(this.current_user.uuid)
         .then(function(response) {
           self.updating = false;
           self.$notifyOK(self.$t("members.notifySuccess"));

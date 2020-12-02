@@ -30,7 +30,7 @@
               v-model="member.password"
             />
           </div>
-          <div class="field is-grouped is-grouped-right">
+          <div class="field is-grouped is-grouped-centered">
             <button
               class="button is-primary"
               type="submit"
@@ -59,10 +59,10 @@
               class="input"
               type="text"
               :placeholder="$t('login.emailPlaceholder')"
-              v-model="member.username"
+              v-model="member.email"
             />
           </div>
-          <div class="field is-grouped is-grouped-right">
+          <div class="field is-grouped is-grouped-centered">
             <button
               class="button is-primary"
               type="submit"
@@ -92,14 +92,15 @@ export default {
       authenticate: "authenticate"
     }),
     ...mapActions({
-      setLanguage: "setLanguage"
+      getLogin: "login"
     }),
     login() {
       var self = this;
-      this.$login(this.member.username, this.member.password)
-        .then(async function(response) {
-          await self.authenticate(response.data);
-          await self.setLanguage(response.data.uuid);
+      this.getLogin({
+        username: this.member.username,
+        password: this.member.password
+      })
+        .then(function() {
           self.$root.setLocale(self.$store.getters.language);
           self.$router.push({ name: "Events" });
         })
@@ -108,10 +109,7 @@ export default {
           self.$notifyNOK(self.$t("login.notifyError"));
         });
     },
-    resetPassword() {
-      // var self = this;
-      // this.$resetPassword()
-    }
+    resetPassword() {}
   }
 };
 </script>

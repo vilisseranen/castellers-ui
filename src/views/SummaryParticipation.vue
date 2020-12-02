@@ -49,7 +49,7 @@
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   data() {
@@ -137,6 +137,10 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      getEvents: "getEvents",
+      getEventParticipation: "getEventParticipation"
+    }),
     countEventParticipants(eventUuid) {
       var total = 0;
       const events = this.eventsParticipants;
@@ -155,7 +159,7 @@ export default {
       this.eventsParticipants = [];
       var self = this;
       let events;
-      this.$getEvents().then(function(response) {
+      this.getEvents().then(function(response) {
         events = response.data;
         for (var i = 0; i < response.data.length; i++) {
           events[i].date = self.extractDate(events[i].startDate);
@@ -165,7 +169,7 @@ export default {
         self.events = events;
         for (var id in events) {
           const event = events[id];
-          self.$getEventParticipation(events[id].uuid).then(function(response) {
+          self.getEventParticipation(events[id].uuid).then(function(response) {
             event.members = response.data;
             self.eventsParticipants.push(event);
           });

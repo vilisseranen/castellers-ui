@@ -10,7 +10,7 @@
 
 <script>
 import EditProfileForm from "../components/EditProfileForm.vue";
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import { memberMixin } from "../mixins/members.js";
 
 export default {
@@ -30,10 +30,15 @@ export default {
     ...mapGetters(["uuid", "type"])
   },
   methods: {
+    ...mapActions({
+      getEvent: "getEvent",
+      getMember: "getMember",
+      editMember: "editMember"
+    }),
     editUser(user) {
       var self = this;
       self.updating = true;
-      this.$editMember(user)
+      this.editMember(user)
         .then(function(response) {
           self.updating = false;
           self.$notifyOK(self.$t("members.notifySuccess"));
@@ -56,7 +61,7 @@ export default {
     loadUser(uuid) {
       if (uuid) {
         var self = this;
-        this.$getMember(uuid)
+        this.getMember(uuid)
           .then(function(response) {
             self.user = response.data;
           })

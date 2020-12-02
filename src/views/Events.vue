@@ -41,7 +41,7 @@
 
 <script>
 import Event from "../components/Event.vue";
-import { mapGetters, mapMutations } from "vuex";
+import { mapGetters, mapMutations, mapActions } from "vuex";
 import { eventMixin } from "../mixins/events.js";
 
 export default {
@@ -75,6 +75,10 @@ export default {
   },
   methods: {
     ...mapMutations(["setAction"]),
+    ...mapActions({
+      getEvents: "getEvents",
+      participateEvent: "participateEvent"
+    }),
     checkAction() {
       if (this.action.type === "participateEvent") {
         this.participate(this.action.objectUUID, this.action.payload);
@@ -83,7 +87,7 @@ export default {
     },
     listEvents() {
       var self = this;
-      this.$getEvents()
+      this.getEvents()
         .then(function(response) {
           self.events = response.data;
           for (var i = 0; i < response.data.length; i++) {
@@ -130,7 +134,7 @@ export default {
     },
     participate(eventUuid, participation) {
       var self = this;
-      this.$participateEvent(eventUuid, participation)
+      this.participateEvent({ eventUuid, participation })
         .then(function() {
           self.listEvents();
           self.$notifyOK(self.$t("events.participationOK"));

@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import { memberMixin } from "../mixins/members.js";
 
 export default {
@@ -99,9 +99,12 @@ export default {
     this.listMembers();
   },
   methods: {
+    ...mapActions({
+      getMembers: "getMembers"
+    }),
     listMembers() {
       var self = this;
-      this.$getMembers()
+      this.getMembers()
         .then(function(response) {
           self.members = response.data;
           for (var i = 0; i < self.members.length; i++) {
