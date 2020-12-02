@@ -52,6 +52,14 @@ export default {
   async createEvent(adminUuid, event) {
     return apiCall("POST", `/api/admins/${adminUuid}/events`, {}, event);
   },
+  async deleteEvent(adminUuid, eventUuid) {
+    return apiCall(
+      "DELETE",
+      `/api/admins/${adminUuid}/events/${eventUuid}`,
+      {},
+      null
+    );
+  },
   async presenceEvent(adminUuid, eventUuid, memberUuid, presence) {
     return apiCall(
       "POST",
@@ -71,8 +79,13 @@ export default {
   async getMemberAsMember(uuid) {
     return apiCall("GET", `/api/members/${uuid}`, {}, null);
   },
-  async getMemberAsAdmin(uuid) {
-    return apiCall("GET", `/api/admins/${uuid}/members/${uuid}`, {}, null);
+  async getMemberAsAdmin(adminUuid, memberUuid) {
+    return apiCall(
+      "GET",
+      `/api/admins/${adminUuid}/members/${memberUuid}`,
+      {},
+      null
+    );
   },
   async getMembersAsAdmin(uuid) {
     return apiCall("GET", `/api/admins/${uuid}/members`, {}, null);
@@ -90,6 +103,14 @@ export default {
   },
   async createMemberAsAdmin(adminUuid, member) {
     return apiCall("POST", `/api/admins/${adminUuid}/members`, {}, member);
+  },
+  async deleteMember(adminUuid, memberUuid) {
+    return apiCall(
+      "DELETE",
+      `/api/admins/${adminUuid}/members/${memberUuid}`,
+      {},
+      null
+    );
   },
   async getEventsAsGuest() {
     return apiCall("GET", `/api/events`, {}, null);

@@ -1,4 +1,4 @@
-const axios = require("axios");
+import api from "../api/castellers";
 
 export var memberMixin = {
   methods: {
@@ -17,10 +17,8 @@ export var memberMixin = {
           cancelText: this.$t("members.cancelDelete"),
           type: "is-danger",
           onConfirm: () => {
-            axios
-              .delete(`api/admins/${self.uuid}/members/${member.uuid}`, {
-                headers: { "X-Member-Code": self.code }
-              })
+            api
+              .deleteMember(self.uuid, member.uuid)
               .then(function() {
                 resolve();
               })

@@ -2,7 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
 import createPersistedState from "vuex-persistedstate";
-import api2 from "./api/castellers";
+import api from "./api/castellers";
 
 Vue.use(Vuex);
 
@@ -39,23 +39,22 @@ var store = new Vuex.Store({
   },
   actions: {
     async getRoles() {
-      return api2.getRoles();
+      return api.getRoles();
     },
     async editMember(context, member) {
       if (member.uuid !== undefined) {
         if (context.getters.type === "member") {
-          return api2.editMemberAsMember(member);
+          return api.editMemberAsMember(member);
         }
-        return api2.editMemberAsAdmin(context.getters.uuid, member);
+        return api.editMemberAsAdmin(context.getters.uuid, member);
       }
-      return api2.editMemberAsAdmin(context.getters.uuid, member);
+      return api.editMemberAsAdmin(context.getters.uuid, member);
     },
     async getMember(context, memberUuid) {
       if (context.getters.type === "admin") {
-        console.log(memberUuid);
-        return api2.getMemberAsAdmin(context.getters.uuid, memberUuid);
+        return api.getMemberAsAdmin(context.getters.uuid, memberUuid);
       } else {
-        return api2
+        return api
           .getMemberAsMember(context.getters.uuid)
           .then(function(response) {
             context.commit("setLanguage", response.data.language);
@@ -63,20 +62,20 @@ var store = new Vuex.Store({
       }
     },
     async getMembers(context) {
-      return api2.getMembersAsAdmin(context.getters.uuid);
+      return api.getMembersAsAdmin(context.getters.uuid);
     },
     async getEvent(context, uuid) {
-      return api2.getEvent(uuid);
+      return api.getEvent(uuid);
     },
     async editEvent(context, event) {
       if (event.uuid !== undefined) {
-        return api2.editEvent(event);
+        return api.editEvent(context.getters.uuid, event);
       } else {
-        return api2.createEvent(event);
+        return api.createEvent(context.getters.uuid, event);
       }
     },
     async presenceEvent(context, { eventUuid, memberUuid, presence }) {
-      return api2.presenceEvent(
+      return api.presenceEvent(
         context.getters.uuid,
         eventUuid,
         memberUuid,
@@ -84,7 +83,7 @@ var store = new Vuex.Store({
       );
     },
     async participateEvent(context, { eventUuid, participation }) {
-      return api2.participateEvent(
+      return api.participateEvent(
         context.getters.uuid,
         eventUuid,
         participation
@@ -94,25 +93,25 @@ var store = new Vuex.Store({
       const uuid = context.getters.uuid;
       const type = context.getters.type;
       if (uuid && type) {
-        return api2.getEventsAsAdmin(uuid);
+        return api.getEventsAsAdmin(uuid);
       } else if (uuid) {
-        return api2.getEventsAsMember(uuid);
+        return api.getEventsAsMember(uuid);
       } else {
-        return api2.getEventsAsGuest();
+        return api.getEventsAsGuest();
       }
     },
     async getEventParticipation(context, eventUuid) {
       const adminUuid = context.getters.uuid;
-      return api2.getEventParticipationAsAdmin(adminUuid, eventUuid);
+      return api.getEventParticipationAsAdmin(adminUuid, eventUuid);
     },
     async login(context, { username, password }) {
-      return api2.login(username, password).then(function(response) {
+      return api.login(username, password).then(function(response) {
         context.commit("authenticate", response.data);
         context.dispatch("getMember");
       });
     },
     async refreshToken(context) {
-      return api2
+      return api
         .refreshToken(context.getters.refreshToken)
         .then(function(response) {
           context.commit("authenticate", response.data);
@@ -120,13 +119,13 @@ var store = new Vuex.Store({
         });
     },
     async getInitialize() {
-      return api2.getInitialize();
+      return api.getInitialize();
     },
     async initialize(context, { payload }) {
-      return api2.initialize(payload);
+      return api.initialize(payload);
     },
     async resendEmail(context, userUuid) {
-      return api2.resendEmailAsAdmin(context.getters.uuid, userUuid);
+      return api.resendEmailAsAdmin(context.getters.uuid, userUuid);
     }
   },
   getters: {

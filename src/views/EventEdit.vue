@@ -455,6 +455,7 @@ export default {
     ...mapActions({
       getEventParticipation: "getEventParticipation",
       getEvent: "getEvent",
+      editEvent: "editEvent",
       presenceEvent: "presenceEvent"
     }),
     // map
@@ -480,7 +481,7 @@ export default {
     eventEdit() {
       var self = this;
       self.isLoading = true;
-      this.$editEvent(self.currentEvent)
+      this.editEvent(self.currentEvent)
         .then(function() {
           self.isLoading = false;
           self.$notifyOK(self.$t("events.notify_success"));
@@ -492,29 +493,33 @@ export default {
         });
     },
     loadEvent(uuid) {
-      var self = this;
-      this.getEvent(uuid)
-        .then(function(response) {
-          // If locationName is not set, use default coordinates
-          if (response.data.locationName === "") {
-            response.data.location = self.event.location;
-          }
-          self.event = response.data;
-        })
-        .catch(err => console.log(err));
+      if (uuid) {
+        var self = this;
+        this.getEvent(uuid)
+          .then(function(response) {
+            // If locationName is not set, use default coordinates
+            if (response.data.locationName === "") {
+              response.data.location = self.event.location;
+            }
+            self.event = response.data;
+          })
+          .catch(err => console.log(err));
+      }
     },
     listParticipants(eventUuid) {
-      var self = this;
-      this.getEventParticipation(eventUuid)
-        .then(function(response) {
-          self.participation = response.data;
-          for (var i = 0; i < self.participation.length; i++) {
-            self.participation[i].roles = self.participation[i].roles
-              .sort()
-              .join(", ");
-          }
-        })
-        .catch(err => console.log(err));
+      if (eventUuid) {
+        var self = this;
+        this.getEventParticipation(eventUuid)
+          .then(function(response) {
+            self.participation = response.data;
+            for (var i = 0; i < self.participation.length; i++) {
+              self.participation[i].roles = self.participation[i].roles
+                .sort()
+                .join(", ");
+            }
+          })
+          .catch(err => console.log(err));
+      }
     },
     countRegistered() {
       return this.participation.filter(member => member.participation === "yes")
