@@ -54,11 +54,7 @@ var store = new Vuex.Store({
       if (context.getters.type === "admin") {
         return api.getMemberAsAdmin(context.getters.uuid, memberUuid);
       } else {
-        return api
-          .getMemberAsMember(context.getters.uuid)
-          .then(function(response) {
-            context.commit("setLanguage", response.data.language);
-          });
+        return api.getMemberAsMember(context.getters.uuid);
       }
     },
     async getMembers(context) {
@@ -105,9 +101,10 @@ var store = new Vuex.Store({
       return api.getEventParticipationAsAdmin(adminUuid, eventUuid);
     },
     async login(context, { username, password }) {
-      return api.login(username, password).then(function(response) {
+      return api.login(username, password).then(async function(response) {
         context.commit("authenticate", response.data);
-        context.dispatch("getMember");
+        response = await context.dispatch("getMember", context.getters.uuid);
+        context.commit("setLanguage", response.data.language);
       });
     },
     async refreshToken(context) {
