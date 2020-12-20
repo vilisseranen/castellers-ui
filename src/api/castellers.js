@@ -142,5 +142,24 @@ export default {
       {},
       null
     );
+  },
+  async resetPassword(username, password, token) {
+    return apiCall(
+      "POST",
+      `/api/reset_credentials`,
+      { Authorization: `Bearer: ${token}` },
+      { username: username, password: password }
+    );
+  },
+  async forgotPassword(email) {
+    return apiCall("POST", `/api/forgot_password`, {}, { email: email });
+  },
+  async changePassword(userUuid, password) {
+    return apiCall(
+      "POST",
+      `/api/members/${userUuid}/change_password`,
+      {},
+      { password: password }
+    );
   }
 };

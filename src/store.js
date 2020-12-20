@@ -88,7 +88,7 @@ var store = new Vuex.Store({
     async getEvents(context) {
       const uuid = context.getters.uuid;
       const type = context.getters.type;
-      if (uuid && type) {
+      if (uuid && type === "admin") {
         return api.getEventsAsAdmin(uuid);
       } else if (uuid) {
         return api.getEventsAsMember(uuid);
@@ -123,6 +123,15 @@ var store = new Vuex.Store({
     },
     async resendEmail(context, userUuid) {
       return api.resendEmailAsAdmin(context.getters.uuid, userUuid);
+    },
+    async resetPassword(context, { username, password, token }) {
+      return api.resetPassword(username, password, token);
+    },
+    async forgotPassword(context, email) {
+      return api.forgotPassword(email);
+    },
+    async changePassword(context, password) {
+      return api.changePassword(context.getters.uuid, password);
     }
   },
   getters: {

@@ -92,7 +92,8 @@ export default {
       authenticate: "authenticate"
     }),
     ...mapActions({
-      getLogin: "login"
+      getLogin: "login",
+      forgotPassword: "forgotPassword"
     }),
     login() {
       var self = this;
@@ -109,7 +110,9 @@ export default {
           self.$notifyNOK(self.$t("login.notifyError"));
         });
     },
-    resetPassword() {}
+    resetPassword() {
+      this.forgotPassword(this.member.email);
+    }
   }
 };
 </script>

@@ -199,7 +199,7 @@
           <input class="input" type="text" v-model="current_user.extra" />
         </div>
       </div>
-      <div class="column is-12">
+      <div class="column is-12" v-if="type === 'admin'">
         <div
           class="notification is-success"
           v-if="current_user.activated === 1"
