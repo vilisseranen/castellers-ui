@@ -70,7 +70,10 @@ export default {
       filteredEvents: [],
       allEvents: false,
       showPractices: true,
-      showPresentations: true
+      showPresentations: true,
+      participateEventUuid: "",
+      participateEventAnswer: "",
+      participateEventToken: ""
     };
   },
   methods: {
@@ -80,9 +83,16 @@ export default {
       participateEvent: "participateEvent"
     }),
     checkAction() {
-      if (this.action.type === "participateEvent") {
-        this.participate(this.action.objectUUID, this.action.payload);
-        this.setAction({ type: "", objectUUID: "", payload: "" });
+      // This page handles actions to participate to an event
+      if ("a" in this.$route.query && this.$route.query.a === "participate") {
+        this.participateEventUuid = this.$route.query.e;
+        this.participateEventAnswer = this.$route.query.p;
+        this.participateEventToken = this.$route.query.t;
+        this.participate(
+          this.participateEventUuid,
+          this.participateEventAnswer,
+          this.participateEventToken
+        );
       }
     },
     listEvents() {
@@ -132,9 +142,9 @@ export default {
       var time = new Date(timestamp * 1000);
       return new Intl.DateTimeFormat("fr-FR", options).format(time);
     },
-    participate(eventUuid, participation) {
+    participate(eventUuid, participation, token) {
       var self = this;
-      this.participateEvent({ eventUuid, participation })
+      this.participateEvent({ eventUuid, participation, token })
         .then(function() {
           self.listEvents();
           self.$notifyOK(self.$t("events.participationOK"));

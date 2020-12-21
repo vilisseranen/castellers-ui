@@ -78,7 +78,13 @@ var store = new Vuex.Store({
         presence
       );
     },
-    async participateEvent(context, { eventUuid, participation }) {
+    async participateEvent(
+      context,
+      { eventUuid, participation, token, userUuid }
+    ) {
+      if (token && userUuid) {
+        return api.participateEvent(userUuid, eventUuid, participation, token);
+      }
       return api.participateEvent(
         context.getters.uuid,
         eventUuid,
