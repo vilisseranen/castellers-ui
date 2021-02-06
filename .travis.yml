@@ -6,12 +6,6 @@ node_js:
 
 cache: npm
 
-before_install:
-- openssl aes-256-cbc -K $encrypted_b9416c471052_key -iv $encrypted_b9416c471052_iv
-  -in travis-deploy.enc -out ./travis-deploy -d
-- eval "$(ssh-agent -s)"
-- chmod 600 travis-deploy
-- ssh-add travis-deploy
 
 script:
 - npm run lint
@@ -19,7 +13,10 @@ script:
 
 deploy:
   edge: true
-  provider: script
-  script: bash deploy.sh
-  on:
-    branch: master
+  provider: s3
+  access_key_id: "$AWS_ACCESS_KEY"
+  secret_access_key: "AWS_SECRET_KEY"
+  bucket: "castellers.clemissa.info-static"
+  skip_cleanup: true
+  local_dir: dist
+  region: ca-central-1
