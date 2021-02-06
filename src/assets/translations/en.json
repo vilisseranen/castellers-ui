@@ -33,7 +33,16 @@
     "id": "ID",
     "code": "Code",
     "loginButton": "Log in",
-    "notifyError": "There was an error, please check your information."
+    "notifyError": "There was an error, please check your information.",
+    "username": "Username",
+    "usernamePlaceholder": "Your username",
+    "password": "Password",
+    "passwordPlaceholder": "Your password",
+    "passwordConfirm": "Password again",
+    "resetButton": "Reset",
+    "resetPassword": "Reset Password",
+    "forgotPassword": "Forgot password?",
+    "title": "Connection"
   },
   "members": {
     "create": "Create the profile of a new member",

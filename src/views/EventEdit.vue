@@ -191,7 +191,7 @@
         :can-cancel="false"
       ></b-loading>
     </div>
-    <div class="box" v-if="this.type === 'admin'">
+    <div class="box" v-if="this.type === 'admin' && this.event.uuid">
       <label class="label"
         >{{
           $t("events.presentRegistered").replace(/^\w/, c => c.toUpperCase())
@@ -223,76 +223,85 @@
               : ''
         "
       >
-        <template slot-scope="props">
-          <b-table-column field="name" :label="participationColumns['name']">
-            {{ props.row.firstName }} {{ props.row.lastName }}
-          </b-table-column>
-          <b-table-column field="roles" :label="participationColumns['roles']">
-            {{ props.row.roles }}
-          </b-table-column>
-          <b-table-column
-            field="participation"
-            :label="participationColumns['participation']"
-            sortable
-          >
-            <div class="tags">
-              <span
-                class="tag is-success"
-                v-if="props.row.participation == 'yes'"
-                >{{ $t("events.participationYes") }}</span
-              >
-              <span
-                class="tag is-danger"
-                v-if="props.row.participation == 'no'"
-                >{{ $t("events.participationNo") }}</span
-              >
-            </div>
-          </b-table-column>
-          <b-table-column
-            field="presence"
-            :label="participationColumns['presence']"
-            sortable
-          >
-            <div class="tags">
-              <span class="tag is-success" v-if="props.row.presence == 'yes'">{{
-                $t("members.present")
-              }}</span>
-              <span class="tag is-danger" v-if="props.row.presence == 'no'">{{
-                $t("members.absent")
-              }}</span>
-            </div>
-          </b-table-column>
+        <b-table-column
+          v-slot="props"
+          field="name"
+          :label="participationColumns['name']"
+        >
+          {{ props.row.firstName }} {{ props.row.lastName }}
+        </b-table-column>
+        <b-table-column
+          v-slot="props"
+          field="roles"
+          :label="participationColumns['roles']"
+        >
+          {{ props.row.roles }}
+        </b-table-column>
+        <b-table-column
+          v-slot="props"
+          field="participation"
+          :label="participationColumns['participation']"
+          sortable
+        >
+          <div class="tags">
+            <span
+              class="tag is-success"
+              v-if="props.row.participation == 'yes'"
+              >{{ $t("events.participationYes") }}</span
+            >
+            <span
+              class="tag is-danger"
+              v-if="props.row.participation == 'no'"
+              >{{ $t("events.participationNo") }}</span
+            >
+          </div>
+        </b-table-column>
+        <b-table-column
+          v-slot="props"
+          field="presence"
+          :label="participationColumns['presence']"
+          sortable
+        >
+          <div class="tags">
+            <span class="tag is-success" v-if="props.row.presence == 'yes'">{{
+              $t("members.present")
+            }}</span>
+            <span class="tag is-danger" v-if="props.row.presence == 'no'">{{
+              $t("members.absent")
+            }}</span>
+          </div>
+        </b-table-column>
 
-          <b-table-column
-            field="setPresence"
-            :label="participationColumns['setPresence']"
-            centered
-            width="50"
-          >
-            <a v-on:click="presence(currentEvent.uuid, props.row.uuid, 'yes')">
-              <span class="icon">
-                <i class="fas fa-check has-text-success"></i>
-              </span>
-            </a>
-            <a v-on:click="presence(currentEvent.uuid, props.row.uuid, 'no')">
-              <span class="icon">
-                <i class="fas fa-times has-text-danger"></i>
-              </span>
-            </a>
-            <a v-on:click="presence(currentEvent.uuid, props.row.uuid, '')">
-              <span class="icon">
-                <i class="fas fa-minus has-text-info"></i>
-              </span>
-            </a>
-          </b-table-column>
-        </template>
+        <b-table-column
+          v-slot="props"
+          field="setPresence"
+          :label="participationColumns['setPresence']"
+          centered
+          width="50"
+        >
+          <a v-on:click="presence(currentEvent.uuid, props.row.uuid, 'yes')">
+            <span class="icon">
+              <i class="fas fa-check has-text-success"></i>
+            </span>
+          </a>
+          <a v-on:click="presence(currentEvent.uuid, props.row.uuid, 'no')">
+            <span class="icon">
+              <i class="fas fa-times has-text-danger"></i>
+            </span>
+          </a>
+          <a v-on:click="presence(currentEvent.uuid, props.row.uuid, '')">
+            <span class="icon">
+              <i class="fas fa-minus has-text-info"></i>
+            </span>
+          </a>
+        </b-table-column>
       </b-table>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import { Datetime } from "vue-datetime";
 import PrettyRadio from "pretty-checkbox-vue/radio";
 import { LMap, LTileLayer, LMarker } from "vue2-leaflet";
@@ -393,14 +402,13 @@ export default {
     this.listParticipants(this.$route.params.uuid);
   },
   computed: {
-    ...mapGetters(["uuid", "code", "type"]),
+    ...mapGetters(["uuid", "type"]),
     columns: function() {
       return ["participant_name", "roles", "participation"];
     },
     actionLabel: function() {
       return this.event.uuid ? "update" : "create";
     },
-
     currentEvent: {
       get: function() {
         return this.event;
@@ -444,6 +452,12 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      getEventParticipation: "getEventParticipation",
+      getEvent: "getEvent",
+      editEvent: "editEvent",
+      presenceEvent: "presenceEvent"
+    }),
     // map
     setLocation(event) {
       this.currentEvent.location = L.latLng(event.latlng.lat, event.latlng.lng);
@@ -467,9 +481,13 @@ export default {
     eventEdit() {
       var self = this;
       self.isLoading = true;
-      this.$editEvent(self.currentEvent)
-        .then(function() {
+      this.editEvent(self.currentEvent)
+        .then(function(response) {
           self.isLoading = false;
+          if (!self.event.uuid) {
+            self.$router.push({ path: `/eventEdit/${response.data.uuid}` });
+            self.loadEvent(response.data.uuid);
+          }
           self.$notifyOK(self.$t("events.notify_success"));
         })
         .catch(function(error) {
@@ -479,29 +497,33 @@ export default {
         });
     },
     loadEvent(uuid) {
-      var self = this;
-      this.$getEvent(uuid)
-        .then(function(response) {
-          // If locationName is not set, use default coordinates
-          if (response.data.locationName === "") {
-            response.data.location = self.event.location;
-          }
-          self.event = response.data;
-        })
-        .catch(err => console.log(err));
+      if (uuid) {
+        var self = this;
+        this.getEvent(uuid)
+          .then(function(response) {
+            // If locationName is not set, use default coordinates
+            if (response.data.locationName === "") {
+              response.data.location = self.event.location;
+            }
+            self.event = response.data;
+          })
+          .catch(err => console.log(err));
+      }
     },
     listParticipants(eventUuid) {
-      var self = this;
-      this.$getEventParticipation(eventUuid)
-        .then(function(response) {
-          self.participation = response.data;
-          for (var i = 0; i < self.participation.length; i++) {
-            self.participation[i].roles = self.participation[i].roles
-              .sort()
-              .join(", ");
-          }
-        })
-        .catch(err => console.log(err));
+      if (eventUuid) {
+        var self = this;
+        this.getEventParticipation(eventUuid)
+          .then(function(response) {
+            self.participation = response.data;
+            for (var i = 0; i < self.participation.length; i++) {
+              self.participation[i].roles = self.participation[i].roles
+                .sort()
+                .join(", ");
+            }
+          })
+          .catch(err => console.log(err));
+      }
     },
     countRegistered() {
       return this.participation.filter(member => member.participation === "yes")
@@ -512,7 +534,7 @@ export default {
         .length;
     },
     presence(eventUuid, memberUuid, presence) {
-      this.$presenceEvent(eventUuid, memberUuid, presence).then(
+      this.presenceEvent({ eventUuid, memberUuid, presence }).then(
         this.listParticipants(eventUuid)
       );
     }
