@@ -191,7 +191,7 @@
         :can-cancel="false"
       ></b-loading>
     </div>
-    <div class="box" v-if="this.type === 'admin'">
+    <div class="box" v-if="this.type === 'admin' && this.event.uuid">
       <label class="label"
         >{{
           $t("events.presentRegistered").replace(/^\w/, c => c.toUpperCase())
@@ -482,8 +482,12 @@ export default {
       var self = this;
       self.isLoading = true;
       this.editEvent(self.currentEvent)
-        .then(function() {
+        .then(function(response) {
           self.isLoading = false;
+          if (!self.event.uuid) {
+            self.$router.push({ path: `/eventEdit/${response.data.uuid}` });
+            self.loadEvent(response.data.uuid);
+          }
           self.$notifyOK(self.$t("events.notify_success"));
         })
         .catch(function(error) {
