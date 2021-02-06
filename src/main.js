@@ -10,6 +10,20 @@ import notifications from "./notifications";
 
 Vue.config.productionTip = false;
 
+// Redirect if we need to log in
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!store.getters.isLoggedIn) {
+      console.log(to);
+      next({ name: "Login", query: { next: to.fullPath } });
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
+});
+
 new Vue({
   router,
   store,

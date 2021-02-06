@@ -103,7 +103,7 @@ export default {
       })
         .then(function() {
           self.$root.setLocale(self.$store.getters.language);
-          self.$router.push({ name: "Events" });
+          self.redirect();
         })
         .catch(function(error) {
           console.log(error);
@@ -112,6 +112,13 @@ export default {
     },
     resetPassword() {
       this.forgotPassword(this.member.email);
+    },
+    redirect() {
+      if (this.$route.query.next) {
+        this.$router.push({ path: this.$route.query.next });
+      } else {
+        self.$router.push({ name: "Events" });
+      }
     }
   }
 };

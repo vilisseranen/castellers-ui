@@ -21,7 +21,7 @@ export default new Router({
     {
       path: "/",
       component: Layout,
-      redirect: "/login",
+      redirect: "/events",
       children: [
         {
           path: "initialize",
@@ -51,22 +51,34 @@ export default new Router({
         {
           path: "memberEdit",
           name: "MemberAdd",
-          component: MemberEdit
+          component: MemberEdit,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "memberEdit/:uuid",
           name: "MemberEdit",
-          component: MemberEdit
+          component: MemberEdit,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "eventEdit",
           name: "EventAdd",
-          component: EventEdit
+          component: EventEdit,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "eventEdit/:uuid",
           name: "eventEdit",
-          component: EventEdit
+          component: EventEdit,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "summary",

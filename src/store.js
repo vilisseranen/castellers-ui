@@ -147,6 +147,11 @@ var store = new Vuex.Store({
       getters.accessToken
         ? JSON.parse(atob(getters.accessToken.split(".")[1]))
         : null,
+    refreshTokenData: (state, getters) =>
+      getters.accessToken
+        ? JSON.parse(atob(getters.refreshToken.split(".")[1]))
+        : null,
+
     uuid: (state, getters) =>
       getters.accessTokenData ? getters.accessTokenData.user_uuid : null,
     permissions: (state, getters) =>
@@ -161,7 +166,16 @@ var store = new Vuex.Store({
       }
     },
     language: state => state.locale,
-    action: state => state.action
+    action: state => state.action,
+    isLoggedIn: (state, getters) => {
+      if (
+        getters.refreshTokenData &&
+        getters.refreshTokenData.exp > Date.now() / 1000
+      ) {
+        return true;
+      }
+      return false;
+    }
   },
   plugins: [createPersistedState()]
 });
