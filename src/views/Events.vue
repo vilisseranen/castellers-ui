@@ -88,10 +88,12 @@ export default {
         this.participateEventUuid = this.$route.query.e;
         this.participateEventAnswer = this.$route.query.p;
         this.participateEventToken = this.$route.query.t;
+        this.participateEventUser = this.$route.query.u;
         this.participate(
           this.participateEventUuid,
           this.participateEventAnswer,
-          this.participateEventToken
+          this.participateEventToken,
+          this.participateEventUser
         );
       }
     },
@@ -142,9 +144,9 @@ export default {
       var time = new Date(timestamp * 1000);
       return new Intl.DateTimeFormat("fr-FR", options).format(time);
     },
-    participate(eventUuid, participation, token) {
+    participate(eventUuid, participation, token, userUuid) {
       var self = this;
-      this.participateEvent({ eventUuid, participation, token })
+      this.participateEvent({ eventUuid, participation, token, userUuid })
         .then(function() {
           self.listEvents();
           self.$notifyOK(self.$t("events.participationOK"));
