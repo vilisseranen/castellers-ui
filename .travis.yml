@@ -20,3 +20,5 @@ deploy:
   skip_cleanup: true
   local_dir: dist
   region: ca-central-1
+  on:
+    branch: travis-publish-s3
