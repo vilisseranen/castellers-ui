@@ -1,10 +1,18 @@
 import axios from "axios";
 
+var API_URL;
+
+if (process.env.NODE_ENV === "production" && process.env.VUE_APP_API_URL) {
+  API_URL = "https://" + process.env.VUE_APP_API_URL;
+} else {
+  API_URL = "";
+}
+
 const apiCall = function(method, url, headers, data) {
   return new Promise((resolve, reject) => {
     axios({
       method: method,
-      url: url,
+      url: API_URL + url,
       headers: headers,
       data: data
     })
