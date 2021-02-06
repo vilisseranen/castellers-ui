@@ -22,4 +22,4 @@ deploy:
   region: ca-central-1
   acl: public_read
   on:
-    branch: travis-publish-s3
+    branch: master
