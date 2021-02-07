@@ -48,7 +48,7 @@ var store = new Vuex.Store({
         }
         return api.editMemberAsAdmin(context.getters.uuid, member);
       }
-      return api.editMemberAsAdmin(context.getters.uuid, member);
+      return api.createMemberAsAdmin(context.getters.uuid, member);
     },
     async getMember(context, memberUuid) {
       if (context.getters.type === "admin") {
