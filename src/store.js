@@ -48,7 +48,7 @@ var store = new Vuex.Store({
         }
         return api.editMemberAsAdmin(context.getters.uuid, member);
       }
-      return api.editMemberAsAdmin(context.getters.uuid, member);
+      return api.createMemberAsAdmin(context.getters.uuid, member);
     },
     async getMember(context, memberUuid) {
       if (context.getters.type === "admin") {
@@ -124,7 +124,7 @@ var store = new Vuex.Store({
     async getInitialize() {
       return api.getInitialize();
     },
-    async initialize(context, { payload }) {
+    async initialize(context, payload) {
       return api.initialize(payload);
     },
     async resendEmail(context, userUuid) {
