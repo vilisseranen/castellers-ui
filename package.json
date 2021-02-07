@@ -11,7 +11,7 @@
   "dependencies": {
     "@babel/core": "^7.12.3",
     "@types/leaflet": "^1.5.19",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "buefy": "^0.9.4",
     "bulma": "^0.9.1",
     "core-js": "^3.6.5",

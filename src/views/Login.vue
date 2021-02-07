@@ -117,7 +117,7 @@ export default {
       if (this.$route.query.next) {
         this.$router.push({ path: this.$route.query.next });
       } else {
-        self.$router.push({ name: "Events" });
+        this.$router.push({ name: "Events" });
       }
     }
   }
