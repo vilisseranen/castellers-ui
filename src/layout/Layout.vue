@@ -3,8 +3,8 @@
     <div id="wrapper">
       <!-- Banner with background -->
       <bannerLayout></bannerLayout>
-      <div id="middle" class="container columns is-fluid">
-        <section class="main-content columns">
+      <div id="middle" class="container columns is-fluid is-centered">
+        <section class="main-content column">
           <!-- This is the content of the page -->
           <router-view></router-view>
         </section>

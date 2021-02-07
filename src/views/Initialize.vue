@@ -8,6 +8,7 @@
 </template>
 <script>
 import EditProfileForm from "../components/EditProfileForm.vue";
+import { mapActions } from "vuex";
 
 export default {
   components: {
@@ -18,7 +19,7 @@ export default {
     var initialized = true;
     var updating = false;
     var user = { roles: [], type: "admin", language: "fr" };
-    this.$getInitialize().then(function(response) {
+    this.getInitialize().then(function(response) {
       if (response.status === 204) {
         self.initialized = false;
       } else {
@@ -32,10 +33,14 @@ export default {
     };
   },
   methods: {
+    ...mapActions({
+      getInitialize: "getInitialize",
+      initialize: "initialize"
+    }),
     initializeApp(user) {
       var self = this;
       self.updating = true;
-      this.$initialize(user).then(function(response) {
+      this.initialize(user).then(function(response) {
         self.updating = false;
         self.user = response.data;
         if (response.status === 201) {

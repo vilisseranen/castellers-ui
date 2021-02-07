@@ -41,7 +41,7 @@
 
 <script>
 import Event from "../components/Event.vue";
-import { mapGetters, mapMutations } from "vuex";
+import { mapGetters, mapMutations, mapActions } from "vuex";
 import { eventMixin } from "../mixins/events.js";
 
 export default {
@@ -50,7 +50,7 @@ export default {
     Event
   },
   computed: {
-    ...mapGetters(["uuid", "code", "type", "action"]),
+    ...mapGetters(["uuid", "type", "action"]),
     startTimestamp: function() {
       return this.allEvents ? 1 : 0;
     }
@@ -70,20 +70,36 @@ export default {
       filteredEvents: [],
       allEvents: false,
       showPractices: true,
-      showPresentations: true
+      showPresentations: true,
+      participateEventUuid: "",
+      participateEventAnswer: "",
+      participateEventToken: ""
     };
   },
   methods: {
     ...mapMutations(["setAction"]),
+    ...mapActions({
+      getEvents: "getEvents",
+      participateEvent: "participateEvent"
+    }),
     checkAction() {
-      if (this.action.type === "participateEvent") {
-        this.participate(this.action.objectUUID, this.action.payload);
-        this.setAction({ type: "", objectUUID: "", payload: "" });
+      // This page handles actions to participate to an event
+      if ("a" in this.$route.query && this.$route.query.a === "participate") {
+        this.participateEventUuid = this.$route.query.e;
+        this.participateEventAnswer = this.$route.query.p;
+        this.participateEventToken = this.$route.query.t;
+        this.participateEventUser = this.$route.query.u;
+        this.participate(
+          this.participateEventUuid,
+          this.participateEventAnswer,
+          this.participateEventToken,
+          this.participateEventUser
+        );
       }
     },
     listEvents() {
       var self = this;
-      this.$getEvents()
+      this.getEvents()
         .then(function(response) {
           self.events = response.data;
           for (var i = 0; i < response.data.length; i++) {
@@ -128,9 +144,9 @@ export default {
       var time = new Date(timestamp * 1000);
       return new Intl.DateTimeFormat("fr-FR", options).format(time);
     },
-    participate(eventUuid, participation) {
+    participate(eventUuid, participation, token, userUuid) {
       var self = this;
-      this.$participateEvent(eventUuid, participation)
+      this.participateEvent({ eventUuid, participation, token, userUuid })
         .then(function() {
           self.listEvents();
           self.$notifyOK(self.$t("events.participationOK"));

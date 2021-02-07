@@ -3,6 +3,7 @@ import Router from "vue-router";
 
 import Layout from "./layout/Layout.vue";
 import Login from "./views/Login.vue";
+import ResetPassword from "./views/ResetPassword.vue";
 import Events from "./views/Events.vue";
 import Members from "./views/Members.vue";
 import MemberEdit from "./views/MemberEdit.vue";
@@ -20,7 +21,7 @@ export default new Router({
     {
       path: "/",
       component: Layout,
-      redirect: "/login",
+      redirect: "/events",
       children: [
         {
           path: "initialize",
@@ -31,6 +32,11 @@ export default new Router({
           path: "login",
           name: "Login",
           component: Login
+        },
+        {
+          path: "reset",
+          name: "Reset",
+          component: ResetPassword
         },
         {
           path: "events",
@@ -45,22 +51,34 @@ export default new Router({
         {
           path: "memberEdit",
           name: "MemberAdd",
-          component: MemberEdit
+          component: MemberEdit,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "memberEdit/:uuid",
           name: "MemberEdit",
-          component: MemberEdit
+          component: MemberEdit,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "eventEdit",
           name: "EventAdd",
-          component: EventEdit
+          component: EventEdit,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "eventEdit/:uuid",
           name: "eventEdit",
-          component: EventEdit
+          component: EventEdit,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "summary",

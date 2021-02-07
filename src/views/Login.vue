@@ -1,90 +1,124 @@
 <template>
   <div>
-    <div class="box">
-      <p class="title is-5">{{ $t("login.status") }}</p>
-      <div v-if="authenticated" class="notification is-success">
-        <strong>{{ $t("login.loggedIn") }}</strong>
-        {{ $t("login.loggedInText") }}
+    <section class="hero">
+      <div class="hero-body has-text-centered">
+        <div class="container">
+          <h1 class="title">
+            {{ $t("login.title") }}
+          </h1>
+        </div>
       </div>
-      <div v-else class="notification is-warning">
-        <strong>{{ $t("login.notLoggedIn") }}</strong>
-        {{ $t("login.notLoggedInText") }}
+    </section>
+    <div class="columns is-centered">
+      <div class="column is-one-quarter">
+        <form class="loginform">
+          <div class="field">
+            <label class="label">{{ $t("login.username") }}</label>
+            <input
+              class="input"
+              type="text"
+              :placeholder="$t('login.usernamePlaceholder')"
+              v-model="member.username"
+            />
+          </div>
+          <div class="field">
+            <label class="label">{{ $t("login.password") }}</label>
+            <input
+              class="input"
+              type="password"
+              :placeholder="$t('login.passwordPlaceholder')"
+              v-model="member.password"
+            />
+          </div>
+          <div class="field is-grouped is-grouped-centered">
+            <button
+              class="button is-primary"
+              type="submit"
+              @click.prevent="login"
+            >
+              {{ $t("login.loginButton") }}
+            </button>
+          </div>
+        </form>
+        <div class="has-text-centered">
+          <a
+            class="is-size-7 has-text-weight-bold"
+            v-on:click="passwordForgotten = true"
+            href="#"
+            >{{ $t("login.forgotPassword") }}</a
+          >
+        </div>
       </div>
     </div>
-    <login-form v-if="!authenticated"></login-form>
-    <div class="box" v-if="authenticated">
-      <p class="title is-5">{{ $t("login.now") }}</p>
-      <div class="content">
-        <p>{{ $t("login.loggedInInstructions") }}</p>
-        <ul>
-          <li>{{ $t("login.bookmarkSite") }}</li>
-          <li>{{ $t("login.updateProfile") }}</li>
-          <li>{{ $t("login.registerEvents") }}</li>
-        </ul>
-      </div>
-    </div>
-    <div class="box" v-if="authenticated">
-      <p class="title is-5">{{ $t("login.autoconnect") }}</p>
-      <PrettyCheck class="p-default p-curve" v-model="autoconnect">
-        <span v-if="autoconnectLabel === 'yes'">{{
-          $t("login.autoconnectYes")
-        }}</span>
-        <span v-if="autoconnectLabel === 'no'">{{
-          $t("login.autoconnectNo")
-        }}</span>
-      </PrettyCheck>
-      <hr />
-      <div slot="footer">
-        <p>{{ $t("login.cookie_warning") }}</p>
+    <div class="columns is-centered" v-if="passwordForgotten">
+      <div class="column is-one-quarter">
+        <form class="loginform">
+          <div class="field">
+            <label class="label">{{ $t("login.email") }}</label>
+            <input
+              class="input"
+              type="text"
+              :placeholder="$t('login.emailPlaceholder')"
+              v-model="member.email"
+            />
+          </div>
+          <div class="field is-grouped is-grouped-centered">
+            <button
+              class="button is-primary"
+              type="submit"
+              @click.prevent="resetPassword"
+            >
+              {{ $t("login.resetPasswordButton") }}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import LoginForm from "../components/LoginForm.vue";
-import { mapGetters } from "vuex";
-import PrettyCheck from "pretty-checkbox-vue/check";
-import { cookieMixin } from "../mixins/cookies.js";
-
-import "pretty-checkbox/dist/pretty-checkbox.min.css";
+import { mapMutations, mapActions } from "vuex";
 
 export default {
-  mixins: [cookieMixin],
-  computed: {
-    ...mapGetters(["uuid", "code", "type"]),
-    authenticated: function() {
-      return this.uuid && this.code;
-    },
-    autoconnectLabel: function() {
-      return this.autoconnect ? "yes" : "no";
-    }
-  },
   data() {
     return {
-      autoconnect: false
+      member: {},
+      passwordForgotten: false
     };
   },
-  watch: {
-    autoconnect: function(val) {
-      if (val) {
-        this.setCookie("member", this.uuid, 365);
-        this.setCookie("code", this.code, 365);
+  methods: {
+    ...mapMutations({
+      authenticate: "authenticate"
+    }),
+    ...mapActions({
+      getLogin: "login",
+      forgotPassword: "forgotPassword"
+    }),
+    login() {
+      var self = this;
+      this.getLogin({
+        username: this.member.username,
+        password: this.member.password
+      })
+        .then(function() {
+          self.$root.setLocale(self.$store.getters.language);
+          self.redirect();
+        })
+        .catch(function(error) {
+          console.log(error);
+          self.$notifyNOK(self.$t("login.notifyError"));
+        });
+    },
+    resetPassword() {
+      this.forgotPassword(this.member.email);
+    },
+    redirect() {
+      if (this.$route.query.next) {
+        this.$router.push({ path: this.$route.query.next });
       } else {
-        this.eraseCookie("member");
-        this.eraseCookie("code");
+        self.$router.push({ name: "Events" });
       }
-    }
-  },
-  components: {
-    LoginForm,
-    PrettyCheck
-  },
-  mounted() {
-    var member = this.getCookie("member");
-    var code = this.getCookie("code");
-    if (member && code) {
-      this.autoconnect = true;
     }
   }
 };
