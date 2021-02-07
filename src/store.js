@@ -124,7 +124,7 @@ var store = new Vuex.Store({
     async getInitialize() {
       return api.getInitialize();
     },
-    async initialize(context, { payload }) {
+    async initialize(context, payload) {
       return api.initialize(payload);
     },
     async resendEmail(context, userUuid) {
