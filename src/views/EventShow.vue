@@ -1,5 +1,5 @@
 <template>
-  <div><event-edit></event-edit></div>
+  <div><event-edit readonly></event-edit></div>
 </template>
 
 <script>
