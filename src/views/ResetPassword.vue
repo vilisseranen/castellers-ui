@@ -12,7 +12,7 @@
     <div class="columns is-centered">
       <div class="column is-one-quarter">
         <form class="loginform">
-          <fieldset :disabled="action === 'reset' ? true : false">
+          <fieldset :disabled="action === 'reset' ? true : false" class="field">
             <div class="field">
               <label class="label">{{ $t("login.username") }}</label>
               <input
