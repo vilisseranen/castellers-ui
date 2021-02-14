@@ -51,7 +51,8 @@
     "emailPlaceholder": "Votre courriel",
     "resetPasswordButton": "Réinitialiser votre mot de passe",
     "passwordResetError": "Il y a eu un problème.",
-    "passwordChanged": "Votre mot de passe a été modifié"
+    "passwordChanged": "Votre mot de passe a été modifié",
+    "passwordResetSent": "Un courriel avec un lien pour réinitialiser le mot de passe va être envoyé si cette adresse se trouve dans nos systèmes."
   },
   "members": {
     "create": "Créer un nouveau membre",
