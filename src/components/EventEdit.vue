@@ -49,6 +49,15 @@
               v-model="event.type"
               >{{ $t("events.presentationType") }}</PrettyRadio
             >
+            <PrettyRadio
+              class="p-default p-curve"
+              name="type"
+              color="success-o"
+              value="social"
+              :disabled="readonly ? true : false"
+              v-model="event.type"
+              >{{ $t("events.socialType") }}</PrettyRadio
+            >
           </div>
         </div>
         <div class="field column is-6">
