@@ -160,7 +160,9 @@
     "registered_plural": "inscrits",
     "presence": "Présence",
     "filterMembers": "Filtrer les membres",
-    "presentRegistered": "Présents / Inscrits"
+    "presentRegistered": "Présents / Inscrits",
+    "socialType": "Social",
+    "social": "social"
   },
   "summary": {
     "title": "Participation pour les évènements à venir",

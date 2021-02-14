@@ -39,6 +39,9 @@
                 <span class="tag is-info" v-if="event.type == 'practice'">{{
                   $t("events.practice")
                 }}</span>
+                <span class="tag is-success" v-if="event.type == 'social'">{{
+                  $t("events.social")
+                }}</span>
               </div>
             </div>
           </router-link>
