@@ -111,7 +111,10 @@ export default {
         });
     },
     resetPassword() {
-      this.forgotPassword(this.member.email);
+      var self = this;
+      this.forgotPassword(this.member.email).then(function() {
+        self.$notifyOK(self.$t("login.passwordResetSent"));
+      });
     },
     redirect() {
       if (this.$route.query.next) {

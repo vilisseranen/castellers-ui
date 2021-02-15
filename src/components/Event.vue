@@ -3,39 +3,48 @@
     <div class="card">
       <article class="card-content">
         <div class="content">
-          <div>
-            <strong>{{ event.name }}</strong>
-            <span v-if="memberType === 'admin'">
-              ({{ event.attendance }} {{ registeredLabel }})</span
-            >
-            <br />
-            <small
-              >{{ $t("events.onThe") }} {{ event.date }}
-              {{ $t("events.from") }} {{ event.start }} {{ $t("events.to") }}
-              {{ event.end }}</small
-            >
-            <br />
-            {{ event.description }}
-            <br />
-            <div class="tags">
-              <span
-                class="tag is-success"
-                v-if="event.participation == 'yes'"
-                >{{ $t("events.participationYes") }}</span
+          <router-link
+            :to="{ name: 'eventShow', params: { uuid: event.uuid } }"
+          >
+            <div>
+              <strong>{{ event.name }}</strong>
+              <span v-if="memberType === 'admin'">
+                ({{ event.attendance }} {{ registeredLabel }})</span
               >
-              <span class="tag is-danger" v-if="event.participation == 'no'">{{
-                $t("events.participationNo")
-              }}</span>
-              <span
-                class="tag is-warning"
-                v-if="event.type == 'presentation'"
-                >{{ $t("events.presentation") }}</span
+              <br />
+              <small
+                >{{ $t("events.onThe") }} {{ event.date }}
+                {{ $t("events.from") }} {{ event.start }} {{ $t("events.to") }}
+                {{ event.end }}</small
               >
-              <span class="tag is-info" v-if="event.type == 'practice'">{{
-                $t("events.practice")
-              }}</span>
+              <br />
+              {{ event.description }}
+              <br />
+              <div class="tags">
+                <span
+                  class="tag is-success"
+                  v-if="event.participation == 'yes'"
+                  >{{ $t("events.participationYes") }}</span
+                >
+                <span
+                  class="tag is-danger"
+                  v-if="event.participation == 'no'"
+                  >{{ $t("events.participationNo") }}</span
+                >
+                <span
+                  class="tag is-warning"
+                  v-if="event.type == 'presentation'"
+                  >{{ $t("events.presentation") }}</span
+                >
+                <span class="tag is-info" v-if="event.type == 'practice'">{{
+                  $t("events.practice")
+                }}</span>
+                <span class="tag is-success" v-if="event.type == 'social'">{{
+                  $t("events.social")
+                }}</span>
+              </div>
             </div>
-          </div>
+          </router-link>
         </div>
         <nav class="level is-mobile" v-if="memberType === 'admin'">
           <div class="level-left">

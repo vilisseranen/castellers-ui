@@ -8,6 +8,7 @@ import Events from "./views/Events.vue";
 import Members from "./views/Members.vue";
 import MemberEdit from "./views/MemberEdit.vue";
 import EventEdit from "./views/EventEdit.vue";
+import EventShow from "./views/EventShow.vue";
 import Initialize from "./views/Initialize.vue";
 import SummaryParticipation from "./views/SummaryParticipation.vue";
 
@@ -79,6 +80,11 @@ export default new Router({
           meta: {
             requiresAuth: true
           }
+        },
+        {
+          path: "eventShow/:uuid",
+          name: "eventShow",
+          component: EventShow
         },
         {
           path: "summary",

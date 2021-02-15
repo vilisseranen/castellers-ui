@@ -10,7 +10,7 @@
           <span>{{ $t("events.create") }}</span>
         </button>
       </b-field>
-      <b-field grouped class="column" position="is-right">
+      <!-- <b-field grouped class="column" position="is-right">
         <b-switch
           v-model="showPractices"
           type="is-info"
@@ -23,7 +23,7 @@
           v-on:input="filterEvents('presentations')"
           >{{ $t("events.showPresentations") }}</b-switch
         >
-      </b-field>
+      </b-field> -->
     </div>
     <div class="columns is-multiline">
       <event
