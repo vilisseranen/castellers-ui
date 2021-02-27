@@ -27,7 +27,7 @@ module.exports = {
     appleMobileWebAppStatusBarStyle: "black",
     manifestOptions: {
       short_name: "castellers",
-      start_url: "/login",
+      start_url: "/events",
       description:
         "Organiser les pratiques et présentations des castellers de Montréal",
       dir: "ltr",
