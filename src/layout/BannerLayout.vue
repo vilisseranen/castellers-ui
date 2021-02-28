@@ -60,11 +60,7 @@
               :to="{ name: 'MemberEdit', params: { uuid: uuid } }"
               ><strong>{{ $t("bannerLayout.profile") }}</strong></router-link
             >
-            <a
-              v-on:click="disconnect()"
-              class="button is-primary"
-              v-if="this.uuid"
-            >
+            <a v-on:click="logout()" class="button is-primary" v-if="this.uuid">
               <strong>{{ $t("bannerLayout.disconnect") }}</strong>
             </a>
           </div>
@@ -75,7 +71,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   computed: {
@@ -86,8 +82,8 @@ export default {
     }
   },
   methods: {
-    ...mapMutations({
-      disconnect: "disconnect"
+    ...mapActions({
+      logout: "logout"
     })
   }
 };

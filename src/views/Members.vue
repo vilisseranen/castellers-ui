@@ -100,7 +100,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      getMembers: "getMembers"
+      getMembers: "members/getMembers"
     }),
     listMembers() {
       var self = this;

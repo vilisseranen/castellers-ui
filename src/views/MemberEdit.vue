@@ -88,10 +88,9 @@ export default {
   },
   methods: {
     ...mapActions({
-      getEvent: "getEvent",
-      getMember: "getMember",
-      editMember: "editMember",
-      changePassword: "changePassword"
+      getMember: "members/getMember",
+      editMember: "members/editMember",
+      changePassword: "members/changePassword"
     }),
     editUser(user) {
       var self = this;

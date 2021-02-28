@@ -93,7 +93,7 @@ export default {
     }),
     ...mapActions({
       getLogin: "login",
-      forgotPassword: "forgotPassword"
+      forgotPassword: "members/forgotPassword"
     }),
     login() {
       var self = this;

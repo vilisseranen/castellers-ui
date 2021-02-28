@@ -391,8 +391,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      resendEmaiCall: "resendEmail",
-      getRoles: "getRoles"
+      resendEmaiCall: "members/resendEmail",
+      getRoles: "members/getRoles"
     }),
     heightExemple() {
       return this.height_unit === "cm"

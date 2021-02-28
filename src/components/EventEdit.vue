@@ -475,10 +475,10 @@ export default {
   },
   methods: {
     ...mapActions({
-      getEventParticipation: "getEventParticipation",
-      getEvent: "getEvent",
-      editEvent: "editEvent",
-      presenceEvent: "presenceEvent"
+      getEventParticipation: "events/getEventParticipation",
+      getEvent: "events/getEvent",
+      editEvent: "events/editEvent",
+      presenceEvent: "events/presenceEvent"
     }),
     // map
     setLocation(event) {
@@ -538,7 +538,7 @@ export default {
       }
     },
     listParticipants(eventUuid) {
-      if (eventUuid) {
+      if (eventUuid && this.type === "admin") {
         var self = this;
         this.getEventParticipation(eventUuid)
           .then(function(response) {

@@ -34,8 +34,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      getInitialize: "getInitialize",
-      initialize: "initialize"
+      getInitialize: "initialize/getInitialize",
+      initialize: "initialize/initialize"
     }),
     initializeApp(user) {
       var self = this;

@@ -104,7 +104,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      resetPassword: "resetPassword",
+      resetPassword: "members/resetPassword",
       getLogin: "login"
     }),
     async reset() {
