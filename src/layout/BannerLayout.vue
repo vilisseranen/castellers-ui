@@ -83,8 +83,16 @@ export default {
   },
   methods: {
     ...mapActions({
-      logout: "logout"
-    })
+      resetState: "logout"
+    }),
+    logout() {
+      this.resetState();
+      if (this.$route.name === "Events") {
+        this.$router.go();
+      } else {
+        this.$router.push({ name: "Events" });
+      }
+    }
   }
 };
 </script>
