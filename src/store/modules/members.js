@@ -1,7 +1,9 @@
 import api from "../../api/castellers";
 
 // initial state
-const state = () => ({});
+const state = () => ({
+  members: []
+});
 
 // getters
 const getters = {};
@@ -28,7 +30,16 @@ const actions = {
     }
   },
   async getMembers(context) {
-    return api.getMembersAsAdmin(context.rootGetters.uuid);
+    return api
+      .getMembersAsAdmin(context.rootGetters.uuid)
+      .then(function(response) {
+        var members = response.data;
+        for (var i = 0; i < members.length; i++) {
+          members[i].roles = members[i].roles.join(", ");
+        }
+        context.commit("setMembers", members);
+        return response;
+      });
   },
   async resendEmail(context, userUuid) {
     return api.resendEmailAsAdmin(context.rootGetters.uuid, userUuid);
@@ -46,7 +57,14 @@ const actions = {
 
 // mutations
 const mutations = {
-  reset(state) {}
+  setMembers(state, members) {
+    if (members.length > 0) {
+      state.members = members;
+    }
+  },
+  reset(state) {
+    state.members = [];
+  }
 };
 
 export default {
