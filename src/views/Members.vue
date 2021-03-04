@@ -1,5 +1,5 @@
 <template>
-  <div class="box">
+  <div>
     <p class="title is-5">{{ $t("members.title") }}</p>
     <b-field>
       <button class="button field is-info" @click="addMember">
