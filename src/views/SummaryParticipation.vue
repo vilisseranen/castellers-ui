@@ -60,32 +60,36 @@ export default {
   },
   mounted() {
     this.$store.dispatch("events/getEventsParticipation");
+    this.$store.dispatch("members/getMembers");
   },
 
   computed: {
-    ...mapState(["events"]),
+    ...mapState({
+      events: state => state.events.events,
+      members: state => state.members.members
+    }),
     ...mapGetters(["uuid", "type"]),
     columns: function() {
       var columns = [
         {
           field: "name",
-          label: this.$t("summary.name"),
+          label: this.$t("general.name"),
           width: 150,
           sortable: true,
           subheading: this.$t("summary.total")
         }
       ];
-      const events = this.events.events;
-      if (events) {
+      if (this.events) {
         var count = 1;
-        for (var id in events) {
+        for (var id in this.events) {
           columns.push({
-            field: events[id].uuid,
-            label: [events[id].name, events[id].date].join(" "),
-            subheading: this.countEventParticipants(events[id]),
+            field: this.events[id].uuid,
+            label: [this.events[id].name, this.events[id].date].join(" "),
+            subheading: this.countEventParticipants(this.events[id]),
             width: 25,
             sortable: true
           });
+          // TODO: Adapt pagination for this page
           count++;
           if (count > 10) {
             break;
@@ -95,49 +99,29 @@ export default {
       return columns;
     },
     summaryParticipants: function() {
-      var participantsById = {};
       var participantsArray = [];
-      const events = this.events.events;
-      for (var uuid in events) {
-        if (events[uuid].members) {
-          for (var m = 0; m < events[uuid].members.length; m++) {
-            participantsById[events[uuid].members[m].uuid] = participantsById[
-              events[uuid].members[m].uuid
-            ] || {
-              name: [
-                events[uuid].members[m].firstName,
-                events[uuid].members[m].lastName
-              ].join(" ")
-            };
-            var answer = "-";
-            if (events[uuid].members[m].participation === "yes") {
-              answer = this.$t("summary.yes");
-            } else if (events[uuid].members[m].participation === "no") {
-              answer = this.$t("summary.no");
-            }
-            participantsById[events[uuid].members[m].uuid][uuid] = answer;
-          }
-        }
-      }
-      for (var participant in participantsById) {
-        participantsArray.push(participantsById[participant]);
-      }
-      for (var p = 0; p < participantsArray.length; p++) {
-        let participation = 0;
-        let totalEvents = 0;
-        for (var event in participantsArray[p]) {
-          if (event !== "name") {
-            totalEvents++;
-            if (participantsArray[p][event] === this.$t("summary.yes")) {
-              participation++;
+      for (var m = 0; m < this.members.length; m++) {
+        var memberLine = {
+          name: [this.members[m].firstName, this.members[m].lastName].join(" ")
+        };
+        for (var e = 0; e < this.events.length; e++) {
+          var answer = "-";
+          // check in members this member participation
+          if (this.events[e].members) {
+            for (var p = 0; p < this.events[e].members.length; p++) {
+              if (this.events[e].members[p].uuid === this.members[m].uuid) {
+                // This is the current member
+                if (this.events[e].members[p].participation === "yes") {
+                  answer = this.$t("general.yes");
+                } else if (this.events[e].members[p].participation === "no") {
+                  answer = this.$t("general.no");
+                }
+              }
             }
           }
+          memberLine[this.events[e].uuid] = answer;
         }
-        if (p === participantsArray.length - 1) {
-          participantsArray[p].summary = "";
-        } else {
-          participantsArray[p].summary = participation + "/" + totalEvents;
-        }
+        participantsArray.push(memberLine);
       }
       return participantsArray;
     }
