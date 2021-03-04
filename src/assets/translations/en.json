@@ -7,31 +7,17 @@
   },
   "general": {
     "requiredFields": "The fields marked with an asterisk are mandatory.",
-    "forCastellers": "Created for the Castellers by "
+    "forCastellers": "Created for the Castellers by ",
+    "yes": "Yes",
+    "no": "No",
+    "name": "Name"
   },
   "routes": {
     "members": "Members",
-    "events": "Presentations and practices"
+    "events": "Presentations and practices",
+    "summary": "Summary"
   },
   "login": {
-    "status": "State",
-    "loggedIn": "You are now logged in.",
-    "loggedInText": "You can now register for events or update your profile.",
-    "notLoggedIn": "You are not currently logged in.",
-    "notLoggedInText": "If you want to register for an event or update your profile, please log in first.",
-    "now": "Now what?",
-    "loggedInInstructions": "Now that you are authenticated, you can do all of these things:",
-    "bookmarkSite": "Save the page in your bookmarks, to come back here easily",
-    "updateProfile": "Update your profile",
-    "registerEvents": "Register for events",
-    "autoconnect": "Automatic login",
-    "autoconnectNo": "Disabled",
-    "autoconnectYes": "Enabled",
-    "cookie_warning": "We use cookie to log you in automatically with the code that was sent in your registration email. By clicking the checkbox above, you accept the use of cookies on this website.",
-    "howTo": "How to log in?",
-    "howToDescription": "The easiest way to log in is to click on the link in the registration email. After clicking it, you will be brought back on this page and be automatically logged in.",
-    "id": "ID",
-    "code": "Code",
     "loginButton": "Log in",
     "notifyError": "There was an error, please check your information.",
     "username": "Username",
@@ -42,7 +28,17 @@
     "resetButton": "Reset",
     "resetPassword": "Reset Password",
     "forgotPassword": "Forgot password?",
-    "title": "Connection"
+    "title": "Connection",
+    "email": "Email",
+    "emailPlaceholder": "Your email",
+    "resetPasswordButton": "Reset your password",
+    "passwordResetError": "There was an error.",
+    "passwordChanged": "Your password has been changed",
+    "passwordResetSent": "You will receive an email with instructions to reset your password if we find your email in our database.",
+    "passwordDifferent": "Passwords are different",
+    "activateButton": "Create",
+    "activatePasssword": "Choose you username and password"
+
   },
   "members": {
     "create": "Create the profile of a new member",
@@ -85,10 +81,15 @@
     "okDelete": "Yes",
     "cancelDelete": "No",
     "subscribeEmails": "I accept to receive emails",
-    "yes": "Yes",
-    "no": "No",
     "contact": "Emergency contact",
-    "contactDescription": "Phone number (ex: 514-111-1111)"
+    "contactDescription": "Phone number (ex: 514-111-1111)",
+    "absent": "Missing",
+    "participation": "Participation",
+    "presence": "Presence",
+    "setPresence": "Present?",
+    "present": "Present",
+    "changePassword": "Change your password"
+
   },
   "multiselect": {
     "selectLabel": "Press enter to select",
@@ -101,7 +102,6 @@
     "title": "Upcoming events",
     "create": "Schedule a new event",
     "update": "Change information about an event",
-    "name": "Name of the practice",
     "nameDescription": "Give the practice a name (example: weekly practice at Brébeuf)",
     "start": "Start",
     "end": "End",
@@ -118,15 +118,11 @@
     "participationNOK": "There was a problem.",
     "participationYes": "I will be there",
     "participationNo": "I won't be there",
-    "participationNoAnswer": "No answer",
-    "participation": "Participation",
     "onThe": "On the",
     "from": "from",
     "to": "to",
     "presentation": "Presentation",
     "practice": "Practice",
-    "showPractices": "Show practices",
-    "showPresentations": "Show presentations",
     "confirmDelete": "Do you really want to delete this practice?",
     "deleteOK": "Yes",
     "deleteCancel": "Cancel",
@@ -139,6 +135,16 @@
     "descriptionDescription": "Add a description to the event, for example:\n- What we will practice\n- A special event",
     "noteLocation": "The position on the map will only be saved if a location is specified in the associated textbox.",
     "registered": "registered",
-    "registered_plural": "registered"
+    "registered_plural": "registered",
+    "social": "social",
+    "socialType": "Social",
+    "presentRegistered": "Present / Registered",
+    "filterMembers": "Filter members",
+    "today": "Today",
+    "noEventToDisplay": "No more event to display."
+  },
+  "summary": {
+    "title": "Participants for upcoming events",
+    "total": "Total"
   }
 }
