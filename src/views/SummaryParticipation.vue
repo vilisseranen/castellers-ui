@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="title is-3">
+    <p class="title is-5">
       {{ $t("summary.title") }}
     </p>
     <b-table
