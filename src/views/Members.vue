@@ -81,38 +81,24 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 import { memberMixin } from "../mixins/members.js";
 
 export default {
   mixins: [memberMixin],
   computed: {
-    ...mapGetters(["uuid", "type"])
-  },
-  data() {
-    var members = [];
-    return {
-      members
-    };
+    ...mapGetters(["uuid", "type"]),
+    ...mapState({
+      members: state => state.members.members
+    })
   },
   mounted() {
-    this.listMembers();
+    this.$store.dispatch("members/getMembers");
   },
   methods: {
     ...mapActions({
       getMembers: "members/getMembers"
     }),
-    listMembers() {
-      var self = this;
-      this.getMembers()
-        .then(function(response) {
-          self.members = response.data;
-          for (var i = 0; i < self.members.length; i++) {
-            self.members[i].roles = self.members[i].roles.join(", ");
-          }
-        })
-        .catch(err => console.log(err));
-    },
     addMember() {
       this.$router.push({ name: "MemberAdd" });
     },
@@ -123,7 +109,7 @@ export default {
       var self = this;
       this.deleteUser(member)
         .then(function() {
-          self.listMembers();
+          self.$store.dispatch("members/getMembers");
         })
         .catch(function(error) {
           console.log(error);

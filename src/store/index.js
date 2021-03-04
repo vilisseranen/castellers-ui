@@ -6,6 +6,7 @@ import events from "./modules/events";
 import members from "./modules/members";
 import auth from "./modules/auth";
 import initialization from "./modules/initialization";
+import api from "../api/castellers";
 
 Vue.use(Vuex);
 
@@ -16,13 +17,25 @@ var store = new Vuex.Store({
     auth,
     initialization
   },
-  state: {},
-  mutations: {},
+  state: {
+    version: ""
+  },
+  mutations: {
+    setVersion(state, version) {
+      state.version = version.version;
+    }
+  },
   actions: {
     async reset(context) {
       context.commit("members/reset");
       context.commit("events/reset");
       context.commit("reset");
+    },
+    async version(context) {
+      return api.version().then(function(response) {
+        context.commit("setVersion", response.data);
+        return response;
+      });
     }
   },
   getters: {},
