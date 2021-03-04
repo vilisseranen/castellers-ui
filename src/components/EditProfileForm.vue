@@ -71,7 +71,7 @@
             name="subscribed"
             :value="0"
             v-model="current_user.subscribed"
-            >{{ $t("members.no") }}</PrettyRadio
+            >{{ $t("general.no") }}</PrettyRadio
           >
           <PrettyRadio
             v-bind="{ disabled: !this.user.uuid }"
@@ -79,7 +79,7 @@
             name="subscribed"
             :value="1"
             v-model="current_user.subscribed"
-            >{{ $t("members.yes") }}</PrettyRadio
+            >{{ $t("general.yes") }}</PrettyRadio
           >
         </div>
       </div>
