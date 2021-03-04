@@ -24,6 +24,7 @@
             color="primary-o"
             value="member"
             v-model="current_user.type"
+            :disabled="type === 'admin' ? false : true"
             >{{ $t("members.memberType") }}</PrettyRadio
           >
           <PrettyRadio
@@ -32,6 +33,7 @@
             color="success-o"
             value="admin"
             v-model="current_user.type"
+            :disabled="type === 'admin' ? false : true"
             >{{ $t("members.adminType") }}</PrettyRadio
           >
         </div>
