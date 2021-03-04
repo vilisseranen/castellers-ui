@@ -33,7 +33,7 @@
         </div>
         <div class="field column is-4">
           <label class="label" style="color: white;">{{
-            $t("members.changePasswordButton")
+            $t("members.changePassword")
           }}</label>
           <div class="control">
             <button
@@ -41,7 +41,7 @@
               @click.prevent="changeMyPassword"
               class="button is-danger"
             >
-              {{ $t("members.changePasswordButton") }}
+              {{ $t("members.changePassword") }}
             </button>
           </div>
         </div>
