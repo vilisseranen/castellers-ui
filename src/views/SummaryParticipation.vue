@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="title is-3">
+    <p class="title is-5">
       {{ $t("summary.title") }}
     </p>
     <b-table
@@ -49,142 +49,94 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   data() {
     return {
-      eventsParticipants: [],
-      events: [],
-      selected: null
+      selected: null,
+      eventsParticipants: []
     };
   },
   mounted() {
-    this.listEventsParticipants();
+    this.$store.dispatch("events/getEventsParticipation");
+    this.$store.dispatch("members/getMembers");
   },
+
   computed: {
+    ...mapState({
+      events: state => state.events.events,
+      members: state => state.members.members
+    }),
     ...mapGetters(["uuid", "type"]),
-    columns: {
-      get: function() {
-        var columns = [
-          {
-            field: "name",
-            label: this.$t("summary.name"),
-            width: 150,
-            sortable: true,
-            subheading: this.$t("summary.total")
-          }
-        ];
+    columns: function() {
+      var columns = [
+        {
+          field: "name",
+          label: this.$t("general.name"),
+          width: 150,
+          sortable: true,
+          subheading: this.$t("summary.total")
+        }
+      ];
+      if (this.events) {
+        var count = 1;
         for (var id in this.events) {
           columns.push({
             field: this.events[id].uuid,
             label: [this.events[id].name, this.events[id].date].join(" "),
-            subheading: this.countEventParticipants(this.events[id].uuid),
+            subheading: this.countEventParticipants(this.events[id]),
             width: 25,
             sortable: true
           });
-        }
-        return columns;
-      }
-    },
-    summaryParticipants: {
-      get: function() {
-        var participantsById = {};
-        var participantsArray = [];
-        const events = this.eventsParticipants;
-        for (var e = 0; e < events.length; e++) {
-          const eventUuid = events[e].uuid;
-          for (var m = 0; m < events[e].members.length; m++) {
-            participantsById[events[e].members[m].uuid] = participantsById[
-              events[e].members[m].uuid
-            ] || {
-              name: [
-                events[e].members[m].firstName,
-                events[e].members[m].lastName
-              ].join(" ")
-            };
-            var answer = "-";
-            if (events[e].members[m].participation === "yes") {
-              answer = this.$t("summary.yes");
-            } else if (events[e].members[m].participation === "no") {
-              answer = this.$t("summary.no");
-            }
-            participantsById[events[e].members[m].uuid][eventUuid] = answer;
+          // TODO: Adapt pagination for this page
+          count++;
+          if (count > 10) {
+            break;
           }
         }
-        for (var participant in participantsById) {
-          participantsArray.push(participantsById[participant]);
-        }
-        for (var p = 0; p < participantsArray.length; p++) {
-          let participation = 0;
-          let totalEvents = 0;
-          for (var event in participantsArray[p]) {
-            if (event !== "name") {
-              totalEvents++;
-              if (participantsArray[p][event] === this.$t("summary.yes")) {
-                participation++;
+      }
+      return columns;
+    },
+    summaryParticipants: function() {
+      var participantsArray = [];
+      for (var m = 0; m < this.members.length; m++) {
+        var memberLine = {
+          name: [this.members[m].firstName, this.members[m].lastName].join(" ")
+        };
+        for (var e = 0; e < this.events.length; e++) {
+          var answer = "-";
+          // check in members this member participation
+          if (this.events[e].members) {
+            for (var p = 0; p < this.events[e].members.length; p++) {
+              if (this.events[e].members[p].uuid === this.members[m].uuid) {
+                // This is the current member
+                if (this.events[e].members[p].participation === "yes") {
+                  answer = this.$t("general.yes");
+                } else if (this.events[e].members[p].participation === "no") {
+                  answer = this.$t("general.no");
+                }
               }
             }
           }
-          if (p === participantsArray.length - 1) {
-            participantsArray[p].summary = "";
-          } else {
-            participantsArray[p].summary = participation + "/" + totalEvents;
-          }
+          memberLine[this.events[e].uuid] = answer;
         }
-        return participantsArray;
+        participantsArray.push(memberLine);
       }
+      return participantsArray;
     }
   },
   methods: {
-    ...mapActions({
-      getEvents: "getEvents",
-      getEventParticipation: "getEventParticipation"
-    }),
-    countEventParticipants(eventUuid) {
+    countEventParticipants(event) {
       var total = 0;
-      const events = this.eventsParticipants;
-      for (var e = 0; e < events.length; e++) {
-        if (events[e].uuid === eventUuid) {
-          for (var m = 0; m < events[e].members.length; m++) {
-            if (events[e].members[m].participation === "yes") {
-              total++;
-            }
+      if (event.members) {
+        for (var m = 0; m < event.members.length; m++) {
+          if (event.members[m].participation === "yes") {
+            total++;
           }
         }
       }
       return total;
-    },
-    listEventsParticipants() {
-      this.eventsParticipants = [];
-      var self = this;
-      let events;
-      this.getEvents().then(function(response) {
-        events = response.data;
-        for (var i = 0; i < response.data.length; i++) {
-          events[i].date = self.extractDate(events[i].startDate);
-          events[i].start = self.extractTime(events[i].startDate);
-          events[i].end = self.extractTime(events[i].endDate);
-        }
-        self.events = events;
-        for (var id in events) {
-          const event = events[id];
-          self.getEventParticipation(events[id].uuid).then(function(response) {
-            event.members = response.data;
-            self.eventsParticipants.push(event);
-          });
-        }
-      });
-    },
-    extractDate(timestamp) {
-      var options = { year: "numeric", month: "2-digit", day: "2-digit" };
-      var date = new Date(timestamp * 1000);
-      return new Intl.DateTimeFormat("fr-FR", options).format(date);
-    },
-    extractTime(timestamp) {
-      var options = { hour: "2-digit", minute: "2-digit" };
-      var time = new Date(timestamp * 1000);
-      return new Intl.DateTimeFormat("fr-FR", options).format(time);
     }
   }
 };

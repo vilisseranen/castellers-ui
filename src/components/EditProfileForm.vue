@@ -24,6 +24,7 @@
             color="primary-o"
             value="member"
             v-model="current_user.type"
+            :disabled="type === 'admin' ? false : true"
             >{{ $t("members.memberType") }}</PrettyRadio
           >
           <PrettyRadio
@@ -32,6 +33,7 @@
             color="success-o"
             value="admin"
             v-model="current_user.type"
+            :disabled="type === 'admin' ? false : true"
             >{{ $t("members.adminType") }}</PrettyRadio
           >
         </div>
@@ -71,7 +73,7 @@
             name="subscribed"
             :value="0"
             v-model="current_user.subscribed"
-            >{{ $t("members.no") }}</PrettyRadio
+            >{{ $t("general.no") }}</PrettyRadio
           >
           <PrettyRadio
             v-bind="{ disabled: !this.user.uuid }"
@@ -79,7 +81,7 @@
             name="subscribed"
             :value="1"
             v-model="current_user.subscribed"
-            >{{ $t("members.yes") }}</PrettyRadio
+            >{{ $t("general.yes") }}</PrettyRadio
           >
         </div>
       </div>
@@ -391,8 +393,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      resendEmaiCall: "resendEmail",
-      getRoles: "getRoles"
+      resendEmaiCall: "members/resendEmail",
+      getRoles: "members/getRoles"
     }),
     heightExemple() {
       return this.height_unit === "cm"

@@ -10,24 +10,22 @@
           <span>{{ $t("events.create") }}</span>
         </button>
       </b-field>
-      <!-- <b-field grouped class="column" position="is-right">
-        <b-switch
-          v-model="showPractices"
-          type="is-info"
-          v-on:input="filterEvents('practices')"
-          >{{ $t("events.showPractices") }}</b-switch
+      <nav class="pagination" role="navigation" aria-label="pagination">
+        <a
+          class="pagination-previous"
+          v-on:click="previousPage()"
+          v-if="type === 'admin' || pagination.page > 0"
+          >&#xab;</a
         >
-        <b-switch
-          v-model="showPresentations"
-          type="is-warning"
-          v-on:input="filterEvents('presentations')"
-          >{{ $t("events.showPresentations") }}</b-switch
-        >
-      </b-field> -->
+        <a class="pagination-previous" v-on:click="pageToday()">{{
+          $t("events.today")
+        }}</a>
+        <a class="pagination-next" v-on:click="nextPage()">&#xbb;</a>
+      </nav>
     </div>
     <div class="columns is-multiline">
       <event
-        v-for="event in filteredEvents"
+        v-for="event in events"
         v-bind:key="event.uuid"
         v-bind:event="event"
         v-bind:memberType="type"
@@ -36,12 +34,19 @@
         v-on:edit="editEvent"
       ></event>
     </div>
+    <div class="columns is-centered" v-if="events.length === 0">
+      <div class="column">
+        <p class="has-text-centered title is-3">
+          {{ $t("events.noEventToDisplay") }}
+        </p>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import Event from "../components/Event.vue";
-import { mapGetters, mapMutations, mapActions } from "vuex";
+import { mapGetters, mapMutations, mapActions, mapState } from "vuex";
 import { eventMixin } from "../mixins/events.js";
 
 export default {
@@ -49,106 +54,44 @@ export default {
   components: {
     Event
   },
+  data: function() {
+    return {
+      eventsToListen: {}
+    };
+  },
   computed: {
-    ...mapGetters(["uuid", "type", "action"]),
-    startTimestamp: function() {
-      return this.allEvents ? 1 : 0;
-    }
+    ...mapState({
+      events: state => state.events.events,
+      pagination: state => state.events.pagination
+    }),
+    ...mapGetters(["uuid", "type", "action"])
   },
   mounted() {
-    this.listEvents();
+    this.$store.dispatch("events/getEvents");
     this.checkAction();
-  },
-  watch: {
-    uuid: function(uuid) {
-      this.listEvents();
-    }
-  },
-  data() {
-    return {
-      events: [],
-      filteredEvents: [],
-      allEvents: false,
-      showPractices: true,
-      showPresentations: true,
-      participateEventUuid: "",
-      participateEventAnswer: "",
-      participateEventToken: ""
-    };
   },
   methods: {
     ...mapMutations(["setAction"]),
     ...mapActions({
-      getEvents: "getEvents",
-      participateEvent: "participateEvent"
+      participateEvent: "events/participateEvent",
+      changePagination: "events/changePagination"
     }),
     checkAction() {
       // This page handles actions to participate to an event
       if ("a" in this.$route.query && this.$route.query.a === "participate") {
-        this.participateEventUuid = this.$route.query.e;
-        this.participateEventAnswer = this.$route.query.p;
-        this.participateEventToken = this.$route.query.t;
-        this.participateEventUser = this.$route.query.u;
         this.participate(
-          this.participateEventUuid,
-          this.participateEventAnswer,
-          this.participateEventToken,
-          this.participateEventUser
+          this.$route.query.e,
+          this.$route.query.p,
+          this.$route.query.t,
+          this.$route.query.u
         );
       }
-    },
-    listEvents() {
-      var self = this;
-      this.getEvents()
-        .then(function(response) {
-          self.events = response.data;
-          for (var i = 0; i < response.data.length; i++) {
-            self.events[i].date = self.extractDate(self.events[i].startDate);
-            self.events[i].start = self.extractTime(self.events[i].startDate);
-            self.events[i].end = self.extractTime(self.events[i].endDate);
-          }
-          self.filterEvents();
-        })
-        .catch(err => console.log(err));
-    },
-    filterEvents(type) {
-      // Prevent from displaying neither practices nor events
-      if (this.showPractices === false && this.showPresentations === false) {
-        if (type === "practices") {
-          this.showPresentations = true;
-        }
-        if (type === "presentations") {
-          this.showPractices = true;
-        }
-      }
-      // Filter results
-      if (this.showPractices === false) {
-        this.filteredEvents = this.events.filter(
-          event => event.type !== "practice"
-        );
-      } else if (this.showPresentations === false) {
-        this.filteredEvents = this.events.filter(
-          event => event.type !== "presentation"
-        );
-      } else {
-        this.filteredEvents = this.events;
-      }
-    },
-    extractDate(timestamp) {
-      var options = { year: "numeric", month: "2-digit", day: "2-digit" };
-      var date = new Date(timestamp * 1000);
-      return new Intl.DateTimeFormat("fr-FR", options).format(date);
-    },
-    extractTime(timestamp) {
-      var options = { hour: "2-digit", minute: "2-digit" };
-      var time = new Date(timestamp * 1000);
-      return new Intl.DateTimeFormat("fr-FR", options).format(time);
     },
     participate(eventUuid, participation, token, userUuid) {
       var self = this;
       this.participateEvent({ eventUuid, participation, token, userUuid })
         .then(function() {
-          self.listEvents();
+          self.$store.dispatch("events/getEvent", eventUuid);
           self.$notifyOK(self.$t("events.participationOK"));
         })
         .catch(function() {
@@ -170,6 +113,31 @@ export default {
         .catch(function(error) {
           console.log(error);
         });
+    },
+    previousPage() {
+      if (
+        this.events.length === this.pagination.limit ||
+        this.pagination.page > 0
+      ) {
+        var pagination = this.pagination;
+        pagination.page = pagination.page - 1;
+        this.changePagination(pagination);
+      }
+    },
+    nextPage() {
+      if (
+        this.events.length === this.pagination.limit ||
+        this.pagination.page < 0
+      ) {
+        var pagination = this.pagination;
+        pagination.page = pagination.page + 1;
+        this.changePagination(pagination);
+      }
+    },
+    pageToday() {
+      var pagination = this.pagination;
+      pagination.page = 0;
+      this.changePagination(pagination);
     }
   }
 };

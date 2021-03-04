@@ -124,14 +124,26 @@ export default {
       null
     );
   },
-  async getEventsAsGuest() {
-    return apiCall("GET", `/api/events`, {}, null);
+  async getEventsAsGuest(options) {
+    let endpoint = "/api/events";
+    if (options) {
+      endpoint = `${endpoint}?page=${options.page}&limit=${options.limit}`;
+    }
+    return apiCall("GET", endpoint, {}, null);
   },
-  async getEventsAsMember(uuid) {
-    return apiCall("GET", `/api/members/${uuid}/events`, {}, null);
+  async getEventsAsMember(uuid, options) {
+    let endpoint = `/api/members/${uuid}/events`;
+    if (options) {
+      endpoint = `${endpoint}?page=${options.page}&limit=${options.limit}`;
+    }
+    return apiCall("GET", endpoint, {}, null);
   },
-  async getEventsAsAdmin(uuid) {
-    return apiCall("GET", `/api/admins/${uuid}/events`, {}, null);
+  async getEventsAsAdmin(uuid, options) {
+    let endpoint = `/api/admins/${uuid}/events`;
+    if (options) {
+      endpoint = `${endpoint}?page=${options.page}&limit=${options.limit}`;
+    }
+    return apiCall("GET", endpoint, {}, null);
   },
   async getEventParticipationAsAdmin(adminUuid, eventUuid) {
     return apiCall(
@@ -173,5 +185,8 @@ export default {
       {},
       { password: password }
     );
+  },
+  async version() {
+    return apiCall("GET", `/api/version`, {}, {});
   }
 };

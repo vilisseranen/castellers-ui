@@ -29,17 +29,32 @@
           {{ $t("general.forCastellers")
           }}<a href="https://github.com/vilisseranen">Clément Contini</a>
         </p>
+        <p>Version: {{ uiVersion }} (UI) / {{ apiVersion }} (API)</p>
       </div>
     </div>
   </footer>
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
+  data() {
+    var uiVersion = process.env.VUE_APP_VERSION;
+    return { uiVersion };
+  },
+  computed: {
+    ...mapState({
+      apiVersion: state => state.version
+    })
+  },
   methods: {
     changeLanguage: function(lang) {
       this.$root.setLocale(lang);
     }
+  },
+  mounted() {
+    this.$store.dispatch("version");
   }
 };
 </script>
