@@ -17,7 +17,7 @@
           </fieldset>
         </div>
         <div class="field column is-7">
-          <label class="label required">{{ $t("events.name") }}</label>
+          <label class="label required">{{ $t("general.name") }}</label>
           <div class="control is-expanded">
             <input
               :disabled="readonly ? true : false"
@@ -389,7 +389,7 @@ export default {
       attribution:
         '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       participationColumns: {
-        name: this.$t("members.name"),
+        name: this.$t("general.name"),
         roles: this.$t("members.roles"),
         participation: this.$t("members.participation"),
         presence: this.$t("members.presence"),
