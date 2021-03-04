@@ -10,25 +10,36 @@
           <span>{{ $t("events.create") }}</span>
         </button>
       </b-field>
-      <!-- <b-field grouped class="column" position="is-right">
-        <b-switch v-model="showPractices" type="is-info">{{
-          $t("events.showPractices")
-        }}</b-switch>
-        <b-switch v-model="showPresentations" type="is-warning">{{
-          $t("events.showPresentations")
-        }}</b-switch>
-      </b-field> -->
+      <nav class="pagination" role="navigation" aria-label="pagination">
+        <a
+          class="pagination-previous"
+          v-on:click="previousPage()"
+          v-if="type === 'admin' || pagination.page > 0"
+          >&#xab;</a
+        >
+        <a class="pagination-previous" v-on:click="pageToday()">{{
+          $t("events.today")
+        }}</a>
+        <a class="pagination-next" v-on:click="nextPage()">&#xbb;</a>
+      </nav>
     </div>
     <div class="columns is-multiline">
       <event
-        v-for="(event, uuid) in events.events"
-        v-bind:key="uuid"
+        v-for="event in events"
+        v-bind:key="event.uuid"
         v-bind:event="event"
         v-bind:memberType="type"
         v-on:participate="participate"
         v-on:remove="removeEvent"
         v-on:edit="editEvent"
       ></event>
+    </div>
+    <div class="columns is-centered" v-if="events.length === 0">
+      <div class="column">
+        <p class="has-text-centered title is-3">
+          {{ $t("events.noEventToDisplay") }}
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -43,8 +54,16 @@ export default {
   components: {
     Event
   },
+  data: function() {
+    return {
+      eventsToListen: {}
+    };
+  },
   computed: {
-    ...mapState(["events"]),
+    ...mapState({
+      events: state => state.events.events,
+      pagination: state => state.events.pagination
+    }),
     ...mapGetters(["uuid", "type", "action"])
   },
   mounted() {
@@ -54,7 +73,8 @@ export default {
   methods: {
     ...mapMutations(["setAction"]),
     ...mapActions({
-      participateEvent: "events/participateEvent"
+      participateEvent: "events/participateEvent",
+      changePagination: "events/changePagination"
     }),
     checkAction() {
       // This page handles actions to participate to an event
@@ -93,6 +113,31 @@ export default {
         .catch(function(error) {
           console.log(error);
         });
+    },
+    previousPage() {
+      if (
+        this.events.length === this.pagination.limit ||
+        this.pagination.page > 0
+      ) {
+        var pagination = this.pagination;
+        pagination.page = pagination.page - 1;
+        this.changePagination(pagination);
+      }
+    },
+    nextPage() {
+      if (
+        this.events.length === this.pagination.limit ||
+        this.pagination.page < 0
+      ) {
+        var pagination = this.pagination;
+        pagination.page = pagination.page + 1;
+        this.changePagination(pagination);
+      }
+    },
+    pageToday() {
+      var pagination = this.pagination;
+      pagination.page = 0;
+      this.changePagination(pagination);
     }
   }
 };

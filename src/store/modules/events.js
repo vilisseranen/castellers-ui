@@ -1,9 +1,14 @@
 import api from "../../api/castellers";
 import helper from "../../api/dateTimeHelper";
+// import Vue from "vue";
 
 // initial state
 const state = () => ({
-  events: {}
+  events: [],
+  pagination: {
+    page: 0,
+    limit: 12
+  }
 });
 
 // getters
@@ -16,22 +21,22 @@ const actions = {
     const type = context.rootGetters.type;
     let response;
     if (uuid && type === "admin") {
-      response = api.getEventsAsAdmin(uuid);
+      response = api.getEventsAsAdmin(uuid, context.state.pagination);
     } else if (uuid) {
-      response = api.getEventsAsMember(uuid);
+      response = api.getEventsAsMember(uuid, context.state.pagination);
     } else {
-      response = api.getEventsAsGuest();
+      response = api.getEventsAsGuest(context.state.pagination);
     }
     response.then(function(response) {
-      var events = {};
+      var events = [];
       for (var i = 0; i < response.data.length; i++) {
-        const uuid = response.data[i].uuid;
-        events[uuid] = response.data[i];
-        events[uuid].date = helper.extractDate(events[uuid].startDate);
-        events[uuid].start = helper.extractTime(events[uuid].startDate);
-        events[uuid].end = helper.extractTime(events[uuid].endDate);
-        context.commit("setEvent", events[uuid]);
+        events[i] = response.data[i];
+        events[i].date = helper.extractDate(events[i].startDate);
+        events[i].start = helper.extractTime(events[i].startDate);
+        events[i].end = helper.extractTime(events[i].endDate);
       }
+      context.commit("setEvents", events);
+      return response;
     });
     return response;
   },
@@ -56,26 +61,33 @@ const actions = {
     await this.dispatch("events/getEvents");
     const events = context.state.events;
     const adminUuid = context.rootGetters.uuid;
-    for (var id in events) {
-      const event = events[id];
+    for (var i in events) {
+      const event = events[i];
       await api
         .getEventParticipationAsAdmin(adminUuid, event.uuid)
         .then(function(response) {
           event.members = response.data;
         });
-      events[id] = event;
-      context.commit("setEvent", event);
+      context.commit("setEvent", { event: events[i], index: i });
     }
   },
   async getEvent(context, uuid) {
     return api.getEvent(uuid).then(function(response) {
-      context.commit("setEvent", response.data);
+      for (var i = 0; i < context.state.events.length; i++) {
+        if (context.state.events[i].uuid === response.data.uuid) {
+          context.commit("setEvent", { event: response.data, index: i });
+        }
+      }
       return response;
     });
   },
   async editEvent(context, event) {
     if (event.uuid !== undefined) {
-      context.commit("setEvent", event);
+      for (var i = 0; i < context.state.events.length; i++) {
+        if (context.state.events[i].uuid === event.uuid) {
+          context.commit("setEvent", { event: event, index: i });
+        }
+      }
       return api.editEvent(context.rootGetters.uuid, event);
     } else {
       return api.createEvent(context.rootGetters.uuid, event);
@@ -88,24 +100,34 @@ const actions = {
       memberUuid,
       presence
     );
+  },
+  changePagination(context, pagination) {
+    context.commit("setPagination", pagination);
+    context.dispatch("getEvents");
   }
 };
 
 // mutations
 const mutations = {
-  setEvent(state, event) {
-    if (event.uuid in state.events) {
-      const existingEvent = state.events[event.uuid];
-      for (var key in existingEvent) {
-        if (event[key] === undefined) {
-          event[key] = existingEvent[key];
-        }
+  setEvent(state, { event, index }) {
+    for (var key in state.events[index]) {
+      if (event[key] === undefined) {
+        event[key] = state.events[index][key];
       }
     }
-    state.events[event.uuid] = event;
+    state.events.splice(index, 1, event);
+  },
+  setEvents(state, events) {
+    if (events.length > 0) {
+      state.events = events;
+    }
+  },
+  setPagination(state, pagination) {
+    state.pagination = pagination;
   },
   reset(state) {
-    state.events = {};
+    state.events = [];
+    state.pagination = {};
   }
 };
 
