@@ -108,7 +108,7 @@ export default {
       var self = this;
       this.deleteEvent(practice)
         .then(function() {
-          self.listEvents();
+          self.$store.dispatch("events/getEvents");
         })
         .catch(function(error) {
           console.log(error);
