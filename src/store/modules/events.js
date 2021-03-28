@@ -118,9 +118,7 @@ const mutations = {
     state.events.splice(index, 1, event);
   },
   setEvents(state, events) {
-    if (events.length > 0) {
-      state.events = events;
-    }
+    state.events = events;
   },
   setPagination(state, pagination) {
     state.pagination = pagination;

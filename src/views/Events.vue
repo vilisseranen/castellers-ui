@@ -116,8 +116,9 @@ export default {
     },
     previousPage() {
       if (
-        this.events.length === this.pagination.limit ||
-        this.pagination.page > 0
+        this.pagination.page >= 0 ||
+        (this.events.length === this.pagination.limit &&
+          this.pagination.page < 0)
       ) {
         var pagination = this.pagination;
         pagination.page = pagination.page - 1;
@@ -126,8 +127,9 @@ export default {
     },
     nextPage() {
       if (
-        this.events.length === this.pagination.limit ||
-        this.pagination.page < 0
+        this.pagination.page < 0 ||
+        (this.events.length === this.pagination.limit &&
+          this.pagination.page >= 0)
       ) {
         var pagination = this.pagination;
         pagination.page = pagination.page + 1;

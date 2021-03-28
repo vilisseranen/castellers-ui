@@ -170,7 +170,7 @@
             </div>
           </div>
         </div>
-        <div class="field is-12 column">
+        <div class="field is-12 column" v-if="!readonly">
           <div class="field-body">
             <div class="field">
               <p class="control">
