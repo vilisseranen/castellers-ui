@@ -18,7 +18,6 @@
                 {{ event.end }}</small
               >
               <br />
-              {{ event.description }}
               <br />
               <div class="tags">
                 <span
