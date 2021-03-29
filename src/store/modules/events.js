@@ -125,7 +125,7 @@ const mutations = {
   },
   reset(state) {
     state.events = [];
-    state.pagination = {};
+    state.pagination = { limit: 12 };
   }
 };
 

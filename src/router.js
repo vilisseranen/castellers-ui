@@ -47,7 +47,10 @@ export default new Router({
         {
           path: "members",
           name: "Members",
-          component: Members
+          component: Members,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "memberEdit",
@@ -89,7 +92,10 @@ export default new Router({
         {
           path: "summary",
           name: "summary",
-          component: SummaryParticipation
+          component: SummaryParticipation,
+          meta: {
+            requiresAuth: true
+          }
         }
       ]
     }

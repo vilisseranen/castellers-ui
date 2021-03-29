@@ -57,6 +57,8 @@ axios.interceptors.response.use(
       originalRequest.headers.Authorization = `Bearer: ${response.data.access_token}`;
       return axios(originalRequest);
     }
+    // Set store as disconnected
+    store.dispatch("logout");
     return Promise.reject(error);
   }
 );
