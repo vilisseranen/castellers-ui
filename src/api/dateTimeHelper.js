@@ -8,5 +8,5 @@ export default {
     const options = { hour: "2-digit", minute: "2-digit" };
     const time = new Date(timestamp * 1000);
     return new Intl.DateTimeFormat("fr-FR", options).format(time);
-  }
+  },
 };

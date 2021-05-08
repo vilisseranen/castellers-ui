@@ -89,7 +89,7 @@ export default {
         return this.$t("login.resetButton");
       }
       return "";
-    }
+    },
   },
   mounted() {
     if ("t" in this.$route.query) {
@@ -105,7 +105,7 @@ export default {
   methods: {
     ...mapActions({
       resetPassword: "members/resetPassword",
-      getLogin: "login"
+      getLogin: "login",
     }),
     async reset() {
       const self = this;
@@ -115,24 +115,24 @@ export default {
         this.resetPassword({
           username: this.credentials.username,
           password: this.credentials.password,
-          token: this.resetToken
+          token: this.resetToken,
         })
-          .then(function() {
+          .then(function () {
             self
               .getLogin({
                 username: self.credentials.username,
-                password: self.credentials.password
+                password: self.credentials.password,
               })
-              .then(function() {
+              .then(function () {
                 self.$root.setLocale(self.$store.getters.language);
                 self.$router.push({ name: "Events" });
               });
           })
-          .catch(function() {
+          .catch(function () {
             self.$notifyNOK(self.$t("login.passwordResetError"));
           });
       }
-    }
-  }
+    },
+  },
 };
 </script>

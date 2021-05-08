@@ -4,21 +4,21 @@
       <div class="column buttons has-addons">
         <a
           v-bind:class="[
-            this.$i18n.locale == 'fr' ? 'button is-focused' : 'button'
+            this.$i18n.locale == 'fr' ? 'button is-focused' : 'button',
           ]"
           v-on:click="changeLanguage('fr')"
           >Français</a
         >
         <a
           v-bind:class="[
-            this.$i18n.locale == 'en' ? 'button is-focused' : 'button'
+            this.$i18n.locale == 'en' ? 'button is-focused' : 'button',
           ]"
           v-on:click="changeLanguage('en')"
           >English</a
         >
         <a
           v-bind:class="[
-            this.$i18n.locale == 'cat' ? 'button is-focused' : 'button'
+            this.$i18n.locale == 'cat' ? 'button is-focused' : 'button',
           ]"
           v-on:click="changeLanguage('cat')"
           >Català</a
@@ -45,16 +45,16 @@ export default {
   },
   computed: {
     ...mapState({
-      apiVersion: state => state.version
-    })
+      apiVersion: (state) => state.version,
+    }),
   },
   methods: {
-    changeLanguage: function(lang) {
+    changeLanguage: function (lang) {
       this.$root.setLocale(lang);
-    }
+    },
   },
   mounted() {
     this.$store.dispatch("version");
-  }
+  },
 };
 </script>

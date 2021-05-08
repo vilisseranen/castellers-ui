@@ -2,7 +2,7 @@ import api from "../../api/castellers";
 
 // initial state
 const state = () => ({
-  members: []
+  members: [],
 });
 
 // getters
@@ -32,7 +32,7 @@ const actions = {
   async getMembers(context) {
     return api
       .getMembersAsAdmin(context.rootGetters.uuid)
-      .then(function(response) {
+      .then(function (response) {
         const members = response.data;
         for (let i = 0; i < members.length; i++) {
           members[i].roles = members[i].roles.join(", ");
@@ -52,7 +52,7 @@ const actions = {
   },
   async changePassword(context, password) {
     return api.changePassword(context.rootGetters.uuid, password);
-  }
+  },
 };
 
 // mutations
@@ -64,7 +64,7 @@ const mutations = {
   },
   reset(state) {
     state.members = [];
-  }
+  },
 };
 
 export default {
@@ -72,5 +72,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

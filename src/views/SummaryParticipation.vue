@@ -37,7 +37,7 @@
             <span
               v-bind:class="{
                 'has-text-weight-bold':
-                  props.row['name'] === $t('summary.total')
+                  props.row['name'] === $t('summary.total'),
               }"
             >
               {{ props.row[column.field] }}
@@ -55,7 +55,7 @@ export default {
   data() {
     return {
       selected: null,
-      eventsParticipants: []
+      eventsParticipants: [],
     };
   },
   mounted() {
@@ -65,19 +65,19 @@ export default {
 
   computed: {
     ...mapState({
-      events: state => state.events.events,
-      members: state => state.members.members
+      events: (state) => state.events.events,
+      members: (state) => state.members.members,
     }),
     ...mapGetters(["uuid", "type"]),
-    columns: function() {
+    columns: function () {
       const columns = [
         {
           field: "name",
           label: this.$t("general.name"),
           width: 150,
           sortable: true,
-          subheading: this.$t("summary.total")
-        }
+          subheading: this.$t("summary.total"),
+        },
       ];
       if (this.events) {
         let count = 1;
@@ -87,7 +87,7 @@ export default {
             label: [this.events[id].name, this.events[id].date].join(" "),
             subheading: this.countEventParticipants(this.events[id]),
             width: 25,
-            sortable: true
+            sortable: true,
           });
           // TODO: Adapt pagination for this page
           count++;
@@ -98,11 +98,11 @@ export default {
       }
       return columns;
     },
-    summaryParticipants: function() {
+    summaryParticipants: function () {
       const participantsArray = [];
       for (let m = 0; m < this.members.length; m++) {
         const memberLine = {
-          name: [this.members[m].firstName, this.members[m].lastName].join(" ")
+          name: [this.members[m].firstName, this.members[m].lastName].join(" "),
         };
         for (let e = 0; e < this.events.length; e++) {
           let answer = "-";
@@ -124,7 +124,7 @@ export default {
         participantsArray.push(memberLine);
       }
       return participantsArray;
-    }
+    },
   },
   methods: {
     countEventParticipants(event) {
@@ -137,7 +137,7 @@ export default {
         }
       }
       return total;
-    }
-  }
+    },
+  },
 };
 </script>

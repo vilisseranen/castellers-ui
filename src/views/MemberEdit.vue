@@ -32,7 +32,7 @@
           </div>
         </div>
         <div class="field column is-4">
-          <label class="label" style="color: white;">{{
+          <label class="label" style="color: white">{{
             $t("members.changePassword")
           }}</label>
           <div class="control">
@@ -58,21 +58,21 @@ import { memberMixin } from "../mixins/members.js";
 export default {
   mixins: [memberMixin],
   components: {
-    EditProfileForm
+    EditProfileForm,
   },
   data() {
     return {
       user: { roles: [], type: "member", language: "fr", subscribed: 0 }, // defaults are set here
-      credentials: {}
+      credentials: {},
     };
   },
   mounted() {
     this.loadUser(this.$route.params.uuid);
   },
   watch: {
-    "$route.params.uuid": function(uuid) {
+    "$route.params.uuid": function (uuid) {
       this.loadUser(uuid);
-    }
+    },
   },
   computed: {
     ...mapGetters(["uuid", "type"]),
@@ -84,19 +84,19 @@ export default {
         return true;
       }
       return false;
-    }
+    },
   },
   methods: {
     ...mapActions({
       getMember: "members/getMember",
       editMember: "members/editMember",
-      changePassword: "members/changePassword"
+      changePassword: "members/changePassword",
     }),
     editUser(user) {
       const self = this;
       self.updating = true;
       this.editMember(user)
-        .then(function(response) {
+        .then(function (response) {
           self.updating = false;
           self.$notifyOK(self.$t("members.notifySuccess"));
           // If changing own profile, update language settings
@@ -108,7 +108,7 @@ export default {
             self.loadUser(response.data.uuid);
           }
         })
-        .catch(function(error) {
+        .catch(function (error) {
           self.updating = false;
           self.$notifyNOK(self.$t("members.notifyFailure"));
           console.log(error);
@@ -118,19 +118,19 @@ export default {
       if (uuid) {
         const self = this;
         this.getMember(uuid)
-          .then(function(response) {
+          .then(function (response) {
             self.user = response.data;
           })
-          .catch(err => console.log(err));
+          .catch((err) => console.log(err));
       }
     },
     removeUser(member) {
       const self = this;
       this.deleteUser(member)
-        .then(function() {
+        .then(function () {
           self.$router.push({ path: `/members` });
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error);
         });
     },
@@ -140,15 +140,15 @@ export default {
         this.$notifyNOK(this.$t("login.passwordDifferent"));
       } else {
         this.changePassword(this.credentials.password)
-          .then(function() {
+          .then(function () {
             self.$notifyOK(self.$t("login.passwordChanged"));
           })
-          .catch(function() {
+          .catch(function () {
             self.$notifyNOK(self.$t("login.passwordResetError"));
           });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style></style>

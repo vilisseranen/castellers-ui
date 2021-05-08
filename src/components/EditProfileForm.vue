@@ -282,27 +282,27 @@ import "pretty-checkbox/dist/pretty-checkbox.min.css";
 export default {
   components: {
     Multiselect,
-    PrettyRadio
+    PrettyRadio,
   },
   name: "edit-profile-form",
   props: {
-    user: Object
+    user: Object,
   },
   computed: {
     ...mapGetters(["uuid", "type"]),
-    actionLabel: function() {
+    actionLabel: function () {
       return this.user.uuid ? "update" : "create";
     },
     current_user: {
-      get: function() {
+      get: function () {
         return this.user;
       },
-      set: function(newUuid) {
+      set: function (newUuid) {
         this.current_user.uuid = newUuid;
-      }
+      },
     },
     heightDisplayed: {
-      get: function() {
+      get: function () {
         let height;
         if (this.height_unit === "ft") {
           let inches = Math.round(
@@ -325,7 +325,7 @@ export default {
         }
         return null;
       },
-      set: function(height) {
+      set: function (height) {
         let heightToSave;
         if (this.height_unit === "ft") {
           const heightParsed = height.split("'", 2);
@@ -347,10 +347,10 @@ export default {
         if (isNaN(heightToSave)) {
           this.current_user.height = "";
         }
-      }
+      },
     },
     weightDisplayed: {
-      get: function() {
+      get: function () {
         let weight;
         if (this.weight_unit === "lb") {
           weight = parseFloat(this.current_user.weight) * 2.205;
@@ -362,7 +362,7 @@ export default {
         }
         return null;
       },
-      set: function(weight) {
+      set: function (weight) {
         let weightToSave = parseFloat(weight);
         if (!isNaN(weightToSave)) {
           if (this.weight_unit === "lb") {
@@ -374,27 +374,27 @@ export default {
             this.current_user.weight = weightToSave.toFixed(2);
           }
         }
-      }
-    }
+      },
+    },
   },
   data() {
     return {
       updating: false,
       available_roles: [],
       height_unit: "cm",
-      weight_unit: "kg"
+      weight_unit: "kg",
     };
   },
   mounted() {
     const self = this;
-    this.getRoles().then(function(response) {
+    this.getRoles().then(function (response) {
       self.available_roles = response.data.sort();
     });
   },
   methods: {
     ...mapActions({
       resendEmaiCall: "members/resendEmail",
-      getRoles: "members/getRoles"
+      getRoles: "members/getRoles",
     }),
     heightExemple() {
       return this.height_unit === "cm"
@@ -410,11 +410,11 @@ export default {
       const self = this;
       self.updating = true;
       this.resendEmaiCall(this.current_user.uuid)
-        .then(function(response) {
+        .then(function (response) {
           self.updating = false;
           self.$notifyOK(self.$t("members.notifySuccess"));
         })
-        .catch(function(error) {
+        .catch(function (error) {
           self.updating = false;
           self.$notifyNOK(self.$t("members.notifyFailure"));
           console.log(error);
@@ -425,7 +425,7 @@ export default {
     },
     memberDelete() {
       this.$emit("deleteUser", this.current_user);
-    }
-  }
+    },
+  },
 };
 </script>

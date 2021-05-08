@@ -13,7 +13,7 @@ const actions = {
   },
   async initialize(context, payload) {
     return api.initialize(payload);
-  }
+  },
 };
 
 // mutations
@@ -24,5 +24,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

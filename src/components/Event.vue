@@ -83,7 +83,7 @@
 export default {
   props: {
     event: Object,
-    memberType: String
+    memberType: String,
   },
   computed: {
     registeredLabel() {
@@ -92,7 +92,7 @@ export default {
       } else {
         return this.$t("events.registered");
       }
-    }
+    },
   },
   methods: {
     participate(eventUuid, participation) {
@@ -103,7 +103,7 @@ export default {
     },
     remove(event) {
       this.$emit("remove", event);
-    }
-  }
+    },
+  },
 };
 </script>

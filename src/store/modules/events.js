@@ -7,8 +7,8 @@ const state = () => ({
   events: [],
   pagination: {
     page: 0,
-    limit: 12
-  }
+    limit: 12,
+  },
 });
 
 // getters
@@ -27,7 +27,7 @@ const actions = {
     } else {
       response = api.getEventsAsGuest(context.state.pagination);
     }
-    response.then(function(response) {
+    response.then(function (response) {
       const events = [];
       for (let i = 0; i < response.data.length; i++) {
         events[i] = response.data[i];
@@ -65,14 +65,14 @@ const actions = {
       const event = events[i];
       await api
         .getEventParticipationAsAdmin(adminUuid, event.uuid)
-        .then(function(response) {
+        .then(function (response) {
           event.members = response.data;
         });
       context.commit("setEvent", { event: events[i], index: i });
     }
   },
   async getEvent(context, uuid) {
-    return api.getEvent(uuid).then(function(response) {
+    return api.getEvent(uuid).then(function (response) {
       for (let i = 0; i < context.state.events.length; i++) {
         if (context.state.events[i].uuid === response.data.uuid) {
           context.commit("setEvent", { event: response.data, index: i });
@@ -104,7 +104,7 @@ const actions = {
   changePagination(context, pagination) {
     context.commit("setPagination", pagination);
     context.dispatch("getEvents");
-  }
+  },
 };
 
 // mutations
@@ -126,7 +126,7 @@ const mutations = {
   reset(state) {
     state.events = [];
     state.pagination = { limit: 12 };
-  }
+  },
 };
 
 export default {
@@ -134,5 +134,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

@@ -2,7 +2,7 @@ import api from "../api/castellers";
 
 export const eventMixin = {
   methods: {
-    deleteEvent: function(event) {
+    deleteEvent: function (event) {
       const self = this;
       const options = { year: "numeric", month: "2-digit", day: "2-digit" };
       const date = new Date(event.startDate * 1000);
@@ -22,15 +22,15 @@ export const eventMixin = {
           onConfirm: () => {
             api
               .deleteEvent(self.uuid, event.uuid)
-              .then(function() {
+              .then(function () {
                 resolve();
               })
-              .catch(function(err) {
+              .catch(function (err) {
                 reject(err);
               });
-          }
+          },
         });
       });
-    }
-  }
+    },
+  },
 };

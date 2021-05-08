@@ -15,15 +15,15 @@ const store = new Vuex.Store({
     events,
     members,
     auth,
-    initialization
+    initialization,
   },
   state: {
-    version: ""
+    version: "",
   },
   mutations: {
     setVersion(state, version) {
       state.version = version.version;
-    }
+    },
   },
   actions: {
     async reset(context) {
@@ -32,23 +32,23 @@ const store = new Vuex.Store({
       context.commit("reset");
     },
     async version(context) {
-      return api.version().then(function(response) {
+      return api.version().then(function (response) {
         context.commit("setVersion", response.data);
         return response;
       });
-    }
+    },
   },
   getters: {},
-  plugins: [createPersistedState()]
+  plugins: [createPersistedState()],
 });
 
 axios.defaults.headers.common.Authorization = `Bearer: ${store.getters.accessToken}`;
 
 axios.interceptors.response.use(
-  response => {
+  (response) => {
     return response;
   },
-  async function(error) {
+  async function (error) {
     const originalRequest = error.config;
     if (error.response.status === 403 && !originalRequest._retry) {
       originalRequest._retry = true;

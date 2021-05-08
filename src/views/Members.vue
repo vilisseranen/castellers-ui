@@ -89,15 +89,15 @@ export default {
   computed: {
     ...mapGetters(["uuid", "type"]),
     ...mapState({
-      members: state => state.members.members
-    })
+      members: (state) => state.members.members,
+    }),
   },
   mounted() {
     this.$store.dispatch("members/getMembers");
   },
   methods: {
     ...mapActions({
-      getMembers: "members/getMembers"
+      getMembers: "members/getMembers",
     }),
     addMember() {
       this.$router.push({ name: "MemberAdd" });
@@ -108,13 +108,13 @@ export default {
     removeUser(member) {
       const self = this;
       this.deleteUser(member)
-        .then(function() {
+        .then(function () {
           self.$store.dispatch("members/getMembers");
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error);
         });
-    }
-  }
+    },
+  },
 };
 </script>

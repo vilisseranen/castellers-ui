@@ -60,13 +60,13 @@
 <script>
 export default {
   props: {
-    type: String
+    type: String,
   },
   computed: {
     routeName() {
       const { path } = this.$route;
       return path.split("/")[1].toLowerCase();
-    }
-  }
+    },
+  },
 };
 </script>

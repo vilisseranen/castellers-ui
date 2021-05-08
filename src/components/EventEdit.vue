@@ -134,7 +134,7 @@
               v-if="(readonly && event.locationName) || !readonly"
             >
               <label class="label note">{{ $t("events.location") }}</label>
-              <div class="control is-expanded" style="margin-bottom: 10px;">
+              <div class="control is-expanded" style="margin-bottom: 10px">
                 <input
                   :disabled="readonly ? true : false"
                   class="input"
@@ -147,7 +147,7 @@
                 :zoom="zoom"
                 :center="currentEvent.location"
                 @click="setLocation"
-                style="height:400px;margin: 0;z-index:0;"
+                style="height: 400px; margin: 0; z-index: 0"
               >
                 <l-tile-layer
                   :url="url"
@@ -158,7 +158,7 @@
             </div>
             <div class="field is-6 column">
               <label class="label">{{ $t("events.description") }}</label>
-              <div class="control is-expanded" style="margin-bottom: 10px;">
+              <div class="control is-expanded" style="margin-bottom: 10px">
                 <textarea
                   :disabled="readonly ? true : false"
                   class="textarea"
@@ -213,7 +213,7 @@
     <div class="box" v-if="this.type === 'admin' && this.event.uuid">
       <label class="label"
         >{{
-          $t("events.presentRegistered").replace(/^\w/, c => c.toUpperCase())
+          $t("events.presentRegistered").replace(/^\w/, (c) => c.toUpperCase())
         }}
         ({{ this.countPresent() }} / {{ this.countRegistered() }})</label
       >
@@ -337,21 +337,21 @@ delete Icon.Default.prototype._getIconUrl;
 Icon.Default.mergeOptions({
   iconRetinaUrl: require("leaflet/dist/images/marker-icon-2x.png"),
   iconUrl: require("leaflet/dist/images/marker-icon.png"),
-  shadowUrl: require("leaflet/dist/images/marker-shadow.png")
+  shadowUrl: require("leaflet/dist/images/marker-shadow.png"),
 });
 
 const L = window.L;
 
 export default {
   props: {
-    readonly: Boolean
+    readonly: Boolean,
   },
   components: {
     Datetime,
     PrettyRadio,
     LMap,
     LTileLayer,
-    LMarker
+    LMarker,
   },
   data() {
     const s = new Date(Date.now());
@@ -360,7 +360,7 @@ export default {
     const e = new Date(s);
     e.setHours(21, 30);
     const table = {
-      data: []
+      data: [],
     };
     return {
       event: {
@@ -368,16 +368,16 @@ export default {
         endDate: Math.trunc(e.valueOf() / 1000),
         recurring: {
           interval: "1w",
-          until: 0
+          until: 0,
         },
         type: "practice",
         location: {
           // defaults to college Brebeuf
           lat: 45.50073714334654,
-          lng: -73.6241186484186
+          lng: -73.6241186484186,
         },
         locationName: "",
-        description: ""
+        description: "",
       }, // defaults are set here
       isLoading: false,
       table,
@@ -393,31 +393,31 @@ export default {
         roles: this.$t("members.roles"),
         participation: this.$t("members.participation"),
         presence: this.$t("members.presence"),
-        setPresence: this.$t("members.setPresence")
+        setPresence: this.$t("members.setPresence"),
       },
       filters: {
         present: { title: this.$t("members.present"), display: true },
         absent: { title: this.$t("members.absent"), display: true },
         participationYes: {
           title: this.$t("events.participationYes"),
-          display: true
+          display: true,
         },
         participationNo: {
           title: this.$t("events.participationNo"),
-          display: true
-        }
+          display: true,
+        },
       },
-      participation: []
+      participation: [],
     };
   },
   watch: {
-    recurring: function(val) {
+    recurring: function (val) {
       if (val) {
         this.currentEvent.recurring.until = this.currentEvent.startDate;
       } else {
         this.currentEvent.recurring.until = 0;
       }
-    }
+    },
   },
   mounted() {
     this.loadEvent(this.$route.params.uuid);
@@ -425,25 +425,25 @@ export default {
   },
   computed: {
     ...mapGetters(["uuid", "type"]),
-    columns: function() {
+    columns: function () {
       return ["participant_name", "roles", "participation"];
     },
-    actionLabel: function() {
+    actionLabel: function () {
       return this.event.uuid ? "update" : "create";
     },
     currentEvent: {
-      get: function() {
+      get: function () {
         return this.event;
       },
-      set: function(newUuid) {
+      set: function (newUuid) {
         this.currentEvent.uuid = newUuid;
-      }
+      },
     },
     startDateForCalendar: {
-      get: function() {
+      get: function () {
         return this.dateToCalendar(this.currentEvent.startDate);
       },
-      set: function(newDate) {
+      set: function (newDate) {
         this.currentEvent.startDate = this.dateFromCalendar(newDate);
         if (this.currentEvent.startDate > this.currentEvent.endDate) {
           this.endDateForCalendar = newDate;
@@ -454,31 +454,31 @@ export default {
         ) {
           this.untilDateForCalendar = newDate;
         }
-      }
+      },
     },
     endDateForCalendar: {
-      get: function() {
+      get: function () {
         return this.dateToCalendar(this.currentEvent.endDate);
       },
-      set: function(newDate) {
+      set: function (newDate) {
         this.currentEvent.endDate = this.dateFromCalendar(newDate);
-      }
+      },
     },
     untilDateForCalendar: {
-      get: function() {
+      get: function () {
         return this.dateToCalendar(this.currentEvent.recurring.until);
       },
-      set: function(newDate) {
+      set: function (newDate) {
         this.currentEvent.recurring.until = this.dateFromCalendar(newDate);
-      }
-    }
+      },
+    },
   },
   methods: {
     ...mapActions({
       getEventParticipation: "events/getEventParticipation",
       getEvent: "events/getEvent",
       editEvent: "events/editEvent",
-      presenceEvent: "events/presenceEvent"
+      presenceEvent: "events/presenceEvent",
     }),
     // map
     setLocation(event) {
@@ -509,7 +509,7 @@ export default {
       const self = this;
       self.isLoading = true;
       this.editEvent(self.currentEvent)
-        .then(function(response) {
+        .then(function (response) {
           self.isLoading = false;
           if (!self.event.uuid) {
             self.$router.push({ path: `/eventEdit/${response.data.uuid}` });
@@ -517,7 +517,7 @@ export default {
           }
           self.$notifyOK(self.$t("events.notify_success"));
         })
-        .catch(function(error) {
+        .catch(function (error) {
           self.isLoading = false;
           self.$notifyNOK(self.$t("events.notify_error"));
           console.log(error);
@@ -527,21 +527,21 @@ export default {
       if (uuid) {
         const self = this;
         this.getEvent(uuid)
-          .then(function(response) {
+          .then(function (response) {
             // If locationName is not set, use default coordinates
             if (response.data.locationName === "") {
               response.data.location = self.event.location;
             }
             self.event = response.data;
           })
-          .catch(err => console.log(err));
+          .catch((err) => console.log(err));
       }
     },
     listParticipants(eventUuid) {
       if (eventUuid && this.type === "admin") {
         const self = this;
         this.getEventParticipation(eventUuid)
-          .then(function(response) {
+          .then(function (response) {
             self.participation = response.data;
             for (let i = 0; i < self.participation.length; i++) {
               self.participation[i].roles = self.participation[i].roles
@@ -549,22 +549,23 @@ export default {
                 .join(", ");
             }
           })
-          .catch(err => console.log(err));
+          .catch((err) => console.log(err));
       }
     },
     countRegistered() {
-      return this.participation.filter(member => member.participation === "yes")
-        .length;
+      return this.participation.filter(
+        (member) => member.participation === "yes"
+      ).length;
     },
     countPresent() {
-      return this.participation.filter(member => member.presence === "yes")
+      return this.participation.filter((member) => member.presence === "yes")
         .length;
     },
     presence(eventUuid, memberUuid, presence) {
       this.presenceEvent({ eventUuid, memberUuid, presence }).then(
         this.listParticipants(eventUuid)
       );
-    }
-  }
+    },
+  },
 };
 </script>
