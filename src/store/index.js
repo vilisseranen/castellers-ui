@@ -39,7 +39,11 @@ const store = new Vuex.Store({
     },
   },
   getters: {},
-  plugins: [createPersistedState()],
+  plugins: [
+    createPersistedState({
+      paths: ["auth", "events.events", "members.members"],
+    }),
+  ],
 });
 
 axios.defaults.headers.common.Authorization = `Bearer: ${store.getters.accessToken}`;
