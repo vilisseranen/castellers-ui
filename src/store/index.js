@@ -32,10 +32,13 @@ const store = new Vuex.Store({
       context.commit("reset");
     },
     async version(context) {
-      return api.version().then(function (response) {
-        context.commit("setVersion", response.data);
-        return response;
-      });
+      return api
+        .version()
+        .then(function (response) {
+          context.commit("setVersion", response.data);
+          return response;
+        })
+        .catch(function (response) {});
     },
   },
   getters: {},

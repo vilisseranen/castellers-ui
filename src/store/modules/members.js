@@ -39,7 +39,8 @@ const actions = {
         }
         context.commit("setMembers", members);
         return response;
-      });
+      })
+      .catch(function (response) {});
   },
   async resendEmail(context, userUuid) {
     return api.resendEmailAsAdmin(context.rootGetters.uuid, userUuid);

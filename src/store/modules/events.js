@@ -27,18 +27,19 @@ const actions = {
     } else {
       response = api.getEventsAsGuest(context.state.pagination);
     }
-    response.then(function (response) {
-      const events = [];
-      for (let i = 0; i < response.data.length; i++) {
-        events[i] = response.data[i];
-        events[i].date = helper.extractDate(events[i].startDate);
-        events[i].start = helper.extractTime(events[i].startDate);
-        events[i].end = helper.extractTime(events[i].endDate);
-      }
-      context.commit("setEvents", events);
-      return response;
-    });
-    return response;
+    response
+      .then(function (response) {
+        const events = [];
+        for (let i = 0; i < response.data.length; i++) {
+          events[i] = response.data[i];
+          events[i].date = helper.extractDate(events[i].startDate);
+          events[i].start = helper.extractTime(events[i].startDate);
+          events[i].end = helper.extractTime(events[i].endDate);
+        }
+        context.commit("setEvents", events);
+        return response;
+      })
+      .catch(function (response) {});
   },
   async participateEvent(
     context,
