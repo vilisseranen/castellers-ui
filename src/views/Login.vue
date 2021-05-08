@@ -84,35 +84,35 @@ export default {
   data() {
     return {
       member: {},
-      passwordForgotten: false
+      passwordForgotten: false,
     };
   },
   methods: {
     ...mapMutations({
-      authenticate: "authenticate"
+      authenticate: "authenticate",
     }),
     ...mapActions({
       getLogin: "login",
-      forgotPassword: "members/forgotPassword"
+      forgotPassword: "members/forgotPassword",
     }),
     login() {
-      var self = this;
+      const self = this;
       this.getLogin({
         username: this.member.username,
-        password: this.member.password
+        password: this.member.password,
       })
-        .then(function() {
+        .then(function () {
           self.$root.setLocale(self.$store.getters.language);
           self.redirect();
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error);
           self.$notifyNOK(self.$t("login.notifyError"));
         });
     },
     resetPassword() {
-      var self = this;
-      this.forgotPassword(this.member.email).then(function() {
+      const self = this;
+      this.forgotPassword(this.member.email).then(function () {
         self.$notifyOK(self.$t("login.passwordResetSent"));
       });
     },
@@ -122,7 +122,7 @@ export default {
       } else {
         this.$router.push({ name: "Events" });
       }
-    }
-  }
+    },
+  },
 };
 </script>

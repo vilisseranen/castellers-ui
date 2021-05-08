@@ -52,19 +52,19 @@ import { eventMixin } from "../mixins/events.js";
 export default {
   mixins: [eventMixin],
   components: {
-    Event
+    Event,
   },
-  data: function() {
+  data: function () {
     return {
-      eventsToListen: {}
+      eventsToListen: {},
     };
   },
   computed: {
     ...mapState({
-      events: state => state.events.events,
-      pagination: state => state.events.pagination
+      events: (state) => state.events.events,
+      pagination: (state) => state.events.pagination,
     }),
-    ...mapGetters(["uuid", "type", "action"])
+    ...mapGetters(["uuid", "type", "action"]),
   },
   mounted() {
     this.$store.dispatch("events/getEvents");
@@ -74,7 +74,7 @@ export default {
     ...mapMutations(["setAction"]),
     ...mapActions({
       participateEvent: "events/participateEvent",
-      changePagination: "events/changePagination"
+      changePagination: "events/changePagination",
     }),
     checkAction() {
       // This page handles actions to participate to an event
@@ -88,13 +88,13 @@ export default {
       }
     },
     participate(eventUuid, participation, token, userUuid) {
-      var self = this;
+      const self = this;
       this.participateEvent({ eventUuid, participation, token, userUuid })
-        .then(function() {
+        .then(function () {
           self.$store.dispatch("events/getEvent", eventUuid);
           self.$notifyOK(self.$t("events.participationOK"));
         })
-        .catch(function() {
+        .catch(function () {
           self.$notifyNOK(self.$t("events.participationNOK"));
         });
     },
@@ -105,12 +105,12 @@ export default {
       this.$router.push({ path: `/eventEdit/${eventUuid}` });
     },
     removeEvent(practice) {
-      var self = this;
+      const self = this;
       this.deleteEvent(practice)
-        .then(function() {
-          self.listEvents();
+        .then(function () {
+          self.$store.dispatch("events/getEvents");
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error);
         });
     },
@@ -120,7 +120,7 @@ export default {
         (this.events.length === this.pagination.limit &&
           this.pagination.page < 0)
       ) {
-        var pagination = this.pagination;
+        const pagination = this.pagination;
         pagination.page = pagination.page - 1;
         this.changePagination(pagination);
       }
@@ -131,16 +131,16 @@ export default {
         (this.events.length === this.pagination.limit &&
           this.pagination.page >= 0)
       ) {
-        var pagination = this.pagination;
+        const pagination = this.pagination;
         pagination.page = pagination.page + 1;
         this.changePagination(pagination);
       }
     },
     pageToday() {
-      var pagination = this.pagination;
+      const pagination = this.pagination;
       pagination.page = 0;
       this.changePagination(pagination);
-    }
-  }
+    },
+  },
 };
 </script>

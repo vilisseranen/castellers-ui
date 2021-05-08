@@ -10,7 +10,7 @@ function loadLocaleMessages() {
     /[A-Za-z0-9-_,\s]+\.json$/i
   );
   const messages = {};
-  locales.keys().forEach(key => {
+  locales.keys().forEach((key) => {
     const matched = key.match(/([A-Za-z0-9-_]+)\./i);
     if (matched && matched.length > 1) {
       const locale = matched[1];
@@ -24,5 +24,5 @@ export default new VueI18n({
   locale: process.env.VUE_APP_I18N_LOCALE || "fr",
   fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE || "fr",
   silentTranslationWarn: process.env.NODE_ENV === "production",
-  messages: loadLocaleMessages()
+  messages: loadLocaleMessages(),
 });

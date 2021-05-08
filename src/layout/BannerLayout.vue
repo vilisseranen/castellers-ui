@@ -79,11 +79,11 @@ export default {
     routeName() {
       const { path } = this.$route;
       return path.split("/")[1].toLowerCase();
-    }
+    },
   },
   methods: {
     ...mapActions({
-      resetState: "logout"
+      resetState: "logout",
     }),
     logout() {
       this.resetState();
@@ -92,7 +92,7 @@ export default {
       } else {
         this.$router.push({ name: "Events" });
       }
-    }
-  }
+    },
+  },
 };
 </script>

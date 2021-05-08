@@ -5,7 +5,7 @@ export default {
         message: text,
         type: "is-success",
         queue: false,
-        position: "is-bottom-left"
+        position: "is-bottom-left",
       });
     },
     $notifyNOK(text) {
@@ -14,8 +14,8 @@ export default {
         type: "is-danger",
         queue: false,
         position: "is-bottom-left",
-        indefinite: true
+        indefinite: true,
       });
-    }
-  }
+    },
+  },
 };

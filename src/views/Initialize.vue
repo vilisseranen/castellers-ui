@@ -12,14 +12,14 @@ import { mapActions } from "vuex";
 
 export default {
   components: {
-    EditProfileForm
+    EditProfileForm,
   },
   data() {
-    var self = this;
-    var initialized = true;
-    var updating = false;
-    var user = { roles: [], type: "admin", language: "fr" };
-    this.getInitialize().then(function(response) {
+    const self = this;
+    const initialized = true;
+    const updating = false;
+    const user = { roles: [], type: "admin", language: "fr" };
+    this.getInitialize().then(function (response) {
       if (response.status === 204) {
         self.initialized = false;
       } else {
@@ -29,18 +29,18 @@ export default {
     return {
       user,
       initialized,
-      updating
+      updating,
     };
   },
   methods: {
     ...mapActions({
       getInitialize: "initialize/getInitialize",
-      initialize: "initialize/initialize"
+      initialize: "initialize/initialize",
     }),
     initializeApp(user) {
-      var self = this;
+      const self = this;
       self.updating = true;
-      this.initialize(user).then(function(response) {
+      this.initialize(user).then(function (response) {
         self.updating = false;
         self.user = response.data;
         if (response.status === 201) {
@@ -54,8 +54,8 @@ export default {
           );
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style></style>

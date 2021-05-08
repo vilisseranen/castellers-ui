@@ -10,20 +10,20 @@ import api from "../api/castellers";
 
 Vue.use(Vuex);
 
-var store = new Vuex.Store({
+const store = new Vuex.Store({
   modules: {
     events,
     members,
     auth,
-    initialization
+    initialization,
   },
   state: {
-    version: ""
+    version: "",
   },
   mutations: {
     setVersion(state, version) {
       state.version = version.version;
-    }
+    },
   },
   actions: {
     async reset(context) {
@@ -32,30 +32,41 @@ var store = new Vuex.Store({
       context.commit("reset");
     },
     async version(context) {
-      return api.version().then(function(response) {
-        context.commit("setVersion", response.data);
-        return response;
-      });
-    }
+      return api
+        .version()
+        .then(function (response) {
+          context.commit("setVersion", response.data);
+          return response;
+        })
+        .catch(function (response) {});
+    },
   },
   getters: {},
-  plugins: [createPersistedState()]
+  plugins: [
+    createPersistedState({
+      paths: ["auth", "events.events", "members.members"],
+    }),
+  ],
 });
 
 axios.defaults.headers.common.Authorization = `Bearer: ${store.getters.accessToken}`;
 
 axios.interceptors.response.use(
-  response => {
+  (response) => {
     return response;
   },
-  async function(error) {
+  async function (error) {
     const originalRequest = error.config;
     if (error.response.status === 403 && !originalRequest._retry) {
       originalRequest._retry = true;
-      var response = await store.dispatch("refreshToken");
+      const response = await store.dispatch("refreshToken");
       // Replace Bearer token from original request
       originalRequest.headers.Authorization = `Bearer: ${response.data.access_token}`;
       return axios(originalRequest);
+    }
+    if (error.response.status === 401) {
+      // Set store as disconnected
+      store.dispatch("logout");
     }
     return Promise.reject(error);
   }

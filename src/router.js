@@ -27,73 +27,79 @@ export default new Router({
         {
           path: "initialize",
           name: "Initialize",
-          component: Initialize
+          component: Initialize,
         },
         {
           path: "login",
           name: "Login",
-          component: Login
+          component: Login,
         },
         {
           path: "reset",
           name: "Reset",
-          component: ResetPassword
+          component: ResetPassword,
         },
         {
           path: "events",
           name: "Events",
-          component: Events
+          component: Events,
         },
         {
           path: "members",
           name: "Members",
-          component: Members
+          component: Members,
+          meta: {
+            requiresAuth: true,
+          },
         },
         {
           path: "memberEdit",
           name: "MemberAdd",
           component: MemberEdit,
           meta: {
-            requiresAuth: true
-          }
+            requiresAuth: true,
+          },
         },
         {
           path: "memberEdit/:uuid",
           name: "MemberEdit",
           component: MemberEdit,
           meta: {
-            requiresAuth: true
-          }
+            requiresAuth: true,
+          },
         },
         {
           path: "eventEdit",
           name: "EventAdd",
           component: EventEdit,
           meta: {
-            requiresAuth: true
-          }
+            requiresAuth: true,
+          },
         },
         {
           path: "eventEdit/:uuid",
           name: "eventEdit",
           component: EventEdit,
           meta: {
-            requiresAuth: true
-          }
+            requiresAuth: true,
+          },
         },
         {
           path: "eventShow/:uuid",
           name: "eventShow",
-          component: EventShow
+          component: EventShow,
         },
         {
           path: "summary",
           name: "summary",
-          component: SummaryParticipation
-        }
-      ]
-    }
+          component: SummaryParticipation,
+          meta: {
+            requiresAuth: true,
+          },
+        },
+      ],
+    },
     /*     { path: '*', component: NotFound }
      */
-  ]
+  ],
 });

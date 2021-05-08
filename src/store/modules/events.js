@@ -7,8 +7,8 @@ const state = () => ({
   events: [],
   pagination: {
     page: 0,
-    limit: 12
-  }
+    limit: 12,
+  },
 });
 
 // getters
@@ -27,18 +27,19 @@ const actions = {
     } else {
       response = api.getEventsAsGuest(context.state.pagination);
     }
-    response.then(function(response) {
-      var events = [];
-      for (var i = 0; i < response.data.length; i++) {
-        events[i] = response.data[i];
-        events[i].date = helper.extractDate(events[i].startDate);
-        events[i].start = helper.extractTime(events[i].startDate);
-        events[i].end = helper.extractTime(events[i].endDate);
-      }
-      context.commit("setEvents", events);
-      return response;
-    });
-    return response;
+    response
+      .then(function (response) {
+        const events = [];
+        for (let i = 0; i < response.data.length; i++) {
+          events[i] = response.data[i];
+          events[i].date = helper.extractDate(events[i].startDate);
+          events[i].start = helper.extractTime(events[i].startDate);
+          events[i].end = helper.extractTime(events[i].endDate);
+        }
+        context.commit("setEvents", events);
+        return response;
+      })
+      .catch(function (response) {});
   },
   async participateEvent(
     context,
@@ -61,19 +62,19 @@ const actions = {
     await this.dispatch("events/getEvents");
     const events = context.state.events;
     const adminUuid = context.rootGetters.uuid;
-    for (var i in events) {
+    for (const i in events) {
       const event = events[i];
       await api
         .getEventParticipationAsAdmin(adminUuid, event.uuid)
-        .then(function(response) {
+        .then(function (response) {
           event.members = response.data;
         });
       context.commit("setEvent", { event: events[i], index: i });
     }
   },
   async getEvent(context, uuid) {
-    return api.getEvent(uuid).then(function(response) {
-      for (var i = 0; i < context.state.events.length; i++) {
+    return api.getEvent(uuid).then(function (response) {
+      for (let i = 0; i < context.state.events.length; i++) {
         if (context.state.events[i].uuid === response.data.uuid) {
           context.commit("setEvent", { event: response.data, index: i });
         }
@@ -83,7 +84,7 @@ const actions = {
   },
   async editEvent(context, event) {
     if (event.uuid !== undefined) {
-      for (var i = 0; i < context.state.events.length; i++) {
+      for (let i = 0; i < context.state.events.length; i++) {
         if (context.state.events[i].uuid === event.uuid) {
           context.commit("setEvent", { event: event, index: i });
         }
@@ -104,13 +105,13 @@ const actions = {
   changePagination(context, pagination) {
     context.commit("setPagination", pagination);
     context.dispatch("getEvents");
-  }
+  },
 };
 
 // mutations
 const mutations = {
   setEvent(state, { event, index }) {
-    for (var key in state.events[index]) {
+    for (const key in state.events[index]) {
       if (event[key] === undefined) {
         event[key] = state.events[index][key];
       }
@@ -125,8 +126,8 @@ const mutations = {
   },
   reset(state) {
     state.events = [];
-    state.pagination = {};
-  }
+    state.pagination = { limit: 12 };
+  },
 };
 
 export default {
@@ -134,5 +135,5 @@ export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

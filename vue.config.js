@@ -6,10 +6,10 @@ module.exports = {
       locale: "fr",
       fallbackLocale: "en",
       localeDir: "assets/translations",
-      enableInSFC: true
-    }
+      enableInSFC: true,
+    },
   },
-  chainWebpack: config => {
+  chainWebpack: (config) => {
     config.resolve.symlinks(true);
     return config;
   },
@@ -17,9 +17,9 @@ module.exports = {
     proxy: {
       "/api": {
         target: "http://localhost:8080",
-        changeOrigin: true
-      }
-    }
+        changeOrigin: true,
+      },
+    },
   },
   pwa: {
     name: "Castellers de Montréal",
@@ -38,35 +38,35 @@ module.exports = {
         {
           src: "static/icons/android-chrome-192x192.png",
           sizes: "192x192",
-          type: "image/png"
+          type: "image/png",
         },
         {
           src: "static/icons/android-chrome-512x512.png",
           sizes: "512x512",
-          type: "image/png"
+          type: "image/png",
         },
         {
           src: "static/icons/android-chrome-maskable-192x192.png",
           sizes: "192x192",
           type: "image/png",
-          purpose: "maskable"
+          purpose: "maskable",
         },
         {
           src: "static/icons/android-chrome-maskable-512x512.png",
           sizes: "512x512",
           type: "image/png",
-          purpose: "maskable"
-        }
-      ]
+          purpose: "maskable",
+        },
+      ],
     },
     iconPaths: {
       favicon32: "static/icons/favicon-32x32.png",
       favicon16: "static/icons/favicon-16x16.png",
       appleTouchIcon: "static/icons/apple-touch-icon.png",
       maskIcon: "static/icons/safari-pinned-tab.svg",
-      msTileImage: "static/icons/mstile-150x150.png"
+      msTileImage: "static/icons/mstile-150x150.png",
     },
     // configure the workbox plugin
-    workboxPluginMode: "GenerateSW"
-  }
+    workboxPluginMode: "GenerateSW",
+  },
 };

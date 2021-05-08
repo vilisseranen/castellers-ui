@@ -4,20 +4,20 @@ import api from "../../api/castellers";
 const state = () => ({
   auth: {
     accessToken: "",
-    refreshToken: ""
+    refreshToken: "",
   },
   action: {
     type: "",
     objectUUID: "",
-    payload: ""
+    payload: "",
   },
-  locale: ""
+  locale: "",
 });
 
 // getters
 const getters = {
-  refreshToken: state => state.auth.refreshToken,
-  accessToken: state => state.auth.accessToken,
+  refreshToken: (state) => state.auth.refreshToken,
+  accessToken: (state) => state.auth.accessToken,
   accessTokenData: (state, getters) =>
     getters.accessToken
       ? JSON.parse(atob(getters.accessToken.split(".")[1]))
@@ -41,8 +41,8 @@ const getters = {
       return null;
     }
   },
-  language: state => state.locale,
-  action: state => state.action,
+  language: (state) => state.locale,
+  action: (state) => state.action,
   isLoggedIn: (state, getters) => {
     if (
       getters.refreshTokenData &&
@@ -51,13 +51,13 @@ const getters = {
       return true;
     }
     return false;
-  }
+  },
 };
 
 // actions
 const actions = {
   async login(context, { username, password }) {
-    return api.login(username, password).then(async function(response) {
+    return api.login(username, password).then(async function (response) {
       context.commit("authenticate", response.data);
       response = await context.dispatch("members/getMember");
       context.commit("setLanguage", response.data.language);
@@ -66,14 +66,14 @@ const actions = {
   async refreshToken(context) {
     return api
       .refreshToken(context.getters.refreshToken)
-      .then(function(response) {
+      .then(function (response) {
         context.commit("authenticate", response.data);
         return response;
       });
   },
   logout(context) {
     context.dispatch("reset");
-  }
+  },
 };
 
 // mutations
@@ -95,12 +95,12 @@ const mutations = {
   },
   setLanguage(state, locale) {
     state.locale = locale;
-  }
+  },
 };
 
 export default {
   state,
   getters,
   actions,
-  mutations
+  mutations,
 };

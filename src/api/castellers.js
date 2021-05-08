@@ -1,6 +1,6 @@
 import axios from "axios";
 
-var API_URL;
+let API_URL;
 
 if (process.env.NODE_ENV === "production" && process.env.VUE_APP_API_URL) {
   API_URL = "https://" + process.env.VUE_APP_API_URL;
@@ -8,18 +8,18 @@ if (process.env.NODE_ENV === "production" && process.env.VUE_APP_API_URL) {
   API_URL = "";
 }
 
-const apiCall = function(method, url, headers, data) {
+const apiCall = function (method, url, headers, data) {
   return new Promise((resolve, reject) => {
     axios({
       method: method,
       url: API_URL + url,
       headers: headers,
-      data: data
+      data: data,
     })
-      .then(function(response) {
+      .then(function (response) {
         resolve(response);
       })
-      .catch(function(error) {
+      .catch(function (error) {
         reject(error);
       });
   });
@@ -29,16 +29,16 @@ export default {
   async login(username, password) {
     return apiCall("POST", `/api/login`, null, {
       username: username,
-      password: password
-    }).then(function(response) {
+      password: password,
+    }).then(function (response) {
       axios.defaults.headers.common.Authorization = `Bearer: ${response.data.access_token}`;
       return response;
     });
   },
   async refreshToken(token) {
     return apiCall("POST", `/api/refresh`, null, {
-      refresh_token: token
-    }).then(function(response) {
+      refresh_token: token,
+    }).then(function (response) {
       axios.defaults.headers.common.Authorization = `Bearer: ${response.data.access_token}`;
       return response;
     });
@@ -77,7 +77,7 @@ export default {
     );
   },
   async participateEvent(memberUuid, eventUuid, participation, token) {
-    var authorizationHeader = {};
+    let authorizationHeader = {};
     if (token != null) {
       authorizationHeader = { Authorization: `Bearer: ${token}` };
     }
@@ -188,5 +188,5 @@ export default {
   },
   async version() {
     return apiCall("GET", `/api/version`, {}, {});
-  }
+  },
 };

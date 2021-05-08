@@ -6,6 +6,6 @@
 import EventEdit from "../components/EventEdit.vue";
 
 export default {
-  components: { EventEdit }
+  components: { EventEdit },
 };
 </script>

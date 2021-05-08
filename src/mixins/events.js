@@ -1,12 +1,12 @@
 import api from "../api/castellers";
 
-export var eventMixin = {
+export const eventMixin = {
   methods: {
-    deleteEvent: function(event) {
-      var self = this;
-      var options = { year: "numeric", month: "2-digit", day: "2-digit" };
-      var date = new Date(event.startDate * 1000);
-      var startDate = Intl.DateTimeFormat("fr-FR", options).format(date);
+    deleteEvent: function (event) {
+      const self = this;
+      const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+      const date = new Date(event.startDate * 1000);
+      const startDate = Intl.DateTimeFormat("fr-FR", options).format(date);
       return new Promise((resolve, reject) => {
         this.$buefy.dialog.confirm({
           message:
@@ -22,15 +22,15 @@ export var eventMixin = {
           onConfirm: () => {
             api
               .deleteEvent(self.uuid, event.uuid)
-              .then(function() {
+              .then(function () {
                 resolve();
               })
-              .catch(function(err) {
+              .catch(function (err) {
                 reject(err);
               });
-          }
+          },
         });
       });
-    }
-  }
+    },
+  },
 };

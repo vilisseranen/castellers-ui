@@ -22,12 +22,12 @@ import { mapGetters } from "vuex";
 
 export default {
   computed: {
-    ...mapGetters(["type"])
+    ...mapGetters(["type"]),
   },
   components: {
     BannerLayout,
-    FooterLayout
-  }
+    FooterLayout,
+  },
 };
 </script>
 
