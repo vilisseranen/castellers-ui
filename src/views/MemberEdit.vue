@@ -93,7 +93,7 @@ export default {
       changePassword: "members/changePassword"
     }),
     editUser(user) {
-      var self = this;
+      const self = this;
       self.updating = true;
       this.editMember(user)
         .then(function(response) {
@@ -116,7 +116,7 @@ export default {
     },
     loadUser(uuid) {
       if (uuid) {
-        var self = this;
+        const self = this;
         this.getMember(uuid)
           .then(function(response) {
             self.user = response.data;
@@ -125,7 +125,7 @@ export default {
       }
     },
     removeUser(member) {
-      var self = this;
+      const self = this;
       this.deleteUser(member)
         .then(function() {
           self.$router.push({ path: `/members` });
@@ -135,7 +135,7 @@ export default {
         });
     },
     changeMyPassword(password) {
-      var self = this;
+      const self = this;
       if (this.passwordConfirmDifferent) {
         this.$notifyNOK(this.$t("login.passwordDifferent"));
       } else {

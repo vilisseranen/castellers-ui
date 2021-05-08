@@ -70,7 +70,7 @@ export default {
     }),
     ...mapGetters(["uuid", "type"]),
     columns: function() {
-      var columns = [
+      const columns = [
         {
           field: "name",
           label: this.$t("general.name"),
@@ -80,8 +80,8 @@ export default {
         }
       ];
       if (this.events) {
-        var count = 1;
-        for (var id in this.events) {
+        let count = 1;
+        for (const id in this.events) {
           columns.push({
             field: this.events[id].uuid,
             label: [this.events[id].name, this.events[id].date].join(" "),
@@ -99,16 +99,16 @@ export default {
       return columns;
     },
     summaryParticipants: function() {
-      var participantsArray = [];
-      for (var m = 0; m < this.members.length; m++) {
-        var memberLine = {
+      const participantsArray = [];
+      for (let m = 0; m < this.members.length; m++) {
+        const memberLine = {
           name: [this.members[m].firstName, this.members[m].lastName].join(" ")
         };
-        for (var e = 0; e < this.events.length; e++) {
-          var answer = "-";
+        for (let e = 0; e < this.events.length; e++) {
+          let answer = "-";
           // check in members this member participation
           if (this.events[e].members) {
-            for (var p = 0; p < this.events[e].members.length; p++) {
+            for (let p = 0; p < this.events[e].members.length; p++) {
               if (this.events[e].members[p].uuid === this.members[m].uuid) {
                 // This is the current member
                 if (this.events[e].members[p].participation === "yes") {
@@ -128,9 +128,9 @@ export default {
   },
   methods: {
     countEventParticipants(event) {
-      var total = 0;
+      let total = 0;
       if (event.members) {
-        for (var m = 0; m < event.members.length; m++) {
+        for (let m = 0; m < event.members.length; m++) {
           if (event.members[m].participation === "yes") {
             total++;
           }

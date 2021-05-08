@@ -96,7 +96,7 @@ export default {
       forgotPassword: "members/forgotPassword"
     }),
     login() {
-      var self = this;
+      const self = this;
       this.getLogin({
         username: this.member.username,
         password: this.member.password
@@ -111,7 +111,7 @@ export default {
         });
     },
     resetPassword() {
-      var self = this;
+      const self = this;
       this.forgotPassword(this.member.email).then(function() {
         self.$notifyOK(self.$t("login.passwordResetSent"));
       });

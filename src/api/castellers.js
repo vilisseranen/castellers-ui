@@ -1,6 +1,6 @@
 import axios from "axios";
 
-var API_URL;
+let API_URL;
 
 if (process.env.NODE_ENV === "production" && process.env.VUE_APP_API_URL) {
   API_URL = "https://" + process.env.VUE_APP_API_URL;
@@ -77,7 +77,7 @@ export default {
     );
   },
   async participateEvent(memberUuid, eventUuid, participation, token) {
-    var authorizationHeader = {};
+    let authorizationHeader = {};
     if (token != null) {
       authorizationHeader = { Authorization: `Bearer: ${token}` };
     }

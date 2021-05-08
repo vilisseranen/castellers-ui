@@ -15,10 +15,10 @@ export default {
     EditProfileForm
   },
   data() {
-    var self = this;
-    var initialized = true;
-    var updating = false;
-    var user = { roles: [], type: "admin", language: "fr" };
+    const self = this;
+    const initialized = true;
+    const updating = false;
+    const user = { roles: [], type: "admin", language: "fr" };
     this.getInitialize().then(function(response) {
       if (response.status === 204) {
         self.initialized = false;
@@ -38,7 +38,7 @@ export default {
       initialize: "initialize/initialize"
     }),
     initializeApp(user) {
-      var self = this;
+      const self = this;
       self.updating = true;
       this.initialize(user).then(function(response) {
         self.updating = false;

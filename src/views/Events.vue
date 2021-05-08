@@ -88,7 +88,7 @@ export default {
       }
     },
     participate(eventUuid, participation, token, userUuid) {
-      var self = this;
+      const self = this;
       this.participateEvent({ eventUuid, participation, token, userUuid })
         .then(function() {
           self.$store.dispatch("events/getEvent", eventUuid);
@@ -105,7 +105,7 @@ export default {
       this.$router.push({ path: `/eventEdit/${eventUuid}` });
     },
     removeEvent(practice) {
-      var self = this;
+      const self = this;
       this.deleteEvent(practice)
         .then(function() {
           self.$store.dispatch("events/getEvents");
@@ -120,7 +120,7 @@ export default {
         (this.events.length === this.pagination.limit &&
           this.pagination.page < 0)
       ) {
-        var pagination = this.pagination;
+        const pagination = this.pagination;
         pagination.page = pagination.page - 1;
         this.changePagination(pagination);
       }
@@ -131,13 +131,13 @@ export default {
         (this.events.length === this.pagination.limit &&
           this.pagination.page >= 0)
       ) {
-        var pagination = this.pagination;
+        const pagination = this.pagination;
         pagination.page = pagination.page + 1;
         this.changePagination(pagination);
       }
     },
     pageToday() {
-      var pagination = this.pagination;
+      const pagination = this.pagination;
       pagination.page = 0;
       this.changePagination(pagination);
     }

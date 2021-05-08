@@ -303,12 +303,12 @@ export default {
     },
     heightDisplayed: {
       get: function() {
-        var height;
+        let height;
         if (this.height_unit === "ft") {
-          var inches = Math.round(
+          let inches = Math.round(
             (parseInt(this.current_user.height) / 2.54) % 12
           );
-          var feet = Math.floor(parseInt(this.current_user.height) / 2.54 / 12);
+          let feet = Math.floor(parseInt(this.current_user.height) / 2.54 / 12);
           if (inches === 12) {
             feet += 1;
             inches = "";
@@ -326,11 +326,11 @@ export default {
         return null;
       },
       set: function(height) {
-        var heightToSave;
+        let heightToSave;
         if (this.height_unit === "ft") {
-          var heightParsed = height.split("'", 2);
-          var feet = parseFloat(heightParsed[0]);
-          var inches = parseFloat(heightParsed[1]);
+          const heightParsed = height.split("'", 2);
+          const feet = parseFloat(heightParsed[0]);
+          let inches = parseFloat(heightParsed[1]);
           if (isNaN(inches)) {
             inches = 0;
           }
@@ -351,7 +351,7 @@ export default {
     },
     weightDisplayed: {
       get: function() {
-        var weight;
+        let weight;
         if (this.weight_unit === "lb") {
           weight = parseFloat(this.current_user.weight) * 2.205;
         } else {
@@ -363,7 +363,7 @@ export default {
         return null;
       },
       set: function(weight) {
-        var weightToSave = parseFloat(weight);
+        let weightToSave = parseFloat(weight);
         if (!isNaN(weightToSave)) {
           if (this.weight_unit === "lb") {
             weightToSave /= 2.205;
@@ -386,7 +386,7 @@ export default {
     };
   },
   mounted() {
-    var self = this;
+    const self = this;
     this.getRoles().then(function(response) {
       self.available_roles = response.data.sort();
     });
@@ -407,7 +407,7 @@ export default {
         : this.$t("members.exempleLB");
     },
     resendEmail() {
-      var self = this;
+      const self = this;
       self.updating = true;
       this.resendEmaiCall(this.current_user.uuid)
         .then(function(response) {

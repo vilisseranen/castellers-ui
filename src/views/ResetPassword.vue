@@ -108,7 +108,7 @@ export default {
       getLogin: "login"
     }),
     async reset() {
-      var self = this;
+      const self = this;
       if (this.passwordConfirmDifferent) {
         this.$notifyNOK(this.$t("login.passwordDifferent"));
       } else {

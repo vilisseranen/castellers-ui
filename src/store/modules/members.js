@@ -33,8 +33,8 @@ const actions = {
     return api
       .getMembersAsAdmin(context.rootGetters.uuid)
       .then(function(response) {
-        var members = response.data;
-        for (var i = 0; i < members.length; i++) {
+        const members = response.data;
+        for (let i = 0; i < members.length; i++) {
           members[i].roles = members[i].roles.join(", ");
         }
         context.commit("setMembers", members);

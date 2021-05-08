@@ -36,7 +36,7 @@ new Vue({
     },
     checkAction() {
       if ("action" in this.$route.query) {
-        var action = {};
+        const action = {};
         action.type = this.$route.query.action;
         action.objectUUID = this.$route.query.objectUUID;
         action.payload = this.$route.query.payload;

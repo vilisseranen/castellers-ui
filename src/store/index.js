@@ -10,7 +10,7 @@ import api from "../api/castellers";
 
 Vue.use(Vuex);
 
-var store = new Vuex.Store({
+const store = new Vuex.Store({
   modules: {
     events,
     members,
@@ -52,7 +52,7 @@ axios.interceptors.response.use(
     const originalRequest = error.config;
     if (error.response.status === 403 && !originalRequest._retry) {
       originalRequest._retry = true;
-      var response = await store.dispatch("refreshToken");
+      const response = await store.dispatch("refreshToken");
       // Replace Bearer token from original request
       originalRequest.headers.Authorization = `Bearer: ${response.data.access_token}`;
       return axios(originalRequest);

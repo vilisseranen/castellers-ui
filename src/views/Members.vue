@@ -106,7 +106,7 @@ export default {
       this.$router.push({ path: `/memberEdit/${memberUuid}` });
     },
     removeUser(member) {
-      var self = this;
+      const self = this;
       this.deleteUser(member)
         .then(function() {
           self.$store.dispatch("members/getMembers");

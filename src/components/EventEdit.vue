@@ -340,7 +340,7 @@ Icon.Default.mergeOptions({
   shadowUrl: require("leaflet/dist/images/marker-shadow.png")
 });
 
-var L = window.L;
+const L = window.L;
 
 export default {
   props: {
@@ -354,12 +354,12 @@ export default {
     LMarker
   },
   data() {
-    var s = new Date(Date.now());
+    const s = new Date(Date.now());
     s.setDate(s.getDate() + ((4 + 7 - s.getDay()) % 7)); // next thursday
     s.setHours(18, 45); // at 6:45PM
-    var e = new Date(s);
+    const e = new Date(s);
     e.setHours(21, 30);
-    var table = {
+    const table = {
       data: []
     };
     return {
@@ -491,7 +491,7 @@ export default {
     },
     dateFromCalendar(dateToConvert) {
       if (dateToConvert) {
-        var date = new Date(dateToConvert);
+        const date = new Date(dateToConvert);
         return Math.trunc(date.getTime() / 1000);
       } else {
         return 0;
@@ -499,14 +499,14 @@ export default {
     },
     dateToCalendar(dateToConvert) {
       if (dateToConvert) {
-        var date = new Date(dateToConvert * 1000);
+        const date = new Date(dateToConvert * 1000);
         return date.toISOString();
       } else {
         return "";
       }
     },
     eventEdit() {
-      var self = this;
+      const self = this;
       self.isLoading = true;
       this.editEvent(self.currentEvent)
         .then(function(response) {
@@ -525,7 +525,7 @@ export default {
     },
     loadEvent(uuid) {
       if (uuid) {
-        var self = this;
+        const self = this;
         this.getEvent(uuid)
           .then(function(response) {
             // If locationName is not set, use default coordinates
@@ -539,11 +539,11 @@ export default {
     },
     listParticipants(eventUuid) {
       if (eventUuid && this.type === "admin") {
-        var self = this;
+        const self = this;
         this.getEventParticipation(eventUuid)
           .then(function(response) {
             self.participation = response.data;
-            for (var i = 0; i < self.participation.length; i++) {
+            for (let i = 0; i < self.participation.length; i++) {
               self.participation[i].roles = self.participation[i].roles
                 .sort()
                 .join(", ");
