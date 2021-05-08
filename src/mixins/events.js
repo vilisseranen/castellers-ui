@@ -1,6 +1,6 @@
 import api from "../api/castellers";
 
-export var eventMixin = {
+export const eventMixin = {
   methods: {
     deleteEvent: function(event) {
       const self = this;

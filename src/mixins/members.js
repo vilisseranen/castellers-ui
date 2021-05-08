@@ -1,6 +1,6 @@
 import api from "../api/castellers";
 
-export var memberMixin = {
+export const memberMixin = {
   methods: {
     deleteUser: function(member) {
       const self = this;
