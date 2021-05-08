@@ -64,8 +64,10 @@ axios.interceptors.response.use(
       originalRequest.headers.Authorization = `Bearer: ${response.data.access_token}`;
       return axios(originalRequest);
     }
-    // Set store as disconnected
-    store.dispatch("logout");
+    if (error.response.status === 401) {
+      // Set store as disconnected
+      store.dispatch("logout");
+    }
     return Promise.reject(error);
   }
 );
