@@ -562,9 +562,12 @@ export default {
         .length;
     },
     presence(eventUuid, memberUuid, presence) {
-      this.presenceEvent({ eventUuid, memberUuid, presence }).then(
-        this.listParticipants(eventUuid)
-      );
+      const self = this;
+      this.presenceEvent({ eventUuid, memberUuid, presence }).then(function (
+        response
+      ) {
+        self.listParticipants(eventUuid);
+      });
     },
   },
 };
