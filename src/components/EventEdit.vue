@@ -145,7 +145,9 @@
               class="field is-6 column"
               v-if="(readonly && event.locationName) || !readonly"
             >
-              <label class="label note">{{ $t("events.location") }}</label>
+              <label class="label" v-bind:class="{ note: !readonly }">{{
+                $t("events.location")
+              }}</label>
               <div class="control is-expanded" style="margin-bottom: 10px">
                 <input
                   :disabled="readonly ? true : false"
