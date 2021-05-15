@@ -17,7 +17,9 @@
           </fieldset>
         </div>
         <div class="field column is-7">
-          <label class="label required">{{ $t("general.name") }}</label>
+          <label class="label" v-bind:class="{ required: !readonly }">{{
+            $t("general.name")
+          }}</label>
           <div class="control is-expanded">
             <input
               :disabled="readonly ? true : false"
@@ -29,7 +31,9 @@
           </div>
         </div>
         <div class="field column is-2">
-          <label class="label required">{{ $t("events.type") }}</label>
+          <label class="label" v-bind:class="{ required: !readonly }">{{
+            $t("events.type")
+          }}</label>
           <div class="control is-expanded">
             <PrettyRadio
               class="p-default p-curve"
@@ -61,7 +65,9 @@
           </div>
         </div>
         <div class="field column is-6">
-          <label class="label required">{{ $t("events.start") }}</label>
+          <label class="label" v-bind:class="{ required: !readonly }">{{
+            $t("events.start")
+          }}</label>
           <div class="control is-expanded">
             <datetime
               :disabled="readonly ? true : false"
@@ -74,7 +80,9 @@
           </div>
         </div>
         <div class="field column is-6">
-          <label class="label required">{{ $t("events.end") }}</label>
+          <label class="label" v-bind:class="{ required: !readonly }">{{
+            $t("events.end")
+          }}</label>
           <div class="control is-expanded">
             <datetime
               :disabled="readonly ? true : false"
@@ -96,7 +104,9 @@
           class="field column is-4"
           v-if="currentEvent.uuid === undefined && recurring"
         >
-          <label class="label required">{{ $t("events.interval") }}</label>
+          <label class="label" v-bind:class="{ required: !readonly }">{{
+            $t("events.interval")
+          }}</label>
           <PrettyRadio
             class="p-default p-curve"
             name="interval"
@@ -118,7 +128,9 @@
           class="field column is-6"
           v-if="currentEvent.uuid === undefined && recurring"
         >
-          <label class="label required">{{ $t("events.until") }}</label>
+          <label class="label" v-bind:class="{ required: !readonly }">{{
+            $t("events.until")
+          }}</label>
           <datetime
             type="datetime"
             v-model="untilDateForCalendar"
@@ -195,14 +207,16 @@
           </div>
         </div>
       </div>
-      <hr />
-      <div>
-        <span class="required"></span>
-        {{ $t("general.requiredFields") }}
-      </div>
-      <div>
-        <span class="note"></span>
-        {{ $t("events.noteLocation") }}
+      <div v-if="!readonly">
+        <hr />
+        <div>
+          <span class="required"></span>
+          {{ $t("general.requiredFields") }}
+        </div>
+        <div>
+          <span class="note"></span>
+          {{ $t("events.noteLocation") }}
+        </div>
       </div>
       <b-loading
         :is-full-page="true"
