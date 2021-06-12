@@ -11,6 +11,8 @@ import EventEdit from "./views/EventEdit.vue";
 import EventShow from "./views/EventShow.vue";
 import Initialize from "./views/Initialize.vue";
 import SummaryParticipation from "./views/SummaryParticipation.vue";
+import Castells from "./views/Castells.vue";
+import CastellsEdit from "./views/CastellsEdit.vue";
 
 Vue.use(Router);
 
@@ -96,6 +98,16 @@ export default new Router({
           meta: {
             requiresAuth: true,
           },
+        },
+        {
+          path: "castells",
+          name: "Castells",
+          component: Castells,
+        },
+        {
+          path: "castellEdit",
+          name: "CastellAdd",
+          component: CastellsEdit,
         },
       ],
     },

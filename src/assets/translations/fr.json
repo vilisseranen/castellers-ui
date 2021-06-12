@@ -144,5 +144,13 @@
   "summary": {
     "title": "Participation pour les évènements à venir",
     "total": "Total"
+  },
+  "castells": {
+    "title": "Liste de castells",
+    "addCastell": "Créer un nouveau castell",
+    "update": "Modifier un castell",
+    "create": "Créer un nouveau castell",
+    "nameDescription": "Le nom du castell (ex: 4d6 de la Diada 2022)",
+    "type": "Type de castell"
   }
 }

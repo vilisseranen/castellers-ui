@@ -19,6 +19,7 @@
     "luxon": "^1.26.0",
     "node-sass": "^5.0.0",
     "pretty-checkbox-vue": "^1.1.9",
+    "raphael": "^2.3.0",
     "register-service-worker": "^1.7.2",
     "velocity-animate": "^1.5.2",
     "vue": "^2.6.12",
