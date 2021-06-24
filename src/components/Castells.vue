@@ -7,16 +7,23 @@
         id="canvas_tronc"
         style="border: solid 1px"
       ></div>
-      <div class="column is-6" style="border: solid 1px">
+      <div class="column is-3" style="border: solid 1px">
+        <h1 class="subtitle is-3">Membres Disponibles</h1>
         <p
-          v-for="member in members"
-          v-bind:key="member.id"
-          v-on:click="selectMember(member.firstName)"
+          v-for="uuid in availableMembersIDs"
+          v-bind:key="uuid"
+          v-on:click="selectMember(uuid)"
         >
-          {{ member.firstName }}
+          {{ allMembers[uuid].firstName }}
         </p>
-        <strong>{{ selectedMember }}</strong>
-        <p>{{ this.positionsMembers }}</p>
+        <strong>{{ selectedMemberFirstName }}</strong>
+        <p>{{ positionsMembers }}</p>
+      </div>
+      <div class="column is-3" style="border: solid 1px">
+        <h1 class="subtitle is-3">Membres dans le castell</h1>
+        <p v-for="uuid in selectedMembersIDs" v-bind:key="uuid">
+          {{ allMembers[uuid].firstName }}
+        </p>
       </div>
     </div>
   </div>
@@ -31,6 +38,32 @@ export default {
     castell: Object,
   },
   computed: {
+    selectedMemberFirstName: function () {
+      if (this.selectedMemberUuid) {
+        return this.allMembers[this.selectedMemberUuid].firstName;
+      } else {
+        return "";
+      }
+    },
+    allMembers: function () {
+      const members = {};
+      for (let i = 0; i < this.members.length; i++) {
+        members[this.members[i].uuid] = this.members[i];
+      }
+      return members;
+    },
+    selectedMembersIDs: function () {
+      const membersIDs = [];
+      for (let i = 0; i < this.positionsMembers.length; i++) {
+        membersIDs.push(this.positionsMembers[i].uuid);
+      }
+      return membersIDs;
+    },
+    availableMembersIDs: function () {
+      return Object.keys(this.allMembers).filter(
+        (x) => !this.selectedMembersIDs.includes(x)
+      );
+    },
     castellHeight: function () {
       let h = 0;
       if (this.castell.type) {
@@ -52,7 +85,7 @@ export default {
   data() {
     return {
       paperTronc: null,
-      selectedMember: "",
+      selectedMemberUuid: "",
       positionsMembers: [],
       swapOriginPosition: [0, 0],
       swapDestinationPosition: [0, 0],
@@ -67,11 +100,11 @@ export default {
     ...mapActions({
       getMembers: "members/getMembers",
     }),
-    selectMember(firstName) {
-      this.selectedMember = firstName;
+    selectMember(uuid) {
+      this.selectedMemberUuid = uuid;
     },
-    setMemberPosition(column, cordon, firstName) {
-      if (!firstName) {
+    setMemberPosition(column, cordon, uuid) {
+      if (!uuid) {
         return;
       }
       for (let i = 0; i < this.positionsMembers.length; i++) {
@@ -83,16 +116,15 @@ export default {
           this.positionsMembers.splice(i, 1);
         }
         // Remove member if it is present in the list
-        else if (this.positionsMembers[i].name === firstName) {
+        else if (this.positionsMembers[i].uuid === uuid) {
           this.positionsMembers.splice(i, 1);
         }
       }
-
       // Add member in list of positions
       this.positionsMembers.push({
         cordon: cordon,
         column: column,
-        name: firstName,
+        uuid: uuid,
       });
       // redraw the tronc
       this.drawTronc();
@@ -107,24 +139,24 @@ export default {
       destinationCordon
     ) {
       // find who is at origin
-      let originName;
-      let destinationName;
+      let originUuid;
+      let destinationUuid;
       for (let i = 0; i < this.positionsMembers.length; i++) {
         if (
           this.positionsMembers[i].column === originColumn &&
           this.positionsMembers[i].cordon === originCordon
         ) {
-          originName = this.positionsMembers[i].name;
+          originUuid = this.positionsMembers[i].uuid;
         }
         if (
           this.positionsMembers[i].column === destinationColumn &&
           this.positionsMembers[i].cordon === destinationCordon
         ) {
-          destinationName = this.positionsMembers[i].name;
+          destinationUuid = this.positionsMembers[i].uuid;
         }
       }
-      this.setMemberPosition(destinationColumn, destinationCordon, originName);
-      this.setMemberPosition(originColumn, originCordon, destinationName);
+      this.setMemberPosition(destinationColumn, destinationCordon, originUuid);
+      this.setMemberPosition(originColumn, originCordon, destinationUuid);
     },
     drawTronc() {
       const self = this;
@@ -181,7 +213,7 @@ export default {
                 .text(
                   posW / 8 + posW * 1.25 * w + posW / 2,
                   posH / 16 + posH * 1.125 * h + posH / 2,
-                  self.positionsMembers[i].name
+                  self.allMembers[self.positionsMembers[i].uuid].firstName
                 )
                 .attr({ fill: "#000000" })
                 .transform("R270s2")
@@ -194,7 +226,7 @@ export default {
             .click(
               (function (w, h) {
                 return function () {
-                  self.setMemberPosition(w, h, self.selectedMember);
+                  self.setMemberPosition(w, h, self.selectedMemberUuid);
                 };
               })(w + 1, height - h)
             )

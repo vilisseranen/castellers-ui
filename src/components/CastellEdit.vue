@@ -33,26 +33,6 @@
         <label class="label" v-bind:class="{ required: !readonly }">{{
           $t("castells.type")
         }}</label>
-        <!-- <b-dropdown aria-role="list" v-model="castell.type">
-          <template #trigger="{ active }">
-            <b-button
-              type="is-primary"
-              icon-pack="fa"
-              :label="$t('castells.type')"
-              :icon-right="active ? 'caret-up' : 'caret-down'"
-            />
-          </template>
-
-          <b-dropdown-item value="toto" aria-role="listitem"
-            >Action</b-dropdown-item
-          >
-          <b-dropdown-item value="tata" aria-role="listitem"
-            >Another action</b-dropdown-item
-          >
-          <b-dropdown-item value="tutu" aria-role="listitem"
-            >Something else</b-dropdown-item
-          >
-        </b-dropdown> -->
         <b-dropdown v-model="currentCastell.type" aria-role="list">
           <template #trigger>
             <b-button
