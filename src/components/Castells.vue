@@ -95,6 +95,8 @@ export default {
     this.paperTronc = new Raphael(document.getElementById("canvas_tronc"));
     this.$store.dispatch("members/getMembers");
     this.drawTronc();
+    this.positionsMembers = this.castell.positions;
+    console.log(this.castell);
   },
   methods: {
     ...mapActions({
@@ -130,6 +132,28 @@ export default {
       this.drawTronc();
     },
     getElementBycoordinates(paper, coordinatesArray) {
+      // var offsetx = document.getElementById("canvas_tronc").offsetLeft;
+      // var offsety = document.getElementById("canvas_tronc").offsetTop;
+
+      // console.log("offsetLeft: " + offsetx);
+      // console.log("offsetTop: " + offsety);
+
+      var coordinatesWithOffset = [
+        coordinatesArray[0] - 0,
+        coordinatesArray[1] - 0,
+      ];
+      console.log("position " + coordinatesWithOffset);
+
+      // DEBUG
+      var elemfound = paper.getElementByPoint(
+        coordinatesWithOffset[0],
+        coordinatesWithOffset[1]
+      );
+      if (elemfound) {
+        console.log(elemfound.id);
+      } else {
+        console.log("no element found");
+      }
       return paper.getElementByPoint(coordinatesArray[0], coordinatesArray[1]);
     },
     swapMemberPositions(
@@ -194,6 +218,21 @@ export default {
               5
             )
             .attr({ fill: color, opacity: 0.3 });
+          this.paperTronc.text(
+            posW / 8 + posW * 1.25 * w + posW / 2,
+            posH / 16 + posH * 1.125 * h + posH / 2,
+            rect.id +
+              "\n(" +
+              [
+                Math.round(rect.getBBox().x) +
+                  "-" +
+                  Math.round(rect.getBBox().x + rect.getBBox().width),
+                Math.round(rect.getBBox().y) +
+                  "-" +
+                  Math.round(rect.getBBox().y + rect.getBBox().height),
+              ].join(", ") +
+              ")"
+          );
           posGroup.push(rect);
 
           // Add a few attributes to the group
@@ -231,12 +270,23 @@ export default {
               })(w + 1, height - h)
             )
             .drag(
-              function (dx, dy, x, y) {
-                self.swapOriginPosition = [0, 0];
-                self.swapDestinationPosition = [0, 0];
+              function (dx, dy, mx, my) {
+                // var offset = self.paperTronc.canvas.parent().offset();
+                // var offsety = document.getElementById("canvas_tronc").offsetTop;
+                // var offsetx = document.getElementById("canvas_tronc")
+                //   .offsetLeft;
+                // console.log("offset " + offsety);
+                // var px = mx - offsetx;
+                // var py = my - offsety;
+                // console.log("dx: " + dx);
+                // console.log("dy: " + dy);
+                // console.log("x: " + x);
+                // console.log("y: " + y);
+                // self.swapOriginPosition = [0, 0];
+                // self.swapDestinationPosition = [0, 0];
                 if (Math.abs(dx) + Math.abs(dy) > 10) {
-                  self.swapOriginPosition = [x - dx, y - dy];
-                  self.swapDestinationPosition = [x, y];
+                  self.swapOriginPosition = [mx - dx, my - dy];
+                  self.swapDestinationPosition = [mx, my];
                 }
               },
               function () {},
