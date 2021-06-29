@@ -2,11 +2,7 @@
   <div>
     <p class="title is-5">{{ this.castell.name }}</p>
     <div class="columns is-multiline">
-      <div
-        class="column is-6"
-        id="canvas_tronc"
-        style="border: solid 1px"
-      ></div>
+      <div class="column is-6" id="canvas_tronc" style="padding: 0"></div>
       <div class="column is-3" style="border: solid 1px">
         <h1 class="subtitle is-3">Membres Disponibles</h1>
         <p
@@ -96,7 +92,6 @@ export default {
     this.$store.dispatch("members/getMembers");
     this.drawTronc();
     this.positionsMembers = this.castell.positions;
-    console.log(this.castell);
   },
   methods: {
     ...mapActions({
@@ -132,28 +127,6 @@ export default {
       this.drawTronc();
     },
     getElementBycoordinates(paper, coordinatesArray) {
-      // var offsetx = document.getElementById("canvas_tronc").offsetLeft;
-      // var offsety = document.getElementById("canvas_tronc").offsetTop;
-
-      // console.log("offsetLeft: " + offsetx);
-      // console.log("offsetTop: " + offsety);
-
-      var coordinatesWithOffset = [
-        coordinatesArray[0] - 0,
-        coordinatesArray[1] - 0,
-      ];
-      console.log("position " + coordinatesWithOffset);
-
-      // DEBUG
-      var elemfound = paper.getElementByPoint(
-        coordinatesWithOffset[0],
-        coordinatesWithOffset[1]
-      );
-      if (elemfound) {
-        console.log(elemfound.id);
-      } else {
-        console.log("no element found");
-      }
       return paper.getElementByPoint(coordinatesArray[0], coordinatesArray[1]);
     },
     swapMemberPositions(
@@ -181,6 +154,8 @@ export default {
       }
       this.setMemberPosition(destinationColumn, destinationCordon, originUuid);
       this.setMemberPosition(originColumn, originCordon, destinationUuid);
+      this.swapOriginPosition = [0, 0];
+      this.swapDestinationPosition = [0, 0];
     },
     drawTronc() {
       const self = this;
@@ -195,11 +170,11 @@ export default {
         350
       );
 
-      const posW = realWidth / (width * 1.25); // width of a cell
+      const posW = realWidth / (width + (width - 1) / 4); // width of a cell (1/4 is the space between cells)
       const posH = posW * 2; // height of a cell
 
       // Resize canvas for the current castell
-      this.paperTronc.setSize(width * posW * 1.25, height * posH * 1.125);
+      this.paperTronc.setSize(realWidth, height * posH * 1.125);
 
       let h, w;
       for (h = 0; h < height; h++) {
@@ -210,29 +185,8 @@ export default {
 
           // draw cell and add to group
           const rect = this.paperTronc
-            .rect(
-              posW / 8 + posW * 1.25 * w,
-              posH / 16 + posH * 1.125 * h,
-              posW,
-              posH,
-              5
-            )
+            .rect(posW * 1.25 * w, posH * 1.125 * h, posW, posH, 5)
             .attr({ fill: color, opacity: 0.3 });
-          this.paperTronc.text(
-            posW / 8 + posW * 1.25 * w + posW / 2,
-            posH / 16 + posH * 1.125 * h + posH / 2,
-            rect.id +
-              "\n(" +
-              [
-                Math.round(rect.getBBox().x) +
-                  "-" +
-                  Math.round(rect.getBBox().x + rect.getBBox().width),
-                Math.round(rect.getBBox().y) +
-                  "-" +
-                  Math.round(rect.getBBox().y + rect.getBBox().height),
-              ].join(", ") +
-              ")"
-          );
           posGroup.push(rect);
 
           // Add a few attributes to the group
@@ -262,7 +216,7 @@ export default {
             }
           }
           posGroup
-            .click(
+            .mouseup(
               (function (w, h) {
                 return function () {
                   self.setMemberPosition(w, h, self.selectedMemberUuid);
@@ -271,22 +225,19 @@ export default {
             )
             .drag(
               function (dx, dy, mx, my) {
-                // var offset = self.paperTronc.canvas.parent().offset();
-                // var offsety = document.getElementById("canvas_tronc").offsetTop;
-                // var offsetx = document.getElementById("canvas_tronc")
-                //   .offsetLeft;
-                // console.log("offset " + offsety);
-                // var px = mx - offsetx;
-                // var py = my - offsety;
-                // console.log("dx: " + dx);
-                // console.log("dy: " + dy);
-                // console.log("x: " + x);
-                // console.log("y: " + y);
-                // self.swapOriginPosition = [0, 0];
-                // self.swapDestinationPosition = [0, 0];
+                self.swapOriginPosition = [0, 0];
+                self.swapDestinationPosition = [0, 0];
+
+                // TODO improve that part
                 if (Math.abs(dx) + Math.abs(dy) > 10) {
-                  self.swapOriginPosition = [mx - dx, my - dy];
-                  self.swapDestinationPosition = [mx, my];
+                  self.swapOriginPosition = [
+                    mx - dx,
+                    my - dy - document.body.scrollTop,
+                  ];
+                  self.swapDestinationPosition = [
+                    mx,
+                    my - document.body.scrollTop,
+                  ];
                 }
               },
               function () {},
@@ -311,8 +262,6 @@ export default {
                     destinationEl.data("cordon")
                   );
                 }
-                self.swapOriginPosition = [0, 0];
-                self.swapDestinationPosition = [0, 0];
               }
             );
         }
