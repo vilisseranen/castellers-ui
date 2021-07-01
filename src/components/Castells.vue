@@ -52,8 +52,8 @@ export default {
       const membersIDs = [];
       for (let i = 0; i < this.positionsMembers.length; i++) {
         if (this.allMembers[this.positionsMembers[i].uuid]) {
-        membersIDs.push(this.positionsMembers[i].uuid);
-      }
+          membersIDs.push(this.positionsMembers[i].uuid);
+        }
       }
       return membersIDs;
     },
@@ -158,14 +158,16 @@ export default {
         // Member at origin
         if (
           this.positionsMembers[i].column === originColumn &&
-          this.positionsMembers[i].cordon === originCordon
+          this.positionsMembers[i].cordon === originCordon &&
+          this.positionsMembers[i].position === originPosition
         ) {
           originUuid = this.positionsMembers[i].uuid;
         }
         // Member at destination
         if (
           this.positionsMembers[i].column === destinationColumn &&
-          this.positionsMembers[i].cordon === destinationCordon
+          this.positionsMembers[i].cordon === destinationCordon &&
+          this.positionsMembers[i].position === destinationPosition
         ) {
           destinationUuid = this.positionsMembers[i].uuid;
         }
