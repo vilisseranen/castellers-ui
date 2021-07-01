@@ -51,7 +51,9 @@ export default {
     selectedMembersIDs: function () {
       const membersIDs = [];
       for (let i = 0; i < this.positionsMembers.length; i++) {
+        if (this.allMembers[this.positionsMembers[i].uuid]) {
         membersIDs.push(this.positionsMembers[i].uuid);
+      }
       }
       return membersIDs;
     },
