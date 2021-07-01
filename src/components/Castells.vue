@@ -60,6 +60,13 @@ export default {
         (x) => !this.selectedMembersIDs.includes(x)
       );
     },
+    pomHeight: function () {
+      let h = 0;
+      if (this.castell.type) {
+        h = this.castell.type.split("d")[0] === "1" ? 0 : 3;
+      }
+      return h;
+    },
     castellHeight: function () {
       let h = 0;
       if (this.castell.type) {
@@ -83,15 +90,14 @@ export default {
       paperTronc: null,
       selectedMemberUuid: "",
       positionsMembers: [],
-      swapOriginPosition: [0, 0],
-      swapDestinationPosition: [0, 0],
+      dragging: false,
     };
   },
   mounted() {
-    this.paperTronc = new Raphael(document.getElementById("canvas_tronc"));
     this.$store.dispatch("members/getMembers");
-    this.drawTronc();
+    this.paperTronc = new Raphael(document.getElementById("canvas_tronc"));
     this.positionsMembers = this.castell.positions;
+    this.drawTronc();
   },
   methods: {
     ...mapActions({
@@ -111,10 +117,12 @@ export default {
           this.positionsMembers[i].cordon === cordon
         ) {
           this.positionsMembers.splice(i, 1);
+          i = i - 1;
         }
         // Remove member if it is present in the list
         else if (this.positionsMembers[i].uuid === uuid) {
           this.positionsMembers.splice(i, 1);
+          i = i - 1;
         }
       }
       // Add member in list of positions
@@ -122,12 +130,16 @@ export default {
         cordon: cordon,
         column: column,
         uuid: uuid,
+        name: this.allMembers[uuid].firstName,
       });
       // redraw the tronc
       this.drawTronc();
     },
     getElementBycoordinates(paper, coordinatesArray) {
-      return paper.getElementByPoint(coordinatesArray[0], coordinatesArray[1]);
+      return paper.getElementByPoint(
+        coordinatesArray[0] - document.body.scrollLeft,
+        coordinatesArray[1] - document.body.scrollTop
+      );
     },
     swapMemberPositions(
       originColumn,
@@ -135,16 +147,17 @@ export default {
       destinationColumn,
       destinationCordon
     ) {
-      // find who is at origin
       let originUuid;
       let destinationUuid;
       for (let i = 0; i < this.positionsMembers.length; i++) {
+        // Member at origin
         if (
           this.positionsMembers[i].column === originColumn &&
           this.positionsMembers[i].cordon === originCordon
         ) {
           originUuid = this.positionsMembers[i].uuid;
         }
+        // Member at destination
         if (
           this.positionsMembers[i].column === destinationColumn &&
           this.positionsMembers[i].cordon === destinationCordon
@@ -154,58 +167,93 @@ export default {
       }
       this.setMemberPosition(destinationColumn, destinationCordon, originUuid);
       this.setMemberPosition(originColumn, originCordon, destinationUuid);
-      this.swapOriginPosition = [0, 0];
-      this.swapDestinationPosition = [0, 0];
     },
     drawTronc() {
       const self = this;
 
       this.paperTronc.clear(); // Clear the canvas before starting
 
-      const width = this.castellWidth;
-      const height = this.castellHeight - 3; // pom = 3
+      // const width = this.castellWidth;
+      const troncHeight = this.castellHeight - this.pomHeight;
 
-      const realWidth = Math.min(
-        document.getElementById("canvas_tronc").offsetWidth,
-        350
-      );
+      const l = 150; // short side of rectangle
+      const s = l / 2; // long side of rectangle
+      const spacing = 10;
 
-      const posW = realWidth / (width + (width - 1) / 4); // width of a cell (1/4 is the space between cells)
-      const posH = posW * 2; // height of a cell
+      const canvasWidth =
+        this.castellWidth * s + (this.castellWidth - 1) * spacing;
+      const canvasTroncHeight = troncHeight * (l + spacing);
+      const canvasPomHeight =
+        (this.pomHeight > 0 ? 1 : 0) * 2 * (s + spacing) +
+        (this.pomHeight > 0 ? 1 : 0) * (l + spacing);
+
+      const defaultColor = "gray";
 
       // Resize canvas for the current castell
-      this.paperTronc.setSize(realWidth, height * posH * 1.125);
+      this.paperTronc.setSize(canvasWidth, canvasTroncHeight + canvasPomHeight);
 
       let h, w;
-      for (h = 0; h < height; h++) {
-        for (w = 0; w < width; w++) {
-          const color = "gray";
 
+      // This part draws the pom
+      for (h = 0; h < this.pomHeight; h++) {
+        const posGroup = this.paperTronc.set();
+        let rect;
+        if (h < 2) {
+          rect = this.paperTronc
+            .rect((canvasWidth - l) / 2, (s + spacing) * h, l, s, 5)
+            .attr({ fill: defaultColor, opacity: 0.3 });
+        } else {
+          for (w = 0; w < 2; w++) {
+            rect = this.paperTronc
+              .rect(
+                canvasWidth / 2 - spacing / 2 - s + w * (s + spacing),
+                (s + spacing) * h,
+                s,
+                l,
+                5
+              )
+              .attr({ fill: defaultColor, opacity: 0.3 });
+          }
+        }
+        posGroup.push(rect);
+      }
+
+      // This part draws the tronc
+      for (h = 0; h < troncHeight; h++) {
+        for (w = 0; w < this.castellWidth; w++) {
           const posGroup = this.paperTronc.set(); // Group a cell and its text
-
           // draw cell and add to group
           const rect = this.paperTronc
-            .rect(posW * 1.25 * w, posH * 1.125 * h, posW, posH, 5)
-            .attr({ fill: color, opacity: 0.3 });
+            .rect(
+              (s + spacing) * w,
+              canvasPomHeight + (l + spacing) * h,
+              s,
+              l,
+              5
+            )
+            .attr({
+              fill: defaultColor,
+              opacity: 0.3,
+            });
           posGroup.push(rect);
-
-          // Add a few attributes to the group
+          // Add attributes representing the position in the castell
           posGroup.data("name", "");
           posGroup.data("column", w + 1);
-          posGroup.data("cordon", height - h);
+          posGroup.data("cordon", troncHeight - h);
 
-          // Write each position to the right cell
+          // Write the name of the casteller at this position
           for (let i = 0; i < this.positionsMembers.length; i++) {
             // Write if current position matches current cell
             if (
               this.positionsMembers[i].column === w + 1 &&
-              this.positionsMembers[i].cordon === height - h
+              this.positionsMembers[i].cordon === troncHeight - h
             ) {
+              const bbox = rect.getBBox();
               // Write text and add to group
               const name = this.paperTronc
                 .text(
-                  posW / 8 + posW * 1.25 * w + posW / 2,
-                  posH / 16 + posH * 1.125 * h + posH / 2,
+                  bbox.x + s / 2,
+                  bbox.y + l / 2,
                   self.allMembers[self.positionsMembers[i].uuid].firstName
                 )
                 .attr({ fill: "#000000" })
@@ -215,40 +263,37 @@ export default {
               posGroup.data("name", self.positionsMembers[i].name); // Set name if there is someone in this position
             }
           }
+
+          // Attach events
           posGroup
             .mouseup(
               (function (w, h) {
                 return function () {
-                  self.setMemberPosition(w, h, self.selectedMemberUuid);
+                  // The condition avoids triggering the event during a drag
+                  if (!self.dragging) {
+                    self.setMemberPosition(w, h, self.selectedMemberUuid);
+                  }
                 };
-              })(w + 1, height - h)
+              })(w + 1, troncHeight - h)
             )
             .drag(
               function (dx, dy, mx, my) {
-                self.swapOriginPosition = [0, 0];
-                self.swapDestinationPosition = [0, 0];
-
-                // TODO improve that part
+                this.data("origin", [0, 0]).data("destination", [0, 0]);
                 if (Math.abs(dx) + Math.abs(dy) > 10) {
-                  self.swapOriginPosition = [
-                    mx - dx,
-                    my - dy - document.body.scrollTop,
-                  ];
-                  self.swapDestinationPosition = [
-                    mx,
-                    my - document.body.scrollTop,
-                  ];
+                  self.dragging = true;
+                  this.data("origin", [mx - dx, my - dy]);
+                  this.data("destination", [mx, my]);
                 }
               },
               function () {},
               function () {
                 const originEl = self.getElementBycoordinates(
                   self.paperTronc,
-                  self.swapOriginPosition
+                  this.data("origin")
                 );
                 const destinationEl = self.getElementBycoordinates(
                   self.paperTronc,
-                  self.swapDestinationPosition
+                  this.data("destination")
                 );
                 if (
                   originEl &&
@@ -261,6 +306,7 @@ export default {
                     destinationEl.data("column"),
                     destinationEl.data("cordon")
                   );
+                  self.dragging = false;
                 }
               }
             );
