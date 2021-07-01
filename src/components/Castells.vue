@@ -106,7 +106,7 @@ export default {
     selectMember(uuid) {
       this.selectedMemberUuid = uuid;
     },
-    setMemberPosition(column, cordon, uuid) {
+    setMemberPosition(column, cordon, position, uuid) {
       if (!uuid) {
         return;
       }
@@ -114,7 +114,8 @@ export default {
         // Remove member in position if there is a member
         if (
           this.positionsMembers[i].column === column &&
-          this.positionsMembers[i].cordon === cordon
+          this.positionsMembers[i].cordon === cordon &&
+          this.positionsMembers[i].position === position
         ) {
           this.positionsMembers.splice(i, 1);
           i = i - 1;
@@ -129,8 +130,8 @@ export default {
       this.positionsMembers.push({
         cordon: cordon,
         column: column,
+        position: position,
         uuid: uuid,
-        name: this.allMembers[uuid].firstName,
       });
       // redraw the tronc
       this.drawTronc();
@@ -144,8 +145,10 @@ export default {
     swapMemberPositions(
       originColumn,
       originCordon,
+      originPosition,
       destinationColumn,
-      destinationCordon
+      destinationCordon,
+      destinationPosition
     ) {
       let originUuid;
       let destinationUuid;
@@ -165,13 +168,25 @@ export default {
           destinationUuid = this.positionsMembers[i].uuid;
         }
       }
-      this.setMemberPosition(destinationColumn, destinationCordon, originUuid);
-      this.setMemberPosition(originColumn, originCordon, destinationUuid);
+      this.setMemberPosition(
+        destinationColumn,
+        destinationCordon,
+        destinationPosition,
+        originUuid
+      );
+      this.setMemberPosition(
+        originColumn,
+        originCordon,
+        originPosition,
+        destinationUuid
+      );
     },
     drawTronc() {
       const self = this;
 
       this.paperTronc.clear(); // Clear the canvas before starting
+
+      const allCells = this.paperTronc.set();
 
       // const width = this.castellWidth;
       const troncHeight = this.castellHeight - this.pomHeight;
@@ -192,18 +207,26 @@ export default {
       // Resize canvas for the current castell
       this.paperTronc.setSize(canvasWidth, canvasTroncHeight + canvasPomHeight);
 
-      let h, w;
+      let h;
+      let w = 1;
 
       // This part draws the pom
       for (h = 0; h < this.pomHeight; h++) {
-        const posGroup = this.paperTronc.set();
+        let posGroup;
         let rect;
         if (h < 2) {
+          posGroup = this.paperTronc.set();
           rect = this.paperTronc
             .rect((canvasWidth - l) / 2, (s + spacing) * h, l, s, 5)
             .attr({ fill: defaultColor, opacity: 0.3 });
+          posGroup.push(rect);
+          posGroup.data("column", 1);
+          posGroup.data("cordon", this.pomHeight - h);
+          posGroup.data("position", "pom");
+          allCells.push(posGroup);
         } else {
           for (w = 0; w < 2; w++) {
+            posGroup = this.paperTronc.set();
             rect = this.paperTronc
               .rect(
                 canvasWidth / 2 - spacing / 2 - s + w * (s + spacing),
@@ -213,9 +236,13 @@ export default {
                 5
               )
               .attr({ fill: defaultColor, opacity: 0.3 });
+            posGroup.push(rect);
+            posGroup.data("column", w + 1);
+            posGroup.data("cordon", this.pomHeight - h);
+            posGroup.data("position", "pom");
+            allCells.push(posGroup);
           }
         }
-        posGroup.push(rect);
       }
 
       // This part draws the tronc
@@ -237,96 +264,109 @@ export default {
             });
           posGroup.push(rect);
           // Add attributes representing the position in the castell
-          posGroup.data("name", "");
           posGroup.data("column", w + 1);
           posGroup.data("cordon", troncHeight - h);
+          posGroup.data("position", "tronc");
 
-          // Write the name of the casteller at this position
-          for (let i = 0; i < this.positionsMembers.length; i++) {
-            // Write if current position matches current cell
-            if (
-              this.positionsMembers[i].column === w + 1 &&
-              this.positionsMembers[i].cordon === troncHeight - h
-            ) {
-              const bbox = rect.getBBox();
-              // Write text and add to group
-              const name = this.paperTronc
-                .text(
-                  bbox.x + s / 2,
-                  bbox.y + l / 2,
-                  [
-                    self.allMembers[self.positionsMembers[i].uuid].firstName,
-                    self.allMembers[self.positionsMembers[i].uuid].lastName[0] +
-                      ".",
-                  ].join(" ")
-                )
-                .attr({ fill: "#000000" })
-                .transform("R270s2")
-                .toBack();
-              posGroup.push(name);
-              posGroup.data("name", self.positionsMembers[i].name); // Set name if there is someone in this position
-            }
-          }
-
-          // Attach events
-          posGroup
-            .mouseup(
-              (function (w, h) {
-                return function () {
-                  // The condition avoids triggering the event during a drag
-                  if (!self.dragging) {
-                    self.setMemberPosition(w, h, self.selectedMemberUuid);
-                  }
-                };
-              })(w + 1, troncHeight - h)
-            )
-            .touchend(
-              (function (w, h) {
-                return function () {
-                  // The condition avoids triggering the event during a drag
-                  if (!self.dragging) {
-                    self.setMemberPosition(w, h, self.selectedMemberUuid);
-                  }
-                };
-              })(w + 1, troncHeight - h)
-            )
-            .drag(
-              function (dx, dy, mx, my) {
-                if (Math.abs(dx) + Math.abs(dy) > 10) {
-                  self.dragging = true;
-                  this.data("origin", [mx - dx, my - dy]);
-                  this.data("destination", [mx, my]);
-                }
-              },
-              function () {
-                this.data("origin", [0, 0]).data("destination", [0, 0]);
-              },
-              function () {
-                const originEl = self.getElementBycoordinates(
-                  self.paperTronc,
-                  this.data("origin")
-                );
-                const destinationEl = self.getElementBycoordinates(
-                  self.paperTronc,
-                  this.data("destination")
-                );
-                if (
-                  originEl &&
-                  destinationEl &&
-                  originEl.id !== destinationEl.id
-                ) {
-                  self.swapMemberPositions(
-                    originEl.data("column"),
-                    originEl.data("cordon"),
-                    destinationEl.data("column"),
-                    destinationEl.data("cordon")
-                  );
-                  self.dragging = false;
-                }
-              }
-            );
+          allCells.push(posGroup);
         }
       }
+
+      // Write names where necessary
+      allCells.forEach(function (cell) {
+        const rect = cell[0]; // data is set on the set but only accessible in the rectangle
+        // For each cell we will see if someone is assigned
+        for (let i = 0; i < self.positionsMembers.length; i++) {
+          // Write if current position matches current cell
+          if (
+            self.positionsMembers[i].column === rect.data("column") &&
+            self.positionsMembers[i].cordon === rect.data("cordon") &&
+            self.positionsMembers[i].position === rect.data("position") &&
+            self.allMembers[self.positionsMembers[i].uuid]
+          ) {
+            const bbox = rect.getBBox();
+            const vertical = bbox.width < bbox.height;
+            // Write text and add to group
+            const name = self.paperTronc
+              .text(
+                bbox.x + (vertical ? s / 2 : l / 2),
+                bbox.y + (vertical ? l / 2 : s / 2),
+                [
+                  self.allMembers[self.positionsMembers[i].uuid].firstName,
+                  self.allMembers[self.positionsMembers[i].uuid].lastName[0] +
+                    ".",
+                ].join(" ")
+              )
+              .attr({ fill: "#000000" })
+              .transform(vertical ? "R270s2" : "R0s2")
+              .toBack();
+            cell.push(name);
+          }
+        }
+      });
+
+      // Attach events
+      allCells.forEach(function (cell) {
+        const rect = cell[0];
+        cell
+          .mouseup(function () {
+            if (!self.dragging) {
+              self.setMemberPosition(
+                rect.data("column"),
+                rect.data("cordon"),
+                rect.data("position"),
+                self.selectedMemberUuid
+              );
+            }
+          })
+          .touchend(function () {
+            if (!self.dragging) {
+              self.setMemberPosition(
+                rect.data("column"),
+                rect.data("cordon"),
+                rect.data("position"),
+                self.selectedMemberUuid
+              );
+            }
+          })
+          .drag(
+            function (dx, dy, mx, my) {
+              if (Math.abs(dx) + Math.abs(dy) > 10) {
+                self.dragging = true;
+                this.data("origin", [mx - dx, my - dy]);
+                this.data("destination", [mx, my]);
+              }
+            },
+            function () {
+              this.data("origin", [0, 0]).data("destination", [0, 0]);
+            },
+            function () {
+              const originEl = self.getElementBycoordinates(
+                self.paperTronc,
+                this.data("origin")
+              );
+              const destinationEl = self.getElementBycoordinates(
+                self.paperTronc,
+                this.data("destination")
+              );
+              if (
+                originEl &&
+                destinationEl &&
+                originEl.id !== destinationEl.id
+              ) {
+                self.swapMemberPositions(
+                  originEl.data("column"),
+                  originEl.data("cordon"),
+                  originEl.data("position"),
+                  destinationEl.data("column"),
+                  destinationEl.data("cordon"),
+                  destinationEl.data("position")
+                );
+                self.dragging = false;
+              }
+            }
+          );
+      });
     },
   },
   watch: {

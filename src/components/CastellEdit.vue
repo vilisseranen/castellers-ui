@@ -79,26 +79,31 @@ export default {
           {
             cordon: 1,
             column: 3,
+            position: "tronc",
             uuid: "414a6643106ba4c964d77535c77b9115d658d4ae",
           },
           {
             cordon: 1,
             column: 4,
+            position: "tronc",
             uuid: "b813618d0cc0d2e010eb206ddf326bdcfe407627",
           },
           {
             cordon: 3,
             column: 2,
+            position: "tronc",
             uuid: "c8d110e8509484f18c87b3639d26a5e3942ef24f",
           },
           {
             cordon: 2,
             column: 1,
+            position: "tronc",
             uuid: "d58cbc38db47e95536020154553c721161e46468",
           },
           {
             cordon: 2,
             column: 4,
+            position: "tronc",
             uuid: "95d29d72733807812bb4829860d25fdb37743d93",
           },
         ],
