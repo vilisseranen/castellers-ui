@@ -280,16 +280,27 @@ export default {
                 };
               })(w + 1, troncHeight - h)
             )
+            .touchend(
+              (function (w, h) {
+                return function () {
+                  // The condition avoids triggering the event during a drag
+                  if (!self.dragging) {
+                    self.setMemberPosition(w, h, self.selectedMemberUuid);
+                  }
+                };
+              })(w + 1, troncHeight - h)
+            )
             .drag(
               function (dx, dy, mx, my) {
-                this.data("origin", [0, 0]).data("destination", [0, 0]);
                 if (Math.abs(dx) + Math.abs(dy) > 10) {
                   self.dragging = true;
                   this.data("origin", [mx - dx, my - dy]);
                   this.data("destination", [mx, my]);
                 }
               },
-              function () {},
+              function () {
+                this.data("origin", [0, 0]).data("destination", [0, 0]);
+              },
               function () {
                 const originEl = self.getElementBycoordinates(
                   self.paperTronc,
