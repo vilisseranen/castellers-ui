@@ -254,7 +254,11 @@ export default {
                 .text(
                   bbox.x + s / 2,
                   bbox.y + l / 2,
-                  self.allMembers[self.positionsMembers[i].uuid].firstName
+                  [
+                    self.allMembers[self.positionsMembers[i].uuid].firstName,
+                    self.allMembers[self.positionsMembers[i].uuid].lastName[0] +
+                      ".",
+                  ].join(" ")
                 )
                 .attr({ fill: "#000000" })
                 .transform("R270s2")
