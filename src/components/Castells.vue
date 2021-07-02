@@ -3,23 +3,33 @@
     <p class="title is-5">{{ this.castell.name }}</p>
     <div class="columns is-multiline">
       <div class="column is-6" id="canvas_tronc" style="padding: 0"></div>
-      <div class="column is-3" style="border: solid 1px">
-        <h1 class="subtitle is-3">Membres Disponibles</h1>
+      <div class="column is-3">
+        <h1 class="subtitle is-3">Membres disponibles</h1>
         <p
           v-for="uuid in availableMembersIDs"
           v-bind:key="uuid"
           v-on:click="selectMember(uuid)"
         >
-          {{ allMembers[uuid].firstName }}
+          {{ allMembers[uuid].firstName }} {{ allMembers[uuid].lastName }}
         </p>
-        <strong>{{ selectedMemberFirstName }}</strong>
-        <p>{{ positionsMembers }}</p>
       </div>
-      <div class="column is-3" style="border: solid 1px">
-        <h1 class="subtitle is-3">Membres dans le castell</h1>
-        <p v-for="uuid in selectedMembersIDs" v-bind:key="uuid">
-          {{ allMembers[uuid].firstName }}
-        </p>
+      <div class="column is-3">
+        <div class="columns is-multiline">
+          <div class="column is-12">
+            <h1 class="subtitle is-3">Membre sélectionné</h1>
+            <strong>{{ selectedMemberName }}</strong>
+          </div>
+          <div class="column is-12">
+            <h1 class="subtitle is-3">Membres dans le castell</h1>
+            <p
+              v-for="uuid in selectedMembersIDs"
+              v-bind:key="uuid"
+              v-on:click="selectMember(uuid)"
+            >
+              {{ allMembers[uuid].firstName }} {{ allMembers[uuid].lastName }}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -34,11 +44,14 @@ export default {
     castell: Object,
   },
   computed: {
-    selectedMemberFirstName: function () {
+    selectedMemberName: function () {
       if (this.selectedMemberUuid) {
-        return this.allMembers[this.selectedMemberUuid].firstName;
+        return [
+          this.allMembers[this.selectedMemberUuid].firstName,
+          this.allMembers[this.selectedMemberUuid].lastName,
+        ].join(" ");
       } else {
-        return "";
+        return "-";
       }
     },
     allMembers: function () {
@@ -214,7 +227,7 @@ export default {
       let h;
       let w = 1;
 
-      // This part draws the pom
+      // Draw the pom
       for (h = 0; h < this.pomHeight; h++) {
         let posGroup;
         let rect;
@@ -249,7 +262,7 @@ export default {
         }
       }
 
-      // This part draws the tronc
+      // Draw the tronc
       for (h = 0; h < troncHeight; h++) {
         for (w = 0; w < this.castellWidth; w++) {
           const posGroup = this.paperTronc.set(); // Group a cell and its text
@@ -276,7 +289,7 @@ export default {
         }
       }
 
-      // Write names where necessary
+      // Write the name of castellers in the castell
       allCells.forEach(function (cell) {
         const rect = cell[0]; // data is set on the set but only accessible in the rectangle
         // For each cell we will see if someone is assigned
@@ -297,8 +310,7 @@ export default {
                 bbox.y + (vertical ? l / 2 : s / 2),
                 [
                   self.allMembers[self.positionsMembers[i].uuid].firstName,
-                  self.allMembers[self.positionsMembers[i].uuid].lastName[0] +
-                    ".",
+                  self.allMembers[self.positionsMembers[i].uuid].lastName[0],
                 ].join(" ")
               )
               .attr({ fill: "#000000" })
@@ -309,30 +321,23 @@ export default {
         }
       });
 
-      // Attach events
+      // Attach events to elements
       allCells.forEach(function (cell) {
+        const setPosition = function () {
+          if (!self.dragging) {
+            self.setMemberPosition(
+              rect.data("column"),
+              rect.data("cordon"),
+              rect.data("position"),
+              self.selectedMemberUuid
+            );
+            self.selectedMemberUuid = "";
+          }
+        };
         const rect = cell[0];
         cell
-          .mouseup(function () {
-            if (!self.dragging) {
-              self.setMemberPosition(
-                rect.data("column"),
-                rect.data("cordon"),
-                rect.data("position"),
-                self.selectedMemberUuid
-              );
-            }
-          })
-          .touchend(function () {
-            if (!self.dragging) {
-              self.setMemberPosition(
-                rect.data("column"),
-                rect.data("cordon"),
-                rect.data("position"),
-                self.selectedMemberUuid
-              );
-            }
-          })
+          .mouseup(setPosition)
+          .touchend(setPosition)
           .drag(
             function (dx, dy, mx, my) {
               if (Math.abs(dx) + Math.abs(dy) > 10) {
