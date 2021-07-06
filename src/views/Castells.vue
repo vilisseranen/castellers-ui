@@ -4,14 +4,55 @@
       {{ $t("castells.title") }}
     </p>
     <b-field>
-      <button class="button field is-info" @click="addCastell">
+      <button class="button field is-info" @click="addCastellModel">
         <span class="icon">
           <i class="fa fa-plus"></i>
         </span>
-        <span>{{ $t("castells.addCastell") }}</span>
+        <span>{{ $t("castells.create") }}</span>
       </button>
     </b-field>
-    <b-table><!-- List of castells --></b-table>
+    <b-table :data="castellModels" sort-icon="arrow-up" icon-pack="fa" striped>
+      <b-table-column
+        key="name"
+        field="name"
+        :label="$t('castells.model_name')"
+        v-slot="props"
+        sortable
+        searchable
+        >{{ props.row.name }}
+      </b-table-column>
+      <b-table-column
+        key="type"
+        field="type"
+        :label="$t('castells.type')"
+        sortable
+        searchable
+        v-slot="props"
+        >{{ props.row.type }}
+      </b-table-column>
+      <b-table-column
+        key="actions"
+        :label="$t('general.actions')"
+        v-slot="props"
+      >
+        <a href="#">
+          <span
+            class="icon has-text-info"
+            v-on:click="editCastellModel(props.row.uuid)"
+          >
+            <i class="fa fa-edit"></i>
+          </span>
+        </a>
+        <a href="#">
+          <span
+            class="icon has-text-danger"
+            v-on:click="deleteCastellModel(props.row.uuid)"
+          >
+            <i class="fa fa-times"></i>
+          </span>
+        </a>
+      </b-table-column>
+    </b-table>
   </div>
 </template>
 
@@ -22,21 +63,37 @@
 </style>
 
 <script>
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   components: {},
   computed: {
     ...mapState({
       castellTypes: (state) => state.castells.types,
+      castellModels: (state) => state.castells.models,
     }),
   },
   mounted() {
-    this.$store.dispatch("castells/getCastellsTypeList");
+    this.getTypes();
+    this.getModels();
   },
   methods: {
-    addCastell() {
+    ...mapActions({
+      deleteModel: "castells/deleteCastellModel",
+      getTypes: "castells/getCastellsTypeList",
+      getModels: "castells/getCastellModels",
+    }),
+    addCastellModel() {
       this.$router.push({ name: "CastellAdd" });
+    },
+    editCastellModel(uuid) {
+      this.$router.push({ path: `/castellEdit/${uuid}` });
+    },
+    deleteCastellModel(uuid) {
+      const self = this;
+      this.deleteModel(uuid).then(function () {
+        self.getModels();
+      });
     },
   },
 };

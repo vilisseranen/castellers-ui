@@ -10,7 +10,7 @@
       <div class="columns is-multiline">
         <div class="field column is-3" v-if="!readonly">
           <fieldset disabled>
-            <label class="label">ID</label>
+            <label class="label">{{ $t("general.id") }}</label>
             <div class="control is-expanded">
               <input class="input" type="text" v-model="currentEvent.uuid" />
             </div>
@@ -531,11 +531,11 @@ export default {
             self.$router.push({ path: `/eventEdit/${response.data.uuid}` });
             self.loadEvent(response.data.uuid);
           }
-          self.$notifyOK(self.$t("events.notify_success"));
+          self.$notifyOK(self.$t("general.notifySuccess"));
         })
         .catch(function (error) {
           self.isLoading = false;
-          self.$notifyNOK(self.$t("events.notify_error"));
+          self.$notifyNOK(self.$t("general.notifyFailure"));
           console.log(error);
         });
     },

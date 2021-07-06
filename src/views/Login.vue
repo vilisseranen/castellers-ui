@@ -107,7 +107,7 @@ export default {
         })
         .catch(function (error) {
           console.log(error);
-          self.$notifyNOK(self.$t("login.notifyError"));
+          self.$notifyNOK(self.$t("general.notifyFailure"));
         });
     },
     resetPassword() {

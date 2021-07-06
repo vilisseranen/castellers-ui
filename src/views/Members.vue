@@ -59,7 +59,7 @@
       </b-table-column>
       <b-table-column
         key="actions"
-        :label="$t('members.actions')"
+        :label="$t('general.actions')"
         v-slot="props"
       >
         <a href="#">

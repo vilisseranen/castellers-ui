@@ -103,11 +103,25 @@ export default new Router({
           path: "castells",
           name: "Castells",
           component: Castells,
+          meta: {
+            requiresAuth: true,
+          },
         },
         {
           path: "castellEdit",
           name: "CastellAdd",
           component: CastellsEdit,
+          meta: {
+            requiresAuth: true,
+          },
+        },
+        {
+          path: "castellEdit/:uuid",
+          name: "castellEdit",
+          component: CastellsEdit,
+          meta: {
+            requiresAuth: true,
+          },
         },
       ],
     },

@@ -98,7 +98,7 @@ export default {
       this.editMember(user)
         .then(function (response) {
           self.updating = false;
-          self.$notifyOK(self.$t("members.notifySuccess"));
+          self.$notifyOK(self.$t("general.notifySuccess"));
           // If changing own profile, update language settings
           if (response.data.uuid === self.uuid) {
             self.$root.setLocale(response.data.language);
@@ -110,7 +110,7 @@ export default {
         })
         .catch(function (error) {
           self.updating = false;
-          self.$notifyNOK(self.$t("members.notifyFailure"));
+          self.$notifyNOK(self.$t("general.notifyFailure"));
           console.log(error);
         });
     },

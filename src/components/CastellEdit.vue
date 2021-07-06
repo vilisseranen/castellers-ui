@@ -9,7 +9,7 @@
     <div class="columns is-multiline">
       <div class="field column is-3" v-if="!readonly">
         <fieldset disabled>
-          <label class="label">ID</label>
+          <label class="label">{{ $t("general.id") }}</label>
           <div class="control is-expanded">
             <input class="input" type="text" v-model="currentCastell.uuid" />
           </div>
@@ -33,7 +33,11 @@
         <label class="label" v-bind:class="{ required: !readonly }">{{
           $t("castells.type")
         }}</label>
-        <b-dropdown v-model="currentCastell.type" aria-role="list">
+        <b-dropdown
+          v-model="currentCastell.type"
+          aria-role="list"
+          :disabled="currentCastell.uuid ? true : false"
+        >
           <template #trigger>
             <b-button
               :label="currentCastell.type || $t('castells.type')"
@@ -53,14 +57,35 @@
           </b-dropdown-item>
         </b-dropdown>
       </div>
+      <div class="column is-12 buttons">
+        <button
+          type="submit"
+          class="button is-info"
+          @click.prevent="editCastellModel()"
+        >
+          {{
+            this.currentCastell.uuid === ""
+              ? $t("castells.createModelButton")
+              : $t("castells.updateModelButton")
+          }}
+        </button>
+        <button
+          type="submit"
+          class="button is-danger"
+          v-if="this.currentCastell.uuid"
+          @click.prevent="deleteCastellModel(currentCastell.uuid)"
+        >
+          {{ $t("castells.deleteModelButton") }}
+        </button>
+      </div>
     </div>
 
-    <castell :castell="this.currentCastell"></castell>
+    <castell :castell="this.currentCastell" ref="drawing"></castell>
   </div>
 </template>
 
 <script>
-import Castell from "../components/Castells.vue";
+import Castell from "./CastellsDrawing.vue";
 import { mapActions, mapState } from "vuex";
 import Vue from "vue";
 
@@ -75,38 +100,9 @@ export default {
     return {
       castell: {},
       currentCastell: {
-        positions: [
-          {
-            cordon: 1,
-            column: 3,
-            position: "tronc",
-            uuid: "414a6643106ba4c964d77535c77b9115d658d4ae",
-          },
-          {
-            cordon: 1,
-            column: 4,
-            position: "tronc",
-            uuid: "b813618d0cc0d2e010eb206ddf326bdcfe407627",
-          },
-          {
-            cordon: 3,
-            column: 2,
-            position: "tronc",
-            uuid: "c8d110e8509484f18c87b3639d26a5e3942ef24f",
-          },
-          {
-            cordon: 2,
-            column: 1,
-            position: "tronc",
-            uuid: "d58cbc38db47e95536020154553c721161e46468",
-          },
-          {
-            cordon: 2,
-            column: 4,
-            position: "tronc",
-            uuid: "95d29d72733807812bb4829860d25fdb37743d93",
-          },
-        ],
+        position_members: [],
+        type: "",
+        name: "",
       },
     };
   },
@@ -115,20 +111,59 @@ export default {
       types: (state) => state.castells.types.sort(),
       positions: (state) => state.castells.positions,
     }),
-
     actionLabel: function () {
       return this.castell.uuid ? "update" : "create";
     },
   },
   mounted() {
     this.getTypes();
+    this.loadModel(this.$route.params.uuid);
   },
   methods: {
     ...mapActions({
       getTypes: "castells/getCastellsTypeList",
       getPositions: "castells/getCastellTypePositions",
+      editModel: "castells/editCastellModel",
+      getModel: "castells/getCastellModel",
+      deleteModel: "castells/deleteCastellModel",
     }),
+    editCastellModel() {
+      const self = this;
+      this.editModel(this.currentCastell)
+        .then(function (response) {
+          self.$notifyOK(self.$t("general.notifySuccess"));
+          if (!self.currentCastell.uuid) {
+            self.$router.push({ path: `/castellEdit/${response.data.uuid}` });
+            // self.loadUser(response.data.uuid); // load castell
+          }
+        })
+        .catch(function (error) {
+          self.$notifyNOK(self.$t("general.notifyFailure"));
+          console.log(error);
+        });
+    },
+    deleteCastellModel(uuid) {
+      const self = this;
+      this.deleteModel(uuid)
+        .then(function () {
+          self.$router.push({ path: `/castells` });
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    },
+    loadModel(uuid) {
+      if (uuid) {
+        const self = this;
+        this.getModel(uuid)
+          .then(function (response) {
+            self.currentCastell = response.data;
+          })
+          .catch((err) => console.log(err));
+      }
+    },
   },
+  // List of positions in a castell of this type
   watch: {
     "currentCastell.type": function (type) {
       if (type) {
@@ -137,6 +172,9 @@ export default {
           Vue.set(self.currentCastell, "positions", response.data.positions);
         });
       }
+    },
+    "$route.params.uuid": function (uuid) {
+      this.loadModel(uuid);
     },
   },
 };
