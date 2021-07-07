@@ -189,4 +189,10 @@ export default {
   async version() {
     return apiCall("GET", `/api/version`, {}, {});
   },
+  async getCastellsTypeList() {
+    return apiCall("GET", `/api/castell_types`, {}, {});
+  },
+  async getCastellTypePositions(type) {
+    return apiCall("GET", `/api/castell_type/${type}`, {}, {});
+  },
 };

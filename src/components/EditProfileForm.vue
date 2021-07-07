@@ -9,7 +9,7 @@
     <div class="columns is-multiline">
       <div class="field column is-3">
         <fieldset disabled>
-          <label class="label">ID</label>
+          <label class="label">{{ $t("general.id") }}</label>
           <div class="control is-expanded">
             <input class="input" type="text" v-model="current_user.uuid" />
           </div>
@@ -412,11 +412,11 @@ export default {
       this.resendEmaiCall(this.current_user.uuid)
         .then(function (response) {
           self.updating = false;
-          self.$notifyOK(self.$t("members.notifySuccess"));
+          self.$notifyOK(self.$t("general.notifySuccess"));
         })
         .catch(function (error) {
           self.updating = false;
-          self.$notifyNOK(self.$t("members.notifyFailure"));
+          self.$notifyNOK(self.$t("general.notifyFailure"));
           console.log(error);
         });
     },

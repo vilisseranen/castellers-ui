@@ -10,7 +10,11 @@
     "forCastellers": "Created for the Castellers by ",
     "yes": "Yes",
     "no": "No",
-    "name": "Name"
+    "name": "Name",
+    "notifySuccess": "The operation completed successfully.",
+    "notifyFailure": "There was a problem. Please check the informations entered.",
+    "actions": "Actions",
+    "id": "ID"
   },
   "routes": {
     "members": "Members",
@@ -19,7 +23,6 @@
   },
   "login": {
     "loginButton": "Log in",
-    "notifyError": "There was an error, please check your information.",
     "username": "Username",
     "usernamePlaceholder": "Your username",
     "password": "Password",
@@ -37,8 +40,7 @@
     "passwordResetSent": "You will receive an email with instructions to reset your password if we find your email in our database.",
     "passwordDifferent": "Passwords are different",
     "activateButton": "Create",
-    "activatePasssword": "Choose you username and password"
-
+    "activatePasssword": "Choose your username and password"
   },
   "members": {
     "create": "Create the profile of a new member",
@@ -72,10 +74,7 @@
     "createButton": "Create member",
     "updateButton": "Update profile",
     "emailButton": "Resend registration email",
-    "notifySuccess": "The operation was successful.",
-    "notifyFailure": "There was a problem. Please check the informations entered.",
     "addMember": "Add a new member",
-    "actions": "Actions",
     "title": "Member list",
     "confirmDelete": "Do you really want to remove this member?",
     "okDelete": "Yes",
@@ -89,7 +88,6 @@
     "setPresence": "Present?",
     "present": "Present",
     "changePassword": "Change your password"
-
   },
   "multiselect": {
     "selectLabel": "Press enter to select",
@@ -112,8 +110,6 @@
     "1d": "Daily",
     "createButton": "Create the event",
     "updateButton": "Update the event",
-    "notify_success": "The operation was successful.",
-    "notify_error": "There was a problem. Please check the informations entered.",
     "participationOK": "Got it, thanks!",
     "participationNOK": "There was a problem.",
     "participationYes": "I will be there",
@@ -146,5 +142,20 @@
   "summary": {
     "title": "Participants for upcoming events",
     "total": "Total"
+  },
+  "castells": {
+    "title": "Castells list",
+    "update": "Update an existing castell",
+    "create": "Create a new castell",
+    "nameDescription": "Name of the castell (ex: 4d6 de la Diada 2022)",
+    "type": "Type of castell",
+    "model_name": "Model name",
+    "createModelButton": "Create",
+    "updateModelButton": "Save",
+    "deleteModelButton": "Delete",
+    "available_members": "Available members",
+    "selected_member": "Member to place",
+    "selected_members": "Members with a position",
+    "remove_all": "remove everybody"
   }
 }

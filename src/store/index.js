@@ -4,6 +4,7 @@ import axios from "axios";
 import createPersistedState from "vuex-persistedstate";
 import events from "./modules/events";
 import members from "./modules/members";
+import castells from "./modules/castells";
 import auth from "./modules/auth";
 import initialization from "./modules/initialization";
 import api from "../api/castellers";
@@ -14,6 +15,7 @@ const store = new Vuex.Store({
   modules: {
     events,
     members,
+    castells,
     auth,
     initialization,
   },

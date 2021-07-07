@@ -10,7 +10,11 @@
     "forCastellers": "Créé pour les Castellers par ",
     "yes": "Oui",
     "no": "Non",
-    "name": "Nom"
+    "name": "Nom",
+    "notifySuccess": "L'opération s'est complétée avec succès.",
+    "notifyFailure": "Il y a eu une erreur, veuillez vérifier les informations fournies.",
+    "actions": "Actions",
+    "id": "ID"
   },
   "routes": {
     "members": "Les membres",
@@ -19,7 +23,6 @@
   },
   "login": {
     "loginButton": "Se connecter",
-    "notifyError": "Il y a eu une erreur, veuillez vérifier les informations fournies.",
     "username": "Identifiant",
     "usernamePlaceholder": "Votre identifiant",
     "password": "Mot de passe",
@@ -71,10 +74,7 @@
     "createButton": "Créer le membre",
     "updateButton": "Mettre à jour le profil",
     "emailButton": "Renvoyer le courriel d'inscription",
-    "notifySuccess": "L'opération s'est complétée avec succès.",
-    "notifyFailure": "Un problème est survenu. Veuillez vérifier les informations fournies.",
     "addMember": "Ajouter un membre",
-    "actions": "Actions",
     "title": "Liste des membres",
     "confirmDelete": "Veux-tu vraiment retirer ce membre",
     "okDelete": "Oui",
@@ -110,8 +110,6 @@
     "1d": "Quotidien",
     "createButton": "Créer l'évènement",
     "updateButton": "Modifier l'évènement",
-    "notify_success": "L'opération s'est complétée avec succès.",
-    "notify_error": "Un problème est survenu. Veuillez vérifier les informations fournies.",
     "participationOK": "C'est noté !",
     "participationNOK": "Un problème est survenu.",
     "participationYes": "Je viens",
@@ -144,5 +142,20 @@
   "summary": {
     "title": "Participation pour les évènements à venir",
     "total": "Total"
+  },
+  "castells": {
+    "title": "Liste de castells",
+    "update": "Modifier un castell",
+    "create": "Créer un nouveau castell",
+    "nameDescription": "Le nom du castell (ex: 4d6 de la Diada 2022)",
+    "type": "Type de castell",
+    "model_name": "Nom du modèle",
+    "createModelButton": "Créer",
+    "updateModelButton": "Sauvegarder",
+    "deleteModelButton": "Supprimer",
+    "available_members": "Membres disponibles",
+    "selected_member": "Membre à placer",
+    "selected_members": "Membres dans le castell",
+    "remove_all": "retirer tout le monde"
   }
 }

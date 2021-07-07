@@ -43,6 +43,16 @@
             {{ $t("routes.summary") }}
           </span>
         </b-navbar-item>
+        <b-navbar-item
+          tag="router-link"
+          to="/castells"
+          v-if="this.type === 'admin'"
+        >
+          <span class="icon">
+            <i class="fa fa-chess-rook"></i>
+          </span>
+          <span> Castells </span>
+        </b-navbar-item>
       </template>
       <template slot="end">
         <b-navbar-item tag="div">

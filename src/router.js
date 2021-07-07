@@ -11,6 +11,8 @@ import EventEdit from "./views/EventEdit.vue";
 import EventShow from "./views/EventShow.vue";
 import Initialize from "./views/Initialize.vue";
 import SummaryParticipation from "./views/SummaryParticipation.vue";
+import Castells from "./views/Castells.vue";
+import CastellsEdit from "./views/CastellsEdit.vue";
 
 Vue.use(Router);
 
@@ -93,6 +95,30 @@ export default new Router({
           path: "summary",
           name: "summary",
           component: SummaryParticipation,
+          meta: {
+            requiresAuth: true,
+          },
+        },
+        {
+          path: "castells",
+          name: "Castells",
+          component: Castells,
+          meta: {
+            requiresAuth: true,
+          },
+        },
+        {
+          path: "castellEdit",
+          name: "CastellAdd",
+          component: CastellsEdit,
+          meta: {
+            requiresAuth: true,
+          },
+        },
+        {
+          path: "castellEdit/:uuid",
+          name: "castellEdit",
+          component: CastellsEdit,
           meta: {
             requiresAuth: true,
           },

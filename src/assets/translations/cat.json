@@ -14,8 +14,7 @@
     "events": "Esdeveniments"
   },
   "login": {
-    "loginButton": "Inicia sessió",
-    "notifyError": "S'ha produït un error. Comproveu la informació."
+    "loginButton": "Inicia sessió"
   },
   "members": {
     "create": "Crear el perfil d'un membre nou",
@@ -49,10 +48,7 @@
     "createButton": "Crear membre",
     "updateButton": "Actualitzar el perfil",
     "emailButton": "Enviar un mail de registre",
-    "notifySuccess": "L'opéració s'ha completat correctament.",
-    "notifyFailure": "Hi ha hagut un problema. Comproveu les dades entrades.",
     "addMember": "Afegir un membre nou",
-    "actions": "Accions",
     "title": "Llista dels membres",
     "confirmDelete": "Estàs segur que vols eliminar aquest membre?",
     "okDelete": "Si",
@@ -79,8 +75,6 @@
     "1d": "Diaria",
     "createButton": "Crear l'esdeveniment",
     "updateButton": "Modificar l'esdeveniment",
-    "notify_success": "L'operació s'ha completat correctament.",
-    "notify_error": "Hi ha hagut un problema, siusplau verifica que la informació sigui correcte.",
     "participationOK": "Guardat correctament",
     "participationNOK": "No s'ha pogut guardar correctament.",
     "participationYes": "Sí",
