@@ -134,7 +134,6 @@ export default {
           self.$notifyOK(self.$t("general.notifySuccess"));
           if (!self.currentCastell.uuid) {
             self.$router.push({ path: `/castellEdit/${response.data.uuid}` });
-            // self.loadUser(response.data.uuid); // load castell
           }
         })
         .catch(function (error) {

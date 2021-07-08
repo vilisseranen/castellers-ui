@@ -132,7 +132,6 @@ export default {
       this.drawTronc();
     },
     removePositionsOutsideCastell() {
-      console.log(this.castell.positions);
       for (let i = 0; i < this.positionsMembers.length; i++) {
         let remove = true;
         this.castell.positions.forEach((position) => {
