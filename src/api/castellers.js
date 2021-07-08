@@ -190,9 +190,24 @@ export default {
     return apiCall("GET", `/api/version`, {}, {});
   },
   async getCastellsTypeList() {
-    return apiCall("GET", `/api/castell_types`, {}, {});
+    return apiCall("GET", `/api/v1/castells/types`, {}, {});
   },
   async getCastellTypePositions(type) {
-    return apiCall("GET", `/api/castell_type/${type}`, {}, {});
+    return apiCall("GET", `/api/v1/castells/types/${type}`, {}, {});
   },
+  async getCastellModels() {
+    return apiCall("GET", `/api/v1/castells/models`, {}, {});
+  },
+  async getCastellModel(uuid) {
+    return apiCall("GET", `/api/v1/castells/models/${uuid}`, {}, {});
+  },
+  async createCastellModel(model) {
+    return apiCall("POST", `/api/v1/castells/models`, {}, model);
+  },
+  async updateCastellModel(model) {
+    return apiCall("PUT", `/api/v1/castells/models/${model.uuid}`, {}, model);
+  },
+  async deleteCastellModel(uuid) {
+    return apiCall("DELETE", `/api/v1/castells/models/${uuid}`, {}, {});
+  }
 };
