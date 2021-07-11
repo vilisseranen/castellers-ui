@@ -87,7 +87,7 @@
 <script>
 import Castell from "./CastellsDrawing.vue";
 import { mapActions, mapState } from "vuex";
-import Vue from "vue";
+// import Vue from "vue";
 
 export default {
   components: {
@@ -99,11 +99,7 @@ export default {
   data() {
     return {
       castell: {},
-      currentCastell: {
-        position_members: [],
-        type: "",
-        name: "",
-      },
+      currentCastell: {},
     };
   },
   computed: {
@@ -157,6 +153,8 @@ export default {
         this.getModel(uuid)
           .then(function (response) {
             self.currentCastell = response.data;
+            self.$set(self.currentCastell, "positions", []); // to make property reactive
+            console.log(self.currentCastell);
           })
           .catch((err) => console.log(err));
       }
@@ -168,7 +166,7 @@ export default {
       if (type) {
         const self = this;
         this.getPositions(type).then(function (response) {
-          Vue.set(self.currentCastell, "positions", response.data.positions);
+          self.$set(self.currentCastell, "positions", response.data.positions);
         });
       }
     },

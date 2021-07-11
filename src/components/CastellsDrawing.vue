@@ -133,7 +133,12 @@ export default {
     removePositionsOutsideCastell() {
       for (let i = 0; i < this.positionsMembers.length; i++) {
         let remove = true;
-        this.castell.positions.forEach((position) => {
+        console.log(this.castell);
+        console.log("positions in removePositionsOutsideCastell");
+        console.log(this.castell.positions);
+        const positions = Array(...this.castell.positions) || [];
+        console.log(typeof this.castell.positions);
+        for (const position of positions) {
           if (
             position.column === this.positionsMembers[i].position.column &&
             position.cordon === this.positionsMembers[i].position.cordon &&
@@ -142,7 +147,7 @@ export default {
           ) {
             remove = false;
           }
-        });
+        }
         if (remove) {
           this.positionsMembers.splice(i, 1);
           i = i - 1;
@@ -262,13 +267,14 @@ export default {
 
       // Resize canvas for the current castell
       this.paperTronc.setSize(canvasWidth, canvasTroncHeight + canvasPomHeight);
-      // this.paperTronc.setSize(5000, canvasTroncHeight + canvasPomHeight);
 
       // We draw the tronc in a grid pattern.
       // For each position of the castell, we draw the cell at (column,cordon)
       let posGroup;
       let rect;
-      this.castell.positions.forEach(function (position) {
+      const positions = Array(...this.castell.positions) || [];
+      for (const position of positions) {
+        console.log(position);
         posGroup = self.paperTronc.set();
         let x, y;
         let dx = s;
@@ -304,7 +310,7 @@ export default {
         posGroup.data("part", position.part);
         posGroup.data("name", position.name);
         allCells.push(posGroup);
-      });
+      }
 
       // Write the name of castellers in the castell
       allCells.forEach(function (cell) {
@@ -403,21 +409,24 @@ export default {
     },
   },
   watch: {
-    castell: function () {
-      this.drawTronc();
-    },
     // castell.positions is updated after castell.type is refreshed in the parent
     // we remove the members that are outside of the castell after we
     // get the new positions for the current castell
     "castell.positions": function () {
+      console.log("positions");
       this.removePositionsOutsideCastell();
+      console.log("drawing in positions");
       this.drawTronc();
     },
     // castell.position_members is loaded asynchronously after the component is loaded
     // we add this function to react to the update
     "castell.position_members": function () {
+      console.log("position_members");
       this.positionsMembers = this.castell.position_members;
-      this.drawTronc();
+      if (this.castell.positions) {
+        console.log("drawing in members");
+        this.drawTronc();
+      }
     },
   },
 };
