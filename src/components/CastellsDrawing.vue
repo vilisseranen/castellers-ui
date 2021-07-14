@@ -131,14 +131,12 @@ export default {
       this.drawTronc();
     },
     removePositionsOutsideCastell() {
+      if (!this.castell.positions) {
+        return;
+      }
       for (let i = 0; i < this.positionsMembers.length; i++) {
         let remove = true;
-        console.log(this.castell);
-        console.log("positions in removePositionsOutsideCastell");
-        console.log(this.castell.positions);
-        const positions = Array(...this.castell.positions) || [];
-        console.log(typeof this.castell.positions);
-        for (const position of positions) {
+        for (const position of this.castell.positions) {
           if (
             position.column === this.positionsMembers[i].position.column &&
             position.cordon === this.positionsMembers[i].position.cordon &&
@@ -242,6 +240,9 @@ export default {
       );
     },
     drawTronc() {
+      if (!this.castell.positions) {
+        return;
+      }
       const self = this;
 
       this.paperTronc.clear(); // Clear the canvas before starting
@@ -272,9 +273,7 @@ export default {
       // For each position of the castell, we draw the cell at (column,cordon)
       let posGroup;
       let rect;
-      const positions = Array(...this.castell.positions) || [];
-      for (const position of positions) {
-        console.log(position);
+      for (const position of this.castell.positions) {
         posGroup = self.paperTronc.set();
         let x, y;
         let dx = s;
@@ -409,22 +408,21 @@ export default {
     },
   },
   watch: {
+    castell: function () {
+      this.drawTronc();
+    },
     // castell.positions is updated after castell.type is refreshed in the parent
     // we remove the members that are outside of the castell after we
     // get the new positions for the current castell
     "castell.positions": function () {
-      console.log("positions");
       this.removePositionsOutsideCastell();
-      console.log("drawing in positions");
       this.drawTronc();
     },
     // castell.position_members is loaded asynchronously after the component is loaded
     // we add this function to react to the update
     "castell.position_members": function () {
-      console.log("position_members");
       this.positionsMembers = this.castell.position_members;
       if (this.castell.positions) {
-        console.log("drawing in members");
         this.drawTronc();
       }
     },
