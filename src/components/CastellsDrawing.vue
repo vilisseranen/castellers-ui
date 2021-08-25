@@ -4,11 +4,11 @@
       <div class="column is-3">
         <h1 class="subtitle is-3">{{ $t("castells.available_members") }}</h1>
         <p
-          v-for="uuid in availableMembersIDs"
-          v-bind:key="uuid"
-          v-on:click="selectMember(uuid)"
+          v-for="member in availableMembers"
+          v-bind:key="member.uuid"
+          v-on:click="selectMember(member.uuid)"
         >
-          {{ allMembers[uuid].firstName }} {{ allMembers[uuid].lastName }}
+          {{ member.firstName }} {{ member.lastName }}
         </p>
       </div>
       <div class="column is-3">
@@ -22,17 +22,17 @@
           <div class="column is-12">
             <h1 class="subtitle is-3">
               {{ $t("castells.selected_members") }}
-              <small v-on:click="resetPositions()"
-                >({{ $t("castells.remove_all") }})</small
-              >
+              <small v-on:click="resetPositions()">
+                ({{ $t("castells.remove_all") }})
+              </small>
             </h1>
 
             <p
-              v-for="uuid in selectedMembersIDs"
-              v-bind:key="uuid"
-              v-on:click="selectMember(uuid)"
+              v-for="member in selectedMembers"
+              v-bind:key="member.uuid"
+              v-on:click="selectMember(member.uuid)"
             >
-              {{ allMembers[uuid].firstName }} {{ allMembers[uuid].lastName }}
+              {{ member.firstName }} {{ member.lastName }}
             </p>
           </div>
         </div>
@@ -77,10 +77,35 @@ export default {
       }
       return membersIDs;
     },
-    availableMembersIDs: function () {
-      return Object.keys(this.allMembers).filter(
-        (x) => !this.selectedMembersIDs.includes(x)
+    availableMembers: function () {
+      const allMembers = [...this.members].filter(
+        (x) => !this.selectedMembersIDs.includes(x.uuid)
       );
+      const availableMembers = allMembers.sort(function (a, b) {
+        if (a.firstName.toUpperCase() < b.firstName.toUpperCase()) {
+          return -1;
+        }
+        if (a.firstName.toUpperCase() > b.firstName.toUpperCase()) {
+          return 1;
+        }
+        return 0;
+      });
+      return availableMembers;
+    },
+    selectedMembers: function () {
+      const allMembers = [...this.members].filter((x) =>
+        this.selectedMembersIDs.includes(x.uuid)
+      );
+      const availableMembers = allMembers.sort(function (a, b) {
+        if (a.firstName.toUpperCase() < b.firstName.toUpperCase()) {
+          return -1;
+        }
+        if (a.firstName.toUpperCase() > b.firstName.toUpperCase()) {
+          return 1;
+        }
+        return 0;
+      });
+      return availableMembers;
     },
     pomHeight: function () {
       let h = 0;
