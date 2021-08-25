@@ -105,7 +105,7 @@ export default {
       positions: (state) => state.castells.positions,
     }),
     actionLabel: function () {
-      return this.castell.uuid ? "update" : "create";
+      return this.currentCastell.uuid ? "update" : "create";
     },
   },
   mounted() {
