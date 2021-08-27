@@ -4,11 +4,11 @@
       <div class="column is-3">
         <h1 class="subtitle is-3">{{ $t("castells.available_members") }}</h1>
         <p
-          v-for="uuid in availableMembersIDs"
-          v-bind:key="uuid"
-          v-on:click="selectMember(uuid)"
+          v-for="member in availableMembers"
+          v-bind:key="member.uuid"
+          v-on:click="selectMember(member.uuid)"
         >
-          {{ allMembers[uuid].firstName }} {{ allMembers[uuid].lastName }}
+          {{ member.firstName }} {{ member.lastName }}
         </p>
       </div>
       <div class="column is-3">
@@ -22,17 +22,17 @@
           <div class="column is-12">
             <h1 class="subtitle is-3">
               {{ $t("castells.selected_members") }}
-              <small v-on:click="resetPositions()"
-                >({{ $t("castells.remove_all") }})</small
-              >
+              <small v-on:click="resetPositions()">
+                ({{ $t("castells.remove_all") }})
+              </small>
             </h1>
 
             <p
-              v-for="uuid in selectedMembersIDs"
-              v-bind:key="uuid"
-              v-on:click="selectMember(uuid)"
+              v-for="member in selectedMembers"
+              v-bind:key="member.uuid"
+              v-on:click="selectMember(member.uuid)"
             >
-              {{ allMembers[uuid].firstName }} {{ allMembers[uuid].lastName }}
+              {{ member.firstName }} {{ member.lastName }}
             </p>
           </div>
         </div>
@@ -77,10 +77,35 @@ export default {
       }
       return membersIDs;
     },
-    availableMembersIDs: function () {
-      return Object.keys(this.allMembers).filter(
-        (x) => !this.selectedMembersIDs.includes(x)
+    availableMembers: function () {
+      const allMembers = [...this.members].filter(
+        (x) => !this.selectedMembersIDs.includes(x.uuid)
       );
+      const availableMembers = allMembers.sort(function (a, b) {
+        if (a.firstName.toUpperCase() < b.firstName.toUpperCase()) {
+          return -1;
+        }
+        if (a.firstName.toUpperCase() > b.firstName.toUpperCase()) {
+          return 1;
+        }
+        return 0;
+      });
+      return availableMembers;
+    },
+    selectedMembers: function () {
+      const allMembers = [...this.members].filter((x) =>
+        this.selectedMembersIDs.includes(x.uuid)
+      );
+      const availableMembers = allMembers.sort(function (a, b) {
+        if (a.firstName.toUpperCase() < b.firstName.toUpperCase()) {
+          return -1;
+        }
+        if (a.firstName.toUpperCase() > b.firstName.toUpperCase()) {
+          return 1;
+        }
+        return 0;
+      });
+      return availableMembers;
     },
     pomHeight: function () {
       let h = 0;
@@ -118,7 +143,6 @@ export default {
   mounted() {
     this.$store.dispatch("members/getMembers");
     this.paperTronc = new Raphael(document.getElementById("canvas_tronc"));
-    this.drawTronc();
   },
   methods: {
     ...mapActions({
@@ -132,9 +156,12 @@ export default {
       this.drawTronc();
     },
     removePositionsOutsideCastell() {
+      if (!this.castell.positions) {
+        return;
+      }
       for (let i = 0; i < this.positionsMembers.length; i++) {
         let remove = true;
-        this.castell.positions.forEach((position) => {
+        for (const position of this.castell.positions) {
           if (
             position.column === this.positionsMembers[i].position.column &&
             position.cordon === this.positionsMembers[i].position.cordon &&
@@ -143,7 +170,7 @@ export default {
           ) {
             remove = false;
           }
-        });
+        }
         if (remove) {
           this.positionsMembers.splice(i, 1);
           i = i - 1;
@@ -238,6 +265,9 @@ export default {
       );
     },
     drawTronc() {
+      if (!this.castell.positions) {
+        return;
+      }
       const self = this;
 
       this.paperTronc.clear(); // Clear the canvas before starting
@@ -247,103 +277,63 @@ export default {
       // const width = this.castellWidth;
       const troncHeight = this.castellHeight - this.pomHeight;
 
-      const l = 150; // short side of rectangle
-      const s = l / 2; // long side of rectangle
-      const spacing = 10;
+      // Define size of cells
+      const area = document.getElementById("canvas_tronc");
+      const areaW = area.clientWidth;
+      const l = Math.min(100, areaW / this.castellWidth); // long side of the rectangle. 100 or less if we don't have enough space
+      const s = l / 2; // short side of rectangle
+      const spacing = l / 10;
 
-      const canvasWidth =
-        this.castellWidth * s + (this.castellWidth - 1) * spacing;
-      const canvasTroncHeight = troncHeight * (l + spacing);
+      const canvasWidth = this.castellWidth * l;
+      const canvasTroncHeight = troncHeight * (l + spacing) - spacing;
       const canvasPomHeight =
-        (this.pomHeight > 0 ? 1 : 0) * 2 * (s + spacing) +
-        (this.pomHeight > 0 ? 1 : 0) * (l + spacing);
+        (this.pomHeight > 0 ? 1 : 0) * (2 * (s + spacing) + l + spacing);
 
       const defaultColor = "gray";
 
       // Resize canvas for the current castell
       this.paperTronc.setSize(canvasWidth, canvasTroncHeight + canvasPomHeight);
 
-      let h;
-      let w = 1;
-
-      // Draw the pom
-      for (h = 0; h < this.pomHeight; h++) {
-        let posGroup;
-        let rect;
-        if (h < 2) {
-          posGroup = this.paperTronc.set();
-          rect = this.paperTronc
-            .rect((canvasWidth - l) / 2, (s + spacing) * h, l, s, 5)
-            .attr({ fill: defaultColor, opacity: 0.3 });
-          posGroup.push(rect);
-          posGroup.data("column", 1);
-          posGroup.data("cordon", this.pomHeight - h);
-          posGroup.data("part", "pom");
-          posGroup.data("name", h === 0 ? "enxaneta" : "acotxador");
-          allCells.push(posGroup);
-        } else {
-          for (w = 0; w < 2; w++) {
-            posGroup = this.paperTronc.set();
-            rect = this.paperTronc
-              .rect(
-                canvasWidth / 2 - spacing / 2 - s + w * (s + spacing),
-                (s + spacing) * h,
-                s,
-                l,
-                5
-              )
-              .attr({ fill: defaultColor, opacity: 0.3 });
-            posGroup.push(rect);
-            posGroup.data("column", w + 1);
-            posGroup.data("cordon", this.pomHeight - h);
-            posGroup.data("part", "pom");
-            posGroup.data("name", "dos");
-            allCells.push(posGroup);
+      // We draw the tronc in a grid pattern.
+      // For each position of the castell, we draw the cell at (column,cordon)
+      let posGroup;
+      let rect;
+      for (const position of this.castell.positions) {
+        posGroup = self.paperTronc.set();
+        let x, y;
+        let dx = s;
+        let dy = l;
+        if (position.part === "tronc") {
+          // calculate x, y tronc (with Y offset for the pom)
+          x =
+            ((position.column - 1) * canvasWidth) / self.castellWidth +
+            (l - s) / 2;
+          y = (troncHeight - position.cordon) * (l + spacing) + canvasPomHeight;
+        } else if (position.part === "pom") {
+          // calculate x, y pom
+          if (position.cordon === 1) {
+            // dosos (vertical)
+            x =
+              ((position.column - 1) * canvasWidth) / self.castellWidth +
+              (l - s) / 2;
+            y = (self.pomHeight - position.cordon) * (s + spacing);
+          } else {
+            // acotxador and enxaneta (horizontal)
+            x = ((position.column - 1) * canvasWidth) / self.castellWidth;
+            y = (self.pomHeight - position.cordon) * (s + spacing);
+            dx = l;
+            dy = s;
           }
         }
-      }
-
-      // Draw the tronc
-      for (h = 0; h < troncHeight; h++) {
-        for (w = 0; w < this.castellWidth; w++) {
-          const posGroup = this.paperTronc.set(); // Group a cell and its text
-          // draw cell and add to group
-          const rect = this.paperTronc
-            .rect(
-              (s + spacing) * w,
-              canvasPomHeight + (l + spacing) * h,
-              s,
-              l,
-              5
-            )
-            .attr({
-              fill: defaultColor,
-              opacity: 0.3,
-            });
-          posGroup.push(rect);
-          // Add attributes representing the position in the castell
-          posGroup.data("column", w + 1);
-          posGroup.data("cordon", troncHeight - h);
-          posGroup.data("part", "tronc");
-          let positionName;
-          switch (troncHeight - h) {
-            case 1:
-              positionName = "baix";
-              break;
-            case 2:
-              positionName = "segon";
-              break;
-            case 3:
-              positionName = "terç";
-              break;
-            case 4:
-              positionName = "quart";
-              break;
-          }
-          posGroup.data("name", positionName);
-
-          allCells.push(posGroup);
-        }
+        rect = self.paperTronc
+          .rect(x, y, dx, dy, 5)
+          .attr({ fill: defaultColor, opacity: 0.3 });
+        posGroup.push(rect);
+        posGroup.data("column", position.column);
+        posGroup.data("cordon", position.cordon);
+        posGroup.data("part", position.part);
+        posGroup.data("name", position.name);
+        allCells.push(posGroup);
       }
 
       // Write the name of castellers in the castell
@@ -374,7 +364,8 @@ export default {
                 ].join(" ")
               )
               .attr({ fill: "#000000" })
-              .transform(vertical ? "R270s2" : "R0s2")
+              // rotate and scale text. If cell width = 100, s = 1.5. If cell width = 50, s = 1
+              .transform((vertical ? "R270s" : "R0s") + (l * 0.01 + 0.5))
               .toBack();
             cell.push(name);
           }
@@ -456,7 +447,9 @@ export default {
     // we add this function to react to the update
     "castell.position_members": function () {
       this.positionsMembers = this.castell.position_members;
-      this.drawTronc();
+      if (this.castell.positions) {
+        this.drawTronc();
+      }
     },
   },
 };

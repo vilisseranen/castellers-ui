@@ -33,11 +33,7 @@
         <label class="label" v-bind:class="{ required: !readonly }">{{
           $t("castells.type")
         }}</label>
-        <b-dropdown
-          v-model="currentCastell.type"
-          aria-role="list"
-          :disabled="currentCastell.uuid ? true : false"
-        >
+        <b-dropdown v-model="currentType" aria-role="list">
           <template #trigger>
             <b-button
               :label="currentCastell.type || $t('castells.type')"
@@ -87,7 +83,7 @@
 <script>
 import Castell from "./CastellsDrawing.vue";
 import { mapActions, mapState } from "vuex";
-import Vue from "vue";
+// import Vue from "vue";
 
 export default {
   components: {
@@ -99,11 +95,8 @@ export default {
   data() {
     return {
       castell: {},
-      currentCastell: {
-        position_members: [],
-        type: "",
-        name: "",
-      },
+      currentCastell: {},
+      currentType: "",
     };
   },
   computed: {
@@ -112,7 +105,7 @@ export default {
       positions: (state) => state.castells.positions,
     }),
     actionLabel: function () {
-      return this.castell.uuid ? "update" : "create";
+      return this.currentCastell.uuid ? "update" : "create";
     },
   },
   mounted() {
@@ -129,6 +122,11 @@ export default {
     }),
     editCastellModel() {
       const self = this;
+      self.$set(
+        this.currentCastell,
+        "position_members",
+        this.$refs.drawing.positionsMembers
+      ); // add the list of members from the child
       this.editModel(this.currentCastell)
         .then(function (response) {
           self.$notifyOK(self.$t("general.notifySuccess"));
@@ -156,7 +154,12 @@ export default {
         const self = this;
         this.getModel(uuid)
           .then(function (response) {
-            self.currentCastell = response.data;
+            const c = response.data;
+            // self.$set(self.currentCastell, "positions", []);
+            self.getPositions(response.data.type).then(function (response) {
+              c.positions = response.data.positions;
+              self.currentCastell = c;
+            });
           })
           .catch((err) => console.log(err));
       }
@@ -164,11 +167,14 @@ export default {
   },
   // List of positions in a castell of this type
   watch: {
-    "currentCastell.type": function (type) {
+    currentType: function (type) {
       if (type) {
         const self = this;
         this.getPositions(type).then(function (response) {
-          Vue.set(self.currentCastell, "positions", response.data.positions);
+          self.currentCastell = Object.assign({}, self.currentCastell, {
+            positions: response.data.positions,
+            type: response.data.name,
+          });
         });
       }
     },
