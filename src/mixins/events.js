@@ -16,8 +16,8 @@ export const eventMixin = {
             "</b> (" +
             startDate +
             ")",
-          confirmText: this.$t("events.deleteOK"),
-          cancelText: this.$t("events.deleteCancel"),
+          confirmText: this.$t("general.deleteOK"),
+          cancelText: this.$t("general.deleteCancel"),
           type: "is-danger",
           onConfirm: () => {
             api

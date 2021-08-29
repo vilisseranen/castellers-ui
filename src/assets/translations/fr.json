@@ -14,7 +14,9 @@
     "notifySuccess": "L'opération s'est complétée avec succès.",
     "notifyFailure": "Il y a eu une erreur, veuillez vérifier les informations fournies.",
     "actions": "Actions",
-    "id": "ID"
+    "id": "ID",
+    "deleteOK": "Oui",
+    "deleteCancel": "Annuler"
   },
   "routes": {
     "members": "Les membres",
@@ -77,8 +79,6 @@
     "addMember": "Ajouter un membre",
     "title": "Liste des membres",
     "confirmDelete": "Veux-tu vraiment retirer ce membre",
-    "okDelete": "Oui",
-    "cancelDelete": "Non",
     "subscribeEmails": "J'accepte de recevoir les courriels",
     "contact": "Contact en cas d'urgence",
     "contactDescription": "Téléphone (ex: 514-111-1111)",
@@ -120,8 +120,6 @@
     "presentation": "Présentation",
     "practice": "Pratique",
     "confirmDelete": "Veux-tu vraiment supprimer cet évènement ?",
-    "deleteOK": "Oui",
-    "deleteCancel": "Annuler",
     "type": "Type",
     "practiceType": "Pratique",
     "presentationType": "Présentation",
@@ -156,6 +154,7 @@
     "available_members": "Membres disponibles",
     "selected_member": "Membre à placer",
     "selected_members": "Membres dans le castell",
-    "remove_all": "retirer tout le monde"
+    "remove_all": "retirer tout le monde",
+    "confirmDelete": "Veux-tu vraiment supprimer ce castell: "
   }
 }

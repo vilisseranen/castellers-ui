@@ -7,7 +7,9 @@
   },
   "general": {
     "requiredFields": "Els camps amb l'asterisc són obligatoris.",
-    "forCastellers": "Creat per als Castellers per "
+    "forCastellers": "Creat per als Castellers per ",
+    "deleteOK": "Sí",
+    "deleteCancel": "Cancel·lar"
   },
   "routes": {
     "members": "Membres",
@@ -50,9 +52,7 @@
     "emailButton": "Enviar un mail de registre",
     "addMember": "Afegir un membre nou",
     "title": "Llista dels membres",
-    "confirmDelete": "Estàs segur que vols eliminar aquest membre?",
-    "okDelete": "Si",
-    "cancelDelete": "No"
+    "confirmDelete": "Estàs segur que vols eliminar aquest membre?"
   },
   "multiselect": {
     "selectLabel": "Prémer el botó 'Entrar' per a seleccionar",
@@ -85,8 +85,6 @@
     "presentation": "Actuació",
     "practice": "Assaig",
     "confirmDelete": "Estàs segur que vols esborrar l'assaig?",
-    "deleteOK": "Sí",
-    "deleteCancel": "Anul·lar",
     "type": "Tipus",
     "practiceType": "Assaig",
     "presentationType": "Actuació"

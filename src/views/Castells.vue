@@ -46,7 +46,7 @@
         <a href="#">
           <span
             class="icon has-text-danger"
-            v-on:click="deleteCastellModel(props.row.uuid)"
+            v-on:click="deleteCastellModel(props.row)"
           >
             <i class="fa fa-times"></i>
           </span>
@@ -64,8 +64,10 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
+import { castellMixin } from "../mixins/castells.js";
 
 export default {
+  mixins: [castellMixin],
   components: {},
   computed: {
     ...mapState({
@@ -89,11 +91,15 @@ export default {
     editCastellModel(uuid) {
       this.$router.push({ path: `/castellEdit/${uuid}` });
     },
-    deleteCastellModel(uuid) {
+    deleteCastellModel(castell) {
       const self = this;
-      this.deleteModel(uuid).then(function () {
-        self.getModels();
-      });
+      this.deleteCastell(castell)
+        .then(function () {
+          self.getModels();
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     },
   },
 };

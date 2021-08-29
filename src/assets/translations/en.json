@@ -14,7 +14,9 @@
     "notifySuccess": "The operation completed successfully.",
     "notifyFailure": "There was a problem. Please check the informations entered.",
     "actions": "Actions",
-    "id": "ID"
+    "id": "ID",
+    "deleteOK": "Yes",
+    "deleteCancel": "Cancel"
   },
   "routes": {
     "members": "Members",
@@ -77,8 +79,6 @@
     "addMember": "Add a new member",
     "title": "Member list",
     "confirmDelete": "Do you really want to remove this member?",
-    "okDelete": "Yes",
-    "cancelDelete": "No",
     "subscribeEmails": "I accept to receive emails",
     "contact": "Emergency contact",
     "contactDescription": "Phone number (ex: 514-111-1111)",
@@ -120,8 +120,6 @@
     "presentation": "Presentation",
     "practice": "Practice",
     "confirmDelete": "Do you really want to delete this practice?",
-    "deleteOK": "Yes",
-    "deleteCancel": "Cancel",
     "type": "Type",
     "practiceType": "Practice",
     "presentationType": "Presentation",

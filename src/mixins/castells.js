@@ -1,24 +1,19 @@
 import api from "../api/castellers";
 
-export const memberMixin = {
+export const castellMixin = {
   methods: {
-    deleteUser: function (member) {
+    deleteCastell: function (castell) {
       const self = this;
       return new Promise((resolve, reject) => {
         this.$buefy.dialog.confirm({
           message:
-            this.$t("members.confirmDelete") +
-            " <b>" +
-            member.firstName +
-            " " +
-            member.lastName +
-            "</b> ?",
+            this.$t("castells.confirmDelete") + " <b>" + castell.name + "</b>?",
           confirmText: this.$t("general.deleteOK"),
           cancelText: this.$t("general.deleteCancel"),
           type: "is-danger",
           onConfirm: () => {
             api
-              .deleteMember(self.uuid, member.uuid)
+              .deleteCastellModel(self.uuid, castell.uuid)
               .then(function () {
                 resolve();
               })
