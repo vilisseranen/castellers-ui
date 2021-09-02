@@ -14,7 +14,9 @@
     "notifySuccess": "The operation completed successfully.",
     "notifyFailure": "There was a problem. Please check the informations entered.",
     "actions": "Actions",
-    "id": "ID"
+    "id": "ID",
+    "deleteOK": "Yes",
+    "deleteCancel": "Cancel"
   },
   "routes": {
     "members": "Members",
@@ -30,17 +32,25 @@
     "passwordConfirm": "Password again",
     "resetButton": "Reset",
     "resetPassword": "Reset Password",
-    "forgotPassword": "Forgot password?",
+    "forgotPassword": "Forgot your password or username?",
     "title": "Connection",
     "email": "Email",
     "emailPlaceholder": "Your email",
     "resetPasswordButton": "Reset your password",
+    "resetPasswordDescription": "Your username will be provided during the password reset.",
     "passwordResetError": "There was an error.",
     "passwordChanged": "Your password has been changed",
     "passwordResetSent": "You will receive an email with instructions to reset your password if we find your email in our database.",
     "passwordDifferent": "Passwords are different",
     "activateButton": "Create",
-    "activatePasssword": "Choose your username and password"
+    "activatePasssword": "Choose your username and password",
+    "linkExpiredTitle": "Expired link",
+    "linkExpired": "The link is expired. You can request a new link by clicking this button: ",
+    "linkExpiredButton": "Resend a link",
+    "passwordResetIssue": "There has been a problem  with this operation, please contact an administrator.",
+    "success": "Success",
+    "successMessageStart": "You are now connected on the site. You can go on your profile page and authorize that we send you emails if you want to receive our notifications. Don't forget to click on",
+    "successMessageEnd": "to save the change!"
   },
   "members": {
     "create": "Create the profile of a new member",
@@ -77,8 +87,6 @@
     "addMember": "Add a new member",
     "title": "Member list",
     "confirmDelete": "Do you really want to remove this member?",
-    "okDelete": "Yes",
-    "cancelDelete": "No",
     "subscribeEmails": "I accept to receive emails",
     "contact": "Emergency contact",
     "contactDescription": "Phone number (ex: 514-111-1111)",
@@ -120,8 +128,6 @@
     "presentation": "Presentation",
     "practice": "Practice",
     "confirmDelete": "Do you really want to delete this practice?",
-    "deleteOK": "Yes",
-    "deleteCancel": "Cancel",
     "type": "Type",
     "practiceType": "Practice",
     "presentationType": "Presentation",
@@ -156,6 +162,7 @@
     "available_members": "Available members",
     "selected_member": "Member to place",
     "selected_members": "Members with a position",
-    "remove_all": "remove everybody"
+    "remove_all": "remove everybody",
+    "confirmDelete": "Do you really want to delete this castell: "
   }
 }

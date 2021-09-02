@@ -52,6 +52,23 @@
             </button>
           </div>
         </form>
+        <br />
+        <b-message
+          v-if="tokenExpired"
+          type="is-danger"
+          icon-pack="fa"
+          has-icon
+          aria-close-label="Link expired"
+        >
+          {{ $t("login.linkExpired") }}
+          <button
+            class="button is-danger"
+            type="submit"
+            @click.prevent="resendLink"
+          >
+            {{ $t("login.linkExpiredButton") }}
+          </button>
+        </b-message>
       </div>
     </div>
   </div>
@@ -59,12 +76,28 @@
 
 <script>
 import { mapActions } from "vuex";
+import jwtd from "jwt-decode"; // check if token is expired
 
 export default {
   data() {
-    return { resetToken: "", credentials: {}, action: "" };
+    return {
+      resetToken: "",
+      credentials: {},
+      action: "",
+      decodedToken: {},
+    };
   },
   computed: {
+    tokenExpired() {
+      if (
+        this.decodedToken &&
+        this.decodedToken.exp &&
+        this.decodedToken.exp < Date.now() / 1000
+      ) {
+        return true;
+      }
+      return false;
+    },
     passwordConfirmDifferent() {
       if (
         this.credentials.passwordConfirm !== undefined &&
@@ -94,6 +127,7 @@ export default {
   mounted() {
     if ("t" in this.$route.query) {
       this.resetToken = this.$route.query.t;
+      this.decodedToken = jwtd(this.resetToken);
     }
     if ("a" in this.$route.query) {
       this.action = this.$route.query.a;
@@ -105,6 +139,7 @@ export default {
   methods: {
     ...mapActions({
       resetPassword: "members/resetPassword",
+      forgotPassword: "members/forgotPassword",
       getLogin: "login",
     }),
     async reset() {
@@ -124,6 +159,22 @@ export default {
                 password: self.credentials.password,
               })
               .then(function () {
+                if (self.action === "activation") {
+                  self.$buefy.dialog.alert({
+                    title: self.$t("login.success"),
+                    message:
+                      self.$t("login.successMessageStart") +
+                      ' "' +
+                      self.$t("members.updateButton") +
+                      '" ' +
+                      self.$t("login.successMessageEnd"),
+                    hasIcon: true,
+                    iconPack: "fa",
+                    ariaRole: "alertdialog",
+                    ariaModal: true,
+                    type: "is-info",
+                  });
+                }
                 self.$root.setLocale(self.$store.getters.language);
                 self.$router.push({ name: "Events" });
               });
@@ -132,6 +183,16 @@ export default {
             self.$notifyNOK(self.$t("login.passwordResetError"));
           });
       }
+    },
+    resendLink() {
+      const self = this;
+      this.forgotPassword(this.decodedToken.email)
+        .then(function () {
+          self.$notifyOK(self.$t("login.passwordResetSent"));
+        })
+        .catch(function () {
+          self.$notifyNOK(self.$t("login.passwordResetIssue"));
+        });
     },
   },
 };

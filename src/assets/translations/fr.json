@@ -14,7 +14,9 @@
     "notifySuccess": "L'opération s'est complétée avec succès.",
     "notifyFailure": "Il y a eu une erreur, veuillez vérifier les informations fournies.",
     "actions": "Actions",
-    "id": "ID"
+    "id": "ID",
+    "deleteOK": "Oui",
+    "deleteCancel": "Annuler"
   },
   "routes": {
     "members": "Les membres",
@@ -33,14 +35,22 @@
     "resetPassword": "Réinitialisation du mot de passe",
     "activateButton": "Créer",
     "activatePasssword": "Création de l'utilisateur et du mot de passe",
-    "forgotPassword": "Mot de passe oublié?",
+    "forgotPassword": "Mot de passe ou nom d'utilisateur oublié?",
     "title": "Connection",
     "email": "Courriel",
     "emailPlaceholder": "Votre courriel",
     "resetPasswordButton": "Réinitialiser votre mot de passe",
+    "resetPasswordDescription": "Votre nom d'utilisateur vous sera fourni lors de la réinitialisation du mot de passe.",
     "passwordResetError": "Il y a eu un problème.",
     "passwordChanged": "Votre mot de passe a été modifié",
-    "passwordResetSent": "Un courriel avec un lien pour réinitialiser le mot de passe va être envoyé si cette adresse se trouve dans nos systèmes."
+    "passwordResetSent": "Un courriel avec un lien pour réinitialiser le mot de passe va être envoyé si cette adresse se trouve dans nos systèmes.",
+    "linkExpiredTitle": "Lien expiré",
+    "linkExpired": "Le lien a expiré. Vous pouvez recevoir un nouveau lien en cliquant sur ce bouton: ",
+    "linkExpiredButton": "Renvoyer un lien",
+    "passwordResetIssue": "Il y a eu un problème avec cette opération, merci de contacter un administrateur.",
+    "success": "Succès",
+    "successMessageStart": "Tu es maintenant connecté sur le site. Tu peux aller dans ton profil et autoriser les courriels si tu souhaites les recevoir. N'oublie pas de cliquer sur",
+    "successMessageEnd": "pour enregistrer la modification!"
   },
   "members": {
     "create": "Créer un nouveau membre",
@@ -77,8 +87,6 @@
     "addMember": "Ajouter un membre",
     "title": "Liste des membres",
     "confirmDelete": "Veux-tu vraiment retirer ce membre",
-    "okDelete": "Oui",
-    "cancelDelete": "Non",
     "subscribeEmails": "J'accepte de recevoir les courriels",
     "contact": "Contact en cas d'urgence",
     "contactDescription": "Téléphone (ex: 514-111-1111)",
@@ -120,8 +128,6 @@
     "presentation": "Présentation",
     "practice": "Pratique",
     "confirmDelete": "Veux-tu vraiment supprimer cet évènement ?",
-    "deleteOK": "Oui",
-    "deleteCancel": "Annuler",
     "type": "Type",
     "practiceType": "Pratique",
     "presentationType": "Présentation",
@@ -156,6 +162,7 @@
     "available_members": "Membres disponibles",
     "selected_member": "Membre à placer",
     "selected_members": "Membres dans le castell",
-    "remove_all": "retirer tout le monde"
+    "remove_all": "retirer tout le monde",
+    "confirmDelete": "Veux-tu vraiment supprimer ce castell: "
   }
 }

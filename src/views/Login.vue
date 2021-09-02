@@ -68,10 +68,14 @@
               type="submit"
               @click.prevent="resetPassword"
             >
-              {{ $t("login.resetPasswordButton") }}
+              {{ $t("login.resetPasswordButton") }}*
             </button>
           </div>
         </form>
+        <div class="is-size-6">
+          <br />
+          * {{ $t("login.resetPasswordDescription") }}
+        </div>
       </div>
     </div>
   </div>
@@ -112,9 +116,13 @@ export default {
     },
     resetPassword() {
       const self = this;
-      this.forgotPassword(this.member.email).then(function () {
-        self.$notifyOK(self.$t("login.passwordResetSent"));
-      });
+      this.forgotPassword(this.member.email)
+        .then(function () {
+          self.$notifyOK(self.$t("login.passwordResetSent"));
+        })
+        .catch(function () {
+          self.$notifyNOK(self.$t("login.passwordResetIssue"));
+        });
     },
     redirect() {
       if (this.$route.query.next) {

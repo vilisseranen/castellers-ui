@@ -10,12 +10,19 @@
       </button>
     </b-field>
 
-    <b-table :data="members" striped>
+    <b-table
+      :data="members"
+      striped
+      default-sort="firstName"
+      sort-icon="arrow-up"
+      icon-pack="fa"
+    >
       <b-table-column
         key="firstName"
         field="firstName"
         :label="$t('members.firstName')"
         searchable
+        sortable
         v-slot="props"
         >{{ props.row.firstName }}
       </b-table-column>
@@ -24,6 +31,7 @@
         field="lastName"
         :label="$t('members.lastName')"
         searchable
+        sortable
         v-slot="props"
         >{{ props.row.lastName }}</b-table-column
       >
@@ -32,6 +40,7 @@
         field="roles"
         :label="$t('members.roles')"
         searchable
+        sortable
         v-slot="props"
         >{{ props.row.roles }}</b-table-column
       >
@@ -40,6 +49,7 @@
         field="extra"
         :label="$t('members.extra')"
         searchable
+        sortable
         v-slot="props"
         >{{ props.row.extra }}</b-table-column
       >
@@ -48,6 +58,7 @@
         field="type"
         :label="$t('members.type')"
         searchable
+        sortable
         v-slot="props"
       >
         <span v-if="props.row.type === 'member'">{{

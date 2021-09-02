@@ -69,7 +69,7 @@
           type="submit"
           class="button is-danger"
           v-if="this.currentCastell.uuid"
-          @click.prevent="deleteCastellModel(currentCastell.uuid)"
+          @click.prevent="deleteCastellModel(currentCastell)"
         >
           {{ $t("castells.deleteModelButton") }}
         </button>
@@ -83,9 +83,10 @@
 <script>
 import Castell from "./CastellsDrawing.vue";
 import { mapActions, mapState } from "vuex";
-// import Vue from "vue";
+import { castellMixin } from "../mixins/castells.js";
 
 export default {
+  mixins: [castellMixin],
   components: {
     Castell,
   },
@@ -118,7 +119,6 @@ export default {
       getPositions: "castells/getCastellTypePositions",
       editModel: "castells/editCastellModel",
       getModel: "castells/getCastellModel",
-      deleteModel: "castells/deleteCastellModel",
     }),
     editCastellModel() {
       const self = this;
@@ -139,9 +139,9 @@ export default {
           console.log(error);
         });
     },
-    deleteCastellModel(uuid) {
+    deleteCastellModel(castell) {
       const self = this;
-      this.deleteModel(uuid)
+      this.deleteCastell(castell)
         .then(function () {
           self.$router.push({ path: `/castells` });
         })
@@ -155,7 +155,6 @@ export default {
         this.getModel(uuid)
           .then(function (response) {
             const c = response.data;
-            // self.$set(self.currentCastell, "positions", []);
             self.getPositions(response.data.type).then(function (response) {
               c.positions = response.data.positions;
               self.currentCastell = c;
