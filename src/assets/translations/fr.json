@@ -35,14 +35,19 @@
     "resetPassword": "Réinitialisation du mot de passe",
     "activateButton": "Créer",
     "activatePasssword": "Création de l'utilisateur et du mot de passe",
-    "forgotPassword": "Mot de passe oublié?",
+    "forgotPassword": "Mot de passe ou nom d'utilisateur oublié?",
     "title": "Connection",
     "email": "Courriel",
     "emailPlaceholder": "Votre courriel",
     "resetPasswordButton": "Réinitialiser votre mot de passe",
+    "resetPasswordDescription": "Votre nom d'utilisateur vous sera fourni lors de la réinitialisation du mot de passe.",
     "passwordResetError": "Il y a eu un problème.",
     "passwordChanged": "Votre mot de passe a été modifié",
-    "passwordResetSent": "Un courriel avec un lien pour réinitialiser le mot de passe va être envoyé si cette adresse se trouve dans nos systèmes."
+    "passwordResetSent": "Un courriel avec un lien pour réinitialiser le mot de passe va être envoyé si cette adresse se trouve dans nos systèmes.",
+    "linkExpiredTitle": "Lien expiré",
+    "linkExpired": "Le lien a expiré. Vous pouvez recevoir un nouveau lien en cliquant sur ce bouton: ",
+    "linkExpiredButton": "Renvoyer un lien",
+    "passwordResetIssue": "Il y a eu un problème avec cette opération, merci de contacter un administrateur."
   },
   "members": {
     "create": "Créer un nouveau membre",

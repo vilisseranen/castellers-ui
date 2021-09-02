@@ -32,17 +32,22 @@
     "passwordConfirm": "Password again",
     "resetButton": "Reset",
     "resetPassword": "Reset Password",
-    "forgotPassword": "Forgot password?",
+    "forgotPassword": "Forgot your password or username?",
     "title": "Connection",
     "email": "Email",
     "emailPlaceholder": "Your email",
     "resetPasswordButton": "Reset your password",
+    "resetPasswordDescription": "Your username will be provided during the password reset.",
     "passwordResetError": "There was an error.",
     "passwordChanged": "Your password has been changed",
     "passwordResetSent": "You will receive an email with instructions to reset your password if we find your email in our database.",
     "passwordDifferent": "Passwords are different",
     "activateButton": "Create",
-    "activatePasssword": "Choose your username and password"
+    "activatePasssword": "Choose your username and password",
+    "linkExpiredTitle": "Expired link",
+    "linkExpired": "The link is expired. You can request a new link by clicking this button: ",
+    "linkExpiredButton": "Resend a link",
+    "passwordResetIssue": "There has been a problem  with this operation, please contact an administrator."
   },
   "members": {
     "create": "Create the profile of a new member",
@@ -154,6 +159,7 @@
     "available_members": "Available members",
     "selected_member": "Member to place",
     "selected_members": "Members with a position",
-    "remove_all": "remove everybody"
+    "remove_all": "remove everybody",
+    "confirmDelete": "Do you really want to delete this castell: "
   }
 }
