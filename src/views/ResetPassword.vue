@@ -80,7 +80,12 @@ import jwtd from "jwt-decode"; // check if token is expired
 
 export default {
   data() {
-    return { resetToken: "", credentials: {}, action: "", decodedToken: {} };
+    return {
+      resetToken: "",
+      credentials: {},
+      action: "",
+      decodedToken: {},
+    };
   },
   computed: {
     tokenExpired() {
@@ -154,6 +159,22 @@ export default {
                 password: self.credentials.password,
               })
               .then(function () {
+                if (self.action === "activation") {
+                  self.$buefy.dialog.alert({
+                    title: self.$t("login.success"),
+                    message:
+                      self.$t("login.successMessageStart") +
+                      ' "' +
+                      self.$t("members.updateButton") +
+                      '" ' +
+                      self.$t("login.successMessageEnd"),
+                    hasIcon: true,
+                    iconPack: "fa",
+                    ariaRole: "alertdialog",
+                    ariaModal: true,
+                    type: "is-info",
+                  });
+                }
                 self.$root.setLocale(self.$store.getters.language);
                 self.$router.push({ name: "Events" });
               });

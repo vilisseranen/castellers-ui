@@ -47,7 +47,10 @@
     "linkExpiredTitle": "Expired link",
     "linkExpired": "The link is expired. You can request a new link by clicking this button: ",
     "linkExpiredButton": "Resend a link",
-    "passwordResetIssue": "There has been a problem  with this operation, please contact an administrator."
+    "passwordResetIssue": "There has been a problem  with this operation, please contact an administrator.",
+    "success": "Success",
+    "successMessageStart": "You are now connected on the site. You can go on your profile page and authorize that we send you emails if you want to receive our notifications. Don't forget to click on",
+    "successMessageEnd": "to save the change!"
   },
   "members": {
     "create": "Create the profile of a new member",

@@ -47,7 +47,10 @@
     "linkExpiredTitle": "Lien expiré",
     "linkExpired": "Le lien a expiré. Vous pouvez recevoir un nouveau lien en cliquant sur ce bouton: ",
     "linkExpiredButton": "Renvoyer un lien",
-    "passwordResetIssue": "Il y a eu un problème avec cette opération, merci de contacter un administrateur."
+    "passwordResetIssue": "Il y a eu un problème avec cette opération, merci de contacter un administrateur.",
+    "success": "Succès",
+    "successMessageStart": "Tu es maintenant connecté sur le site. Tu peux aller dans ton profil et autoriser les courriels si tu souhaites les recevoir. N'oublie pas de cliquer sur",
+    "successMessageEnd": "pour enregistrer la modification!"
   },
   "members": {
     "create": "Créer un nouveau membre",
