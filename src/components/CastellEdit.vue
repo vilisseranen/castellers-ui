@@ -67,6 +67,14 @@
         </button>
         <button
           type="submit"
+          class="button is-info"
+          v-if="this.currentCastell.uuid"
+          @click.prevent="copyCastellModelModal()"
+        >
+          {{ $t("castells.copy") }}
+        </button>
+        <button
+          type="submit"
           class="button is-danger"
           v-if="this.currentCastell.uuid"
           @click.prevent="deleteCastellModel(currentCastell)"
@@ -75,6 +83,21 @@
         </button>
       </div>
     </div>
+    <b-modal
+      v-model="isCopyModalActive"
+      has-modal-card
+      trap-focus
+      aria-role="dialog"
+      aria-label="Example Modal"
+      aria-modal
+    >
+      <template #default="props">
+        <castell-copy-modal
+          v-bind="copyProps"
+          @close="props.close"
+        ></castell-copy-modal>
+      </template>
+    </b-modal>
 
     <castell :castell="this.currentCastell" ref="drawing"></castell>
   </div>
@@ -84,11 +107,13 @@
 import Castell from "./CastellsDrawing.vue";
 import { mapActions, mapState } from "vuex";
 import { castellMixin } from "../mixins/castells.js";
+import CastellCopyModal from "../components/CastellCopyModal.vue";
 
 export default {
   mixins: [castellMixin],
   components: {
     Castell,
+    CastellCopyModal,
   },
   props: {
     readonly: Boolean,
@@ -98,6 +123,12 @@ export default {
       castell: {},
       currentCastell: {},
       currentType: "",
+      isCopyModalActive: false,
+      copyProps: {
+        originalName: "",
+        originalUuid: "",
+        newName: "",
+      },
     };
   },
   computed: {
@@ -162,6 +193,13 @@ export default {
           })
           .catch((err) => console.log(err));
       }
+    },
+    copyCastellModelModal() {
+      this.isCopyModalActive = true;
+      this.copyProps.originalName = this.currentCastell.name;
+      this.copyProps.originalUuid = this.currentCastell.uuid;
+      this.copyProps.newName =
+        this.$t("castells.copyOf") + " " + this.currentCastell.name;
     },
   },
   // List of positions in a castell of this type

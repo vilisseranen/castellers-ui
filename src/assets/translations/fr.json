@@ -15,8 +15,7 @@
     "notifyFailure": "Il y a eu une erreur, veuillez vérifier les informations fournies.",
     "actions": "Actions",
     "id": "ID",
-    "deleteOK": "Oui",
-    "deleteCancel": "Annuler"
+    "cancel": "Annuler"
   },
   "routes": {
     "members": "Les membres",
@@ -164,6 +163,11 @@
     "selected_member": "Membre à placer",
     "selected_members": "Membres dans le castell",
     "remove_all": "retirer tout le monde",
-    "confirmDelete": "Veux-tu vraiment supprimer ce castell: "
+    "confirmDelete": "Veux-tu vraiment supprimer ce castell: ",
+    "copyOf": "Copie de",
+    "copyTitle": "Copier un castell",
+    "originalName": "Nom du castell original",
+    "newName": "Nom du nouveau castell",
+    "copy": "Copier"
   }
 }

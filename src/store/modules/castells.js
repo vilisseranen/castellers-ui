@@ -5,8 +5,8 @@ const state = () => ({
   types: [],
   models: [],
   currentCastell: {
-    positions: {}
-  }
+    positions: {},
+  },
 });
 
 // getters
@@ -53,7 +53,7 @@ const actions = {
   },
   async deleteCastellModel(context, uuid) {
     return api.deleteCastellModel(uuid);
-  }
+  },
 };
 
 // mutations
@@ -69,7 +69,7 @@ const mutations = {
   },
   setCastellModel(state, model) {
     state.currentCastell = model;
-  }
+  },
 };
 
 export default {

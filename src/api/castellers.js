@@ -209,5 +209,5 @@ export default {
   },
   async deleteCastellModel(uuid) {
     return apiCall("DELETE", `/api/v1/castells/models/${uuid}`, {}, {});
-  }
+  },
 };

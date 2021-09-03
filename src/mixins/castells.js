@@ -8,8 +8,8 @@ export const castellMixin = {
         this.$buefy.dialog.confirm({
           message:
             this.$t("castells.confirmDelete") + " <b>" + castell.name + "</b>?",
-          confirmText: this.$t("general.deleteOK"),
-          cancelText: this.$t("general.deleteCancel"),
+          confirmText: this.$t("general.yes"),
+          cancelText: this.$t("general.cancel"),
           type: "is-danger",
           onConfirm: () => {
             api

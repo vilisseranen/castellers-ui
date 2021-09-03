@@ -45,6 +45,14 @@
         </a>
         <a href="#">
           <span
+            class="icon has-text-info"
+            v-on:click="copyCastellModelModal(props.row)"
+          >
+            <i class="fa fa-copy"></i>
+          </span>
+        </a>
+        <a href="#">
+          <span
             class="icon has-text-danger"
             v-on:click="deleteCastellModel(props.row)"
           >
@@ -53,6 +61,21 @@
         </a>
       </b-table-column>
     </b-table>
+    <b-modal
+      v-model="isCopyModalActive"
+      has-modal-card
+      trap-focus
+      aria-role="dialog"
+      aria-label="Copy castell"
+      aria-modal
+    >
+      <template #default="props">
+        <castell-copy-modal
+          v-bind="copyProps"
+          @close="props.close"
+        ></castell-copy-modal>
+      </template>
+    </b-modal>
   </div>
 </template>
 
@@ -65,10 +88,21 @@
 <script>
 import { mapActions, mapState } from "vuex";
 import { castellMixin } from "../mixins/castells.js";
+import CastellCopyModal from "../components/CastellCopyModal.vue";
 
 export default {
   mixins: [castellMixin],
-  components: {},
+  components: { CastellCopyModal },
+  data() {
+    return {
+      isCopyModalActive: false,
+      copyProps: {
+        originalName: "",
+        originalUuid: "",
+        newName: "",
+      },
+    };
+  },
   computed: {
     ...mapState({
       castellTypes: (state) => state.castells.types,
@@ -100,6 +134,12 @@ export default {
         .catch(function (error) {
           console.log(error);
         });
+    },
+    copyCastellModelModal(castell) {
+      this.isCopyModalActive = true;
+      this.copyProps.originalName = castell.name;
+      this.copyProps.originalUuid = castell.uuid;
+      this.copyProps.newName = this.$t("castells.copyOf") + " " + castell.name;
     },
   },
 };

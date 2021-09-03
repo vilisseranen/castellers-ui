@@ -15,8 +15,7 @@
     "notifyFailure": "There was a problem. Please check the informations entered.",
     "actions": "Actions",
     "id": "ID",
-    "deleteOK": "Yes",
-    "deleteCancel": "Cancel"
+    "cancel": "Cancel"
   },
   "routes": {
     "members": "Members",
@@ -164,6 +163,11 @@
     "selected_member": "Member to place",
     "selected_members": "Members with a position",
     "remove_all": "remove everybody",
-    "confirmDelete": "Do you really want to delete this castell: "
+    "confirmDelete": "Do you really want to delete this castell: ",
+    "copyOf": "Copy of",
+    "copyTitle": "Duplicate a castell",
+    "originalName": "Original name",
+    "newName": "New name",
+    "copy": "Copy"
   }
 }
