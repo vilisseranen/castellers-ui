@@ -57,6 +57,7 @@
     "update": "Modifier le profil d'un membre existant",
     "memberType": "Membre régulier",
     "adminType": "Administrateur",
+    "guestType": "Invité",
     "type": "Type",
     "languageFR": "Français",
     "languageEN": "Anglais",

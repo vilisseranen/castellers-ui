@@ -57,6 +57,7 @@
     "update": "Edit the profile of an existing member",
     "memberType": "Regular",
     "adminType": "Administrator",
+    "guestType": "Guest",
     "type": "Type",
     "languageFR": "French",
     "languageEN": "English",

@@ -61,6 +61,9 @@
         sortable
         v-slot="props"
       >
+        <span v-if="props.row.type === 'guest'">{{
+          $t("members.guestType")
+        }}</span>
         <span v-if="props.row.type === 'member'">{{
           $t("members.memberType")
         }}</span>
