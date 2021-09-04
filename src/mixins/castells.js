@@ -3,7 +3,6 @@ import api from "../api/castellers";
 export const castellMixin = {
   methods: {
     deleteCastell: function (castell) {
-      const self = this;
       return new Promise((resolve, reject) => {
         this.$buefy.dialog.confirm({
           message:
@@ -13,7 +12,7 @@ export const castellMixin = {
           type: "is-danger",
           onConfirm: () => {
             api
-              .deleteCastellModel(self.uuid, castell.uuid)
+              .deleteCastellModel(castell.uuid)
               .then(function () {
                 resolve();
               })

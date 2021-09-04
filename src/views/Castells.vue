@@ -115,7 +115,6 @@ export default {
   },
   methods: {
     ...mapActions({
-      deleteModel: "castells/deleteCastellModel",
       getTypes: "castells/getCastellsTypeList",
       getModels: "castells/getCastellModels",
     }),
