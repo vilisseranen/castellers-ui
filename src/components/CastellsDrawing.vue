@@ -44,7 +44,7 @@
 
 <script>
 import Raphael from "raphael";
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 
 export default {
   props: {
@@ -131,6 +131,7 @@ export default {
     ...mapState({
       members: (state) => state.members.members,
     }),
+    ...mapGetters(["uuid"]),
   },
   data() {
     return {
@@ -328,6 +329,7 @@ export default {
         rect = self.paperTronc
           .rect(x, y, dx, dy, 5)
           .attr({ fill: defaultColor, opacity: 0.3 });
+
         posGroup.push(rect);
         posGroup.data("column", position.column);
         posGroup.data("cordon", position.cordon);
@@ -368,7 +370,12 @@ export default {
               .transform((vertical ? "R270s" : "R0s") + (l * 0.01 + 0.5))
               .toBack();
             cell.push(name);
+            cell.data("uuid", self.positionsMembers[i].member_uuid);
           }
+        }
+        // Change color if self
+        if (rect.data("uuid") === self.uuid) {
+          rect.attr({ stroke: "purple", "stroke-width": 4 });
         }
       });
 
