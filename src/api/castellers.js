@@ -12,7 +12,7 @@ const apiCall = function (method, url, headers, data) {
   return new Promise((resolve, reject) => {
     axios({
       method: method,
-      url: API_URL + url,
+      url: API_URL + "/api/v1" + url,
       headers: headers,
       data: data,
     })
@@ -27,7 +27,7 @@ const apiCall = function (method, url, headers, data) {
 
 export default {
   async login(username, password) {
-    return apiCall("POST", `/api/login`, null, {
+    return apiCall("POST", `/login`, null, {
       username: username,
       password: password,
     }).then(function (response) {
@@ -36,7 +36,7 @@ export default {
     });
   },
   async refreshToken(token) {
-    return apiCall("POST", `/api/refresh`, null, {
+    return apiCall("POST", `/refresh`, null, {
       refresh_token: token,
     }).then(function (response) {
       axios.defaults.headers.common.Authorization = `Bearer: ${response.data.access_token}`;
@@ -44,170 +44,110 @@ export default {
     });
   },
   async getRoles() {
-    return apiCall("GET", `/api/roles`, {}, null);
+    return apiCall("GET", `/members/roles`, {}, null);
   },
   async getEvent(uuid) {
-    return apiCall("GET", `/api/events/${uuid}`, {}, null);
+    return apiCall("GET", `/events/${uuid}`, {}, null);
   },
-  async editEvent(adminUuid, event) {
-    return apiCall(
-      "PUT",
-      `/api/admins/${adminUuid}/events/${event.uuid}`,
-      {},
-      event
-    );
+  async editEvent(event) {
+    return apiCall("PUT", `/events/${event.uuid}`, {}, event);
   },
-  async createEvent(adminUuid, event) {
-    return apiCall("POST", `/api/admins/${adminUuid}/events`, {}, event);
+  async createEvent(event) {
+    return apiCall("POST", `/events`, {}, event);
   },
-  async deleteEvent(adminUuid, eventUuid) {
-    return apiCall(
-      "DELETE",
-      `/api/admins/${adminUuid}/events/${eventUuid}`,
-      {},
-      null
-    );
+  async deleteEvent(eventUuid) {
+    return apiCall("DELETE", `/events/${eventUuid}`, {}, null);
   },
-  async presenceEvent(adminUuid, eventUuid, memberUuid, presence) {
+  async presenceEvent(eventUuid, memberUuid, presence) {
     return apiCall(
       "POST",
-      `/api/admins/${adminUuid}/events/${eventUuid}/members/${memberUuid}`,
+      `/events/${eventUuid}/members/${memberUuid}`,
       {},
       { presence: presence }
     );
   },
-  async participateEvent(memberUuid, eventUuid, participation, token) {
+  async participateEvent(eventUuid, participation, token) {
     let authorizationHeader = {};
     if (token != null) {
       authorizationHeader = { Authorization: `Bearer: ${token}` };
     }
     return apiCall(
       "POST",
-      `/api/events/${eventUuid}/members/${memberUuid}`,
+      `/members/events/${eventUuid}`,
       authorizationHeader,
       { answer: participation }
     );
   },
-  async getMemberAsMember(uuid) {
-    return apiCall("GET", `/api/members/${uuid}`, {}, null);
+  async getMember(uuid) {
+    return apiCall("GET", `/members/${uuid}`, {}, null);
   },
-  async getMemberAsAdmin(adminUuid, memberUuid) {
-    return apiCall(
-      "GET",
-      `/api/admins/${adminUuid}/members/${memberUuid}`,
-      {},
-      null
-    );
+  async getMembers() {
+    return apiCall("GET", `/members`, {}, null);
   },
-  async getMembersAsAdmin(uuid) {
-    return apiCall("GET", `/api/admins/${uuid}/members`, {}, null);
+  async editMember(member) {
+    return apiCall("PUT", `/members/${member.uuid}`, {}, member);
   },
-  async editMemberAsAdmin(adminUuid, member) {
-    return apiCall(
-      "PUT",
-      `/api/admins/${adminUuid}/members/${member.uuid}`,
-      {},
-      member
-    );
+  async createMember(member) {
+    return apiCall("POST", `/members`, {}, member);
   },
-  async editMemberAsMember(member) {
-    return apiCall("PUT", `/api/members/${member.uuid}`, {}, member);
+  async deleteMember(memberUuid) {
+    return apiCall("DELETE", `/members/${memberUuid}`, {}, null);
   },
-  async createMemberAsAdmin(adminUuid, member) {
-    return apiCall("POST", `/api/admins/${adminUuid}/members`, {}, member);
-  },
-  async deleteMember(adminUuid, memberUuid) {
-    return apiCall(
-      "DELETE",
-      `/api/admins/${adminUuid}/members/${memberUuid}`,
-      {},
-      null
-    );
-  },
-  async getEventsAsGuest(options) {
-    let endpoint = "/api/events";
+  async getEvents(options) {
+    let endpoint = "/events";
     if (options) {
       endpoint = `${endpoint}?page=${options.page}&limit=${options.limit}`;
     }
     return apiCall("GET", endpoint, {}, null);
   },
-  async getEventsAsMember(uuid, options) {
-    let endpoint = `/api/members/${uuid}/events`;
-    if (options) {
-      endpoint = `${endpoint}?page=${options.page}&limit=${options.limit}`;
-    }
-    return apiCall("GET", endpoint, {}, null);
-  },
-  async getEventsAsAdmin(uuid, options) {
-    let endpoint = `/api/admins/${uuid}/events`;
-    if (options) {
-      endpoint = `${endpoint}?page=${options.page}&limit=${options.limit}`;
-    }
-    return apiCall("GET", endpoint, {}, null);
-  },
-  async getEventParticipationAsAdmin(adminUuid, eventUuid) {
-    return apiCall(
-      "GET",
-      `/api/admins/${adminUuid}/events/${eventUuid}/members`,
-      {},
-      null
-    );
+  async getEventParticipation(eventUuid) {
+    return apiCall("GET", `/events/${eventUuid}/members`, {}, null);
   },
   async getInitialize() {
-    return apiCall("GET", "/api/initialize", null, null);
+    return apiCall("GET", "/initialize", null, null);
   },
   async initialize(payload) {
-    return apiCall("POST", "/api/initialize", null, payload);
+    return apiCall("POST", "/initialize", null, payload);
   },
-  async resendEmailAsAdmin(adminUuid, userUuid) {
-    return apiCall(
-      "GET",
-      `/api/admins/${adminUuid}/members/${userUuid}/registration`,
-      {},
-      null
-    );
+  async resendEmail(userUuid) {
+    return apiCall("GET", `/members/${userUuid}/registration`, {}, null);
   },
   async resetPassword(username, password, token) {
     return apiCall(
       "POST",
-      `/api/reset_credentials`,
+      `/reset_credentials`,
       { Authorization: `Bearer: ${token}` },
       { username: username, password: password }
     );
   },
   async forgotPassword(email) {
-    return apiCall("POST", `/api/forgot_password`, {}, { email: email });
+    return apiCall("POST", `/forgot_password`, {}, { email: email });
   },
-  async changePassword(userUuid, password) {
-    return apiCall(
-      "POST",
-      `/api/members/${userUuid}/change_password`,
-      {},
-      { password: password }
-    );
+  async changePassword(password) {
+    return apiCall("POST", `/change_password`, {}, { password: password });
   },
   async version() {
-    return apiCall("GET", `/api/version`, {}, {});
+    return apiCall("GET", `/version`, {}, {});
   },
   async getCastellsTypeList() {
-    return apiCall("GET", `/api/v1/castells/types`, {}, {});
+    return apiCall("GET", `/castells/types`, {}, {});
   },
   async getCastellTypePositions(type) {
-    return apiCall("GET", `/api/v1/castells/types/${type}`, {}, {});
+    return apiCall("GET", `/castells/types/${type}`, {}, {});
   },
   async getCastellModels() {
-    return apiCall("GET", `/api/v1/castells/models`, {}, {});
+    return apiCall("GET", `/castells/models`, {}, {});
   },
   async getCastellModel(uuid) {
-    return apiCall("GET", `/api/v1/castells/models/${uuid}`, {}, {});
+    return apiCall("GET", `/castells/models/${uuid}`, {}, {});
   },
   async createCastellModel(model) {
-    return apiCall("POST", `/api/v1/castells/models`, {}, model);
+    return apiCall("POST", `/castells/models`, {}, model);
   },
   async updateCastellModel(model) {
-    return apiCall("PUT", `/api/v1/castells/models/${model.uuid}`, {}, model);
+    return apiCall("PUT", `/castells/models/${model.uuid}`, {}, model);
   },
   async deleteCastellModel(uuid) {
-    return apiCall("DELETE", `/api/v1/castells/models/${uuid}`, {}, {});
+    return apiCall("DELETE", `/castells/models/${uuid}`, {}, {});
   },
 };

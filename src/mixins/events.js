@@ -3,7 +3,6 @@ import api from "../api/castellers";
 export const eventMixin = {
   methods: {
     deleteEvent: function (event) {
-      const self = this;
       const options = { year: "numeric", month: "2-digit", day: "2-digit" };
       const date = new Date(event.startDate * 1000);
       const startDate = Intl.DateTimeFormat("fr-FR", options).format(date);
@@ -21,7 +20,7 @@ export const eventMixin = {
           type: "is-danger",
           onConfirm: () => {
             api
-              .deleteEvent(self.uuid, event.uuid)
+              .deleteEvent(event.uuid)
               .then(function () {
                 resolve();
               })
