@@ -105,6 +105,7 @@
     "deselectGroupLabel": "Press enter to deselect the group"
   },
   "events": {
+    "event": "Event",
     "title": "Upcoming events",
     "create": "Schedule a new event",
     "update": "Change information about an event",
@@ -155,7 +156,7 @@
     "create": "Create a new castell",
     "nameDescription": "Name of the castell (ex: 4d6 de la Diada 2022)",
     "type": "Type of castell",
-    "model_name": "Model name",
+    "modelName": "Model name",
     "createModelButton": "Create",
     "updateModelButton": "Save",
     "deleteModelButton": "Delete",
@@ -168,6 +169,13 @@
     "copyTitle": "Duplicate a castell",
     "originalName": "Original name",
     "newName": "New name",
-    "copy": "Copy"
+    "copy": "Copy",
+    "attach": "Add to event",
+    "detach": "Remove from event",
+    "notAttached": "Not added to any event",
+    "selectEvent": "Select an event",
+    "attachButton": "Add",
+    "detachButton": "Remove",
+    "associatedWith": "Linked to event"
   }
 }

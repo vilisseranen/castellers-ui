@@ -54,6 +54,12 @@ const actions = {
   async deleteCastellModel(context, uuid) {
     return api.deleteCastellModel(uuid);
   },
+  async attachCastellModel(context, { modelUuid, eventUuid }) {
+    return api.attachCastellModel(modelUuid, eventUuid);
+  },
+  async detachCastellModel(context, { modelUuid, eventUuid }) {
+    return api.detachCastellModel(modelUuid, eventUuid);
+  },
 };
 
 // mutations

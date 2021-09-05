@@ -150,4 +150,20 @@ export default {
   async deleteCastellModel(uuid) {
     return apiCall("DELETE", `/castells/models/${uuid}`, {}, {});
   },
+  async attachCastellModel(modelUuid, eventUuid) {
+    return apiCall(
+      "POST",
+      `/castells/models/${modelUuid}/events/${eventUuid}`,
+      {},
+      {}
+    );
+  },
+  async detachCastellModel(modelUuid, eventUuid) {
+    return apiCall(
+      "DELETE",
+      `/castells/models/${modelUuid}/events/${eventUuid}`,
+      {},
+      {}
+    );
+  },
 };

@@ -15,7 +15,7 @@
       <b-table-column
         key="name"
         field="name"
-        :label="$t('castells.model_name')"
+        :label="$t('castells.modelName')"
         v-slot="props"
         sortable
         searchable
@@ -29,6 +29,16 @@
         searchable
         v-slot="props"
         >{{ props.row.type }}
+      </b-table-column>
+      <b-table-column
+        key="event"
+        field="event.name"
+        :label="$t('events.event')"
+        searchable
+        sortable
+        v-slot="props"
+      >
+        {{ formattedEvent(props.row.event) }}
       </b-table-column>
       <b-table-column
         key="actions"
@@ -90,6 +100,8 @@ import { mapActions, mapState } from "vuex";
 import { castellMixin } from "../mixins/castells.js";
 import CastellCopyModal from "../components/CastellCopyModal.vue";
 
+import helper from "../api/dateTimeHelper";
+
 export default {
   mixins: [castellMixin],
   components: { CastellCopyModal },
@@ -139,6 +151,16 @@ export default {
       this.copyProps.originalName = castell.name;
       this.copyProps.originalUuid = castell.uuid;
       this.copyProps.newName = this.$t("castells.copyOf") + " " + castell.name;
+    },
+    formattedEvent(event) {
+      if (event && event.name && event.start) {
+        return [
+          event.name,
+          this.$t("events.onThe").toLowerCase(),
+          helper.extractDate(event.start),
+        ].join(" ");
+      }
+      return "";
     },
   },
 };

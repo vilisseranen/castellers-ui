@@ -105,6 +105,7 @@
     "deselectGroupLabel": "Appuyer sur entrer pour déselectionner le groupe"
   },
   "events": {
+    "event": "Évènement",
     "title": "Liste des pratiques à venir",
     "create": "Planifier un nouvel évènement",
     "update": "Modifier les informations sur un évènement",
@@ -155,7 +156,7 @@
     "create": "Créer un nouveau castell",
     "nameDescription": "Le nom du castell (ex: 4d6 de la Diada 2022)",
     "type": "Type de castell",
-    "model_name": "Nom du modèle",
+    "modelName": "Nom du modèle",
     "createModelButton": "Créer",
     "updateModelButton": "Sauvegarder",
     "deleteModelButton": "Supprimer",
@@ -168,6 +169,13 @@
     "copyTitle": "Copier un castell",
     "originalName": "Nom du castell original",
     "newName": "Nom du nouveau castell",
-    "copy": "Copier"
+    "copy": "Copier",
+    "attach": "Associer à un évènement",
+    "detach": "Dissocier d'un évènement",
+    "notAttached": "Associé avec aucun évènement",
+    "selectEvent": "Choisir un évènement",
+    "attachButton": "Associer",
+    "detachButton": "Dissocier",
+    "associatedWith": "Associé à l'évènement"
   }
 }
