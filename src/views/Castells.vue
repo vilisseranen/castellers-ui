@@ -38,7 +38,17 @@
         sortable
         v-slot="props"
       >
-        {{ formattedEvent(props.row.event) }}
+        {{ props.row.event.name }}
+      </b-table-column>
+      <b-table-column
+        key="date"
+        field="event.start"
+        :label="$t('events.date')"
+        searchable
+        sortable
+        v-slot="props"
+      >
+        {{ formattedDate(props.row.event) }}
       </b-table-column>
       <b-table-column
         key="actions"
@@ -152,13 +162,9 @@ export default {
       this.copyProps.originalUuid = castell.uuid;
       this.copyProps.newName = this.$t("castells.copyOf") + " " + castell.name;
     },
-    formattedEvent(event) {
-      if (event && event.name && event.start) {
-        return [
-          event.name,
-          this.$t("events.onThe").toLowerCase(),
-          helper.extractDate(event.start),
-        ].join(" ");
+    formattedDate(event) {
+      if (event && event.start) {
+        return helper.extractDate(event.start);
       }
       return "";
     },

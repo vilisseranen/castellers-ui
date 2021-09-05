@@ -144,7 +144,8 @@
     "socialType": "Social",
     "social": "social",
     "today": "Aujourd'hui",
-    "noEventToDisplay": "Pas d'évènement à afficher."
+    "noEventToDisplay": "Pas d'évènement à afficher.",
+    "date": "Date"
   },
   "summary": {
     "title": "Participation pour les évènements à venir",

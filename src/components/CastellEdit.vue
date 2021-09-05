@@ -187,6 +187,7 @@ export default {
       getPositions: "castells/getCastellTypePositions",
       editModel: "castells/editCastellModel",
       getModel: "castells/getCastellModel",
+      getParticipation: "events/getEventParticipation",
     }),
     editCastellModel() {
       const self = this;
@@ -226,9 +227,17 @@ export default {
             self.getPositions(response.data.type).then(function (response) {
               c.positions = response.data.positions;
               self.currentCastell = c;
+              if (self.currentCastell.event && self.currentCastell.event.uuid) {
+                self
+                  .getParticipation(self.currentCastell.event.uuid)
+                  .then(function (response) {
+                    self.$set(self.currentCastell, "castellers", response.data);
+                  });
+              }
             });
           })
           .catch((err) => console.log(err));
+        console.log(self.currentCastell);
       }
     },
     copyCastellModelModal() {

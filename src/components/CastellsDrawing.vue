@@ -373,9 +373,31 @@ export default {
             cell.data("uuid", self.positionsMembers[i].member_uuid);
           }
         }
-        // Change color if self
+        // Change color of border if self
         if (rect.data("uuid") === self.uuid) {
-          rect.attr({ stroke: "purple", "stroke-width": 4 });
+          rect.attr({ stroke: "purple", "stroke-width": 6 });
+        }
+        // Change color of fill according to presence
+        if (self.castell.castellers) {
+          for (let i = 0; i < self.castell.castellers.length; i++) {
+            if (self.castell.castellers[i].uuid === rect.data("uuid")) {
+              if (
+                // casteller is considered present
+                self.castell.castellers[i].presence === "yes" ||
+                (self.castell.castellers[i].presence === "" &&
+                  self.castell.castellers[i].participation === "yes")
+              ) {
+                rect.attr("fill", "green");
+              } else if (
+                // casteller is considered absent
+                self.castell.castellers[i].presence === "no" ||
+                (self.castell.castellers[i].presence === "" &&
+                  self.castell.castellers[i].participation === "no")
+              ) {
+                rect.attr("fill", "red");
+              }
+            }
+          }
         }
       });
 

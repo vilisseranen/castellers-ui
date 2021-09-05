@@ -144,7 +144,8 @@
     "presentRegistered": "Present / Registered",
     "filterMembers": "Filter members",
     "today": "Today",
-    "noEventToDisplay": "No more event to display."
+    "noEventToDisplay": "No more event to display.",
+    "date": "Date"
   },
   "summary": {
     "title": "Participants for upcoming events",
