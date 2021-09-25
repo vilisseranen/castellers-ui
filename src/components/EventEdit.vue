@@ -460,9 +460,14 @@ export default {
         return this.dateToCalendar(this.currentEvent.startDate);
       },
       set: function (newDate) {
+        const originalStartdate = this.currentEvent.startDate;
         this.currentEvent.startDate = this.dateFromCalendar(newDate);
         if (this.currentEvent.startDate > this.currentEvent.endDate) {
-          this.endDateForCalendar = newDate;
+          this.endDateForCalendar = this.dateToCalendar(
+            this.dateFromCalendar(newDate) +
+              this.currentEvent.endDate -
+              originalStartdate
+          );
         }
         if (
           this.recurring &&
@@ -477,7 +482,14 @@ export default {
         return this.dateToCalendar(this.currentEvent.endDate);
       },
       set: function (newDate) {
+        const originalEnddate = this.currentEvent.endDate;
         this.currentEvent.endDate = this.dateFromCalendar(newDate);
+        if (this.currentEvent.endDate < this.currentEvent.startDate) {
+          this.startDateForCalendar = this.dateToCalendar(
+            this.dateFromCalendar(newDate) -
+              (originalEnddate - this.currentEvent.startDate)
+          );
+        }
       },
     },
     untilDateForCalendar: {
