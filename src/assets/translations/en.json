@@ -7,7 +7,7 @@
   },
   "general": {
     "requiredFields": "The fields marked with an asterisk are mandatory.",
-    "forCastellers": "Created for the Castellers by ",
+    "forCastellers": "Created for the montreal castellers by ",
     "yes": "Yes",
     "no": "No",
     "name": "Name",
@@ -145,7 +145,8 @@
     "filterMembers": "Filter members",
     "today": "Today",
     "noEventToDisplay": "No more event to display.",
-    "date": "Date"
+    "date": "Date",
+    "show": "Event details"
   },
   "summary": {
     "title": "Participants for upcoming events",

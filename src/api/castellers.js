@@ -46,8 +46,12 @@ export default {
   async getRoles() {
     return apiCall("GET", `/members/roles`, {}, null);
   },
-  async getEvent(uuid) {
-    return apiCall("GET", `/events/${uuid}`, {}, null);
+  async getEvent(uuid, token) {
+    let authorizationHeader = {};
+    if (token != null) {
+      authorizationHeader = { Authorization: `Bearer: ${token}` };
+    }
+    return apiCall("GET", `/events/${uuid}`, authorizationHeader, null);
   },
   async editEvent(event) {
     return apiCall("PUT", `/events/${event.uuid}`, {}, event);

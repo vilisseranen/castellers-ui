@@ -52,8 +52,8 @@ const actions = {
       context.commit("setEvent", { event: events[i], index: i });
     }
   },
-  async getEvent(context, uuid) {
-    return api.getEvent(uuid).then(function (response) {
+  async getEvent(context, { uuid, token }) {
+    return api.getEvent(uuid, token).then(function (response) {
       for (let i = 0; i < context.state.events.length; i++) {
         if (context.state.events[i].uuid === response.data.uuid) {
           context.commit("setEvent", { event: response.data, index: i });

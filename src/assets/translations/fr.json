@@ -7,7 +7,7 @@
   },
   "general": {
     "requiredFields": "Les champs marqués d'un astérisque rouge sont obligatoires.",
-    "forCastellers": "Créé pour les Castellers par ",
+    "forCastellers": "Créé pour les castellers de montréal par ",
     "yes": "Oui",
     "no": "Non",
     "name": "Nom",
@@ -119,10 +119,11 @@
     "1d": "Quotidien",
     "createButton": "Créer l'évènement",
     "updateButton": "Modifier l'évènement",
-    "participationOK": "C'est noté !",
+    "participationOK": "Ta réponse a été enregistrée!",
     "participationNOK": "Un problème est survenu.",
     "participationYes": "Je viens",
     "participationNo": "Je ne viens pas",
+    "participationNoAnswer": "Je n'ai pas donné de réponse",
     "onThe": "Le",
     "from": "de",
     "to": "à",
@@ -145,7 +146,8 @@
     "social": "social",
     "today": "Aujourd'hui",
     "noEventToDisplay": "Pas d'évènement à afficher.",
-    "date": "Date"
+    "date": "Date",
+    "show": "Détails de l'évènement"
   },
   "summary": {
     "title": "Participation pour les évènements à venir",

@@ -1,11 +1,18 @@
 <template>
   <div>
     <div class="box">
-      <p class="title is-3" v-if="actionLabel === 'update'">
-        {{ $t("events.update") }}
-      </p>
-      <p class="title is-3" v-if="actionLabel === 'create'">
-        {{ $t("events.create") }}
+      <p class="title is-3">
+        {{ $t("events." + actionLabel) }}
+        <span
+          class="tag"
+          v-if="uuid"
+          v-bind:class="{
+            'is-success': event.participation == 'yes',
+            'is-danger': event.participation == 'no',
+            'is-warning': event.participation == '',
+          }"
+          >{{ $t("events." + participationLabel) }}
+        </span>
       </p>
       <div class="columns is-multiline">
         <div class="field column is-3" v-if="!readonly">
@@ -438,6 +445,7 @@ export default {
   mounted() {
     this.loadEvent(this.$route.params.uuid);
     this.listParticipants(this.$route.params.uuid);
+    this.checkAction();
   },
   computed: {
     ...mapGetters(["uuid", "type"]),
@@ -445,7 +453,19 @@ export default {
       return ["participant_name", "roles", "participation"];
     },
     actionLabel: function () {
+      if (this.readonly) {
+        return "show";
+      }
       return this.event.uuid ? "update" : "create";
+    },
+    participationLabel: function () {
+      let label = "participationNoAnswer";
+      if (this.event.participation === "yes") {
+        label = "participationYes";
+      } else if (this.event.participation === "no") {
+        label = "participationNo";
+      }
+      return label;
     },
     currentEvent: {
       get: function () {
@@ -507,7 +527,30 @@ export default {
       getEvent: "events/getEvent",
       editEvent: "events/editEvent",
       presenceEvent: "events/presenceEvent",
+      participateEvent: "events/participateEvent",
     }),
+    checkAction() {
+      // This page handles actions to participate to an event
+      // if a is in query params, we also expect p and t
+      if ("a" in this.$route.query && this.$route.query.a === "participate") {
+        this.participate(
+          this.$route.params.uuid,
+          this.$route.query.p,
+          this.$route.query.t
+        );
+      }
+    },
+    participate(eventUuid, participation, token) {
+      const self = this;
+      this.participateEvent({ eventUuid, participation, token })
+        .then(function () {
+          self.loadEvent(eventUuid, token);
+        })
+        .then(self.$notifyOK(self.$t("events.participationOK")))
+        .catch(function () {
+          self.$notifyNOK(self.$t("events.participationNOK"));
+        });
+    },
     // map
     setLocation(event) {
       if (!this.readonly) {
@@ -551,10 +594,10 @@ export default {
           console.log(error);
         });
     },
-    loadEvent(uuid) {
+    loadEvent(uuid, token) {
       if (uuid) {
         const self = this;
-        this.getEvent(uuid)
+        this.getEvent({ uuid: uuid, token: token })
           .then(function (response) {
             // If locationName is not set, use default coordinates
             if (response.data.locationName === "") {

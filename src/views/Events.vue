@@ -68,7 +68,6 @@ export default {
   },
   mounted() {
     this.$store.dispatch("events/getEvents");
-    this.checkAction();
   },
   methods: {
     ...mapMutations(["setAction"]),
@@ -76,22 +75,11 @@ export default {
       participateEvent: "events/participateEvent",
       changePagination: "events/changePagination",
     }),
-    checkAction() {
-      // This page handles actions to participate to an event
-      if ("a" in this.$route.query && this.$route.query.a === "participate") {
-        this.participate(
-          this.$route.query.e,
-          this.$route.query.p,
-          this.$route.query.t,
-          this.$route.query.u
-        );
-      }
-    },
     participate(eventUuid, participation, token, userUuid) {
       const self = this;
       this.participateEvent({ eventUuid, participation, token, userUuid })
         .then(function () {
-          self.$store.dispatch("events/getEvent", eventUuid);
+          self.$store.dispatch("events/getEvent", { uuid: eventUuid });
           self.$notifyOK(self.$t("events.participationOK"));
         })
         .catch(function () {
