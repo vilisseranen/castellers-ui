@@ -59,7 +59,10 @@ const actions = {
   async login(context, { username, password }) {
     return api.login(username, password).then(async function (response) {
       context.commit("authenticate", response.data);
-      response = await context.dispatch("members/getMember");
+      response = await context.dispatch(
+        "members/getMember",
+        context.getters.uuid
+      );
       context.commit("setLanguage", response.data.language);
     });
   },

@@ -53,6 +53,18 @@
           </b-dropdown-item>
         </b-dropdown>
       </div>
+      <div class="field column is-12">
+        <label class="label">{{ $t("castells.associatedWith") }}</label>
+        <div class="control is-expanded">
+          <input
+            disabled
+            class="input"
+            type="text"
+            :placeholder="$t('castells.nameDescription')"
+            :value="formattedEvent(currentCastell.event)"
+          />
+        </div>
+      </div>
       <div class="column is-12 buttons">
         <button
           type="submit"
@@ -67,6 +79,22 @@
         </button>
         <button
           type="submit"
+          class="button is-warning"
+          v-if="this.currentCastell.uuid"
+          @click.prevent="copyCastellModelModal()"
+        >
+          {{ $t("castells.copy") }}
+        </button>
+        <button
+          type="submit"
+          class="button is-success"
+          v-if="this.currentCastell.uuid"
+          @click.prevent="attachCastellModelModal()"
+        >
+          {{ $t("castells.attach") }}
+        </button>
+        <button
+          type="submit"
           class="button is-danger"
           v-if="this.currentCastell.uuid"
           @click.prevent="deleteCastellModel(currentCastell)"
@@ -75,6 +103,37 @@
         </button>
       </div>
     </div>
+    <b-modal
+      v-model="isCopyModalActive"
+      has-modal-card
+      trap-focus
+      aria-role="dialog"
+      aria-label="Copy castell"
+      aria-modal
+    >
+      <template #default="props">
+        <castell-copy-modal
+          v-bind="copyProps"
+          @close="props.close"
+        ></castell-copy-modal>
+      </template>
+    </b-modal>
+    <b-modal
+      v-model="isAttachModalActive"
+      has-modal-card
+      trap-focus
+      aria-role="dialog"
+      aria-label="Attach castell to event"
+      aria-modal
+    >
+      <template #default="props">
+        <castell-attach-modal
+          v-bind="attachProps"
+          @close="props.close"
+          v-on:loadModel="loadModel"
+        ></castell-attach-modal>
+      </template>
+    </b-modal>
 
     <castell :castell="this.currentCastell" ref="drawing"></castell>
   </div>
@@ -84,11 +143,16 @@
 import Castell from "./CastellsDrawing.vue";
 import { mapActions, mapState } from "vuex";
 import { castellMixin } from "../mixins/castells.js";
+import CastellCopyModal from "../components/CastellCopyModal.vue";
+import CastellAttachModal from "../components/CastellAttachModal.vue";
+import helper from "../api/dateTimeHelper";
 
 export default {
   mixins: [castellMixin],
   components: {
     Castell,
+    CastellCopyModal,
+    CastellAttachModal,
   },
   props: {
     readonly: Boolean,
@@ -98,6 +162,10 @@ export default {
       castell: {},
       currentCastell: {},
       currentType: "",
+      isCopyModalActive: false,
+      isAttachModalActive: false,
+      copyProps: {},
+      attachProps: {},
     };
   },
   computed: {
@@ -119,6 +187,7 @@ export default {
       getPositions: "castells/getCastellTypePositions",
       editModel: "castells/editCastellModel",
       getModel: "castells/getCastellModel",
+      getParticipation: "events/getEventParticipation",
     }),
     editCastellModel() {
       const self = this;
@@ -158,10 +227,43 @@ export default {
             self.getPositions(response.data.type).then(function (response) {
               c.positions = response.data.positions;
               self.currentCastell = c;
+              if (self.currentCastell.event && self.currentCastell.event.uuid) {
+                self
+                  .getParticipation(self.currentCastell.event.uuid)
+                  .then(function (response) {
+                    self.$set(self.currentCastell, "castellers", response.data);
+                  });
+              }
             });
           })
           .catch((err) => console.log(err));
       }
+    },
+    copyCastellModelModal() {
+      this.isCopyModalActive = true;
+      this.copyProps.originalName = this.currentCastell.name;
+      this.copyProps.originalUuid = this.currentCastell.uuid;
+      this.copyProps.newName =
+        this.$t("castells.copyOf") + " " + this.currentCastell.name;
+    },
+    attachCastellModelModal() {
+      this.isAttachModalActive = true;
+      this.attachProps.name = this.currentCastell.name;
+      this.attachProps.uuid = this.currentCastell.uuid;
+      this.attachProps.eventFormattedName = this.formattedEvent(
+        this.currentCastell.event
+      );
+      this.attachProps.eventUuid = this.currentCastell.event.uuid;
+    },
+    formattedEvent(event) {
+      if (event && event.name && event.start) {
+        return [
+          event.name,
+          this.$t("events.onThe").toLowerCase(),
+          helper.extractDate(event.start),
+        ].join(" ");
+      }
+      return this.$t("castells.notAttached");
     },
   },
   // List of positions in a castell of this type

@@ -7,7 +7,7 @@
   },
   "general": {
     "requiredFields": "The fields marked with an asterisk are mandatory.",
-    "forCastellers": "Created for the Castellers by ",
+    "forCastellers": "Created for the montreal castellers by ",
     "yes": "Yes",
     "no": "No",
     "name": "Name",
@@ -15,8 +15,7 @@
     "notifyFailure": "There was a problem. Please check the informations entered.",
     "actions": "Actions",
     "id": "ID",
-    "deleteOK": "Yes",
-    "deleteCancel": "Cancel"
+    "cancel": "Cancel"
   },
   "routes": {
     "members": "Members",
@@ -44,7 +43,6 @@
     "passwordDifferent": "Passwords are different",
     "activateButton": "Create",
     "activatePasssword": "Choose your username and password",
-    "linkExpiredTitle": "Expired link",
     "linkExpired": "The link is expired. You can request a new link by clicking this button: ",
     "linkExpiredButton": "Resend a link",
     "passwordResetIssue": "There has been a problem  with this operation, please contact an administrator.",
@@ -57,6 +55,7 @@
     "update": "Edit the profile of an existing member",
     "memberType": "Regular",
     "adminType": "Administrator",
+    "guestType": "Guest",
     "type": "Type",
     "languageFR": "French",
     "languageEN": "English",
@@ -105,6 +104,7 @@
     "deselectGroupLabel": "Press enter to deselect the group"
   },
   "events": {
+    "event": "Event",
     "title": "Upcoming events",
     "create": "Schedule a new event",
     "update": "Change information about an event",
@@ -122,6 +122,7 @@
     "participationNOK": "There was a problem.",
     "participationYes": "I will be there",
     "participationNo": "I won't be there",
+    "participationNoAnswer": "I haven't given any answer yet",
     "onThe": "On the",
     "from": "from",
     "to": "to",
@@ -143,7 +144,9 @@
     "presentRegistered": "Present / Registered",
     "filterMembers": "Filter members",
     "today": "Today",
-    "noEventToDisplay": "No more event to display."
+    "noEventToDisplay": "No more event to display.",
+    "date": "Date",
+    "show": "Event details"
   },
   "summary": {
     "title": "Participants for upcoming events",
@@ -155,7 +158,7 @@
     "create": "Create a new castell",
     "nameDescription": "Name of the castell (ex: 4d6 de la Diada 2022)",
     "type": "Type of castell",
-    "model_name": "Model name",
+    "modelName": "Model name",
     "createModelButton": "Create",
     "updateModelButton": "Save",
     "deleteModelButton": "Delete",
@@ -163,6 +166,17 @@
     "selected_member": "Member to place",
     "selected_members": "Members with a position",
     "remove_all": "remove everybody",
-    "confirmDelete": "Do you really want to delete this castell: "
+    "confirmDelete": "Do you really want to delete this castell: ",
+    "copyOf": "Copy of",
+    "copyTitle": "Duplicate a castell",
+    "originalName": "Original name",
+    "newName": "New name",
+    "copy": "Copy",
+    "attach": "Add to event",
+    "notAttached": "Not added to any event",
+    "selectEvent": "Select an event",
+    "attachButton": "Add",
+    "detachButton": "Remove",
+    "associatedWith": "Linked to event"
   }
 }

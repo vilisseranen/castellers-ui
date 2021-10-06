@@ -1,12 +1,22 @@
 <template>
   <div>
     <div class="box">
-      <p class="title is-3" v-if="actionLabel === 'update'">
-        {{ $t("events.update") }}
+      <p class="title is-3">
+        <span v-t="'events.' + actionLabel"></span
+        ><span
+          class="tag"
+          style="margin-left: 10px"
+          v-if="uuid"
+          v-bind:class="{
+            'is-success': event.participation == 'yes',
+            'is-danger': event.participation == 'no',
+            'is-warning': event.participation == '',
+          }"
+          v-t="'events.' + participationLabel"
+        >
+        </span>
       </p>
-      <p class="title is-3" v-if="actionLabel === 'create'">
-        {{ $t("events.create") }}
-      </p>
+
       <div class="columns is-multiline">
         <div class="field column is-3" v-if="!readonly">
           <fieldset disabled>
@@ -226,6 +236,27 @@
         :can-cancel="false"
       ></b-loading>
     </div>
+    <div class="box" v-if="models.length > 0">
+      <p class="title is-3">Castells prévus</p>
+      <router-link
+        v-if="castell.uuid"
+        :to="{ name: 'castellEdit', params: { uuid: castell.uuid } }"
+        tag="button"
+        class="button is-warning"
+        >Edit Castell</router-link
+      >
+      <b-tabs v-on:input="showCastellModel">
+        <template v-for="(model, index) in models">
+          <b-tab-item
+            :value="String(index)"
+            v-bind:key="model.uuid"
+            :label="model.name + ' (' + model.type + ')'"
+          >
+          </b-tab-item>
+        </template>
+      </b-tabs>
+      <castell :castell="castell" ref="drawing" readonly></castell>
+    </div>
     <div class="box" v-if="this.type === 'admin' && this.event.uuid">
       <label class="label"
         >{{
@@ -336,10 +367,11 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions, mapState } from "vuex";
 import { Datetime } from "vue-datetime";
 import PrettyRadio from "pretty-checkbox-vue/radio";
 import { LMap, LTileLayer, LMarker } from "vue2-leaflet";
+import Castell from "./CastellsDrawing.vue";
 
 import "vue-datetime/dist/vue-datetime.css";
 import "pretty-checkbox/dist/pretty-checkbox.min.css";
@@ -363,6 +395,7 @@ export default {
     readonly: Boolean,
   },
   components: {
+    Castell,
     Datetime,
     PrettyRadio,
     LMap,
@@ -423,6 +456,8 @@ export default {
           display: true,
         },
       },
+      castell: {},
+      castells: [],
       participation: [],
     };
   },
@@ -434,18 +469,76 @@ export default {
         this.currentEvent.recurring.until = 0;
       }
     },
+    models: async function () {
+      const self = this;
+      for (let i = 0; i < this.models.length; i++) {
+        const promises = [];
+        promises.push(
+          self.getModel(self.models[i].uuid).then(function (response) {
+            return response.data;
+          })
+        );
+        promises.push(
+          self.getPositions(self.models[i].type).then(function (response) {
+            return response.data;
+          })
+        );
+        if (this.type === "admin") {
+          promises.push(
+            self
+              .getParticipation(self.$route.params.uuid)
+              .then(function (response) {
+                return response.data;
+              })
+          );
+        }
+        await Promise.all(promises).then(function (responses) {
+          const currentCastell = JSON.parse(JSON.stringify(responses[0]));
+          currentCastell.positions = [...responses[1].positions];
+          if (responses.length > 2) {
+            currentCastell.castellers = responses[2];
+          }
+          self.castells.push(currentCastell);
+        });
+        if (i === 0) {
+          self.castell = self.castells[0];
+        }
+      }
+    },
   },
   mounted() {
     this.loadEvent(this.$route.params.uuid);
     this.listParticipants(this.$route.params.uuid);
+    this.checkAction();
+    if (this.uuid) {
+      this.$store.dispatch(
+        "castells/getCastellModels",
+        this.$route.params.uuid
+      );
+    }
   },
   computed: {
     ...mapGetters(["uuid", "type"]),
+    ...mapState({
+      models: (state) => state.castells.models.sort(),
+    }),
     columns: function () {
       return ["participant_name", "roles", "participation"];
     },
     actionLabel: function () {
+      if (this.readonly) {
+        return "show";
+      }
       return this.event.uuid ? "update" : "create";
+    },
+    participationLabel: function () {
+      let label = "participationNoAnswer";
+      if (this.event.participation === "yes") {
+        label = "participationYes";
+      } else if (this.event.participation === "no") {
+        label = "participationNo";
+      }
+      return label;
     },
     currentEvent: {
       get: function () {
@@ -460,9 +553,14 @@ export default {
         return this.dateToCalendar(this.currentEvent.startDate);
       },
       set: function (newDate) {
+        const originalStartdate = this.currentEvent.startDate;
         this.currentEvent.startDate = this.dateFromCalendar(newDate);
         if (this.currentEvent.startDate > this.currentEvent.endDate) {
-          this.endDateForCalendar = newDate;
+          this.endDateForCalendar = this.dateToCalendar(
+            this.dateFromCalendar(newDate) +
+              this.currentEvent.endDate -
+              originalStartdate
+          );
         }
         if (
           this.recurring &&
@@ -477,7 +575,14 @@ export default {
         return this.dateToCalendar(this.currentEvent.endDate);
       },
       set: function (newDate) {
+        const originalEnddate = this.currentEvent.endDate;
         this.currentEvent.endDate = this.dateFromCalendar(newDate);
+        if (this.currentEvent.endDate < this.currentEvent.startDate) {
+          this.startDateForCalendar = this.dateToCalendar(
+            this.dateFromCalendar(newDate) -
+              (originalEnddate - this.currentEvent.startDate)
+          );
+        }
       },
     },
     untilDateForCalendar: {
@@ -495,7 +600,33 @@ export default {
       getEvent: "events/getEvent",
       editEvent: "events/editEvent",
       presenceEvent: "events/presenceEvent",
+      participateEvent: "events/participateEvent",
+      getPositions: "castells/getCastellTypePositions",
+      getParticipation: "events/getEventParticipation",
+      getModel: "castells/getCastellModel",
     }),
+    checkAction() {
+      // This page handles actions to participate to an event
+      // if a is in query params, we also expect p and t
+      if ("a" in this.$route.query && this.$route.query.a === "participate") {
+        this.participate(
+          this.$route.params.uuid,
+          this.$route.query.p,
+          this.$route.query.t
+        );
+      }
+    },
+    participate(eventUuid, participation, token) {
+      const self = this;
+      this.participateEvent({ eventUuid, participation, token })
+        .then(function () {
+          self.loadEvent(eventUuid, token);
+        })
+        .then(self.$notifyOK(self.$t("events.participationOK")))
+        .catch(function () {
+          self.$notifyNOK(self.$t("events.participationNOK"));
+        });
+    },
     // map
     setLocation(event) {
       if (!this.readonly) {
@@ -539,10 +670,10 @@ export default {
           console.log(error);
         });
     },
-    loadEvent(uuid) {
+    loadEvent(uuid, token) {
       if (uuid) {
         const self = this;
-        this.getEvent(uuid)
+        this.getEvent({ uuid: uuid, token: token })
           .then(function (response) {
             // If locationName is not set, use default coordinates
             if (response.data.locationName === "") {
@@ -584,6 +715,9 @@ export default {
       ) {
         self.listParticipants(eventUuid);
       });
+    },
+    showCastellModel(value) {
+      this.castell = this.castells[parseInt(value)];
     },
   },
 };

@@ -16,22 +16,18 @@ const actions = {
   async editMember(context, member) {
     if (member.uuid !== undefined) {
       if (context.rootGetters.type === "member") {
-        return api.editMemberAsMember(member);
+        return api.editMember(member);
       }
-      return api.editMemberAsAdmin(context.rootGetters.uuid, member);
+      return api.editMember(member);
     }
-    return api.createMemberAsAdmin(context.rootGetters.uuid, member);
+    return api.createMember(member);
   },
   async getMember(context, memberUuid) {
-    if (context.rootGetters.type === "admin" && memberUuid != null) {
-      return api.getMemberAsAdmin(context.rootGetters.uuid, memberUuid);
-    } else {
-      return api.getMemberAsMember(context.rootGetters.uuid);
-    }
+    return api.getMember(memberUuid);
   },
   async getMembers(context) {
     return api
-      .getMembersAsAdmin(context.rootGetters.uuid)
+      .getMembers()
       .then(function (response) {
         const members = response.data;
         for (let i = 0; i < members.length; i++) {
@@ -43,7 +39,7 @@ const actions = {
       .catch(function (response) {});
   },
   async resendEmail(context, userUuid) {
-    return api.resendEmailAsAdmin(context.rootGetters.uuid, userUuid);
+    return api.resendEmail(userUuid);
   },
   async resetPassword(context, { username, password, token }) {
     return api.resetPassword(username, password, token);
@@ -52,7 +48,7 @@ const actions = {
     return api.forgotPassword(email);
   },
   async changePassword(context, password) {
-    return api.changePassword(context.rootGetters.uuid, password);
+    return api.changePassword(password);
   },
 };
 

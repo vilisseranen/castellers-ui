@@ -15,7 +15,7 @@
       <b-table-column
         key="name"
         field="name"
-        :label="$t('castells.model_name')"
+        :label="$t('castells.modelName')"
         v-slot="props"
         sortable
         searchable
@@ -29,6 +29,26 @@
         searchable
         v-slot="props"
         >{{ props.row.type }}
+      </b-table-column>
+      <b-table-column
+        key="event"
+        field="event.name"
+        :label="$t('events.event')"
+        searchable
+        sortable
+        v-slot="props"
+      >
+        {{ props.row.event.name }}
+      </b-table-column>
+      <b-table-column
+        key="date"
+        field="event.start"
+        :label="$t('events.date')"
+        searchable
+        sortable
+        v-slot="props"
+      >
+        {{ formattedDate(props.row.event) }}
       </b-table-column>
       <b-table-column
         key="actions"
@@ -45,6 +65,14 @@
         </a>
         <a href="#">
           <span
+            class="icon has-text-info"
+            v-on:click="copyCastellModelModal(props.row)"
+          >
+            <i class="fa fa-copy"></i>
+          </span>
+        </a>
+        <a href="#">
+          <span
             class="icon has-text-danger"
             v-on:click="deleteCastellModel(props.row)"
           >
@@ -53,6 +81,21 @@
         </a>
       </b-table-column>
     </b-table>
+    <b-modal
+      v-model="isCopyModalActive"
+      has-modal-card
+      trap-focus
+      aria-role="dialog"
+      aria-label="Copy castell"
+      aria-modal
+    >
+      <template #default="props">
+        <castell-copy-modal
+          v-bind="copyProps"
+          @close="props.close"
+        ></castell-copy-modal>
+      </template>
+    </b-modal>
   </div>
 </template>
 
@@ -65,10 +108,23 @@
 <script>
 import { mapActions, mapState } from "vuex";
 import { castellMixin } from "../mixins/castells.js";
+import CastellCopyModal from "../components/CastellCopyModal.vue";
+
+import helper from "../api/dateTimeHelper";
 
 export default {
   mixins: [castellMixin],
-  components: {},
+  components: { CastellCopyModal },
+  data() {
+    return {
+      isCopyModalActive: false,
+      copyProps: {
+        originalName: "",
+        originalUuid: "",
+        newName: "",
+      },
+    };
+  },
   computed: {
     ...mapState({
       castellTypes: (state) => state.castells.types,
@@ -81,7 +137,6 @@ export default {
   },
   methods: {
     ...mapActions({
-      deleteModel: "castells/deleteCastellModel",
       getTypes: "castells/getCastellsTypeList",
       getModels: "castells/getCastellModels",
     }),
@@ -100,6 +155,18 @@ export default {
         .catch(function (error) {
           console.log(error);
         });
+    },
+    copyCastellModelModal(castell) {
+      this.isCopyModalActive = true;
+      this.copyProps.originalName = castell.name;
+      this.copyProps.originalUuid = castell.uuid;
+      this.copyProps.newName = this.$t("castells.copyOf") + " " + castell.name;
+    },
+    formattedDate(event) {
+      if (event && event.start) {
+        return helper.extractDate(event.start);
+      }
+      return "";
     },
   },
 };

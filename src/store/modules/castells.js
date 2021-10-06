@@ -5,8 +5,8 @@ const state = () => ({
   types: [],
   models: [],
   currentCastell: {
-    positions: {}
-  }
+    positions: {},
+  },
 });
 
 // getters
@@ -26,8 +26,8 @@ const actions = {
       return response;
     });
   },
-  async getCastellModels(context) {
-    return api.getCastellModels().then(function (response) {
+  async getCastellModels(context, event) {
+    return api.getCastellModels(event).then(function (response) {
       context.commit("setCastellsModels", response.data);
       return response;
     });
@@ -53,7 +53,13 @@ const actions = {
   },
   async deleteCastellModel(context, uuid) {
     return api.deleteCastellModel(uuid);
-  }
+  },
+  async attachCastellModel(context, { modelUuid, eventUuid }) {
+    return api.attachCastellModel(modelUuid, eventUuid);
+  },
+  async detachCastellModel(context, { modelUuid, eventUuid }) {
+    return api.detachCastellModel(modelUuid, eventUuid);
+  },
 };
 
 // mutations
@@ -69,7 +75,7 @@ const mutations = {
   },
   setCastellModel(state, model) {
     state.currentCastell = model;
-  }
+  },
 };
 
 export default {

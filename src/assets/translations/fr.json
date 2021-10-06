@@ -7,7 +7,7 @@
   },
   "general": {
     "requiredFields": "Les champs marqués d'un astérisque rouge sont obligatoires.",
-    "forCastellers": "Créé pour les Castellers par ",
+    "forCastellers": "Créé pour les castellers de montréal par ",
     "yes": "Oui",
     "no": "Non",
     "name": "Nom",
@@ -15,8 +15,7 @@
     "notifyFailure": "Il y a eu une erreur, veuillez vérifier les informations fournies.",
     "actions": "Actions",
     "id": "ID",
-    "deleteOK": "Oui",
-    "deleteCancel": "Annuler"
+    "cancel": "Annuler"
   },
   "routes": {
     "members": "Les membres",
@@ -44,7 +43,6 @@
     "passwordResetError": "Il y a eu un problème.",
     "passwordChanged": "Votre mot de passe a été modifié",
     "passwordResetSent": "Un courriel avec un lien pour réinitialiser le mot de passe va être envoyé si cette adresse se trouve dans nos systèmes.",
-    "linkExpiredTitle": "Lien expiré",
     "linkExpired": "Le lien a expiré. Vous pouvez recevoir un nouveau lien en cliquant sur ce bouton: ",
     "linkExpiredButton": "Renvoyer un lien",
     "passwordResetIssue": "Il y a eu un problème avec cette opération, merci de contacter un administrateur.",
@@ -57,6 +55,7 @@
     "update": "Modifier le profil d'un membre existant",
     "memberType": "Membre régulier",
     "adminType": "Administrateur",
+    "guestType": "Invité",
     "type": "Type",
     "languageFR": "Français",
     "languageEN": "Anglais",
@@ -105,6 +104,7 @@
     "deselectGroupLabel": "Appuyer sur entrer pour déselectionner le groupe"
   },
   "events": {
+    "event": "Évènement",
     "title": "Liste des pratiques à venir",
     "create": "Planifier un nouvel évènement",
     "update": "Modifier les informations sur un évènement",
@@ -118,10 +118,11 @@
     "1d": "Quotidien",
     "createButton": "Créer l'évènement",
     "updateButton": "Modifier l'évènement",
-    "participationOK": "C'est noté !",
+    "participationOK": "Ta réponse a été enregistrée!",
     "participationNOK": "Un problème est survenu.",
     "participationYes": "Je viens",
     "participationNo": "Je ne viens pas",
+    "participationNoAnswer": "Je n'ai pas donné de réponse",
     "onThe": "Le",
     "from": "de",
     "to": "à",
@@ -143,7 +144,9 @@
     "socialType": "Social",
     "social": "social",
     "today": "Aujourd'hui",
-    "noEventToDisplay": "Pas d'évènement à afficher."
+    "noEventToDisplay": "Pas d'évènement à afficher.",
+    "date": "Date",
+    "show": "Détails de l'évènement"
   },
   "summary": {
     "title": "Participation pour les évènements à venir",
@@ -155,7 +158,7 @@
     "create": "Créer un nouveau castell",
     "nameDescription": "Le nom du castell (ex: 4d6 de la Diada 2022)",
     "type": "Type de castell",
-    "model_name": "Nom du modèle",
+    "modelName": "Nom du modèle",
     "createModelButton": "Créer",
     "updateModelButton": "Sauvegarder",
     "deleteModelButton": "Supprimer",
@@ -163,6 +166,17 @@
     "selected_member": "Membre à placer",
     "selected_members": "Membres dans le castell",
     "remove_all": "retirer tout le monde",
-    "confirmDelete": "Veux-tu vraiment supprimer ce castell: "
+    "confirmDelete": "Veux-tu vraiment supprimer ce castell: ",
+    "copyOf": "Copie de",
+    "copyTitle": "Copier un castell",
+    "originalName": "Nom du castell original",
+    "newName": "Nom du nouveau castell",
+    "copy": "Copier",
+    "attach": "Associer à un évènement",
+    "notAttached": "Associé avec aucun évènement",
+    "selectEvent": "Choisir un évènement",
+    "attachButton": "Associer",
+    "detachButton": "Dissocier",
+    "associatedWith": "Associé à l'évènement"
   }
 }

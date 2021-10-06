@@ -53,15 +53,18 @@ const store = new Vuex.Store({
 
 axios.defaults.headers.common.Authorization = `Bearer: ${store.getters.accessToken}`;
 
+let refreshingToken = false;
+
 axios.interceptors.response.use(
   (response) => {
     return response;
   },
   async function (error) {
     const originalRequest = error.config;
-    if (error.response.status === 403 && !originalRequest._retry) {
-      originalRequest._retry = true;
+    if (error.response.status === 403 && !refreshingToken) {
+      refreshingToken = true;
       const response = await store.dispatch("refreshToken");
+      refreshingToken = false;
       // Replace Bearer token from original request
       originalRequest.headers.Authorization = `Bearer: ${response.data.access_token}`;
       return axios(originalRequest);

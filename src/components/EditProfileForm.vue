@@ -21,6 +21,15 @@
           <PrettyRadio
             class="p-default p-curve"
             name="type"
+            color="warning-o"
+            value="guest"
+            v-model="current_user.type"
+            :disabled="type === 'admin' ? false : true"
+            >{{ $t("members.guestType") }}</PrettyRadio
+          >
+          <PrettyRadio
+            class="p-default p-curve"
+            name="type"
             color="primary-o"
             value="member"
             v-model="current_user.type"

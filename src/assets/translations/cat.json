@@ -8,8 +8,8 @@
   "general": {
     "requiredFields": "Els camps amb l'asterisc són obligatoris.",
     "forCastellers": "Creat per als Castellers per ",
-    "deleteOK": "Sí",
-    "deleteCancel": "Cancel·lar"
+    "yes": "Sí",
+    "cancel": "Cancel·lar"
   },
   "routes": {
     "members": "Membres",

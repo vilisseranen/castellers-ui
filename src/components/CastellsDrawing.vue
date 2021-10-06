@@ -1,17 +1,7 @@
 <template>
   <div>
     <div class="columns is-multiline">
-      <div class="column is-3">
-        <h1 class="subtitle is-3">{{ $t("castells.available_members") }}</h1>
-        <p
-          v-for="member in availableMembers"
-          v-bind:key="member.uuid"
-          v-on:click="selectMember(member.uuid)"
-        >
-          {{ member.firstName }} {{ member.lastName }}
-        </p>
-      </div>
-      <div class="column is-3">
+      <div class="column is-3" v-if="!readonly">
         <div class="columns is-multiline">
           <div class="column is-12">
             <h1 class="subtitle is-3">
@@ -31,11 +21,30 @@
               v-for="member in selectedMembers"
               v-bind:key="member.uuid"
               v-on:click="selectMember(member.uuid)"
+              v-bind:class="{
+                'has-text-success': isPresent(member.uuid),
+                'has-text-danger': !isPresent(member.uuid),
+              }"
             >
               {{ member.firstName }} {{ member.lastName }}
             </p>
           </div>
         </div>
+      </div>
+      <div class="column is-3" v-if="!readonly">
+        <h1 class="subtitle is-3">{{ $t("castells.available_members") }}</h1>
+        <p
+          v-for="member in availableMembers"
+          v-bind:key="member.uuid"
+          v-on:click="selectMember(member.uuid)"
+          v-bind:class="{
+            'has-text-success': isPresent(member.uuid),
+            'has-text-danger': !isPresent(member.uuid),
+          }"
+        >
+          <!-- if member in cas -->
+          {{ member.firstName }} {{ member.lastName }}
+        </p>
       </div>
       <div class="column is-6" id="canvas_tronc" style="padding: 0"></div>
     </div>
@@ -44,11 +53,12 @@
 
 <script>
 import Raphael from "raphael";
-import { mapActions, mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   props: {
     castell: Object,
+    readonly: Boolean,
   },
   computed: {
     selectedMemberName: function () {
@@ -131,6 +141,7 @@ export default {
     ...mapState({
       members: (state) => state.members.members,
     }),
+    ...mapGetters(["uuid"]),
   },
   data() {
     return {
@@ -143,11 +154,9 @@ export default {
   mounted() {
     this.$store.dispatch("members/getMembers");
     this.paperTronc = new Raphael(document.getElementById("canvas_tronc"));
+    this.drawTronc();
   },
   methods: {
-    ...mapActions({
-      getMembers: "members/getMembers",
-    }),
     selectMember(uuid) {
       this.selectedMemberUuid = uuid;
     },
@@ -328,6 +337,7 @@ export default {
         rect = self.paperTronc
           .rect(x, y, dx, dy, 5)
           .attr({ fill: defaultColor, opacity: 0.3 });
+
         posGroup.push(rect);
         posGroup.data("column", position.column);
         posGroup.data("cordon", position.cordon);
@@ -368,68 +378,105 @@ export default {
               .transform((vertical ? "R270s" : "R0s") + (l * 0.01 + 0.5))
               .toBack();
             cell.push(name);
+            cell.data("uuid", self.positionsMembers[i].member_uuid);
           }
+        }
+        // Change color of border if self
+        if (rect.data("uuid") === self.uuid) {
+          rect.attr({ stroke: "purple", "stroke-width": 6 });
+        }
+        // Change color of fill according to presence
+        if (self.isPresent(rect.data("uuid")) === true) {
+          rect.attr("fill", "green");
+        } else if (self.isPresent(rect.data("uuid")) === false) {
+          rect.attr("fill", "red");
         }
       });
 
       // Attach events to elements
-      allCells.forEach(function (cell) {
-        const setPosition = function () {
-          if (!self.dragging) {
-            self.setMemberPosition(
-              rect.data("column"),
-              rect.data("cordon"),
-              rect.data("part"),
-              rect.data("name"),
-              self.selectedMemberUuid
-            );
-            self.selectedMemberUuid = "";
-          }
-        };
-        const rect = cell[0];
-        cell
-          .mouseup(setPosition)
-          .touchend(setPosition)
-          .drag(
-            function (dx, dy, mx, my) {
-              if (Math.abs(dx) + Math.abs(dy) > 10) {
-                self.dragging = true;
-                this.data("origin", [mx - dx, my - dy]);
-                this.data("destination", [mx, my]);
-              }
-            },
-            function () {
-              this.data("origin", [0, 0]).data("destination", [0, 0]);
-            },
-            function () {
-              const originEl = self.getElementBycoordinates(
-                self.paperTronc,
-                this.data("origin")
+      if (!this.readonly) {
+        allCells.forEach(function (cell) {
+          const setPosition = function () {
+            if (!self.dragging) {
+              self.setMemberPosition(
+                rect.data("column"),
+                rect.data("cordon"),
+                rect.data("part"),
+                rect.data("name"),
+                self.selectedMemberUuid
               );
-              const destinationEl = self.getElementBycoordinates(
-                self.paperTronc,
-                this.data("destination")
-              );
-              if (
-                originEl &&
-                destinationEl &&
-                originEl.id !== destinationEl.id
-              ) {
-                self.swapMemberPositions(
-                  originEl.data("column"),
-                  originEl.data("cordon"),
-                  originEl.data("part"),
-                  originEl.data("name"),
-                  destinationEl.data("column"),
-                  destinationEl.data("cordon"),
-                  destinationEl.data("part"),
-                  destinationEl.data("name")
-                );
-                self.dragging = false;
-              }
+              self.selectedMemberUuid = "";
             }
-          );
-      });
+          };
+          const rect = cell[0];
+          cell
+            .mouseup(setPosition)
+            .touchend(setPosition)
+            .drag(
+              function (dx, dy, mx, my) {
+                if (Math.abs(dx) + Math.abs(dy) > 10) {
+                  self.dragging = true;
+                  this.data("origin", [mx - dx, my - dy]);
+                  this.data("destination", [mx, my]);
+                }
+              },
+              function () {
+                this.data("origin", [0, 0]).data("destination", [0, 0]);
+              },
+              function () {
+                const originEl = self.getElementBycoordinates(
+                  self.paperTronc,
+                  this.data("origin")
+                );
+                const destinationEl = self.getElementBycoordinates(
+                  self.paperTronc,
+                  this.data("destination")
+                );
+                if (
+                  originEl &&
+                  destinationEl &&
+                  originEl.id !== destinationEl.id
+                ) {
+                  self.swapMemberPositions(
+                    originEl.data("column"),
+                    originEl.data("cordon"),
+                    originEl.data("part"),
+                    originEl.data("name"),
+                    destinationEl.data("column"),
+                    destinationEl.data("cordon"),
+                    destinationEl.data("part"),
+                    destinationEl.data("name")
+                  );
+                  self.dragging = false;
+                }
+              }
+            );
+        });
+      }
+    },
+    isPresent(uuid) {
+      if (this.castell && this.castell.castellers) {
+        for (let i = 0; i < this.castell.castellers.length; i++) {
+          if (this.castell.castellers[i].uuid === uuid) {
+            if (
+              // casteller is considered present
+              this.castell.castellers[i].presence === "yes" ||
+              (this.castell.castellers[i].presence === "" &&
+                this.castell.castellers[i].participation === "yes")
+            ) {
+              return true;
+            } else if (
+              // casteller is considered absent
+              this.castell.castellers[i].presence === "no" ||
+              (this.castell.castellers[i].presence === "" &&
+                this.castell.castellers[i].participation === "no")
+            ) {
+              return false;
+            }
+          }
+        }
+      }
+      return undefined;
     },
   },
   watch: {
