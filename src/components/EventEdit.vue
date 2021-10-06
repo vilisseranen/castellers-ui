@@ -507,7 +507,12 @@ export default {
     this.loadEvent(this.$route.params.uuid);
     this.listParticipants(this.$route.params.uuid);
     this.checkAction();
-    this.$store.dispatch("castells/getCastellModels", this.$route.params.uuid);
+    if (this.uuid) {
+      this.$store.dispatch(
+        "castells/getCastellModels",
+        this.$route.params.uuid
+      );
+    }
   },
   computed: {
     ...mapGetters(["uuid", "type"]),
