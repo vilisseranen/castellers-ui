@@ -233,6 +233,27 @@
         :can-cancel="false"
       ></b-loading>
     </div>
+    <div class="box" v-if="models.length > 0">
+      <p class="title is-3">Castells prévus</p>
+      <router-link
+        v-if="castell.uuid"
+        :to="{ name: 'castellEdit', params: { uuid: castell.uuid } }"
+        tag="button"
+        class="button is-warning"
+        >Edit Castell</router-link
+      >
+      <b-tabs v-on:input="showCastellModel">
+        <template v-for="(model, index) in models">
+          <b-tab-item
+            :value="String(index)"
+            v-bind:key="model.uuid"
+            :label="model.name + ' (' + model.type + ')'"
+          >
+          </b-tab-item>
+        </template>
+      </b-tabs>
+      <castell :castell="castell" ref="drawing" readonly></castell>
+    </div>
     <div class="box" v-if="this.type === 'admin' && this.event.uuid">
       <label class="label"
         >{{
@@ -343,10 +364,11 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters, mapActions, mapState } from "vuex";
 import { Datetime } from "vue-datetime";
 import PrettyRadio from "pretty-checkbox-vue/radio";
 import { LMap, LTileLayer, LMarker } from "vue2-leaflet";
+import Castell from "./CastellsDrawing.vue";
 
 import "vue-datetime/dist/vue-datetime.css";
 import "pretty-checkbox/dist/pretty-checkbox.min.css";
@@ -370,6 +392,7 @@ export default {
     readonly: Boolean,
   },
   components: {
+    Castell,
     Datetime,
     PrettyRadio,
     LMap,
@@ -430,6 +453,8 @@ export default {
           display: true,
         },
       },
+      castell: {},
+      castells: [],
       participation: [],
     };
   },
@@ -441,14 +466,54 @@ export default {
         this.currentEvent.recurring.until = 0;
       }
     },
+    models: async function () {
+      const self = this;
+      for (let i = 0; i < this.models.length; i++) {
+        const promises = [];
+        promises.push(
+          self.getModel(self.models[i].uuid).then(function (response) {
+            return response.data;
+          })
+        );
+        promises.push(
+          self.getPositions(self.models[i].type).then(function (response) {
+            return response.data;
+          })
+        );
+        if (this.type === "admin") {
+          promises.push(
+            self
+              .getParticipation(self.$route.params.uuid)
+              .then(function (response) {
+                return response.data;
+              })
+          );
+        }
+        await Promise.all(promises).then(function (responses) {
+          const currentCastell = JSON.parse(JSON.stringify(responses[0]));
+          currentCastell.positions = [...responses[1].positions];
+          if (responses.length > 2) {
+            currentCastell.castellers = responses[2];
+          }
+          self.castells.push(currentCastell);
+        });
+        if (i === 0) {
+          self.castell = self.castells[0];
+        }
+      }
+    },
   },
   mounted() {
     this.loadEvent(this.$route.params.uuid);
     this.listParticipants(this.$route.params.uuid);
     this.checkAction();
+    this.$store.dispatch("castells/getCastellModels", this.$route.params.uuid);
   },
   computed: {
     ...mapGetters(["uuid", "type"]),
+    ...mapState({
+      models: (state) => state.castells.models.sort(),
+    }),
     columns: function () {
       return ["participant_name", "roles", "participation"];
     },
@@ -528,6 +593,9 @@ export default {
       editEvent: "events/editEvent",
       presenceEvent: "events/presenceEvent",
       participateEvent: "events/participateEvent",
+      getPositions: "castells/getCastellTypePositions",
+      getParticipation: "events/getEventParticipation",
+      getModel: "castells/getCastellModel",
     }),
     checkAction() {
       // This page handles actions to participate to an event
@@ -639,6 +707,9 @@ export default {
       ) {
         self.listParticipants(eventUuid);
       });
+    },
+    showCastellModel(value) {
+      this.castell = this.castells[parseInt(value)];
     },
   },
 };

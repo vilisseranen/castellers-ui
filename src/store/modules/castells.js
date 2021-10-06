@@ -26,8 +26,8 @@ const actions = {
       return response;
     });
   },
-  async getCastellModels(context) {
-    return api.getCastellModels().then(function (response) {
+  async getCastellModels(context, event) {
+    return api.getCastellModels(event).then(function (response) {
       context.commit("setCastellsModels", response.data);
       return response;
     });

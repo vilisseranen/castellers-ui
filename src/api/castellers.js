@@ -139,8 +139,12 @@ export default {
   async getCastellTypePositions(type) {
     return apiCall("GET", `/castells/types/${type}`, {}, {});
   },
-  async getCastellModels() {
-    return apiCall("GET", `/castells/models`, {}, {});
+  async getCastellModels(event) {
+    let url = `/castells/models`;
+    if (event) {
+      url += `?event=${event}`;
+    }
+    return apiCall("GET", url, {}, {});
   },
   async getCastellModel(uuid) {
     return apiCall("GET", `/castells/models/${uuid}`, {}, {});

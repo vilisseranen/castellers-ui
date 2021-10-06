@@ -1,22 +1,7 @@
 <template>
   <div>
     <div class="columns is-multiline">
-      <div class="column is-3">
-        <h1 class="subtitle is-3">{{ $t("castells.available_members") }}</h1>
-        <p
-          v-for="member in availableMembers"
-          v-bind:key="member.uuid"
-          v-on:click="selectMember(member.uuid)"
-          v-bind:class="{
-            'has-text-success': isPresent(member.uuid),
-            'has-text-danger': !isPresent(member.uuid),
-          }"
-        >
-          <!-- if member in cas -->
-          {{ member.firstName }} {{ member.lastName }}
-        </p>
-      </div>
-      <div class="column is-3">
+      <div class="column is-3" v-if="!readonly">
         <div class="columns is-multiline">
           <div class="column is-12">
             <h1 class="subtitle is-3">
@@ -46,6 +31,21 @@
           </div>
         </div>
       </div>
+      <div class="column is-3" v-if="!readonly">
+        <h1 class="subtitle is-3">{{ $t("castells.available_members") }}</h1>
+        <p
+          v-for="member in availableMembers"
+          v-bind:key="member.uuid"
+          v-on:click="selectMember(member.uuid)"
+          v-bind:class="{
+            'has-text-success': isPresent(member.uuid),
+            'has-text-danger': !isPresent(member.uuid),
+          }"
+        >
+          <!-- if member in cas -->
+          {{ member.firstName }} {{ member.lastName }}
+        </p>
+      </div>
       <div class="column is-6" id="canvas_tronc" style="padding: 0"></div>
     </div>
   </div>
@@ -53,11 +53,12 @@
 
 <script>
 import Raphael from "raphael";
-import { mapActions, mapGetters, mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
 
 export default {
   props: {
     castell: Object,
+    readonly: Boolean,
   },
   computed: {
     selectedMemberName: function () {
@@ -153,11 +154,9 @@ export default {
   mounted() {
     this.$store.dispatch("members/getMembers");
     this.paperTronc = new Raphael(document.getElementById("canvas_tronc"));
+    this.drawTronc();
   },
   methods: {
-    ...mapActions({
-      getMembers: "members/getMembers",
-    }),
     selectMember(uuid) {
       this.selectedMemberUuid = uuid;
     },
@@ -395,63 +394,65 @@ export default {
       });
 
       // Attach events to elements
-      allCells.forEach(function (cell) {
-        const setPosition = function () {
-          if (!self.dragging) {
-            self.setMemberPosition(
-              rect.data("column"),
-              rect.data("cordon"),
-              rect.data("part"),
-              rect.data("name"),
-              self.selectedMemberUuid
-            );
-            self.selectedMemberUuid = "";
-          }
-        };
-        const rect = cell[0];
-        cell
-          .mouseup(setPosition)
-          .touchend(setPosition)
-          .drag(
-            function (dx, dy, mx, my) {
-              if (Math.abs(dx) + Math.abs(dy) > 10) {
-                self.dragging = true;
-                this.data("origin", [mx - dx, my - dy]);
-                this.data("destination", [mx, my]);
-              }
-            },
-            function () {
-              this.data("origin", [0, 0]).data("destination", [0, 0]);
-            },
-            function () {
-              const originEl = self.getElementBycoordinates(
-                self.paperTronc,
-                this.data("origin")
+      if (!this.readonly) {
+        allCells.forEach(function (cell) {
+          const setPosition = function () {
+            if (!self.dragging) {
+              self.setMemberPosition(
+                rect.data("column"),
+                rect.data("cordon"),
+                rect.data("part"),
+                rect.data("name"),
+                self.selectedMemberUuid
               );
-              const destinationEl = self.getElementBycoordinates(
-                self.paperTronc,
-                this.data("destination")
-              );
-              if (
-                originEl &&
-                destinationEl &&
-                originEl.id !== destinationEl.id
-              ) {
-                self.swapMemberPositions(
-                  originEl.data("column"),
-                  originEl.data("cordon"),
-                  originEl.data("part"),
-                  originEl.data("name"),
-                  destinationEl.data("column"),
-                  destinationEl.data("cordon"),
-                  destinationEl.data("part"),
-                  destinationEl.data("name")
-                );
-                self.dragging = false;
-              }
+              self.selectedMemberUuid = "";
             }
-          );
-      });
+          };
+          const rect = cell[0];
+          cell
+            .mouseup(setPosition)
+            .touchend(setPosition)
+            .drag(
+              function (dx, dy, mx, my) {
+                if (Math.abs(dx) + Math.abs(dy) > 10) {
+                  self.dragging = true;
+                  this.data("origin", [mx - dx, my - dy]);
+                  this.data("destination", [mx, my]);
+                }
+              },
+              function () {
+                this.data("origin", [0, 0]).data("destination", [0, 0]);
+              },
+              function () {
+                const originEl = self.getElementBycoordinates(
+                  self.paperTronc,
+                  this.data("origin")
+                );
+                const destinationEl = self.getElementBycoordinates(
+                  self.paperTronc,
+                  this.data("destination")
+                );
+                if (
+                  originEl &&
+                  destinationEl &&
+                  originEl.id !== destinationEl.id
+                ) {
+                  self.swapMemberPositions(
+                    originEl.data("column"),
+                    originEl.data("cordon"),
+                    originEl.data("part"),
+                    originEl.data("name"),
+                    destinationEl.data("column"),
+                    destinationEl.data("cordon"),
+                    destinationEl.data("part"),
+                    destinationEl.data("name")
+                  );
+                  self.dragging = false;
+                }
+              }
+            );
+        });
+      }
     },
     isPresent(uuid) {
       if (this.castell && this.castell.castellers) {
