@@ -2,18 +2,21 @@
   <div>
     <div class="box">
       <p class="title is-3">
-        {{ $t("events." + actionLabel) }}
-        <span
+        <span v-t="'events.' + actionLabel"></span
+        ><span
           class="tag"
+          style="margin-left: 10px"
           v-if="uuid"
           v-bind:class="{
             'is-success': event.participation == 'yes',
             'is-danger': event.participation == 'no',
             'is-warning': event.participation == '',
           }"
-          >{{ $t("events." + participationLabel) }}
+          v-t="'events.' + participationLabel"
+        >
         </span>
       </p>
+
       <div class="columns is-multiline">
         <div class="field column is-3" v-if="!readonly">
           <fieldset disabled>
