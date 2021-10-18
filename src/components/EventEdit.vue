@@ -237,15 +237,15 @@
       ></b-loading>
     </div>
     <div class="box" v-if="models.length > 0">
-      <p class="title is-3">Castells prévus</p>
+      <p class="title is-3">{{ $t("castells.castellsScheduled") }}</p>
       <router-link
         v-if="castell.uuid"
         :to="{ name: 'castellEdit', params: { uuid: castell.uuid } }"
         tag="button"
         class="button is-warning"
-        >Edit Castell</router-link
+        >{{ $t("castells.edit") }}</router-link
       >
-      <b-tabs v-on:input="showCastellModel">
+      <b-tabs v-on:input="showCastellModel" :multiline="true">
         <template v-for="(model, index) in models">
           <b-tab-item
             :value="String(index)"
