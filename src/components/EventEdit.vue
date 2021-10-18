@@ -501,7 +501,7 @@ export default {
           self.castells.push(currentCastell);
         });
         if (i === 0) {
-          self.castell = self.castells[0];
+          self.castell = JSON.parse(JSON.stringify(self.castells[0]));
         }
       }
     },
