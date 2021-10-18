@@ -5,12 +5,6 @@
         <div class="columns is-multiline">
           <div class="column is-12">
             <h1 class="subtitle is-3">
-              {{ $t("castells.selected_member") }}
-            </h1>
-            <strong>{{ selectedMemberName }}</strong>
-          </div>
-          <div class="column is-12">
-            <h1 class="subtitle is-3">
               {{ $t("castells.selected_members") }}
               <small v-on:click="resetPositions()">
                 ({{ $t("castells.remove_all") }})
@@ -24,6 +18,8 @@
               v-bind:class="{
                 'has-text-success': isPresent(member.uuid),
                 'has-text-danger': !isPresent(member.uuid),
+                'has-text-weight-bold is-underlined':
+                  member.uuid === selectedMemberUuid,
               }"
             >
               {{ member.firstName }} {{ member.lastName }}
@@ -40,6 +36,8 @@
           v-bind:class="{
             'has-text-success': isPresent(member.uuid),
             'has-text-danger': !isPresent(member.uuid),
+            'has-text-weight-bold is-underlined':
+              member.uuid === selectedMemberUuid,
           }"
         >
           <!-- if member in cas -->
