@@ -11,7 +11,14 @@
         <span>{{ $t("castells.create") }}</span>
       </button>
     </b-field>
-    <b-table :data="castellModels" sort-icon="arrow-up" icon-pack="fa" striped>
+    <b-table
+      :data="castellModels"
+      sort-icon="arrow-up"
+      icon-pack="fa"
+      striped
+      :default-sort="[this.castellSort.field, this.castellSort.order]"
+      @sort="onSort"
+    >
       <b-table-column
         key="name"
         field="name"
@@ -129,6 +136,7 @@ export default {
     ...mapState({
       castellTypes: (state) => state.castells.types,
       castellModels: (state) => state.castells.models,
+      castellSort: (state) => state.castells.sort,
     }),
   },
   mounted() {
@@ -167,6 +175,10 @@ export default {
         return helper.extractDate(event.start);
       }
       return "";
+    },
+    onSort(field, order) {
+      const sort = { field: field, order: order };
+      this.$store.commit("castells/setSort", sort);
     },
   },
 };
