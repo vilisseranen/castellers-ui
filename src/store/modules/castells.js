@@ -7,6 +7,10 @@ const state = () => ({
   currentCastell: {
     positions: {},
   },
+  sort: {
+    field: "",
+    order: "",
+  },
 });
 
 // getters
@@ -75,6 +79,9 @@ const mutations = {
   },
   setCastellModel(state, model) {
     state.currentCastell = model;
+  },
+  setSort(state, sort) {
+    state.sort = sort;
   },
 };
 

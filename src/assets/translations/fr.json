@@ -177,6 +177,8 @@
     "selectEvent": "Choisir un évènement",
     "attachButton": "Associer",
     "detachButton": "Dissocier",
-    "associatedWith": "Associé à l'évènement"
+    "associatedWith": "Associé à l'évènement",
+    "castellsScheduled": "Castells prévus",
+    "edit": "Modifier le castell"
   }
 }

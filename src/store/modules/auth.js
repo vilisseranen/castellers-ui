@@ -75,6 +75,7 @@ const actions = {
       });
   },
   logout(context) {
+    api.logout();
     context.dispatch("reset");
   },
 };

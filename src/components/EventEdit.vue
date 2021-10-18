@@ -6,7 +6,7 @@
         ><span
           class="tag"
           style="margin-left: 10px"
-          v-if="uuid"
+          v-if="uuid || this.$route.query.t"
           v-bind:class="{
             'is-success': event.participation == 'yes',
             'is-danger': event.participation == 'no',
@@ -237,15 +237,15 @@
       ></b-loading>
     </div>
     <div class="box" v-if="models.length > 0">
-      <p class="title is-3">Castells prévus</p>
+      <p class="title is-3">{{ $t("castells.castellsScheduled") }}</p>
       <router-link
         v-if="castell.uuid"
         :to="{ name: 'castellEdit', params: { uuid: castell.uuid } }"
         tag="button"
         class="button is-warning"
-        >Edit Castell</router-link
+        >{{ $t("castells.edit") }}</router-link
       >
-      <b-tabs v-on:input="showCastellModel">
+      <b-tabs v-on:input="showCastellModel" :multiline="true">
         <template v-for="(model, index) in models">
           <b-tab-item
             :value="String(index)"
@@ -507,7 +507,7 @@ export default {
     },
   },
   mounted() {
-    this.loadEvent(this.$route.params.uuid);
+    this.loadEvent(this.$route.params.uuid, this.$route.query.t);
     this.listParticipants(this.$route.params.uuid);
     this.checkAction();
     if (this.uuid) {
@@ -673,7 +673,7 @@ export default {
     loadEvent(uuid, token) {
       if (uuid) {
         const self = this;
-        this.getEvent({ uuid: uuid, token: token })
+        this.getEvent({ uuid, token })
           .then(function (response) {
             // If locationName is not set, use default coordinates
             if (response.data.locationName === "") {
@@ -717,7 +717,7 @@ export default {
       });
     },
     showCastellModel(value) {
-      this.castell = this.castells[parseInt(value)];
+      this.castell = JSON.parse(JSON.stringify(this.castells[parseInt(value)]));
     },
   },
 };
