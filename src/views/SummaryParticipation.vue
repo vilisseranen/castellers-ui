@@ -80,7 +80,6 @@ export default {
         },
       ];
       if (this.events) {
-        let count = 1;
         for (const id in this.events) {
           columns.push({
             field: this.events[id].uuid,
@@ -89,11 +88,6 @@ export default {
             width: 25,
             sortable: true,
           });
-          // TODO: Adapt pagination for this page
-          count++;
-          if (count > 10) {
-            break;
-          }
         }
       }
       return columns;
