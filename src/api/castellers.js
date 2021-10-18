@@ -26,6 +26,9 @@ const apiCall = function (method, url, headers, data) {
 };
 
 export default {
+  async logout() {
+    delete axios.defaults.headers.common.Authorization;
+  },
   async login(username, password) {
     return apiCall("POST", `/login`, null, {
       username: username,

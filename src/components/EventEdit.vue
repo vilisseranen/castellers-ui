@@ -6,7 +6,7 @@
         ><span
           class="tag"
           style="margin-left: 10px"
-          v-if="uuid"
+          v-if="uuid || this.$route.query.t"
           v-bind:class="{
             'is-success': event.participation == 'yes',
             'is-danger': event.participation == 'no',
@@ -507,7 +507,7 @@ export default {
     },
   },
   mounted() {
-    this.loadEvent(this.$route.params.uuid);
+    this.loadEvent(this.$route.params.uuid, this.$route.query.t);
     this.listParticipants(this.$route.params.uuid);
     this.checkAction();
     if (this.uuid) {
@@ -673,7 +673,7 @@ export default {
     loadEvent(uuid, token) {
       if (uuid) {
         const self = this;
-        this.getEvent({ uuid: uuid, token: token })
+        this.getEvent({ uuid, token })
           .then(function (response) {
             // If locationName is not set, use default coordinates
             if (response.data.locationName === "") {
