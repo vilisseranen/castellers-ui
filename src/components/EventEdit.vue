@@ -717,7 +717,7 @@ export default {
       });
     },
     showCastellModel(value) {
-      this.castell = this.castells[parseInt(value)];
+      this.castell = JSON.parse(JSON.stringify(this.castells[parseInt(value)]));
     },
   },
 };
