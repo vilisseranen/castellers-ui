@@ -213,13 +213,13 @@
       <div class="column is-12" v-if="type === 'admin'">
         <div
           class="notification is-success"
-          v-if="current_user.activated === 1"
+          v-if="current_user.status === 'active'"
         >
           <span>{{ $t("members.alreadyLoggedIn") }}</span>
         </div>
         <div
           class="notification is-warning"
-          v-if="current_user.activated === 0"
+          v-if="current_user.status === 'created'"
         >
           <span>{{ $t("members.neverLoggedIn") }}</span>
         </div>
