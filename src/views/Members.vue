@@ -10,6 +10,60 @@
       </button>
     </b-field>
 
+    <b-field>
+      <b-radio-button
+        v-on:input="filterMembers"
+        v-model="membersType"
+        native-value="member,admin"
+        type="is-success is-light is-outlined"
+      >
+        <span>Membres réguliers</span>
+      </b-radio-button>
+      <b-radio-button
+        v-on:input="filterMembers"
+        v-model="membersType"
+        native-value="guest"
+        type="is-warning is-light is-outlined"
+      >
+        <span>Invités</span>
+      </b-radio-button>
+    </b-field>
+
+    <b-field>
+      <b-radio-button
+        v-on:input="filterMembers"
+        v-model="membersStatus"
+        native-value="active"
+        type="is-success is-light is-outlined"
+      >
+        <span>Actifs</span>
+      </b-radio-button>
+      <b-radio-button
+        v-on:input="filterMembers"
+        v-model="membersStatus"
+        native-value="created"
+        type="is-info is-light is-outlined"
+      >
+        <span>Créés</span>
+      </b-radio-button>
+      <b-radio-button
+        v-on:input="filterMembers"
+        v-model="membersStatus"
+        native-value="paused"
+        type="is-warning is-light is-outlined"
+      >
+        <span>Paused</span>
+      </b-radio-button>
+      <b-radio-button
+        v-on:input="filterMembers"
+        v-model="membersStatus"
+        native-value="deleted"
+        type="is-danger is-light is-outlined"
+      >
+        <span>Deleted</span>
+      </b-radio-button>
+    </b-field>
+
     <b-table
       :data="members"
       striped
@@ -100,6 +154,12 @@ import { memberMixin } from "../mixins/members.js";
 
 export default {
   mixins: [memberMixin],
+  data() {
+    return {
+      membersType: "member,admin",
+      membersStatus: "active",
+    };
+  },
   computed: {
     ...mapGetters(["uuid", "type"]),
     ...mapState({
@@ -107,9 +167,18 @@ export default {
     }),
   },
   mounted() {
-    this.$store.dispatch("members/getMembers");
+    this.getMembers({
+      type: this.membersType,
+      status: this.membersStatus,
+    });
   },
   methods: {
+    filterMembers() {
+      this.getMembers({
+        type: this.membersType,
+        status: this.membersStatus,
+      });
+    },
     ...mapActions({
       getMembers: "members/getMembers",
     }),
@@ -120,10 +189,12 @@ export default {
       this.$router.push({ path: `/memberEdit/${memberUuid}` });
     },
     removeUser(member) {
-      const self = this;
       this.deleteUser(member)
         .then(function () {
-          self.$store.dispatch("members/getMembers");
+          this.getMembers({
+            type: this.membersType,
+            status: this.membersStatus,
+          });
         })
         .catch(function (error) {
           console.log(error);

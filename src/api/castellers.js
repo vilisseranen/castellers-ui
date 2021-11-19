@@ -88,8 +88,18 @@ export default {
   async getMember(uuid) {
     return apiCall("GET", `/members/${uuid}`, {}, null);
   },
-  async getMembers() {
-    return apiCall("GET", `/members`, {}, null);
+  async getMembers(options) {
+    let endpoint = "/members";
+    let queryParams = [];
+    if (options && options.type) {
+      queryParams.push(`type=${options.type}`);
+    }
+    if (options && options.status) {
+      queryParams.push(`status=${options.status}`);
+    }
+    queryParams = queryParams.join("&");
+    endpoint = [endpoint, queryParams].join("?");
+    return apiCall("GET", endpoint, {}, null);
   },
   async editMember(member) {
     return apiCall("PUT", `/members/${member.uuid}`, {}, member);

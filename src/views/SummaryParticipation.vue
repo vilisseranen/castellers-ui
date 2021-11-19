@@ -49,7 +49,7 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 
 export default {
   data() {
@@ -60,10 +60,13 @@ export default {
   },
   mounted() {
     this.$store.dispatch("events/getEventsParticipation");
-    this.$store.dispatch("members/getMembers");
+    this.getMembers({});
   },
 
   computed: {
+    ...mapActions({
+      getMembers: "members/getMembers",
+    }),
     ...mapState({
       events: (state) => state.events.events,
       members: (state) => state.members.members,

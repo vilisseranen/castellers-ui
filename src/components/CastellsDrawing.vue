@@ -51,7 +51,7 @@
 
 <script>
 import Raphael from "raphael";
-import { mapGetters, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 
 export default {
   props: {
@@ -150,11 +150,14 @@ export default {
     };
   },
   mounted() {
-    this.$store.dispatch("members/getMembers");
+    this.getMembers({});
     this.paperTronc = new Raphael(document.getElementById("canvas_tronc"));
     this.drawTronc();
   },
   methods: {
+    ...mapActions({
+      getMembers: "members/getMembers",
+    }),
     selectMember(uuid) {
       this.selectedMemberUuid = uuid;
     },
