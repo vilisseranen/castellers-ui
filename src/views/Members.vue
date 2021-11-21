@@ -10,59 +10,11 @@
       </button>
     </b-field>
 
-    <b-field>
-      <b-radio-button
-        v-on:input="filterMembers"
-        v-model="membersType"
-        native-value="member,admin"
-        type="is-success is-light is-outlined"
-      >
-        <span>{{ $t("members.memberTypePlural") }}</span>
-      </b-radio-button>
-      <b-radio-button
-        v-on:input="filterMembers"
-        v-model="membersType"
-        native-value="guest"
-        type="is-warning is-light is-outlined"
-      >
-        <span>{{ $t("members.guestTypePlural") }}</span>
-      </b-radio-button>
-    </b-field>
-
-    <b-field>
-      <b-radio-button
-        v-on:input="filterMembers"
-        v-model="membersStatus"
-        native-value="active"
-        type="is-success is-light is-outlined"
-      >
-        <span>{{ $t("members.activeStatus") }}</span>
-      </b-radio-button>
-      <b-radio-button
-        v-on:input="filterMembers"
-        v-model="membersStatus"
-        native-value="created"
-        type="is-info is-light is-outlined"
-      >
-        <span>{{ $t("members.createdStatus") }}</span>
-      </b-radio-button>
-      <b-radio-button
-        v-on:input="filterMembers"
-        v-model="membersStatus"
-        native-value="paused"
-        type="is-warning is-light is-outlined"
-      >
-        <span>{{ $t("members.pausedStatus") }}</span>
-      </b-radio-button>
-      <b-radio-button
-        v-on:input="filterMembers"
-        v-model="membersStatus"
-        native-value="deleted"
-        type="is-danger is-light is-outlined"
-      >
-        <span>{{ $t("members.deletedStatus") }}</span>
-      </b-radio-button>
-    </b-field>
+    <member-filter
+      :types="this.memberTypes"
+      :statuses="this.memberStatuses"
+      v-on:input="this.filterMembers"
+    ></member-filter>
 
     <b-table
       :data="members"
@@ -151,13 +103,15 @@
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
 import { memberMixin } from "../mixins/members.js";
+import MemberFilter from "../components/MemberFilter.vue";
 
 export default {
+  components: { MemberFilter },
   mixins: [memberMixin],
   data() {
     return {
-      membersType: "member,admin",
-      membersStatus: "active",
+      memberTypes: ["admin,member"],
+      memberStatuses: ["active"],
     };
   },
   computed: {
@@ -168,15 +122,15 @@ export default {
   },
   mounted() {
     this.getMembers({
-      type: this.membersType,
-      status: this.membersStatus,
+      type: this.memberTypes.join(","),
+      status: this.memberStatuses.join(","),
     });
   },
   methods: {
-    filterMembers() {
+    filterMembers(filters) {
       this.getMembers({
-        type: this.membersType,
-        status: this.membersStatus,
+        type: filters.types,
+        status: filters.statuses,
       });
     },
     ...mapActions({
