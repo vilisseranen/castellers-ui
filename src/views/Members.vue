@@ -17,7 +17,7 @@
         native-value="member,admin"
         type="is-success is-light is-outlined"
       >
-        <span>Membres réguliers</span>
+        <span>{{ $t("members.memberTypePlural") }}</span>
       </b-radio-button>
       <b-radio-button
         v-on:input="filterMembers"
@@ -25,7 +25,7 @@
         native-value="guest"
         type="is-warning is-light is-outlined"
       >
-        <span>Invités</span>
+        <span>{{ $t("members.guestTypePlural") }}</span>
       </b-radio-button>
     </b-field>
 
@@ -36,7 +36,7 @@
         native-value="active"
         type="is-success is-light is-outlined"
       >
-        <span>Actifs</span>
+        <span>{{ $t("members.activeStatus") }}</span>
       </b-radio-button>
       <b-radio-button
         v-on:input="filterMembers"
@@ -44,7 +44,7 @@
         native-value="created"
         type="is-info is-light is-outlined"
       >
-        <span>Créés</span>
+        <span>{{ $t("members.createdStatus") }}</span>
       </b-radio-button>
       <b-radio-button
         v-on:input="filterMembers"
@@ -52,7 +52,7 @@
         native-value="paused"
         type="is-warning is-light is-outlined"
       >
-        <span>Paused</span>
+        <span>{{ $t("members.pausedStatus") }}</span>
       </b-radio-button>
       <b-radio-button
         v-on:input="filterMembers"
@@ -60,7 +60,7 @@
         native-value="deleted"
         type="is-danger is-light is-outlined"
       >
-        <span>Deleted</span>
+        <span>{{ $t("members.deletedStatus") }}</span>
       </b-radio-button>
     </b-field>
 
