@@ -705,8 +705,11 @@ export default {
       ).length;
     },
     countPresent() {
-      return this.participation.filter((member) => member.presence === "yes")
-        .length;
+      return this.participation.filter(
+        (member) =>
+          member.presence === "yes" ||
+          (member.participation === "yes" && member.presence !== "no")
+      ).length;
     },
     presence(eventUuid, memberUuid, presence) {
       const self = this;
