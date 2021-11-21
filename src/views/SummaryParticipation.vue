@@ -3,6 +3,13 @@
     <p class="title is-5">
       {{ $t("summary.title") }}
     </p>
+
+    <member-filter
+      :types="this.memberTypes"
+      :statuses="this.memberStatuses"
+      v-on:input="this.filterMembers"
+    ></member-filter>
+
     <b-table
       class="summaryTable table-is-narrow"
       :data="summaryParticipants"
@@ -50,23 +57,27 @@
 </template>
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
+import MemberFilter from "../components/MemberFilter.vue";
 
 export default {
+  components: { MemberFilter },
   data() {
     return {
       selected: null,
       eventsParticipants: [],
+      memberTypes: ["admin,member"],
+      memberStatuses: ["active"],
     };
   },
   mounted() {
-    this.$store.dispatch("events/getEventsParticipation");
-    this.getMembers({});
+    this.getMembers({
+      type: this.memberTypes.join(","),
+      status: this.memberStatuses.join(","),
+    });
+    this.getEventParticipation();
   },
 
   computed: {
-    ...mapActions({
-      getMembers: "members/getMembers",
-    }),
     ...mapState({
       events: (state) => state.events.events,
       members: (state) => state.members.members,
@@ -107,11 +118,21 @@ export default {
           if (this.events[e].members) {
             for (let p = 0; p < this.events[e].members.length; p++) {
               if (this.events[e].members[p].uuid === this.members[m].uuid) {
-                // This is the current member
+                // Participation for current member
                 if (this.events[e].members[p].participation === "yes") {
                   answer = this.$t("general.yes");
                 } else if (this.events[e].members[p].participation === "no") {
                   answer = this.$t("general.no");
+                }
+                // Presence for current member
+                if (
+                  this.events[e].members[p].presence === "yes" ||
+                  (this.events[e].members[p].participation === "yes" &&
+                    this.events[e].members[p].presence !== "no")
+                ) {
+                  answer += " / " + this.$t("general.yes");
+                } else {
+                  answer += " / " + this.$t("general.no");
                 }
               }
             }
@@ -124,11 +145,25 @@ export default {
     },
   },
   methods: {
+    filterMembers(filters) {
+      this.getMembers({
+        type: filters.types,
+        status: filters.statuses,
+      });
+    },
+    ...mapActions({
+      getMembers: "members/getMembers",
+      getEventParticipation: "events/getEventsParticipation",
+    }),
     countEventParticipants(event) {
       let total = 0;
       if (event.members) {
         for (let m = 0; m < event.members.length; m++) {
-          if (event.members[m].participation === "yes") {
+          if (
+            event.members[m].presence === "yes" ||
+            (event.members[m].participation === "yes" &&
+              event.members[m].presence !== "no")
+          ) {
             total++;
           }
         }
