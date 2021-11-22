@@ -124,15 +124,17 @@ export default {
                 } else if (this.events[e].members[p].participation === "no") {
                   answer = this.$t("general.no");
                 }
-                // Presence for current member
-                if (
-                  this.events[e].members[p].presence === "yes" ||
-                  (this.events[e].members[p].participation === "yes" &&
-                    this.events[e].members[p].presence !== "no")
-                ) {
-                  answer += " / " + this.$t("general.yes");
-                } else {
-                  answer += " / " + this.$t("general.no");
+                // Presence for current member (only for past events)
+                if (this.events[e].startDate < Date.now() / 1000) {
+                  if (
+                    this.events[e].members[p].presence === "yes" ||
+                    (this.events[e].members[p].participation === "yes" &&
+                      this.events[e].members[p].presence !== "no")
+                  ) {
+                    answer += " / " + this.$t("general.yes");
+                  } else {
+                    answer += " / " + this.$t("general.no");
+                  }
                 }
               }
             }
