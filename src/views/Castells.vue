@@ -62,15 +62,14 @@
         :label="$t('general.actions')"
         v-slot="props"
       >
-        <a href="#">
-          <span
-            class="icon has-text-info"
-            v-on:click="editCastellModel(props.row.uuid)"
-          >
+        <router-link
+          :to="{ name: 'castellEdit', params: { uuid: props.row.uuid } }"
+        >
+          <span class="icon has-text-info">
             <i class="fa fa-edit"></i>
           </span>
-        </a>
-        <a href="#">
+        </router-link>
+        <a>
           <span
             class="icon has-text-info"
             v-on:click="copyCastellModelModal(props.row)"
@@ -78,7 +77,7 @@
             <i class="fa fa-copy"></i>
           </span>
         </a>
-        <a href="#">
+        <a>
           <span
             class="icon has-text-danger"
             v-on:click="deleteCastellModel(props.row)"
@@ -150,9 +149,6 @@ export default {
     }),
     addCastellModel() {
       this.$router.push({ name: "CastellAdd" });
-    },
-    editCastellModel(uuid) {
-      this.$router.push({ path: `/castellEdit/${uuid}` });
     },
     deleteCastellModel(castell) {
       const self = this;

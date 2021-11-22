@@ -89,7 +89,7 @@
             <i class="fa fa-edit"></i>
           </span>
         </router-link>
-        <a href="#">
+        <a>
           <span class="icon has-text-danger" v-on:click="removeUser(props.row)">
             <i class="fa fa-user-slash"></i>
           </span>
