@@ -82,14 +82,13 @@
         :label="$t('general.actions')"
         v-slot="props"
       >
-        <a href="#">
-          <span
-            class="icon has-text-info"
-            v-on:click="editMemberUuid(props.row.uuid)"
-          >
+        <router-link
+          :to="{ name: 'MemberEdit', params: { uuid: props.row.uuid } }"
+        >
+          <span class="icon has-text-info">
             <i class="fa fa-edit"></i>
           </span>
-        </a>
+        </router-link>
         <a href="#">
           <span class="icon has-text-danger" v-on:click="removeUser(props.row)">
             <i class="fa fa-user-slash"></i>
@@ -138,9 +137,6 @@ export default {
     }),
     addMember() {
       this.$router.push({ name: "MemberAdd" });
-    },
-    editMemberUuid(memberUuid) {
-      this.$router.push({ path: `/memberEdit/${memberUuid}` });
     },
     removeUser(member) {
       this.deleteUser(member)
