@@ -264,7 +264,14 @@
         }}
         ({{ this.countPresent() }} / {{ this.countRegistered() }})</label
       >
-      <span class="has-text-weight-bold">{{ $t("events.filterMembers") }}</span>
+
+      <member-filter
+        :types="this.memberTypes"
+        :statuses="this.memberStatuses"
+        v-on:input="listParticipants($route.params.uuid, $event)"
+      ></member-filter>
+
+      <!-- <span class="has-text-weight-bold">{{ $t("events.filterMembers") }}</span> -->
       <b-field grouped group-multiline>
         <div v-for="(column, index) in filters" :key="index" class="control">
           <b-checkbox v-model="column.display">
@@ -372,6 +379,7 @@ import { Datetime } from "vue-datetime";
 import PrettyRadio from "pretty-checkbox-vue/radio";
 import { LMap, LTileLayer, LMarker } from "vue2-leaflet";
 import Castell from "./CastellsDrawing.vue";
+import MemberFilter from "../components/MemberFilter.vue";
 
 import "vue-datetime/dist/vue-datetime.css";
 import "pretty-checkbox/dist/pretty-checkbox.min.css";
@@ -401,6 +409,7 @@ export default {
     LMap,
     LTileLayer,
     LMarker,
+    MemberFilter,
   },
   data() {
     const s = new Date(Date.now());
@@ -459,6 +468,8 @@ export default {
       castell: {},
       castells: [],
       participation: [],
+      memberTypes: ["admin,member", "guest"],
+      memberStatuses: ["active"],
     };
   },
   watch: {
@@ -486,7 +497,7 @@ export default {
         if (this.type === "admin") {
           promises.push(
             self
-              .getParticipation(self.$route.params.uuid)
+              .getEventParticipation(self.$route.params.uuid)
               .then(function (response) {
                 return response.data;
               })
@@ -508,7 +519,10 @@ export default {
   },
   mounted() {
     this.loadEvent(this.$route.params.uuid, this.$route.query.t);
-    this.listParticipants(this.$route.params.uuid);
+    this.listParticipants(this.$route.params.uuid, {
+      statuses: this.memberStatuses,
+      types: this.memberTypes,
+    });
     this.checkAction();
     if (this.uuid) {
       this.$store.dispatch(
@@ -602,7 +616,6 @@ export default {
       presenceEvent: "events/presenceEvent",
       participateEvent: "events/participateEvent",
       getPositions: "castells/getCastellTypePositions",
-      getParticipation: "events/getEventParticipation",
       getModel: "castells/getCastellModel",
     }),
     checkAction() {
@@ -684,10 +697,18 @@ export default {
           .catch((err) => console.log(err));
       }
     },
-    listParticipants(eventUuid) {
+    listParticipants(eventUuid, options) {
+      if (options !== undefined) {
+        this.memberTypes = options.types;
+        this.memberStatuses = options.statuses;
+      }
       if (eventUuid && this.type === "admin") {
         const self = this;
-        this.getEventParticipation(eventUuid)
+        this.getEventParticipation({
+          eventUuid,
+          type: this.memberTypes,
+          status: this.memberStatuses,
+        })
           .then(function (response) {
             self.participation = response.data;
             for (let i = 0; i < self.participation.length; i++) {

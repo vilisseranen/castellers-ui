@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="margin-bottom: 10px">
     <b-field>
       <b-checkbox-button
         v-on:input="filterMembers"

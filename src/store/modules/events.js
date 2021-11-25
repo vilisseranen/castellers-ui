@@ -38,8 +38,15 @@ const actions = {
     }
     return api.participateEvent(eventUuid, participation);
   },
-  async getEventParticipation(context, eventUuid) {
-    return api.getEventParticipation(eventUuid);
+  async getEventParticipation(context, { eventUuid, type, status }) {
+    const options = {};
+    if (type) {
+      options.type = type;
+    }
+    if (status) {
+      options.status = status;
+    }
+    return api.getEventParticipation(eventUuid, options);
   },
   async getEventsParticipation(context) {
     await this.dispatch("events/getEvents");
