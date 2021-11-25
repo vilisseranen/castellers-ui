@@ -53,9 +53,11 @@ const actions = {
     const events = context.state.events;
     for (const i in events) {
       const event = events[i];
-      await api.getEventParticipation(event.uuid).then(function (response) {
-        event.members = response.data;
-      });
+      await api
+        .getEventParticipation({ eventUuid: event.uuid })
+        .then(function (response) {
+          event.members = response.data;
+        });
       context.commit("setEvent", { event: events[i], index: i });
     }
   },

@@ -497,7 +497,7 @@ export default {
         if (this.type === "admin") {
           promises.push(
             self
-              .getEventParticipation(self.$route.params.uuid)
+              .getEventParticipation({ eventUuid: self.$route.params.uuid })
               .then(function (response) {
                 return response.data;
               })

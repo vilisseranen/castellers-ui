@@ -74,7 +74,7 @@ export default {
       type: this.memberTypes.join(","),
       status: this.memberStatuses.join(","),
     });
-    this.getEventParticipation();
+    this.getEventsParticipation();
   },
 
   computed: {
@@ -155,7 +155,7 @@ export default {
     },
     ...mapActions({
       getMembers: "members/getMembers",
-      getEventParticipation: "events/getEventsParticipation",
+      getEventsParticipation: "events/getEventsParticipation",
     }),
     countEventParticipants(event) {
       let total = 0;
