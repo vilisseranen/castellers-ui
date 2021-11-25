@@ -53,25 +53,26 @@ const store = new Vuex.Store({
 
 axios.defaults.headers.common.Authorization = `Bearer: ${store.getters.accessToken}`;
 
+let refreshTokenPromise;
+
 axios.interceptors.response.use(
   (response) => {
     return response;
   },
   async function (error) {
-    const originalRequest = error.config;
-    if (error.response.status === 403) {
-      store
-        .dispatch("refreshToken")
-        .then(function (response) {
-          // Replace Bearer token from original request
-          originalRequest.headers.Authorization = `Bearer: ${response.data.access_token}`;
-          return axios(originalRequest);
-        })
-        .catch(function (response) {
-          store.dispatch("logout");
-
-          return Promise.reject(error);
-        });
+    if (error.config && error.response && error.response.status === 403) {
+      if (!refreshTokenPromise) {
+        refreshTokenPromise = store
+          .dispatch("refreshToken")
+          .then((response) => {
+            refreshTokenPromise = null;
+            return response.data.access_token;
+          });
+      }
+      return refreshTokenPromise.then((token) => {
+        error.config.headers.Authorization = `Bearer: ${token}`;
+        return axios.request(error.config);
+      });
     }
     return Promise.reject(error);
   }
