@@ -53,6 +53,7 @@
   "members": {
     "create": "Créer un nouveau membre",
     "update": "Modifier le profil d'un membre existant",
+    "updateMyProfile": "Modifier mon profil",
     "memberType": "Membre régulier",
     "memberTypePlural": "Membres réguliers",
     "adminType": "Administrateur",

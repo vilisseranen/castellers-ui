@@ -1,7 +1,16 @@
 <template>
   <div class="box">
-    <p class="title is-3" v-if="actionLabel === 'update'">
+    <p
+      class="title is-3"
+      v-if="actionLabel === 'update' && current_user.uuid != uuid"
+    >
       {{ $t("members.update") }}
+    </p>
+    <p
+      class="title is-3"
+      v-if="actionLabel === 'update' && current_user.uuid == uuid"
+    >
+      {{ $t("members.updateMyProfile") }}
     </p>
     <p class="title is-3" v-if="actionLabel === 'create'">
       {{ $t("members.create") }}
