@@ -26,7 +26,7 @@
         native-value="active"
         type="is-success is-light is-outlined"
       >
-        <span>{{ $t("members.activeStatus") }}</span>
+        <span>{{ $t("members.activeStatusPlural") }}</span>
       </b-checkbox-button>
       <b-checkbox-button
         v-on:input="filterMembers"
@@ -34,7 +34,7 @@
         native-value="created"
         type="is-info is-light is-outlined"
       >
-        <span>{{ $t("members.createdStatus") }}</span>
+        <span>{{ $t("members.createdStatusPlural") }}</span>
       </b-checkbox-button>
       <b-checkbox-button
         v-on:input="filterMembers"
@@ -42,15 +42,7 @@
         native-value="paused"
         type="is-warning is-light is-outlined"
       >
-        <span>{{ $t("members.pausedStatus") }}</span>
-      </b-checkbox-button>
-      <b-checkbox-button
-        v-on:input="filterMembers"
-        v-model="memberStatuses"
-        native-value="deleted"
-        type="is-danger is-light is-outlined"
-      >
-        <span>{{ $t("members.deletedStatus") }}</span>
+        <span>{{ $t("members.pausedStatusPlural") }}</span>
       </b-checkbox-button>
     </b-field>
   </div>
