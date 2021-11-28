@@ -219,19 +219,18 @@
           <input class="input" type="text" v-model="current_user.extra" />
         </div>
       </div>
-      <div class="column is-12" v-if="type === 'admin'">
-        <div
-          class="notification is-success"
-          v-if="current_user.status === 'active'"
+      <div class="column is-12" v-if="type === 'admin' && current_user.status">
+        <span style="margin-right: 10px">{{ $t("members.status") }}:</span
+        ><span
+          class="tag is-medium"
+          v-bind:class="{
+            'is-success': current_user.status === 'active',
+            'is-info': current_user.status === 'created',
+            'is-warning': current_user.status === 'paused',
+            'is-danger': current_user.status === 'deleted',
+          }"
+          >{{ $t("members." + current_user.status + "Status") }}</span
         >
-          <span>{{ $t("members.alreadyLoggedIn") }}</span>
-        </div>
-        <div
-          class="notification is-warning"
-          v-if="current_user.status === 'created'"
-        >
-          <span>{{ $t("members.neverLoggedIn") }}</span>
-        </div>
       </div>
       <div class="field is-horizontal column">
         <div class="field-body">
