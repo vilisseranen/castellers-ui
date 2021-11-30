@@ -115,7 +115,7 @@
           <input class="input" type="text" v-model="current_user.lastName" />
         </div>
       </div>
-      <div class="field column is-4">
+      <div class="field column is-4" v-if="current_user.type !== 'guest'">
         <label class="label required">{{ $t("members.email") }}</label>
         <div class="control is-expanded">
           <input class="input" type="text" v-model="current_user.email" />
