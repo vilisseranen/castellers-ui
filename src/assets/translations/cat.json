@@ -44,8 +44,6 @@
     "exempleFT": "5'11",
     "roles": "Rols",
     "extra": "Extra",
-    "alreadyLoggedIn": "El membre s'ha connectat.",
-    "neverLoggedIn": "El membre no s'ha connectat mai.",
     "deleteButton": "Eliminar membre",
     "createButton": "Crear membre",
     "updateButton": "Actualitzar el perfil",

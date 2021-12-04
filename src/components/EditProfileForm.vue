@@ -229,8 +229,8 @@
             'is-warning': current_user.status === 'paused',
             'is-danger': current_user.status === 'deleted',
           }"
-          >{{ $t("members." + current_user.status + "Status") }}</span
-        >
+          v-t="`members.${current_user.status}Status`"
+        ></span>
       </div>
       <div class="field is-horizontal column">
         <div class="field-body">
