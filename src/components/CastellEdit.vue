@@ -229,7 +229,9 @@ export default {
               self.currentCastell = c;
               if (self.currentCastell.event && self.currentCastell.event.uuid) {
                 self
-                  .getParticipation(self.currentCastell.event.uuid)
+                  .getParticipation({
+                    eventUuid: self.currentCastell.event.uuid,
+                  })
                   .then(function (response) {
                     self.$set(self.currentCastell, "castellers", response.data);
                   });

@@ -44,7 +44,6 @@
           <a
             class="is-size-7 has-text-weight-bold"
             v-on:click="passwordForgotten = true"
-            href="#"
             >{{ $t("login.forgotPassword") }}</a
           >
         </div>

@@ -1,7 +1,16 @@
 <template>
   <div class="box">
-    <p class="title is-3" v-if="actionLabel === 'update'">
+    <p
+      class="title is-3"
+      v-if="actionLabel === 'update' && current_user.uuid != uuid"
+    >
       {{ $t("members.update") }}
+    </p>
+    <p
+      class="title is-3"
+      v-if="actionLabel === 'update' && current_user.uuid == uuid"
+    >
+      {{ $t("members.updateMyProfile") }}
     </p>
     <p class="title is-3" v-if="actionLabel === 'create'">
       {{ $t("members.create") }}
@@ -106,7 +115,7 @@
           <input class="input" type="text" v-model="current_user.lastName" />
         </div>
       </div>
-      <div class="field column is-4">
+      <div class="field column is-4" v-if="current_user.type !== 'guest'">
         <label class="label required">{{ $t("members.email") }}</label>
         <div class="control is-expanded">
           <input class="input" type="text" v-model="current_user.email" />
@@ -210,19 +219,18 @@
           <input class="input" type="text" v-model="current_user.extra" />
         </div>
       </div>
-      <div class="column is-12" v-if="type === 'admin'">
-        <div
-          class="notification is-success"
-          v-if="current_user.activated === 1"
-        >
-          <span>{{ $t("members.alreadyLoggedIn") }}</span>
-        </div>
-        <div
-          class="notification is-warning"
-          v-if="current_user.activated === 0"
-        >
-          <span>{{ $t("members.neverLoggedIn") }}</span>
-        </div>
+      <div class="column is-12" v-if="type === 'admin' && current_user.status">
+        <span style="margin-right: 10px">{{ $t("members.status") }}:</span
+        ><span
+          class="tag is-medium"
+          v-bind:class="{
+            'is-success': current_user.status === 'active',
+            'is-info': current_user.status === 'created',
+            'is-warning': current_user.status === 'paused',
+            'is-danger': current_user.status === 'deleted',
+          }"
+          v-t="`members.${current_user.status}Status`"
+        ></span>
       </div>
       <div class="field is-horizontal column">
         <div class="field-body">

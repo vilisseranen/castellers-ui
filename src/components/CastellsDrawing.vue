@@ -1,5 +1,10 @@
 <template>
   <div>
+    <member-filter
+      :types="this.memberTypes"
+      :statuses="this.memberStatuses"
+      v-on:input="this.filterMembers"
+    ></member-filter>
     <div class="columns is-multiline">
       <div class="column is-3" v-if="!readonly">
         <div class="columns is-multiline">
@@ -51,9 +56,11 @@
 
 <script>
 import Raphael from "raphael";
-import { mapGetters, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
+import MemberFilter from "../components/MemberFilter.vue";
 
 export default {
+  components: { MemberFilter },
   props: {
     castell: Object,
     readonly: Boolean,
@@ -147,14 +154,25 @@ export default {
       selectedMemberUuid: "",
       positionsMembers: [],
       dragging: false,
+      memberTypes: ["admin,member", "guest"],
+      memberStatuses: ["active"],
     };
   },
   mounted() {
-    this.$store.dispatch("members/getMembers");
+    this.getMembers({ type: this.memberTypes, status: this.memberStatuses });
     this.paperTronc = new Raphael(document.getElementById("canvas_tronc"));
     this.drawTronc();
   },
   methods: {
+    filterMembers(filters) {
+      this.getMembers({
+        type: filters.types,
+        status: filters.statuses,
+      });
+    },
+    ...mapActions({
+      getMembers: "members/getMembers",
+    }),
     selectMember(uuid) {
       this.selectedMemberUuid = uuid;
     },

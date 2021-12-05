@@ -25,9 +25,16 @@ const actions = {
   async getMember(context, memberUuid) {
     return api.getMember(memberUuid);
   },
-  async getMembers(context) {
+  async getMembers(context, { type, status }) {
+    const options = {};
+    if (type) {
+      options.type = type;
+    }
+    if (status) {
+      options.status = status;
+    }
     return api
-      .getMembers()
+      .getMembers(options)
       .then(function (response) {
         const members = response.data;
         for (let i = 0; i < members.length; i++) {
@@ -55,9 +62,7 @@ const actions = {
 // mutations
 const mutations = {
   setMembers(state, members) {
-    if (members.length > 0) {
-      state.members = members;
-    }
+    state.members = members;
   },
   reset(state) {
     state.members = [];

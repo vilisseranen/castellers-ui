@@ -38,15 +38,22 @@ const actions = {
     }
     return api.participateEvent(eventUuid, participation);
   },
-  async getEventParticipation(context, eventUuid) {
-    return api.getEventParticipation(eventUuid);
+  async getEventParticipation(context, { eventUuid, type, status }) {
+    const options = {};
+    if (type) {
+      options.type = type;
+    }
+    if (status) {
+      options.status = status;
+    }
+    return api.getEventParticipation(eventUuid, options);
   },
   async getEventsParticipation(context) {
     await this.dispatch("events/getEvents");
     const events = context.state.events;
     for (const i in events) {
       const event = events[i];
-      await api.getEventParticipation(event.uuid).then(function (response) {
+      await api.getEventParticipation(event.uuid, {}).then(function (response) {
         event.members = response.data;
       });
       context.commit("setEvent", { event: events[i], index: i });

@@ -10,6 +10,12 @@
       </button>
     </b-field>
 
+    <member-filter
+      :types="this.memberTypes"
+      :statuses="this.memberStatuses"
+      v-on:input="this.filterMembers"
+    ></member-filter>
+
     <b-table
       :data="members"
       striped
@@ -76,15 +82,14 @@
         :label="$t('general.actions')"
         v-slot="props"
       >
-        <a href="#">
-          <span
-            class="icon has-text-info"
-            v-on:click="editMemberUuid(props.row.uuid)"
-          >
+        <router-link
+          :to="{ name: 'MemberEdit', params: { uuid: props.row.uuid } }"
+        >
+          <span class="icon has-text-info">
             <i class="fa fa-edit"></i>
           </span>
-        </a>
-        <a href="#">
+        </router-link>
+        <a>
           <span class="icon has-text-danger" v-on:click="removeUser(props.row)">
             <i class="fa fa-user-slash"></i>
           </span>
@@ -97,9 +102,17 @@
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
 import { memberMixin } from "../mixins/members.js";
+import MemberFilter from "../components/MemberFilter.vue";
 
 export default {
+  components: { MemberFilter },
   mixins: [memberMixin],
+  data() {
+    return {
+      memberTypes: ["admin,member"],
+      memberStatuses: ["active"],
+    };
+  },
   computed: {
     ...mapGetters(["uuid", "type"]),
     ...mapState({
@@ -107,23 +120,31 @@ export default {
     }),
   },
   mounted() {
-    this.$store.dispatch("members/getMembers");
+    this.getMembers({
+      type: this.memberTypes.join(","),
+      status: this.memberStatuses.join(","),
+    });
   },
   methods: {
+    filterMembers(filters) {
+      this.getMembers({
+        type: filters.types,
+        status: filters.statuses,
+      });
+    },
     ...mapActions({
       getMembers: "members/getMembers",
     }),
     addMember() {
       this.$router.push({ name: "MemberAdd" });
     },
-    editMemberUuid(memberUuid) {
-      this.$router.push({ path: `/memberEdit/${memberUuid}` });
-    },
     removeUser(member) {
-      const self = this;
       this.deleteUser(member)
         .then(function () {
-          self.$store.dispatch("members/getMembers");
+          this.getMembers({
+            type: this.membersType,
+            status: this.membersStatus,
+          });
         })
         .catch(function (error) {
           console.log(error);
