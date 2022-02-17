@@ -91,10 +91,10 @@ export default {
   async getMembers(options) {
     let endpoint = "/members";
     let queryParams = [];
-    if (options && options.type) {
+    if (options && options.type.length > 0) {
       queryParams.push(`type=${options.type}`);
     }
-    if (options && options.status) {
+    if (options && options.status.length > 0) {
       queryParams.push(`status=${options.status}`);
     }
     queryParams = queryParams.join("&");

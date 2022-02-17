@@ -67,15 +67,26 @@
         sortable
         v-slot="props"
       >
-        <span v-if="props.row.type === 'guest'">{{
-          $t("members.guestType")
-        }}</span>
-        <span v-if="props.row.type === 'member'">{{
-          $t("members.memberType")
-        }}</span>
-        <span v-if="props.row.type === 'admin'">{{
-          $t("members.adminType")
-        }}</span>
+        <span v-t="`members.` + props.row.type + `Type`"></span>
+      </b-table-column>
+      <b-table-column
+        key="status"
+        field="status"
+        :label="$t('members.status')"
+        searchable
+        sortable
+        v-slot="props"
+      >
+        <span
+          class="tag is-medium"
+          v-bind:class="{
+            'is-success': props.row.status === 'active',
+            'is-info': props.row.status === 'created',
+            'is-warning': props.row.status === 'paused',
+            'is-danger': props.row.status === 'deleted',
+          }"
+          >{{ $t("members." + props.row.status + "Status") }}</span
+        >
       </b-table-column>
       <b-table-column
         key="actions"

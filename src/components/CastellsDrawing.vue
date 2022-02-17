@@ -76,13 +76,6 @@ export default {
         return "-";
       }
     },
-    allMembers: function () {
-      const members = {};
-      for (let i = 0; i < this.members.length; i++) {
-        members[this.members[i].uuid] = this.members[i];
-      }
-      return members;
-    },
     selectedMembersIDs: function () {
       const membersIDs = [];
       for (let i = 0; i < this.positionsMembers.length; i++) {
@@ -156,23 +149,38 @@ export default {
       dragging: false,
       memberTypes: ["admin,member", "guest"],
       memberStatuses: ["active"],
+      allMembers: {},
     };
   },
   mounted() {
-    this.getMembers({ type: this.memberTypes, status: this.memberStatuses });
+    this.getAllMembers(); // We need all members to be able to write the names even if we filter the member list
+    this.getMembers({ type: this.memberTypes, status: this.memberStatuses }); // We refresh the member list with the current filters
     this.paperTronc = new Raphael(document.getElementById("canvas_tronc"));
     this.drawTronc();
   },
   methods: {
+    ...mapActions({
+      getMembers: "members/getMembers",
+    }),
+    getAllMembers() {
+      const self = this;
+      this.getMembers({
+        type: ["admin", "member", "guest"],
+        status: ["created", "active", "paused", "deleted"],
+      }).then(function (response) {
+        const members = {};
+        for (let i = 0; i < response.data.length; i++) {
+          members[response.data[i].uuid] = response.data[i];
+        }
+        self.allMembers = members;
+      });
+    },
     filterMembers(filters) {
       this.getMembers({
         type: filters.types,
         status: filters.statuses,
       });
     },
-    ...mapActions({
-      getMembers: "members/getMembers",
-    }),
     selectMember(uuid) {
       this.selectedMemberUuid = uuid;
     },
