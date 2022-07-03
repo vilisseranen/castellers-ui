@@ -6,7 +6,7 @@
         ><span
           class="tag"
           style="margin-left: 10px"
-          v-if="uuid || this.$route.query.t"
+          v-if="(uuid || this.$route.query.t) && actionLabel !== 'create'"
           v-bind:class="{
             'is-success': event.participation == 'yes',
             'is-danger': event.participation == 'no',
