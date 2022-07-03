@@ -52,7 +52,7 @@
     "eslint-plugin-promise": "^5.2.0",
     "eslint-plugin-standard": "^5.0.0",
     "eslint-plugin-vue": "^7.20.0",
-    "minimist": ">=1.2.2",
+    "minimist": ">=1.2.6",
     "prettier": "^2.5.1",
     "sass-loader": "^10.2.0",
     "vue-cli-plugin-buefy": "^0.3.8",
