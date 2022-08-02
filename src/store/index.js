@@ -1,5 +1,4 @@
-import Vue from "vue";
-import Vuex from "vuex";
+import { createStore } from "vuex";
 import axios from "axios";
 import createPersistedState from "vuex-persistedstate";
 import events from "./modules/events";
@@ -9,9 +8,7 @@ import auth from "./modules/auth";
 import initialization from "./modules/initialization";
 import api from "../api/castellers";
 
-Vue.use(Vuex);
-
-const store = new Vuex.Store({
+const store = createStore({
   modules: {
     events,
     members,
@@ -40,7 +37,7 @@ const store = new Vuex.Store({
           context.commit("setVersion", response.data);
           return response;
         })
-        .catch(function (response) {});
+        .catch(function () {});
     },
   },
   getters: {},

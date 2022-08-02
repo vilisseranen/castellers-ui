@@ -7,7 +7,7 @@
   </div>
 </template>
 <script>
-import EditProfileForm from "../components/EditProfileForm.vue";
+import EditProfileForm from "../components/EditProfileForm-Component.vue";
 import { mapActions } from "vuex";
 
 export default {
@@ -44,12 +44,12 @@ export default {
         self.updating = false;
         self.user = response.data;
         if (response.status === 201) {
-          self.$notifyOK(
+          self.$root.$notifyOK(
             "The application is now initialized ! You will receive an email with your infos."
           );
         } else {
           self.updating = false;
-          self.$notifyNOK(
+          self.$root.$notifyNOK(
             "There was an error during the application initialization."
           );
         }

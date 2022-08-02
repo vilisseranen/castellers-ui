@@ -31,14 +31,14 @@
                   >{{ $t("events.participationNo") }}</span
                 >
                 <span
-                  class="tag is-warning"
+                  class="tag is-presentation"
                   v-if="event.type == 'presentation'"
                   >{{ $t("events.presentation") }}</span
                 >
-                <span class="tag is-info" v-if="event.type == 'practice'">{{
+                <span class="tag is-practice" v-if="event.type == 'practice'">{{
                   $t("events.practice")
                 }}</span>
-                <span class="tag is-link" v-if="event.type == 'social'">{{
+                <span class="tag is-social" v-if="event.type == 'social'">{{
                   $t("events.social")
                 }}</span>
               </div>

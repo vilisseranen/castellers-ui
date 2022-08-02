@@ -1,31 +1,36 @@
 import api from "../api/castellers";
+import ConfirmModal from "../components/modals/Confirm-Modal";
 
 export const memberMixin = {
   methods: {
-    deleteUser: function (member) {
-      return new Promise((resolve, reject) => {
-        this.$buefy.dialog.confirm({
-          message:
+    async deleteUser(member) {
+      const modalPromise = this.$oruga.modal.open({
+        component: ConfirmModal,
+        props: {
+          title:
             this.$t("members.confirmDelete") +
             " <b>" +
             member.firstName +
             " " +
             member.lastName +
             "</b> ?",
-          confirmText: this.$t("general.yes"),
-          cancelText: this.$t("general.cancel"),
-          type: "is-danger",
-          onConfirm: () => {
-            api
-              .deleteMember(member.uuid)
-              .then(function () {
-                resolve();
-              })
-              .catch(function (err) {
-                reject(err);
-              });
-          },
-        });
+          confirm: this.$t("general.yes"),
+          cancel: this.$t("general.cancel"),
+        },
+      });
+      const result = await modalPromise.promise;
+      return new Promise((resolve, reject) => {
+        if (result.action == "yes") {
+          api
+            .deleteMember(member.uuid)
+            .then(function () {
+              resolve();
+            })
+            .catch(function (err) {
+              reject(err);
+            });
+        }
+        resolve();
       });
     },
   },

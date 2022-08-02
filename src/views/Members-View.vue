@@ -1,29 +1,29 @@
 <template>
   <div>
     <p class="title is-5">{{ $t("members.title") }}</p>
-    <b-field>
+    <o-field>
       <button class="button field is-info" @click="addMember">
         <span class="icon">
           <i class="fa fa-user-plus"></i>
         </span>
         <span>{{ $t("members.addMember") }}</span>
       </button>
-    </b-field>
+    </o-field>
 
     <member-filter
       :types="this.memberTypes"
       :statuses="this.memberStatuses"
-      v-on:input="this.filterMembers"
+      @filterMembers="filterMembers"
     ></member-filter>
 
-    <b-table
+    <o-table
       :data="members"
       striped
       default-sort="firstName"
       sort-icon="arrow-up"
       icon-pack="fa"
     >
-      <b-table-column
+      <o-table-column
         key="firstName"
         field="firstName"
         :label="$t('members.firstName')"
@@ -31,35 +31,35 @@
         sortable
         v-slot="props"
         >{{ props.row.firstName }}
-      </b-table-column>
-      <b-table-column
+      </o-table-column>
+      <o-table-column
         key="lastName"
         field="lastName"
         :label="$t('members.lastName')"
         searchable
         sortable
         v-slot="props"
-        >{{ props.row.lastName }}</b-table-column
+        >{{ props.row.lastName }}</o-table-column
       >
-      <b-table-column
+      <o-table-column
         key="roles"
         field="roles"
         :label="$t('members.roles')"
         searchable
         sortable
         v-slot="props"
-        >{{ props.row.roles }}</b-table-column
+        >{{ props.row.roles }}</o-table-column
       >
-      <b-table-column
+      <o-table-column
         key="extra"
         field="extra"
         :label="$t('members.extra')"
         searchable
         sortable
         v-slot="props"
-        >{{ props.row.extra }}</b-table-column
+        >{{ props.row.extra }}</o-table-column
       >
-      <b-table-column
+      <o-table-column
         key="type"
         field="type"
         :label="$t('members.type')"
@@ -68,8 +68,8 @@
         v-slot="props"
       >
         <span v-t="`members.` + props.row.type + `Type`"></span>
-      </b-table-column>
-      <b-table-column
+      </o-table-column>
+      <o-table-column
         key="status"
         field="status"
         :label="$t('members.status')"
@@ -87,8 +87,8 @@
           }"
           >{{ $t("members." + props.row.status + "Status") }}</span
         >
-      </b-table-column>
-      <b-table-column
+      </o-table-column>
+      <o-table-column
         key="actions"
         :label="$t('general.actions')"
         v-slot="props"
@@ -101,27 +101,28 @@
           </span>
         </router-link>
         <a>
-          <span class="icon has-text-danger" v-on:click="removeUser(props.row)">
+          <span class="icon has-text-danger" @click="removeUser(props.row)">
             <i class="fa fa-user-slash"></i>
           </span>
         </a>
-      </b-table-column>
-    </b-table>
+      </o-table-column>
+    </o-table>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
 import { memberMixin } from "../mixins/members.js";
-import MemberFilter from "../components/MemberFilter.vue";
+import MemberFilter from "../components/MemberFilter-Component.vue";
 
 export default {
   components: { MemberFilter },
   mixins: [memberMixin],
-  data() {
+  data: function () {
     return {
       memberTypes: ["admin,member"],
       memberStatuses: ["active"],
+      test: "toto",
     };
   },
   computed: {
@@ -150,11 +151,12 @@ export default {
       this.$router.push({ name: "MemberAdd" });
     },
     removeUser(member) {
+      const self = this;
       this.deleteUser(member)
         .then(function () {
-          this.getMembers({
-            type: this.membersType,
-            status: this.membersStatus,
+          self.getMembers({
+            type: self.memberTypes.join(","),
+            status: self.memberStatuses.join(","),
           });
         })
         .catch(function (error) {

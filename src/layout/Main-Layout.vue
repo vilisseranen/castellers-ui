@@ -15,8 +15,8 @@
 </template>
 
 <script>
-import BannerLayout from "./BannerLayout.vue";
-import FooterLayout from "./FooterLayout.vue";
+import BannerLayout from "./Banner-Layout.vue";
+import FooterLayout from "./Footer-Layout.vue";
 
 import { mapGetters } from "vuex";
 

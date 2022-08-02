@@ -1,55 +1,56 @@
 <template>
   <div style="margin-bottom: 10px">
-    <b-field>
-      <b-checkbox-button
-        v-on:input="filterMembers"
+    <div class="field">
+      <o-checkbox
+        @change="filterMembers"
         v-model="memberTypes"
-        native-value="admin,member"
-        type="is-success is-light is-outlined"
+        nativeValue="admin,member"
+        variant="success"
       >
         <span>{{ $t("members.memberTypePlural") }}</span>
-      </b-checkbox-button>
-      <b-checkbox-button
-        v-on:input="filterMembers"
+      </o-checkbox>
+      <o-checkbox
+        @change="filterMembers"
         v-model="memberTypes"
-        native-value="guest"
-        type="is-warning is-light is-outlined"
+        nativeValue="guest"
+        variant="warning"
       >
         <span>{{ $t("members.guestTypePlural") }}</span>
-      </b-checkbox-button>
-    </b-field>
+      </o-checkbox>
+    </div>
 
-    <b-field>
-      <b-checkbox-button
-        v-on:input="filterMembers"
+    <div class="field">
+      <o-checkbox
+        @change="filterMembers"
         v-model="memberStatuses"
         native-value="active"
-        type="is-success is-light is-outlined"
+        variant="success"
       >
         <span>{{ $t("members.activeStatusPlural") }}</span>
-      </b-checkbox-button>
-      <b-checkbox-button
-        v-on:input="filterMembers"
+      </o-checkbox>
+      <o-checkbox
+        @change="filterMembers(types, statuses)"
         v-model="memberStatuses"
         native-value="created"
-        type="is-info is-light is-outlined"
+        variant="info"
       >
         <span>{{ $t("members.createdStatusPlural") }}</span>
-      </b-checkbox-button>
-      <b-checkbox-button
-        v-on:input="filterMembers"
+      </o-checkbox>
+      <o-checkbox
+        @change="filterMembers"
         v-model="memberStatuses"
         native-value="paused"
-        type="is-warning is-light is-outlined"
+        variant="warning"
       >
         <span>{{ $t("members.pausedStatusPlural") }}</span>
-      </b-checkbox-button>
-    </b-field>
+      </o-checkbox>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
+  emits: ["filterMembers"],
   props: {
     types: {
       type: Array,
@@ -68,9 +69,11 @@ export default {
   },
   methods: {
     filterMembers() {
-      this.$emit("input", {
-        types: this.memberTypes,
-        statuses: this.memberStatuses,
+      var memberTypes = this.memberTypes;
+      var memberStatuses = this.memberStatuses;
+      this.$emit("filterMembers", {
+        types: memberTypes,
+        statuses: memberStatuses,
       });
     },
   },

@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import EditProfileForm from "../components/EditProfileForm.vue";
+import EditProfileForm from "../components/EditProfileForm-Component.vue";
 import { mapActions, mapGetters } from "vuex";
 import { memberMixin } from "../mixins/members.js";
 
@@ -98,7 +98,7 @@ export default {
       this.editMember(user)
         .then(function (response) {
           self.updating = false;
-          self.$notifyOK(self.$t("general.notifySuccess"));
+          self.$root.$notifyOK(self.$t("general.notifySuccess"));
           // If changing own profile, update language settings
           if (response.data.uuid === self.uuid) {
             self.$root.setLocale(response.data.language);
@@ -110,7 +110,7 @@ export default {
         })
         .catch(function (error) {
           self.updating = false;
-          self.$notifyNOK(self.$t("general.notifyFailure"));
+          self.$root.$notifyNOK(self.$t("general.notifyFailure"));
           console.log(error);
         });
     },
@@ -134,17 +134,17 @@ export default {
           console.log(error);
         });
     },
-    changeMyPassword(password) {
+    changeMyPassword() {
       const self = this;
       if (this.passwordConfirmDifferent) {
-        this.$notifyNOK(this.$t("login.passwordDifferent"));
+        this.$root.$notifyNOK(this.$t("login.passwordDifferent"));
       } else {
         this.changePassword(this.credentials.password)
           .then(function () {
-            self.$notifyOK(self.$t("login.passwordChanged"));
+            self.$root.$notifyOK(self.$t("login.passwordChanged"));
           })
           .catch(function () {
-            self.$notifyNOK(self.$t("login.passwordResetError"));
+            self.$root.$notifyNOK(self.$t("login.passwordResetError"));
           });
       }
     },

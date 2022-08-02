@@ -1,28 +1,51 @@
 <template>
-  <div>
-    <b-navbar fixed-top type="is-beige">
-      <template slot="brand">
-        <b-navbar-item tag="div">
-          <img
-            src="/static/icons/icon-72x72.png"
-            alt="logo Castellers de Montreal"
-          />
-          <strong id="menuTitle">{{ $t("bannerLayout.title") }}</strong>
-        </b-navbar-item>
-      </template>
-      <template slot="start">
-        <b-navbar-item tag="router-link" to="/events">
+  <nav
+    class="navbar is-fixed-top has-shadow"
+    role="navigation"
+    aria-label="main navigation"
+  >
+    <div class="navbar-brand">
+      <a class="navbar-item" href="/">
+        <img
+          src="/static/icons/icon-72x72.png"
+          width="28"
+          height="28"
+          alt="logo Castellers de Montreal"
+        />
+        <strong id="menuTitle">{{ $t("bannerLayout.title") }}</strong>
+      </a>
+      <a
+        role="button"
+        class="navbar-burger"
+        aria-label="menu"
+        aria-expanded="false"
+        data-target="navbarMain"
+        :class="{ 'is-active': burgerActive }"
+        @click="toggleBurger()"
+      >
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+    <div
+      id="navbarMain"
+      class="navbar-menu"
+      :class="{ 'is-active': burgerActive }"
+    >
+      <div class="navbar-start">
+        <router-link :to="{ name: 'Events' }" class="navbar-item">
           <span class="icon">
             <i class="fa fa-calendar-check"></i>
           </span>
           <span>
             {{ $t("routes.events") }}
           </span>
-        </b-navbar-item>
-        <b-navbar-item
-          tag="router-link"
-          to="/members"
+        </router-link>
+        <router-link
+          :to="{ name: 'Members' }"
           v-if="this.type === 'admin'"
+          class="navbar-item"
         >
           <span class="icon">
             <i class="fa fa-address-card"></i>
@@ -30,11 +53,11 @@
           <span>
             {{ $t("routes.members") }}
           </span>
-        </b-navbar-item>
-        <b-navbar-item
-          tag="router-link"
-          to="/summary"
+        </router-link>
+        <router-link
+          :to="{ name: 'Summary' }"
           v-if="this.type === 'admin'"
+          class="navbar-item"
         >
           <span class="icon">
             <i class="fa fa-table"></i>
@@ -42,20 +65,20 @@
           <span>
             {{ $t("routes.summary") }}
           </span>
-        </b-navbar-item>
-        <b-navbar-item
-          tag="router-link"
-          to="/castells"
+        </router-link>
+        <router-link
+          :to="{ name: 'Castells' }"
           v-if="this.type === 'admin'"
+          class="navbar-item"
         >
           <span class="icon">
             <i class="fa fa-chess-rook"></i>
           </span>
           <span> Castells </span>
-        </b-navbar-item>
-      </template>
-      <template slot="end">
-        <b-navbar-item tag="div">
+        </router-link>
+      </div>
+      <div class="navbar-end">
+        <div class="navbar-item">
           <div class="buttons">
             <router-link
               v-if="!this.uuid"
@@ -74,10 +97,10 @@
               <strong>{{ $t("bannerLayout.disconnect") }}</strong>
             </a>
           </div>
-        </b-navbar-item>
-      </template>
-    </b-navbar>
-  </div>
+        </div>
+      </div>
+    </div>
+  </nav>
 </template>
 
 <script>
@@ -91,6 +114,11 @@ export default {
       return path.split("/")[1].toLowerCase();
     },
   },
+  data: function () {
+    return {
+      burgerActive: false,
+    };
+  },
   methods: {
     ...mapActions({
       resetState: "logout",
@@ -102,6 +130,9 @@ export default {
       } else {
         this.$router.push({ name: "Events" });
       }
+    },
+    toggleBurger() {
+      this.burgerActive = !this.burgerActive;
     },
   },
 };

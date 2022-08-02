@@ -43,7 +43,7 @@ const actions = {
         context.commit("setMembers", members);
         return response;
       })
-      .catch(function (response) {});
+      .catch(function () {});
   },
   async resendEmail(context, userUuid) {
     return api.resendEmail(userUuid);

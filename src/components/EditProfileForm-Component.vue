@@ -27,80 +27,93 @@
       <div class="field column is-3">
         <label class="label required">{{ $t("members.type") }}</label>
         <div class="control is-expanded">
-          <PrettyRadio
-            class="p-default p-curve"
-            name="type"
-            color="warning-o"
-            value="guest"
-            v-model="current_user.type"
-            :disabled="type === 'admin' ? false : true"
-            >{{ $t("members.guestType") }}</PrettyRadio
-          >
-          <PrettyRadio
-            class="p-default p-curve"
-            name="type"
-            color="primary-o"
-            value="member"
-            v-model="current_user.type"
-            :disabled="type === 'admin' ? false : true"
-            >{{ $t("members.memberType") }}</PrettyRadio
-          >
-          <PrettyRadio
-            class="p-default p-curve"
-            name="type"
-            color="success-o"
-            value="admin"
-            v-model="current_user.type"
-            :disabled="type === 'admin' ? false : true"
-            >{{ $t("members.adminType") }}</PrettyRadio
-          >
+          <div class="field">
+            <o-radio
+              name="type"
+              variant="warning"
+              nativeValue="guest"
+              v-model="current_user.type"
+              :disabled="type === 'admin' ? false : true"
+              >{{ $t("members.guestType") }}</o-radio
+            >
+          </div>
+          <div class="field">
+            <o-radio
+              name="type"
+              variant="primary"
+              nativeValue="member"
+              v-model="current_user.type"
+              :disabled="type === 'admin' ? false : true"
+              >{{ $t("members.memberType") }}</o-radio
+            >
+          </div>
+          <div class="field">
+            <o-radio
+              name="type"
+              variant="success"
+              nativeValue="admin"
+              v-model="current_user.type"
+              :disabled="type === 'admin' ? false : true"
+              >{{ $t("members.adminType") }}</o-radio
+            >
+          </div>
         </div>
       </div>
       <div class="field column is-3">
         <label class="label required">{{ $t("members.language") }}</label>
         <div class="control is-expanded">
-          <PrettyRadio
-            class="p-default p-curve"
-            name="language"
-            value="fr"
-            v-model="current_user.language"
-            >{{ $t("members.languageFR") }}</PrettyRadio
-          >
-          <PrettyRadio
-            class="p-default p-curve"
-            name="language"
-            value="en"
-            v-model="current_user.language"
-            >{{ $t("members.languageEN") }}</PrettyRadio
-          >
-          <PrettyRadio
-            class="p-default p-curve"
-            name="language"
-            value="cat"
-            v-model="current_user.language"
-            >{{ $t("members.languageCAT") }}</PrettyRadio
-          >
+          <div class="field">
+            <o-radio
+              name="language"
+              variant="undefined"
+              nativeValue="fr"
+              v-model="current_user.language"
+              >{{ $t("members.languageFR") }}</o-radio
+            >
+          </div>
+          <div class="field">
+            <o-radio
+              name="language"
+              variant="undefined"
+              nativeValue="en"
+              v-model="current_user.language"
+              >{{ $t("members.languageEN") }}</o-radio
+            >
+          </div>
+          <div class="field">
+            <o-radio
+              name="language"
+              variant="undefined"
+              nativeValue="cat"
+              v-model="current_user.language"
+              >{{ $t("members.languageCAT") }}</o-radio
+            >
+          </div>
         </div>
       </div>
       <div class="field column is-3">
         <label class="label">{{ $t("members.subscribeEmails") }}</label>
         <div class="control is-expanded">
-          <PrettyRadio
-            v-bind="{ disabled: !this.user.uuid }"
-            class="p-default p-curve"
-            name="subscribed"
-            :value="0"
-            v-model="current_user.subscribed"
-            >{{ $t("general.no") }}</PrettyRadio
-          >
-          <PrettyRadio
-            v-bind="{ disabled: !this.user.uuid }"
-            class="p-default p-curve"
-            name="subscribed"
-            :value="1"
-            v-model="current_user.subscribed"
-            >{{ $t("general.yes") }}</PrettyRadio
-          >
+          <div class="field">
+            <o-radio
+              v-bind="{ disabled: !this.user.uuid }"
+              name="subscribed"
+              variant="undefined"
+              nativeValue="0"
+              v-model="current_user.subscribed"
+              >{{ $t("general.no") }}</o-radio
+            >
+          </div>
+          <div class="field">
+            <o-radio
+              v-bind="{ disabled: !this.user.uuid }"
+              name="subscribed"
+              variant="undefined"
+              nativeValue="1"
+              v-model="current_user.subscribed"
+              >{{ $t("general.yes") }}</o-radio
+            >
+          </div>
         </div>
       </div>
       <div class="field column is-3">
@@ -146,22 +159,24 @@
       <div class="field column is-3">
         <label class="label">{{ $t("members.units") }}</label>
         <div class="control is-expanded">
-          <PrettyRadio
-            class="p-default p-curve"
-            name="height"
-            color="primary-o"
-            value="cm"
-            v-model="height_unit"
-            >{{ $t("members.cm") }}</PrettyRadio
-          >
-          <PrettyRadio
-            class="p-default p-curve"
-            name="height"
-            color="success-o"
-            value="ft"
-            v-model="height_unit"
-            >{{ $t("members.ft") }}</PrettyRadio
-          >
+          <div class="field">
+            <o-radio
+              name="height"
+              variant="primary"
+              nativeValue="cm"
+              v-model="height_unit"
+              >{{ $t("members.cm") }}</o-radio
+            >
+          </div>
+          <div class="field">
+            <o-radio
+              name="height"
+              variant="success"
+              nativeValue="ft"
+              v-model="height_unit"
+              >{{ $t("members.ft") }}</o-radio
+            >
+          </div>
         </div>
       </div>
       <div class="field column is-3">
@@ -178,28 +193,30 @@
       <div class="field column is-3">
         <label class="label">{{ $t("members.units") }}</label>
         <div class="control is-expanded">
-          <PrettyRadio
-            class="p-default p-curve"
-            name="weight"
-            color="primary-o"
-            value="kg"
-            v-model="weight_unit"
-            >{{ $t("members.kg") }}</PrettyRadio
-          >
-          <PrettyRadio
-            class="p-default p-curve"
-            name="weight"
-            color="success-o"
-            value="lb"
-            v-model="weight_unit"
-            >{{ $t("members.lb") }}</PrettyRadio
-          >
+          <div class="field">
+            <o-radio
+              name="weight"
+              variant="primary"
+              nativeValue="kg"
+              v-model="weight_unit"
+              >{{ $t("members.kg") }}</o-radio
+            >
+          </div>
+          <div class="field">
+            <o-radio
+              name="weight"
+              variant="success"
+              nativealue="lb"
+              v-model="weight_unit"
+              >{{ $t("members.lb") }}</o-radio
+            >
+          </div>
         </div>
       </div>
       <div class="field column is-8" v-if="type === 'admin'">
         <label class="label">{{ $t("members.roles") }}</label>
         <div class="control is-expanded">
-          <multiselect
+          <Multiselect
             v-model="current_user.roles"
             :options="available_roles"
             :multiple="true"
@@ -210,7 +227,7 @@
             :deselectLabel="$t('multiselect.deselectLabel')"
             :deselectGroupLabel="$t('multiselect.deselectGroupLabel')"
             :selectedLabel="$t('multiselect.selectedLabel')"
-          ></multiselect>
+          ></Multiselect>
         </div>
       </div>
       <div class="field column is-4" v-if="type === 'admin'">
@@ -291,15 +308,12 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import Multiselect from "vue-multiselect";
-import "vue-multiselect/dist/vue-multiselect.min.css";
-import PrettyRadio from "pretty-checkbox-vue/radio";
-import "pretty-checkbox/dist/pretty-checkbox.min.css";
+import Multiselect from "@vueform/multiselect";
+import "@vueform/multiselect/themes/default.css";
 
 export default {
   components: {
     Multiselect,
-    PrettyRadio,
   },
   name: "edit-profile-form",
   props: {
@@ -427,13 +441,13 @@ export default {
       const self = this;
       self.updating = true;
       this.resendEmaiCall(this.current_user.uuid)
-        .then(function (response) {
+        .then(function () {
           self.updating = false;
-          self.$notifyOK(self.$t("general.notifySuccess"));
+          self.$root.$notifyOK(self.$t("general.notifySuccess"));
         })
         .catch(function (error) {
           self.updating = false;
-          self.$notifyNOK(self.$t("general.notifyFailure"));
+          self.$root.$notifyNOK(self.$t("general.notifyFailure"));
           console.log(error);
         });
     },

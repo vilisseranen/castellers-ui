@@ -145,7 +145,7 @@ export default {
     async reset() {
       const self = this;
       if (this.passwordConfirmDifferent) {
-        this.$notifyNOK(this.$t("login.passwordDifferent"));
+        this.$root.$notifyNOK(this.$t("login.passwordDifferent"));
       } else {
         this.resetPassword({
           username: this.credentials.username,
@@ -180,7 +180,7 @@ export default {
               });
           })
           .catch(function () {
-            self.$notifyNOK(self.$t("login.passwordResetError"));
+            self.$root.$notifyNOK(self.$t("login.passwordResetError"));
           });
       }
     },
@@ -188,10 +188,10 @@ export default {
       const self = this;
       this.forgotPassword(this.decodedToken.email)
         .then(function () {
-          self.$notifyOK(self.$t("login.passwordResetSent"));
+          self.$root.$notifyOK(self.$t("login.passwordResetSent"));
         })
         .catch(function () {
-          self.$notifyNOK(self.$t("login.passwordResetIssue"));
+          self.$root.$notifyNOK(self.$t("login.passwordResetIssue"));
         });
     },
   },

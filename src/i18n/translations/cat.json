@@ -1,0 +1,90 @@
+{
+  "bannerLayout": {
+    "connect": "Iniciar sessió",
+    "disconnect": "Tancar sessió",
+    "profile": "Perfil",
+    "title": "Castellers de Mont-real"
+  },
+  "events": {
+    "1d": "Diaria",
+    "1w": "Setmanal",
+    "confirmDelete": "Estàs segur que vols esborrar l'assaig?",
+    "create": "Planificar un nou esdeveniment",
+    "createButton": "Crear l'esdeveniment",
+    "end": "Acaba",
+    "from": "de",
+    "interval": "En un interval de",
+    "nameDescription": "Anomena l'esdeveniment (per exemple: assaig setmanal a Brébeuf)",
+    "onThe": "El",
+    "participationNo": "No",
+    "participationNOK": "No s'ha pogut guardar correctament.",
+    "participationOK": "Guardat correctament",
+    "participationYes": "Sí",
+    "practice": "Assaig",
+    "practiceType": "Assaig",
+    "presentation": "Actuació",
+    "presentationType": "Actuació",
+    "recurringEvent": "Esdeveniment recurrent",
+    "start": "Comença",
+    "title": "Propers esdeveniments",
+    "to": "a",
+    "type": "Tipus",
+    "until": "Fins el",
+    "update": "Modificar detalls esdeveniment",
+    "updateButton": "Modificar l'esdeveniment"
+  },
+  "general": {
+    "cancel": "Cancel·lar",
+    "forCastellers": "Creat per als Castellers per ",
+    "requiredFields": "Els camps amb l'asterisc són obligatoris.",
+    "yes": "Sí"
+  },
+  "login": {
+    "loginButton": "Inicia sessió"
+  },
+  "members": {
+    "addMember": "Afegir un membre nou",
+    "adminType": "Administrador",
+    "cm": "cm",
+    "confirmDelete": "Estàs segur que vols eliminar aquest membre?",
+    "create": "Crear el perfil d'un membre nou",
+    "createButton": "Crear membre",
+    "deleteButton": "Eliminar membre",
+    "email": "Correu electrònic",
+    "emailButton": "Enviar un mail de registre",
+    "exempleCM": "180",
+    "exempleFT": "5'11",
+    "exempleKG": "74",
+    "exempleLB": "165",
+    "extra": "Extra",
+    "firstName": "Nom",
+    "ft": "ft",
+    "height": "Alçada",
+    "kg": "kg",
+    "language": "Idioma",
+    "languageCAT": "Català",
+    "languageEN": "Anglès",
+    "languageFR": "Francès",
+    "lastName": "Cognom",
+    "lb": "lb",
+    "memberType": "Normal",
+    "roles": "Rols",
+    "title": "Llista dels membres",
+    "type": "Type",
+    "units": "Unitats",
+    "update": "Editar el perfil d'un membre",
+    "updateButton": "Actualitzar el perfil",
+    "weight": "Pes"
+  },
+  "multiselect": {
+    "deselectGroupLabel": "Prémer el botó 'Entrar' per a deseleccionar el grup",
+    "deselectLabel": "Prémer el botó 'Entrar' per a deseleccionar",
+    "selectedLabel": "Seleccionat",
+    "selectGroupLabel": "Prémer el botó 'Entrar' per a seleccionar el grup",
+    "selectLabel": "Prémer el botó 'Entrar' per a seleccionar"
+  },
+  "routes": {
+    "events": "Esdeveniments",
+    "members": "Membres"
+  }
+}

@@ -3,7 +3,7 @@
     <member-filter
       :types="this.memberTypes"
       :statuses="this.memberStatuses"
-      v-on:input="this.filterMembers"
+      @filterMembers="filterMembers"
     ></member-filter>
     <div class="columns is-multiline">
       <div class="column is-3" v-if="!readonly">
@@ -57,7 +57,7 @@
 <script>
 import Raphael from "raphael";
 import { mapActions, mapGetters, mapState } from "vuex";
-import MemberFilter from "../components/MemberFilter.vue";
+import MemberFilter from "./MemberFilter-Component.vue";
 
 export default {
   components: { MemberFilter },

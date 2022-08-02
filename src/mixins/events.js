@@ -1,34 +1,39 @@
 import api from "../api/castellers";
+import ConfirmModal from "../components/modals/Confirm-Modal";
 
 export const eventMixin = {
   methods: {
-    deleteEvent: function (event) {
+    async deleteEvent(event) {
       const options = { year: "numeric", month: "2-digit", day: "2-digit" };
       const date = new Date(event.startDate * 1000);
       const startDate = Intl.DateTimeFormat("fr-FR", options).format(date);
-      return new Promise((resolve, reject) => {
-        this.$buefy.dialog.confirm({
-          message:
+      const modalPromise = this.$oruga.modal.open({
+        component: ConfirmModal,
+        props: {
+          title:
             this.$t("events.confirmDelete") +
             " <b>" +
             event.name +
             "</b> (" +
             startDate +
             ")",
-          confirmText: this.$t("general.yes"),
-          cancelText: this.$t("general.cancel"),
-          type: "is-danger",
-          onConfirm: () => {
-            api
-              .deleteEvent(event.uuid)
-              .then(function () {
-                resolve();
-              })
-              .catch(function (err) {
-                reject(err);
-              });
-          },
-        });
+          confirm: this.$t("general.yes"),
+          cancel: this.$t("general.cancel"),
+        },
+      });
+      const result = await modalPromise.promise;
+      return new Promise((resolve, reject) => {
+        if (result.action == "yes") {
+          api
+            .deleteEvent(event.uuid)
+            .then(function () {
+              resolve();
+            })
+            .catch(function (err) {
+              reject(err);
+            });
+        }
+        resolve();
       });
     },
   },

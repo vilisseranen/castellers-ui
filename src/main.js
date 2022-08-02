@@ -1,14 +1,14 @@
-import Vue from "vue";
+import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import i18n from "./i18n";
-import buefy from "./buefy";
+import Oruga from "@oruga-ui/oruga-next";
+import { bulmaConfig } from "@oruga-ui/theme-bulma";
+
 import "./registerServiceWorker";
 
-import notifications from "./notifications";
-
-Vue.config.productionTip = false;
+import notifications from "./mixins/notifications";
 
 // Redirect if we need to log in
 router.beforeEach((to, from, next) => {
@@ -24,28 +24,12 @@ router.beforeEach((to, from, next) => {
   }
 });
 
-new Vue({
-  router,
-  store,
-  i18n,
-  buefy,
-  notifications,
-  render: (h) => h(App),
-  methods: {
-    setLocale: function (locale) {
-      this.$i18n.locale = locale;
-    },
-    checkAction() {
-      if ("action" in this.$route.query) {
-        const action = {};
-        action.type = this.$route.query.action;
-        action.objectUUID = this.$route.query.objectUUID;
-        action.payload = this.$route.query.payload;
-        this.$store.commit("setAction", action);
-      }
-    },
-  },
-  mounted() {
-    this.checkAction(); // check for an action to perform
-  },
-}).$mount("#app");
+createApp({
+  extends: App,
+  mixins: [notifications],
+})
+  .use(store)
+  .use(router)
+  .use(i18n)
+  .use(Oruga, bulmaConfig)
+  .mount("#app");
