@@ -13,6 +13,7 @@
     "@oruga-ui/theme-bulma": "^0.2.6",
     "@vueform/multiselect": "^2.5.2",
     "@vuepic/vue-datepicker": "^3.3.1",
+    "axios": "^0.27.2",
     "bulma": "^0.9.4",
     "core-js": "^3.8.3",
     "jwt-decode": "^3.1.2",
