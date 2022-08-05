@@ -46,5 +46,12 @@ jobs:
           bucket-region: ${{ secrets.S3_BUCKET_REGION }}
           cache: 1209600
           private: true
-          dist-id: ${{ secrets.CLOUDFRONT_DIST_ID }}
-          invalidation: /
+      - name: Deploy index.html
+        uses: reggionick/s3-deploy@v3
+        with:
+          folder: dist
+          bucket: ${{ secrets.S3_BUCKET }}
+          bucket-region: ${{ secrets.S3_BUCKET_REGION }}
+          no-cache: true
+          private: true
+          filesToInclude: "index.html"
