@@ -172,7 +172,7 @@
                   v-model="currentEvent.locationName"
                 />
               </div>
-              <!-- <l-map
+              <l-map
                 :zoom="zoom"
                 :center="currentEvent.location"
                 @click="setLocation"
@@ -183,7 +183,7 @@
                   :attribution="attribution"
                 ></l-tile-layer>
                 <l-marker :lat-lng="currentEvent.location"></l-marker>
-              </l-map> -->
+              </l-map>
             </div>
             <div class="field is-6 column">
               <label class="label">{{ $t("events.description") }}</label>
@@ -379,7 +379,7 @@
 <script>
 import { mapGetters, mapActions, mapState } from "vuex";
 import Datepicker from "@vuepic/vue-datepicker";
-// import { LMap, LTileLayer, LMarker } from "@vue-leaflet/vue-leaflet";
+import { LMap, LTileLayer, LMarker } from "@vue-leaflet/vue-leaflet";
 import Castell from "./CastellsDrawing-Component.vue";
 import MemberFilter from "../components/MemberFilter-Component.vue";
 
@@ -406,9 +406,9 @@ export default {
   components: {
     Castell,
     Datepicker,
-    // LMap,
-    // LTileLayer,
-    // LMarker,
+    LMap,
+    LTileLayer,
+    LMarker,
     MemberFilter,
   },
   data() {
@@ -642,7 +642,7 @@ export default {
     },
     // map
     setLocation(event) {
-      if (!this.readonly) {
+      if (!this.readonly && event.latlng !== undefined) {
         this.currentEvent.location = L.latLng(
           event.latlng.lat,
           event.latlng.lng
