@@ -7,16 +7,16 @@
           <button type="button" class="delete" @click="$emit('close')" />
         </header>
         <section class="modal-card-body">
-          <b-field :label="$t('castells.originalName')">
-            <b-input type="string" :value="originalName" disabled> </b-input>
-          </b-field>
-          <b-field :label="$t('castells.newName')">
-            <b-input type="string" v-model="name" required> </b-input>
-          </b-field>
+          <o-field :label="$t('castells.originalName')">
+            <o-input type="string" v-model="oName" disabled> </o-input>
+          </o-field>
+          <o-field :label="$t('castells.newName')">
+            <o-input type="string" v-model="name" required> </o-input>
+          </o-field>
         </section>
         <footer class="modal-card-foot">
-          <b-button :label="$t('general.cancel')" @click="$emit('close')" />
-          <b-button
+          <o-button :label="$t('general.cancel')" @click="$emit('close')" />
+          <o-button
             :label="$t('castells.copy')"
             type="is-info"
             @click="createCastell()"
@@ -29,8 +29,10 @@
 
 <script>
 import { mapActions } from "vuex";
+import notifications from "../../mixins/notifications";
 
 export default {
+  mixins: [notifications],
   props: {
     originalName: String,
     originalUuid: String,
@@ -39,6 +41,7 @@ export default {
   data() {
     return {
       name: this.newName,
+      oName: this.originalName,
     };
   },
   methods: {

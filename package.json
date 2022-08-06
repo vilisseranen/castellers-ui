@@ -1,63 +1,49 @@
 {
   "name": "castellers-ui",
-  "version": "0.0.14",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve --port 8081 --mode development",
+    "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "i18n": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/assets/translations/**/*.json'"
   },
   "dependencies": {
-    "@babel/core": "^7.16.0",
-    "@types/leaflet": "^1.7.6",
-    "axios": "^0.21.4",
-    "buefy": "^0.9.13",
-    "bulma": "^0.9.3",
-    "core-js": "^3.19.2",
+    "@oruga-ui/oruga-next": "^0.5.5",
+    "@oruga-ui/theme-bulma": "^0.2.6",
+    "@vueform/multiselect": "^2.5.2",
+    "@vuepic/vue-datepicker": "^3.3.1",
+    "axios": "^0.27.2",
+    "bulma": "^0.9.4",
+    "core-js": "^3.8.3",
     "jwt-decode": "^3.1.2",
-    "leaflet": "^1.7.1",
-    "luxon": "^1.28.0",
-    "node-sass": "^5.0.0",
-    "pretty-checkbox-vue": "^1.1.9",
     "raphael": "^2.3.0",
     "register-service-worker": "^1.7.2",
-    "velocity-animate": "^1.5.2",
-    "vue": "^2.6.14",
-    "vue-datetime": "^1.0.0-beta.14",
-    "vue-i18n": "^8.26.7",
-    "vue-multiselect": "^2.1.6",
-    "vue-router": "^3.5.3",
-    "vue2-leaflet": "^2.7.1",
-    "vuex": "^3.6.2",
-    "vuex-persistedstate": "^4.1.0",
-    "weekstart": "^1.1.0"
+    "vue": "^3.2.13",
+    "vue-i18n": "^9.1.10",
+    "vue-router": "^4.0.3",
+    "vuex": "^4.0.0",
+    "vuex-persistedstate": "^4.1.0"
   },
   "devDependencies": {
-    "@intlify/vue-i18n-loader": "^2.1.2",
-    "@vue/cli-plugin-babel": "^4.5.15",
-    "@vue/cli-plugin-eslint": "^4.5.15",
-    "@vue/cli-plugin-pwa": "^4.5.15",
-    "@vue/cli-plugin-router": "^4.5.15",
-    "@vue/cli-plugin-vuex": "^4.5.15",
-    "@vue/cli-service": "^4.5.15",
-    "@vue/eslint-config-prettier": "^6.0.0",
-    "@vue/eslint-config-standard": "^6.1.0",
-    "babel-eslint": "^10.1.0",
+    "@babel/core": "^7.12.16",
+    "@babel/eslint-parser": "^7.12.16",
+    "@intlify/vue-i18n-loader": "^3.0.0",
+    "@vue-leaflet/vue-leaflet": "^0.6.1",
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-plugin-eslint": "~5.0.0",
+    "@vue/cli-plugin-pwa": "~5.0.0",
+    "@vue/cli-plugin-router": "~5.0.0",
+    "@vue/cli-plugin-vuex": "~5.0.0",
+    "@vue/cli-service": "~5.0.0",
     "eslint": "^7.32.0",
-    "eslint-loader": "^4.0.2",
-    "eslint-plugin-import": "^2.25.3",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^3.4.1",
-    "eslint-plugin-promise": "^5.2.0",
-    "eslint-plugin-standard": "^5.0.0",
-    "eslint-plugin-vue": "^7.20.0",
-    "minimist": ">=1.2.2",
-    "prettier": "^2.5.1",
-    "sass-loader": "^10.2.0",
-    "vue-cli-plugin-buefy": "^0.3.8",
-    "vue-cli-plugin-i18n": "^2.3.1",
-    "vue-template-compiler": "^2.6.14"
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-vue": "^8.0.3",
+    "prettier": "^2.4.1",
+    "sass": "^1.32.7",
+    "sass-loader": "^12.0.0",
+    "vue-cli-plugin-i18n": "^0.6.1"
   },
   "eslintConfig": {
     "root": true,
@@ -65,23 +51,19 @@
       "node": true
     },
     "extends": [
-      "plugin:vue/essential",
-      "@vue/standard",
+      "plugin:vue/vue3-essential",
       "eslint:recommended",
-      "@vue/prettier"
+      "plugin:prettier/recommended"
     ],
-    "rules": {},
     "parserOptions": {
-      "parser": "babel-eslint"
-    }
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
+      "parser": "@babel/eslint-parser"
+    },
+    "rules": {}
   },
   "browserslist": [
     "> 1%",
-    "last 2 versions"
+    "last 2 versions",
+    "not dead",
+    "not ie 11"
   ]
 }

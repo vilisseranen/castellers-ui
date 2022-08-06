@@ -2,14 +2,14 @@
   <div>
     <p class="title is-5">{{ $t("events.title") }}</p>
     <div class="columns">
-      <b-field class="column" v-if="type === 'admin'">
+      <o-field class="column" v-if="type === 'admin'">
         <button class="button field is-info" @click="addEvent">
           <span class="icon">
             <i class="fa fa-calendar-plus"></i>
           </span>
           <span>{{ $t("events.create") }}</span>
         </button>
-      </b-field>
+      </o-field>
       <nav class="pagination" role="navigation" aria-label="pagination">
         <a
           class="pagination-previous"
@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import Event from "../components/Event.vue";
+import Event from "../components/Event-Component.vue";
 import { mapGetters, mapMutations, mapActions, mapState } from "vuex";
 import { eventMixin } from "../mixins/events.js";
 
@@ -80,10 +80,10 @@ export default {
       this.participateEvent({ eventUuid, participation, token, userUuid })
         .then(function () {
           self.$store.dispatch("events/getEvent", { uuid: eventUuid });
-          self.$notifyOK(self.$t("events.participationOK"));
+          self.$root.$notifyOK(self.$t("events.participationOK"));
         })
         .catch(function () {
-          self.$notifyNOK(self.$t("events.participationNOK"));
+          self.$root.$notifyNOK(self.$t("events.participationNOK"));
         });
     },
     addEvent() {

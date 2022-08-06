@@ -30,7 +30,7 @@ const actions = {
         context.commit("setEvents", events);
         return response;
       })
-      .catch(function (response) {});
+      .catch(function () {});
   },
   async participateEvent(context, { eventUuid, participation, token }) {
     if (token) {

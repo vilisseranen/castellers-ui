@@ -3,15 +3,15 @@
     <p class="title is-3">
       {{ $t("castells.title") }}
     </p>
-    <b-field>
+    <o-field>
       <button class="button field is-info" @click="addCastellModel">
         <span class="icon">
           <i class="fa fa-plus"></i>
         </span>
         <span>{{ $t("castells.create") }}</span>
       </button>
-    </b-field>
-    <b-table
+    </o-field>
+    <o-table
       :data="castellModels"
       sort-icon="arrow-up"
       icon-pack="fa"
@@ -19,7 +19,7 @@
       :default-sort="[this.castellSort.field, this.castellSort.order]"
       @sort="onSort"
     >
-      <b-table-column
+      <o-table-column
         key="name"
         field="name"
         :label="$t('castells.modelName')"
@@ -27,8 +27,8 @@
         sortable
         searchable
         >{{ props.row.name }}
-      </b-table-column>
-      <b-table-column
+      </o-table-column>
+      <o-table-column
         key="type"
         field="type"
         :label="$t('castells.type')"
@@ -36,8 +36,8 @@
         searchable
         v-slot="props"
         >{{ props.row.type }}
-      </b-table-column>
-      <b-table-column
+      </o-table-column>
+      <o-table-column
         key="event"
         field="event.name"
         :label="$t('events.event')"
@@ -46,8 +46,8 @@
         v-slot="props"
       >
         {{ props.row.event.name }}
-      </b-table-column>
-      <b-table-column
+      </o-table-column>
+      <o-table-column
         key="date"
         field="event.start"
         :label="$t('events.date')"
@@ -56,8 +56,8 @@
         v-slot="props"
       >
         {{ formattedDate(props.row.event) }}
-      </b-table-column>
-      <b-table-column
+      </o-table-column>
+      <o-table-column
         key="actions"
         :label="$t('general.actions')"
         v-slot="props"
@@ -85,23 +85,8 @@
             <i class="fa fa-times"></i>
           </span>
         </a>
-      </b-table-column>
-    </b-table>
-    <b-modal
-      v-model="isCopyModalActive"
-      has-modal-card
-      trap-focus
-      aria-role="dialog"
-      aria-label="Copy castell"
-      aria-modal
-    >
-      <template #default="props">
-        <castell-copy-modal
-          v-bind="copyProps"
-          @close="props.close"
-        ></castell-copy-modal>
-      </template>
-    </b-modal>
+      </o-table-column>
+    </o-table>
   </div>
 </template>
 
@@ -114,13 +99,12 @@
 <script>
 import { mapActions, mapState } from "vuex";
 import { castellMixin } from "../mixins/castells.js";
-import CastellCopyModal from "../components/CastellCopyModal.vue";
+import CastellCopyModal from "../components/modals/CastellCopy-Modal.vue";
 
 import helper from "../api/dateTimeHelper";
 
 export default {
   mixins: [castellMixin],
-  components: { CastellCopyModal },
   data() {
     return {
       isCopyModalActive: false,
@@ -161,10 +145,15 @@ export default {
         });
     },
     copyCastellModelModal(castell) {
-      this.isCopyModalActive = true;
-      this.copyProps.originalName = castell.name;
-      this.copyProps.originalUuid = castell.uuid;
-      this.copyProps.newName = this.$t("castells.copyOf") + " " + castell.name;
+      this.$oruga.modal.open({
+        trapFocus: true,
+        component: CastellCopyModal,
+        props: {
+          originalName: castell.name,
+          originalUuid: castell.uuid,
+          newName: this.$t("castells.copyOf") + " " + castell.name,
+        },
+      });
     },
     formattedDate(event) {
       if (event && event.start) {

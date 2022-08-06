@@ -7,34 +7,34 @@
     <member-filter
       :types="this.memberTypes"
       :statuses="this.memberStatuses"
-      v-on:input="this.filterMembers"
+      @filterMembers="filterMembers"
     ></member-filter>
 
-    <b-table
+    <o-table
       class="summaryTable table-is-narrow"
       :data="summaryParticipants"
       :mobile-cards="false"
-      :selected.sync="selected"
+      v-model:selected="selected"
       icon-pack="fa"
     >
       <template>
-        <b-table-column
+        <o-table-column
           v-for="column in columns"
           v-bind:key="column.field"
           :field="column.field"
           :label="column.label"
           :width="column.width"
           :sortable="column.sortable"
-          :subheading="column.subheading"
+          :subheading="String(column.subheading)"
           class="is-size-7"
         >
-          <template slot="header" slot-scope="{ column }">
+          <template v-slot:header="{ column }">
             <span class="is-size-7">
               {{ column.label }}
             </span>
           </template>
 
-          <template slot="subheading" slot-scope="{ column }">
+          <template v-slot:subheading="{ column }">
             <span class="is-size-7">
               {{ column.subheading }}
             </span>
@@ -50,14 +50,14 @@
               {{ props.row[column.field] }}
             </span>
           </template>
-        </b-table-column>
+        </o-table-column>
       </template>
-    </b-table>
+    </o-table>
   </div>
 </template>
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
-import MemberFilter from "../components/MemberFilter.vue";
+import MemberFilter from "../components/MemberFilter-Component.vue";
 
 export default {
   components: { MemberFilter },

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="box">
+    <div class="box" id="eventCreate">
       <p class="title is-3">
         <span v-t="'events.' + actionLabel"></span
         ><span
@@ -45,33 +45,36 @@
             $t("events.type")
           }}</label>
           <div class="control is-expanded">
-            <PrettyRadio
-              class="p-default p-curve"
-              name="type"
-              color="primary-o"
-              value="practice"
-              :disabled="readonly ? true : false"
-              v-model="event.type"
-              >{{ $t("events.practiceType") }}</PrettyRadio
-            >
-            <PrettyRadio
-              class="p-default p-curve"
-              name="type"
-              color="warning-o"
-              value="presentation"
-              :disabled="readonly ? true : false"
-              v-model="event.type"
-              >{{ $t("events.presentationType") }}</PrettyRadio
-            >
-            <PrettyRadio
-              class="p-default p-curve"
-              name="type"
-              color="success-o"
-              value="social"
-              :disabled="readonly ? true : false"
-              v-model="event.type"
-              >{{ $t("events.socialType") }}</PrettyRadio
-            >
+            <div class="field">
+              <o-radio
+                name="type"
+                variant="practice"
+                nativeValue="practice"
+                :disabled="readonly ? true : false"
+                v-model="event.type"
+                >{{ $t("events.practiceType") }}</o-radio
+              >
+            </div>
+            <div class="field">
+              <o-radio
+                name="type"
+                variant="presentation"
+                nativeValue="presentation"
+                :disabled="readonly ? true : false"
+                v-model="event.type"
+                >{{ $t("events.presentationType") }}</o-radio
+              >
+            </div>
+            <div class="field">
+              <o-radio
+                name="type"
+                variant="social"
+                nativeValue="social"
+                :disabled="readonly ? true : false"
+                v-model="event.type"
+                >{{ $t("events.socialType") }}</o-radio
+              >
+            </div>
           </div>
         </div>
         <div class="field column is-6">
@@ -79,14 +82,15 @@
             $t("events.start")
           }}</label>
           <div class="control is-expanded">
-            <datetime
+            <Datepicker
               :disabled="readonly ? true : false"
-              input-id="startDate"
-              type="datetime"
               v-model="startDateForCalendar"
-              input-class="input"
-              :minute-step="15"
-            ></datetime>
+              autoApply
+              minutesIncrement="15"
+              locale="fr"
+              format="dd/MM/yyyy HH:mm"
+              :transitions="false"
+            />
           </div>
         </div>
         <div class="field column is-6">
@@ -94,21 +98,22 @@
             $t("events.end")
           }}</label>
           <div class="control is-expanded">
-            <datetime
+            <Datepicker
               :disabled="readonly ? true : false"
-              input-id="endDate"
-              type="datetime"
               v-model="endDateForCalendar"
-              input-class="input"
-              :minute-step="15"
-            ></datetime>
+              autoApply
+              minutesIncrement="15"
+              locale="fr"
+              format="dd/MM/yyyy HH:mm"
+              :transitions="false"
+            />
           </div>
         </div>
         <div class="field column is-2" v-if="currentEvent.uuid === undefined">
           <label class="label">{{ $t("events.recurringEvent") }}</label>
-          <div class="field">
-            <b-switch v-model="recurring" type="is-info"></b-switch>
-          </div>
+          <o-field>
+            <o-switch v-model="recurring" variant="info"></o-switch>
+          </o-field>
         </div>
         <div
           class="field column is-4"
@@ -117,21 +122,19 @@
           <label class="label" v-bind:class="{ required: !readonly }">{{
             $t("events.interval")
           }}</label>
-          <PrettyRadio
-            class="p-default p-curve"
+          <o-radio
             name="interval"
-            color="primary-o"
-            value="1w"
+            variant="primary"
+            nativeValue="1w"
             v-model="currentEvent.recurring.interval"
-            >{{ $t("events.1w") }}</PrettyRadio
+            >{{ $t("events.1w") }}</o-radio
           >
-          <PrettyRadio
-            class="p-default p-curve"
+          <o-radio
             name="interval"
-            color="info-o"
-            value="1d"
+            variant="info"
+            nativeValue="1d"
             v-model="currentEvent.recurring.interval"
-            >{{ $t("events.1d") }}</PrettyRadio
+            >{{ $t("events.1d") }}</o-radio
           >
         </div>
         <div
@@ -141,13 +144,15 @@
           <label class="label" v-bind:class="{ required: !readonly }">{{
             $t("events.until")
           }}</label>
-          <datetime
-            type="datetime"
+          <Datepicker
+            :disabled="readonly ? true : false"
             v-model="untilDateForCalendar"
-            input-class="input"
-            input-id="until"
-            :minute-step="15"
-          ></datetime>
+            autoApply
+            minutesIncrement="15"
+            locale="fr"
+            format="dd/MM/yyyy HH:mm"
+            :transitions="false"
+          />
         </div>
         <div class="column is-12">
           <div class="columns">
@@ -230,31 +235,29 @@
           {{ $t("events.noteLocation") }}
         </div>
       </div>
-      <b-loading
+      <o-loading
         :is-full-page="true"
-        :active.sync="isLoading"
+        v-model:active="isLoading"
         :can-cancel="false"
-      ></b-loading>
+      ></o-loading>
     </div>
     <div class="box" v-if="models.length > 0">
       <p class="title is-3">{{ $t("castells.castellsScheduled") }}</p>
       <router-link
         v-if="castell.uuid"
         :to="{ name: 'castellEdit', params: { uuid: castell.uuid } }"
-        tag="button"
         class="button is-warning"
-        >{{ $t("castells.edit") }}</router-link
+        ><button>{{ $t("castells.edit") }}</button></router-link
       >
-      <b-tabs v-on:input="showCastellModel" :multiline="true">
-        <template v-for="(model, index) in models">
-          <b-tab-item
+      <o-tabs v-on:input="showCastellModel" :multiline="true">
+        <template v-for="(model, index) in models" :key="model.uuid">
+          <o-tab-item
             :value="String(index)"
-            v-bind:key="model.uuid"
             :label="model.name + ' (' + model.type + ')'"
           >
-          </b-tab-item>
+          </o-tab-item>
         </template>
-      </b-tabs>
+      </o-tabs>
       <castell :castell="castell" ref="drawing" readonly></castell>
     </div>
     <div class="box" v-if="this.type === 'admin' && this.event.uuid">
@@ -266,21 +269,21 @@
       >
 
       <member-filter
-        :types="this.memberTypes"
-        :statuses="this.memberStatuses"
-        v-on:input="listParticipants($route.params.uuid, $event)"
+        v-model:types="this.memberTypes"
+        v-model:statuses="this.memberStatuses"
+        @filterMembers="listParticipants"
       ></member-filter>
 
-      <!-- <span class="has-text-weight-bold">{{ $t("events.filterMembers") }}</span> -->
-      <b-field grouped group-multiline>
+      <span class="has-text-weight-bold">{{ $t("events.filterMembers") }}</span>
+      <o-field grouped group-multiline>
         <div v-for="(column, index) in filters" :key="index" class="control">
-          <b-checkbox v-model="column.display">
+          <o-checkbox v-model="column.display">
             {{ column.title }}
-          </b-checkbox>
+          </o-checkbox>
         </div>
-      </b-field>
+      </o-field>
 
-      <b-table
+      <o-table
         :data="this.participation"
         ref="table"
         :default-sort="['participation', 'asc']"
@@ -296,21 +299,21 @@
               : ''
         "
       >
-        <b-table-column
+        <o-table-column
           v-slot="props"
           field="name"
           :label="participationColumns['name']"
         >
           {{ props.row.firstName }} {{ props.row.lastName }}
-        </b-table-column>
-        <b-table-column
+        </o-table-column>
+        <o-table-column
           v-slot="props"
           field="roles"
           :label="participationColumns['roles']"
         >
           {{ props.row.roles }}
-        </b-table-column>
-        <b-table-column
+        </o-table-column>
+        <o-table-column
           v-slot="props"
           field="participation"
           :label="participationColumns['participation']"
@@ -328,8 +331,8 @@
               >{{ $t("events.participationNo") }}</span
             >
           </div>
-        </b-table-column>
-        <b-table-column
+        </o-table-column>
+        <o-table-column
           v-slot="props"
           field="presence"
           :label="participationColumns['presence']"
@@ -343,9 +346,9 @@
               $t("members.absent")
             }}</span>
           </div>
-        </b-table-column>
+        </o-table-column>
 
-        <b-table-column
+        <o-table-column
           v-slot="props"
           field="setPresence"
           :label="participationColumns['setPresence']"
@@ -367,22 +370,20 @@
               <i class="fas fa-minus has-text-info"></i>
             </span>
           </a>
-        </b-table-column>
-      </b-table>
+        </o-table-column>
+      </o-table>
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions, mapState } from "vuex";
-import { Datetime } from "vue-datetime";
-import PrettyRadio from "pretty-checkbox-vue/radio";
-import { LMap, LTileLayer, LMarker } from "vue2-leaflet";
-import Castell from "./CastellsDrawing.vue";
-import MemberFilter from "../components/MemberFilter.vue";
+import Datepicker from "@vuepic/vue-datepicker";
+import { LMap, LTileLayer, LMarker } from "@vue-leaflet/vue-leaflet";
+import Castell from "./CastellsDrawing-Component.vue";
+import MemberFilter from "../components/MemberFilter-Component.vue";
 
-import "vue-datetime/dist/vue-datetime.css";
-import "pretty-checkbox/dist/pretty-checkbox.min.css";
+import "@vuepic/vue-datepicker/dist/main.css";
 
 import { Icon } from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -404,8 +405,7 @@ export default {
   },
   components: {
     Castell,
-    Datetime,
-    PrettyRadio,
+    Datepicker,
     LMap,
     LTileLayer,
     LMarker,
@@ -519,7 +519,7 @@ export default {
   },
   mounted() {
     this.loadEvent(this.$route.params.uuid, this.$route.query.t);
-    this.listParticipants(this.$route.params.uuid, {
+    this.listParticipants({
       statuses: this.memberStatuses,
       types: this.memberTypes,
     });
@@ -635,14 +635,14 @@ export default {
         .then(function () {
           self.loadEvent(eventUuid, token);
         })
-        .then(self.$notifyOK(self.$t("events.participationOK")))
+        .then(self.$root.$notifyOK(self.$t("events.participationOK")))
         .catch(function () {
-          self.$notifyNOK(self.$t("events.participationNOK"));
+          self.$root.$notifyNOK(self.$t("events.participationNOK"));
         });
     },
     // map
     setLocation(event) {
-      if (!this.readonly) {
+      if (!this.readonly && event.latlng !== undefined) {
         this.currentEvent.location = L.latLng(
           event.latlng.lat,
           event.latlng.lng
@@ -652,6 +652,7 @@ export default {
     dateFromCalendar(dateToConvert) {
       if (dateToConvert) {
         const date = new Date(dateToConvert);
+        date.setSeconds(0);
         return Math.trunc(date.getTime() / 1000);
       } else {
         return 0;
@@ -675,11 +676,11 @@ export default {
             self.$router.push({ path: `/eventEdit/${response.data.uuid}` });
             self.loadEvent(response.data.uuid);
           }
-          self.$notifyOK(self.$t("general.notifySuccess"));
+          self.$root.$notifyOK(self.$t("general.notifySuccess"));
         })
         .catch(function (error) {
           self.isLoading = false;
-          self.$notifyNOK(self.$t("general.notifyFailure"));
+          self.$root.$notifyNOK(self.$t("general.notifyFailure"));
           console.log(error);
         });
     },
@@ -697,11 +698,10 @@ export default {
           .catch((err) => console.log(err));
       }
     },
-    listParticipants(eventUuid, options) {
-      if (options !== undefined) {
-        this.memberTypes = options.types;
-        this.memberStatuses = options.statuses;
-      }
+    listParticipants({ types, statuses }) {
+      this.memberTypes = types;
+      this.memberStatuses = statuses;
+      var eventUuid = this.$route.params.uuid;
       if (eventUuid && this.type === "admin") {
         const self = this;
         this.getEventParticipation({
@@ -720,6 +720,9 @@ export default {
           .catch((err) => console.log(err));
       }
     },
+    updateFilter() {
+      console.log("received update from component");
+    },
     countRegistered() {
       return this.participation.filter(
         (member) => member.participation === "yes"
@@ -734,9 +737,7 @@ export default {
     },
     presence(eventUuid, memberUuid, presence) {
       const self = this;
-      this.presenceEvent({ eventUuid, memberUuid, presence }).then(function (
-        response
-      ) {
+      this.presenceEvent({ eventUuid, memberUuid, presence }).then(function () {
         self.listParticipants(eventUuid);
       });
     },

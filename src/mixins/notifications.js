@@ -1,20 +1,23 @@
 export default {
   methods: {
-    $notifyOK(text) {
-      this.$buefy.snackbar.open({
+    $notifyOK: function (text) {
+      this.$oruga.notification.open({
+        duration: 3500,
         message: text,
-        type: "is-success",
+        variant: "success",
         queue: false,
-        position: "is-bottom-left",
+        position: "bottom-left",
+        closable: true,
       });
     },
-    $notifyNOK(text) {
-      this.$buefy.snackbar.open({
+    $notifyNOK: function (text) {
+      this.$oruga.notification.open({
         message: text,
-        type: "is-danger",
+        variant: "danger",
         queue: false,
-        position: "is-bottom-left",
+        position: "bottom-left",
         indefinite: true,
+        closable: true,
       });
     },
   },

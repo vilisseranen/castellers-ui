@@ -1,26 +1,19 @@
 process.env.VUE_APP_VERSION = require("./package.json").version;
 
-module.exports = {
-  pluginOptions: {
-    i18n: {
-      locale: "fr",
-      fallbackLocale: "en",
-      localeDir: "assets/translations",
-      enableInSFC: true,
-    },
-  },
-  chainWebpack: (config) => {
-    config.resolve.symlinks(true);
-    return config;
-  },
+const { defineConfig } = require("@vue/cli-service");
+module.exports = defineConfig({
+  transpileDependencies: true,
+
   devServer: {
     proxy: {
-      "/api": {
+      "^/api": {
         target: "http://localhost:8080",
         changeOrigin: true,
+        logLevel: "debug",
       },
     },
   },
+
   pwa: {
     name: "Castellers de Montréal",
     themeColor: "#e0dac5",
@@ -69,4 +62,16 @@ module.exports = {
     // configure the workbox plugin
     workboxPluginMode: "GenerateSW",
   },
-};
+
+  pluginOptions: {
+    i18n: {
+      locale: undefined,
+      fallbackLocale: undefined,
+      localeDir: undefined,
+      enableLegacy: undefined,
+      runtimeOnly: false,
+      compositionOnly: false,
+      fullInstall: true,
+    },
+  },
+});

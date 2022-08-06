@@ -1,7 +1,7 @@
 <template>
   <footer class="footer">
     <div class="columns">
-      <div class="column buttons has-addons">
+      <div class="column buttons has-addons" style="margin-bottom: 0px">
         <a
           v-bind:class="[
             this.$i18n.locale == 'fr' ? 'button is-focused' : 'button',

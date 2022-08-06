@@ -7,13 +7,13 @@
           <button type="button" class="delete" @click="$emit('close')" />
         </header>
         <section class="modal-card-body">
-          <b-field :label="$t('castells.modelName')">
-            <b-input type="string" :value="name" disabled> </b-input>
-          </b-field>
+          <o-field :label="$t('castells.modelName')">
+            <o-input type="string" v-model="oName" disabled> </o-input>
+          </o-field>
         </section>
         <section class="modal-card-body">
-          <b-field :label="$t('castells.selectEvent')">
-            <b-select type="string" v-model="selectedEvent">
+          <o-field :label="$t('castells.selectEvent')">
+            <o-select v-model="selectedEvent">
               <option
                 v-for="event in eventsForSelection"
                 :value="event.uuid"
@@ -21,21 +21,21 @@
               >
                 {{ event.name }}
               </option>
-            </b-select>
-          </b-field>
+            </o-select>
+          </o-field>
         </section>
         <footer class="modal-card-foot">
-          <b-button :label="$t('general.cancel')" @click="$emit('close')" />
-          <b-button
+          <o-button :label="$t('general.cancel')" @click="$emit('close')" />
+          <o-button
             v-if="eventFormattedName"
             :label="$t('castells.detachButton')"
-            type="is-warning"
+            variant="warning"
             @click="detachCastell()"
           />
-          <b-button
+          <o-button
             v-if="selectedEvent"
             :label="$t('castells.attachButton')"
-            type="is-info"
+            variant="info"
             @click="attachCastell()"
           />
         </footer>
@@ -46,8 +46,10 @@
 
 <script>
 import { mapActions, mapState } from "vuex";
+import notifications from "../../mixins/notifications";
 
 export default {
+  mixins: [notifications],
   props: {
     name: String,
     uuid: String,
@@ -55,7 +57,7 @@ export default {
     eventUuid: String,
   },
   data() {
-    return { selectedEvent: this.eventUuid };
+    return { selectedEvent: this.eventUuid, oName: this.name };
   },
   mounted() {
     this.$store.dispatch("events/getEvents");

@@ -1,10 +1,49 @@
-@import "../../node_modules/bulma/sass/utilities/_all.sass";
+@import "../../node_modules/bulma/sass/utilities/initial-variables";
+@import "../../node_modules/bulma/sass/utilities/functions";
 
+// Buefy initial variables
+$speed-slow: 150ms;
+$speed-slower: 250ms;
+
+$primary: #7957d5;
+$primary-invert: findColorInvert($primary);
+$primary-light: findLightColor($primary);
+$primary-dark: findDarkColor($primary);
+
+$info: #167df0;
+
+$label-weight: $weight-semibold;
+
+// custom colors
+$beige: rgba(224, 218, 197, 1);
+$beige-invert: findColorInvert($beige);
+$beige-dark: darken($beige, 5);
+$beige-light: lighten($beige, 10);
 $link: hsl(217,71%, 53%);
+$link-invert: findColorInvert($link);
+$link-light: findLightColor($link);
+$link-dark: findDarkColor($link);
+$grey: rgba(180,180,180,1);
+$grey-invert: findColorInvert($grey);
+$grey-light: findLightColor($grey);
+$grey-dark: findDarkColor($grey);
 
+@import "../../node_modules/bulma/sass/utilities/derived-variables";
+$colors: map-merge($colors, (
+    "beige": ($beige, $beige-invert, $beige-light, $beige-dark),
+    "presentation": ($warning, $warning-invert, $warning-light, $warning-dark),
+    "practice": ($info, $info-invert, $info-light, $info-dark),
+    "social": ($primary, $primary-invert, $primary-light, $primary-dark),
+    "undefined": ($grey, $grey-invert, $grey-light, $grey-dark),
+));
+
+
+// Other components customization
+$navbar-background-color: $beige;
+$navbar-item-hover-background-color: $beige-dark;
+$navbar-item-hover-color: black;
 $footer-padding: 1.5rem 1rem 1.5rem;
-$footer-background-color: rgba(224, 218, 197, 0.3);
+$footer-background-color: $beige-light; //rgba(224, 218, 197, 0.3);
+$footer-color: true;
 
-$colors: (
-    "beige": (rgba(224, 218, 197, 1), rgba(0, 0, 0, 1))
-);
+@import "~bulma/bulma";

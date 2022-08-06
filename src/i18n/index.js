@@ -1,11 +1,8 @@
-import Vue from "vue";
-import VueI18n from "vue-i18n";
-
-Vue.use(VueI18n);
+import { createI18n } from "vue-i18n";
 
 function loadLocaleMessages() {
   const locales = require.context(
-    "./assets/translations",
+    "./translations",
     true,
     /[A-Za-z0-9-_,\s]+\.json$/i
   );
@@ -20,9 +17,11 @@ function loadLocaleMessages() {
   return messages;
 }
 
-export default new VueI18n({
+const i18n = createI18n({
   locale: process.env.VUE_APP_I18N_LOCALE || "fr",
   fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE || "fr",
   silentTranslationWarn: process.env.NODE_ENV === "production",
   messages: loadLocaleMessages(),
 });
+
+export default i18n;

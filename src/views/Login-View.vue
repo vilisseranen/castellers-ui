@@ -110,17 +110,17 @@ export default {
         })
         .catch(function (error) {
           console.log(error);
-          self.$notifyNOK(self.$t("general.notifyFailure"));
+          self.$root.$notifyNOK(self.$t("general.notifyFailure"));
         });
     },
     resetPassword() {
       const self = this;
       this.forgotPassword(this.member.email)
         .then(function () {
-          self.$notifyOK(self.$t("login.passwordResetSent"));
+          self.$root.$notifyOK(self.$t("login.passwordResetSent"));
         })
         .catch(function () {
-          self.$notifyNOK(self.$t("login.passwordResetIssue"));
+          self.$root.$notifyNOK(self.$t("login.passwordResetIssue"));
         });
     },
     redirect() {

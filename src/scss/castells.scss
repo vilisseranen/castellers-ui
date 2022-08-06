@@ -1,29 +1,15 @@
-html,body
-{
-    width: 100%;
-    height: 100%;
-    margin: 0px;
-    padding: 0px;
-    overflow-x: hidden; 
-}
-
-body {
-  overscroll-behavior-y: none;
-}
-
 #wrapper {
   flex: 1;
 }
 
 #app {
   display: flex;
-  min-height: 100vh;
+  min-height: calc(100vh - $navbar-height);
   flex-direction: column;
-  margin-top: -3.5em; // default size of navbar
 }
 
 #middle {
-  padding-top: 3.5em + 2em;
+  padding-top: 2em;
   padding-bottom: 2em;
   margin: 0px;
 }
