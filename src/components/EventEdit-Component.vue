@@ -247,13 +247,18 @@
         v-if="castell.uuid"
         :to="{ name: 'castellEdit', params: { uuid: castell.uuid } }"
         class="button is-warning"
-        ><button>{{ $t("castells.edit") }}</button></router-link
+        >{{ $t("castells.edit") }}</router-link
       >
-      <o-tabs v-on:input="showCastellModel" :multiline="true">
+      <o-tabs
+        :multiline="true"
+        v-on:click="showCastellModel"
+        v-model="activeCastell"
+      >
         <template v-for="(model, index) in models" :key="model.uuid">
           <o-tab-item
             :value="String(index)"
             :label="model.name + ' (' + model.type + ')'"
+            on:click="showCastellModel()"
           >
           </o-tab-item>
         </template>
@@ -467,6 +472,7 @@ export default {
       },
       castell: {},
       castells: [],
+      activeCastell: 0,
       participation: [],
       memberTypes: ["admin,member", "guest"],
       memberStatuses: ["active"],
@@ -534,7 +540,13 @@ export default {
   computed: {
     ...mapGetters(["uuid", "type"]),
     ...mapState({
-      models: (state) => state.castells.models.sort(),
+      models: function (state) {
+        if (this.$route.params.uuid) {
+          return state.castells.models.sort();
+        } else {
+          return [];
+        }
+      },
     }),
     columns: function () {
       return ["participant_name", "roles", "participation"];
@@ -741,8 +753,10 @@ export default {
         self.listParticipants(eventUuid);
       });
     },
-    showCastellModel(value) {
-      this.castell = JSON.parse(JSON.stringify(this.castells[parseInt(value)]));
+    showCastellModel() {
+      this.castell = JSON.parse(
+        JSON.stringify(this.castells[parseInt(this.activeCastell)])
+      );
     },
   },
 };
