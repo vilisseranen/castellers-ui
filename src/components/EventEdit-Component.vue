@@ -247,7 +247,7 @@
         v-if="castell.uuid"
         :to="{ name: 'castellEdit', params: { uuid: castell.uuid } }"
         class="button is-warning"
-        ><button>{{ $t("castells.edit") }}</button></router-link
+        >{{ $t("castells.edit") }}</router-link
       >
       <o-tabs v-on:input="showCastellModel" :multiline="true">
         <template v-for="(model, index) in models" :key="model.uuid">
