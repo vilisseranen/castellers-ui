@@ -249,11 +249,16 @@
         class="button is-warning"
         >{{ $t("castells.edit") }}</router-link
       >
-      <o-tabs v-on:input="showCastellModel" :multiline="true">
+      <o-tabs
+        :multiline="true"
+        v-on:click="showCastellModel"
+        v-model="activeCastell"
+      >
         <template v-for="(model, index) in models" :key="model.uuid">
           <o-tab-item
             :value="String(index)"
             :label="model.name + ' (' + model.type + ')'"
+            on:click="showCastellModel()"
           >
           </o-tab-item>
         </template>
@@ -467,6 +472,7 @@ export default {
       },
       castell: {},
       castells: [],
+      activeCastell: 0,
       participation: [],
       memberTypes: ["admin,member", "guest"],
       memberStatuses: ["active"],
@@ -741,8 +747,10 @@ export default {
         self.listParticipants(eventUuid);
       });
     },
-    showCastellModel(value) {
-      this.castell = JSON.parse(JSON.stringify(this.castells[parseInt(value)]));
+    showCastellModel() {
+      this.castell = JSON.parse(
+        JSON.stringify(this.castells[parseInt(this.activeCastell)])
+      );
     },
   },
 };
