@@ -540,7 +540,13 @@ export default {
   computed: {
     ...mapGetters(["uuid", "type"]),
     ...mapState({
-      models: (state) => state.castells.models.sort(),
+      models: function (state) {
+        if (this.$route.params.uuid) {
+          return state.castells.models.sort();
+        } else {
+          return [];
+        }
+      },
     }),
     columns: function () {
       return ["participant_name", "roles", "participation"];
