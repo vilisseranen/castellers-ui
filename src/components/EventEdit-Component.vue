@@ -750,7 +750,10 @@ export default {
     presence(eventUuid, memberUuid, presence) {
       const self = this;
       this.presenceEvent({ eventUuid, memberUuid, presence }).then(function () {
-        self.listParticipants(eventUuid);
+        self.listParticipants({
+          statuses: self.memberStatuses,
+          types: self.memberTypes,
+        });
       });
     },
     showCastellModel() {
