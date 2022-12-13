@@ -218,15 +218,11 @@
         <div class="control is-expanded">
           <Multiselect
             v-model="current_user.roles"
+            mode="multiple"
             :options="available_roles"
-            :multiple="true"
-            :placeholder="''"
             :closeOnSelect="false"
-            :selectLabel="$t('multiselect.selectLabel')"
-            :selectGroupLabel="$t('multiselect.selectGroupLabel')"
-            :deselectLabel="$t('multiselect.deselectLabel')"
-            :deselectGroupLabel="$t('multiselect.deselectGroupLabel')"
-            :selectedLabel="$t('multiselect.selectedLabel')"
+            :multipleLabel="multiSelectLabel"
+            :hideSelected="false"
           ></Multiselect>
         </div>
       </div>
@@ -456,6 +452,14 @@ export default {
     },
     memberDelete() {
       this.$emit("deleteUser", this.current_user);
+    },
+    multiSelectLabel(options) {
+      return options
+        .map((option) => {
+          return option.value;
+        })
+        .sort()
+        .join(", ");
     },
   },
 };
