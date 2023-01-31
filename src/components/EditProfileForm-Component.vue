@@ -99,7 +99,7 @@
               v-bind="{ disabled: !this.user.uuid }"
               name="subscribed"
               variant="undefined"
-              nativeValue="0"
+              :nativeValue="0"
               v-model="current_user.subscribed"
               >{{ $t("general.no") }}</o-radio
             >
@@ -109,7 +109,7 @@
               v-bind="{ disabled: !this.user.uuid }"
               name="subscribed"
               variant="undefined"
-              nativeValue="1"
+              :nativeValue="1"
               v-model="current_user.subscribed"
               >{{ $t("general.yes") }}</o-radio
             >

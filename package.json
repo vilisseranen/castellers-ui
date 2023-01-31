@@ -1,6 +1,6 @@
 {
   "name": "castellers-ui",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -9,13 +9,13 @@
     "i18n": "vue-cli-service i18n:report --src './src/**/*.?(js|vue)' --locales './src/assets/translations/**/*.json'"
   },
   "dependencies": {
-    "@oruga-ui/oruga-next": "^0.5.9",
+    "@oruga-ui/oruga-next": "^0.5.10",
     "@oruga-ui/theme-bulma": "^0.2.8",
-    "@vueform/multiselect": "^2.5.7",
+    "@vueform/multiselect": "^2.5.8",
     "@vuepic/vue-datepicker": "^3.6.0",
     "axios": "^0.27.2",
     "bulma": "^0.9.4",
-    "core-js": "^3.26.1",
+    "core-js": "^3.27.2",
     "jwt-decode": "^3.1.2",
     "raphael": "^2.3.0",
     "register-service-worker": "^1.7.2",
@@ -37,7 +37,7 @@
     "@vue/cli-plugin-vuex": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
     "eslint": "^7.32.0",
-    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^8.0.3",
     "prettier": "^2.4.1",
