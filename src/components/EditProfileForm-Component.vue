@@ -40,6 +40,16 @@
           <div class="field">
             <o-radio
               name="type"
+              variant="info"
+              nativeValue="canalla"
+              v-model="current_user.type"
+              :disabled="type === 'admin' ? false : true"
+              >{{ $t("members.canallaType") }}</o-radio
+            >
+          </div>
+          <div class="field">
+            <o-radio
+              name="type"
               variant="primary"
               nativeValue="member"
               v-model="current_user.type"
@@ -91,7 +101,10 @@
           </div>
         </div>
       </div>
-      <div class="field column is-3">
+      <div
+        v-if="current_user.type !== 'guest' && current_user.type !== 'canalla'"
+        class="field column is-3"
+      >
         <label class="label">{{ $t("members.subscribeEmails") }}</label>
         <div class="control is-expanded">
           <div class="field">
@@ -128,7 +141,10 @@
           <input class="input" type="text" v-model="current_user.lastName" />
         </div>
       </div>
-      <div class="field column is-4" v-if="current_user.type !== 'guest'">
+      <div
+        class="field column is-4"
+        v-if="current_user.type !== 'guest' && current_user.type !== 'canalla'"
+      >
         <label class="label required">{{ $t("members.email") }}</label>
         <div class="control is-expanded">
           <input class="input" type="text" v-model="current_user.email" />

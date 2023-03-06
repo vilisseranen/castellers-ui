@@ -147,7 +147,7 @@ export default {
       selectedMemberUuid: "",
       positionsMembers: [],
       dragging: false,
-      memberTypes: ["admin,member", "guest"],
+      memberTypes: ["admin,member,canalla", "guest"],
       memberStatuses: ["active"],
       allMembers: {},
     };

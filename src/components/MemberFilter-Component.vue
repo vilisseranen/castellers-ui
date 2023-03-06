@@ -4,7 +4,7 @@
       <o-checkbox
         @change="filterMembers"
         v-model="memberTypes"
-        nativeValue="admin,member"
+        nativeValue="admin,member,canalla"
         variant="success"
       >
         <span>{{ $t("members.memberTypePlural") }}</span>

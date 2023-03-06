@@ -153,6 +153,7 @@
     "lb": "lb",
     "memberType": "Regular",
     "memberTypePlural": "Regulars",
+    "canallaType": "Canalla",
     "participation": "Participation",
     "pausedStatusPlural": "Paused",
     "presence": "Presence",

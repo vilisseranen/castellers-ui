@@ -32,11 +32,14 @@ const actions = {
       })
       .catch(function () {});
   },
-  async participateEvent(context, { eventUuid, participation, token }) {
+  async participateEvent(
+    context,
+    { memberUuid, eventUuid, participation, token }
+  ) {
     if (token) {
-      return api.participateEvent(eventUuid, participation, token);
+      return api.participateEvent(memberUuid, eventUuid, participation, token);
     }
-    return api.participateEvent(eventUuid, participation);
+    return api.participateEvent(memberUuid, eventUuid, participation);
   },
   async getEventParticipation(context, { eventUuid, type, status }) {
     const options = {};

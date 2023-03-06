@@ -73,14 +73,14 @@ export default {
       { presence: presence }
     );
   },
-  async participateEvent(eventUuid, participation, token) {
+  async participateEvent(memberUuid, eventUuid, participation, token) {
     let authorizationHeader = {};
     if (token != null) {
       authorizationHeader = { Authorization: `Bearer: ${token}` };
     }
     return apiCall(
       "POST",
-      `/members/events/${eventUuid}`,
+      `/members/${memberUuid}/events/${eventUuid}`,
       authorizationHeader,
       { answer: participation }
     );
