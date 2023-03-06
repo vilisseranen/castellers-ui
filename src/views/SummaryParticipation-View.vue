@@ -65,7 +65,7 @@ export default {
     return {
       selected: null,
       eventsParticipants: [],
-      memberTypes: ["admin,member"],
+      memberTypes: ["admin,member,canalla"],
       memberStatuses: ["active"],
     };
   },

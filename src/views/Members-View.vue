@@ -120,7 +120,7 @@ export default {
   mixins: [memberMixin],
   data: function () {
     return {
-      memberTypes: ["admin,member"],
+      memberTypes: ["admin,member,canalla"],
       memberStatuses: ["active"],
       test: "toto",
     };

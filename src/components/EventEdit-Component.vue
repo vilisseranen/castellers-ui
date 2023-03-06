@@ -474,7 +474,7 @@ export default {
       castells: [],
       activeCastell: 0,
       participation: [],
-      memberTypes: ["admin,member", "guest"],
+      memberTypes: ["admin,member,canalla", "guest"],
       memberStatuses: ["active"],
     };
   },
