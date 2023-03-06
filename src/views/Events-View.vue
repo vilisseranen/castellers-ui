@@ -77,7 +77,14 @@ export default {
     }),
     participate(eventUuid, participation, token, userUuid) {
       const self = this;
-      this.participateEvent({ eventUuid, participation, token, userUuid })
+      const memberUuid = this.uuid;
+      this.participateEvent({
+        memberUuid,
+        eventUuid,
+        participation,
+        token,
+        userUuid,
+      })
         .then(function () {
           self.$store.dispatch("events/getEvent", { uuid: eventUuid });
           self.$root.$notifyOK(self.$t("events.participationOK"));

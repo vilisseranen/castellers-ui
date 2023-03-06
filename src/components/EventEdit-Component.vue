@@ -635,15 +635,16 @@ export default {
       // if a is in query params, we also expect p and t
       if ("a" in this.$route.query && this.$route.query.a === "participate") {
         this.participate(
+          this.$route.params.m,
           this.$route.params.uuid,
           this.$route.query.p,
           this.$route.query.t
         );
       }
     },
-    participate(eventUuid, participation, token) {
+    participate(memberUuid, eventUuid, participation, token) {
       const self = this;
-      this.participateEvent({ eventUuid, participation, token })
+      this.participateEvent({ memberUuid, eventUuid, participation, token })
         .then(function () {
           self.loadEvent(eventUuid, token);
         })
