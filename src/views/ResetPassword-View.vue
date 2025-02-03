@@ -133,7 +133,7 @@ export default {
       this.action = this.$route.query.a;
     }
     if ("u" in this.$route.query) {
-      this.$set(this.credentials, "username", this.$route.query.u);
+      this.credentials["username"] = this.$route.query.u;
     }
   },
   methods: {
@@ -160,20 +160,13 @@ export default {
               })
               .then(function () {
                 if (self.action === "activation") {
-                  self.$buefy.dialog.alert({
-                    title: self.$t("login.success"),
-                    message:
-                      self.$t("login.successMessageStart") +
+                  self.$root.notifyOK(
+                    self.$t("login.successMessageStart") +
                       ' "' +
                       self.$t("members.updateButton") +
                       '" ' +
-                      self.$t("login.successMessageEnd"),
-                    hasIcon: true,
-                    iconPack: "fa",
-                    ariaRole: "alertdialog",
-                    ariaModal: true,
-                    type: "is-info",
-                  });
+                      self.$t("login.successMessageEnd")
+                  );
                 }
                 self.$root.setLocale(self.$store.getters.language);
                 self.$router.push({ name: "Events" });
