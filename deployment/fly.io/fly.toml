@@ -1,0 +1,16 @@
+# fly.toml app configuration file generated for castellers-ui on 2025-02-05T22:22:30+01:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'castellers-ui'
+primary_region = 'yul'
+
+[http_service]
+  internal_port = 80
+  force_https = true
+  min_machines_running = 1
+  processes = ['app']
+
+[[vm]]
+  size = 'shared-cpu-1x'
