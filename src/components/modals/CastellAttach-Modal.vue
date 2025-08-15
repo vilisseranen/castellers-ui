@@ -102,13 +102,13 @@ export default {
         eventUuid: this.selectedEvent,
       })
         .then(function () {
-          self.$notifyOK(self.$t("general.notifySuccess"));
+          self.$root.$notifyOK(self.$t("general.notifySuccess"));
           self.$emit("loadModel", self.uuid);
           self.$emit("close");
         })
         .catch(function (error) {
           console.log(error);
-          self.$notifyNOK(self.$t("general.notifyFailure"));
+          self.$root.$notifyNOK(self.$t("general.notifyFailure"));
         });
     },
     async detachCastell() {
@@ -118,13 +118,13 @@ export default {
         eventUuid: this.eventUuid,
       })
         .then(function () {
-          self.$notifyOK(self.$t("general.notifySuccess"));
+          self.$root.$notifyOK(self.$t("general.notifySuccess"));
           self.$emit("loadModel", self.uuid);
           self.$emit("close");
         })
         .catch(function (error) {
           console.log(error);
-          self.$notifyNOK(self.$t("general.notifyFailure"));
+          self.$root.$notifyNOK(self.$t("general.notifyFailure"));
         });
     },
     formattedEvent(event) {

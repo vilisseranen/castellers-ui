@@ -160,7 +160,7 @@ export default {
               })
               .then(function () {
                 if (self.action === "activation") {
-                  self.$root.notifyOK(
+                  self.$root.$notifyOK(
                     self.$t("login.successMessageStart") +
                       ' "' +
                       self.$t("members.updateButton") +
