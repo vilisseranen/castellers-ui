@@ -59,18 +59,18 @@ export default {
           self
             .createCastellModel(newCastell)
             .then(function (response) {
-              self.$notifyOK(self.$t("general.notifySuccess"));
+              self.$root.$notifyOK(self.$t("general.notifySuccess"));
               self.$emit("close");
               self.$router.push({ path: `/castellEdit/${response.data.uuid}` });
             })
             .catch(function (error) {
               console.log(error);
-              self.$notifyNOK(self.$t("general.notifyFailure"));
+              self.$root.$notifyNOK(self.$t("general.notifyFailure"));
             });
         })
         .catch(function (error) {
           console.log(error);
-          self.$notifyNOK(self.$t("general.notifyFailure"));
+          self.$root.$notifyNOK(self.$t("general.notifyFailure"));
         });
     },
   },
