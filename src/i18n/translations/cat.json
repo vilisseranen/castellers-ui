@@ -11,6 +11,7 @@
     "confirmDelete": "Estàs segur que vols esborrar l'assaig?",
     "create": "Planificar un nou esdeveniment",
     "createButton": "Crear l'esdeveniment",
+    "editEvent": "Editar l'esdeveniment",
     "end": "Acaba",
     "from": "de",
     "interval": "En un interval de",

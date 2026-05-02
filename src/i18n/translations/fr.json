@@ -43,6 +43,7 @@
     "description": "Description de l'évènement",
     "descriptionDescription": "Ajouter une description à l'évènement, par exemple:\n- Ce que nous allons pratiquer\n- Un évènement notable",
     "end": "Fin",
+    "editEvent": "Modifier l'évènement",
     "event": "Évènement",
     "filterMembers": "Filtrer les membres",
     "from": "de",
