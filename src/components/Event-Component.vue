@@ -4,7 +4,11 @@
       <article class="card-content">
         <div class="content">
           <router-link
-            :to="{ name: 'eventShow', params: { uuid: event.uuid } }"
+            :to="
+              memberType === 'admin'
+                ? { name: 'eventEdit', params: { uuid: event.uuid } }
+                : { name: 'eventShow', params: { uuid: event.uuid } }
+            "
           >
             <div>
               <strong>{{ event.name }}</strong>

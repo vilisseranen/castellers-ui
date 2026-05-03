@@ -43,6 +43,7 @@
     "description": "Description of the event",
     "descriptionDescription": "Add a description to the event, for example:\n- What we will practice\n- A special event",
     "end": "End",
+    "editEvent": "Edit event",
     "event": "Event",
     "filterMembers": "Filter members",
     "filterParticipantsSearch": "Search participants",
