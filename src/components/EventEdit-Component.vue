@@ -279,6 +279,32 @@
         @filterMembers="listParticipants"
       ></member-filter>
 
+      <div class="field mt-4">
+        <label class="label">{{ $t("events.filterParticipantsSearch") }}</label>
+        <div class="field has-addons">
+          <div class="control is-expanded">
+            <input
+              class="input"
+              type="search"
+              v-model="participantSearchQuery"
+              :placeholder="$t('events.filterParticipantsSearchPlaceholder')"
+              autocomplete="off"
+            />
+          </div>
+          <div class="control">
+            <button
+              type="button"
+              class="button is-light"
+              @click="participantSearchQuery = ''"
+              :disabled="!participantSearchQuery.trim()"
+              :aria-label="$t('events.clearParticipantSearch')"
+            >
+              {{ $t("events.clearParticipantSearch") }}
+            </button>
+          </div>
+        </div>
+      </div>
+
       <span class="has-text-weight-bold">{{ $t("events.filterMembers") }}</span>
       <o-field grouped group-multiline>
         <div v-for="(column, index) in filters" :key="index" class="control">
@@ -289,7 +315,7 @@
       </o-field>
 
       <o-table
-        :data="this.participation"
+        :data="filteredParticipation"
         ref="table"
         :default-sort="['participation', 'asc']"
         icon-pack="fas"
@@ -474,6 +500,7 @@ export default {
       castells: [],
       activeCastell: 0,
       participation: [],
+      participantSearchQuery: "",
       memberTypes: ["admin,member,canalla", "guest"],
       memberStatuses: ["active"],
     };
@@ -618,6 +645,24 @@ export default {
       set: function (newDate) {
         this.currentEvent.recurring.until = this.dateFromCalendar(newDate);
       },
+    },
+    filteredParticipation: function () {
+      const q = this.participantSearchQuery.trim().toLowerCase();
+      if (!q) {
+        return this.participation;
+      }
+      return this.participation.filter((row) => {
+        const first = String(row.firstName || "").toLowerCase();
+        const last = String(row.lastName || "").toLowerCase();
+        const email = String(row.email || "").toLowerCase();
+        const full = `${first} ${last}`;
+        return (
+          full.includes(q) ||
+          first.includes(q) ||
+          last.includes(q) ||
+          email.includes(q)
+        );
+      });
     },
   },
   methods: {
