@@ -117,6 +117,13 @@ export default {
     }
     return apiCall("GET", endpoint, {}, null);
   },
+  async sendEventReminders(eventUuid, { audience, memberUuids }) {
+    const body = { audience };
+    if (memberUuids && memberUuids.length > 0) {
+      body.memberUuids = memberUuids;
+    }
+    return apiCall("POST", `/events/${eventUuid}/reminders`, {}, body);
+  },
   async getEventParticipation(eventUuid, options) {
     let endpoint = `/events/${eventUuid}/members`;
     let queryParams = [];

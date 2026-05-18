@@ -87,6 +87,9 @@ const actions = {
   async presenceEvent(context, { eventUuid, memberUuid, presence }) {
     return api.presenceEvent(eventUuid, memberUuid, presence);
   },
+  async sendEventReminders(context, { eventUuid, audience, memberUuids }) {
+    return api.sendEventReminders(eventUuid, { audience, memberUuids });
+  },
   changePagination(context, pagination) {
     context.commit("setPagination", pagination);
     context.dispatch("getEvents");
