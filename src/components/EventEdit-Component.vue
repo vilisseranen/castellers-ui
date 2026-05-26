@@ -273,6 +273,66 @@
         ({{ this.countPresent() }} / {{ this.countRegistered() }})</label
       >
 
+      <div
+        class="mt-4 mb-4"
+        style="padding: 1rem; background: #f5f5f5; border-radius: 4px"
+      >
+        <p class="label">{{ $t("events.remindersTitle") }}</p>
+        <o-field :label="$t('events.remindersAudience')">
+          <o-select v-model="reminderAudience" expanded>
+            <option value="default">
+              {{ $t("events.remindersAudienceDefault") }}
+            </option>
+            <option value="no_answer_active">
+              {{ $t("events.remindersAudienceNoAnswerActive") }}
+            </option>
+            <option value="no_answer_active_paused">
+              {{ $t("events.remindersAudienceNoAnswerActivePaused") }}
+            </option>
+            <option value="members">
+              {{ $t("events.remindersAudienceMembers") }}
+            </option>
+          </o-select>
+        </o-field>
+        <p v-if="reminderAudience === 'default'" class="help mb-3">
+          {{ $t("events.remindersAudienceDefaultHelp") }}
+        </p>
+        <p
+          v-if="reminderAudience === 'members' && selectedReminderCount === 0"
+          class="help has-text-warning mb-3"
+        >
+          {{ $t("events.remindersSelectMembers") }}
+        </p>
+        <p
+          v-if="reminderAudience === 'members' && selectedReminderCount > 0"
+          class="help mb-3"
+        >
+          <span v-if="hiddenSelectedReminderCount > 0">
+            {{
+              $t("events.remindersSelectedHidden", {
+                total: selectedReminderCount,
+                hidden: hiddenSelectedReminderCount,
+              })
+            }}
+          </span>
+          <span v-else>
+            {{
+              $t("events.remindersSelectedCount", {
+                count: selectedReminderCount,
+              })
+            }}
+          </span>
+        </p>
+        <o-button
+          variant="primary"
+          :disabled="!canSendReminders"
+          :loading="remindersLoading"
+          @click="confirmSendReminders"
+        >
+          {{ $t("events.remindersSend") }}
+        </o-button>
+      </div>
+
       <member-filter
         v-model:types="this.memberTypes"
         v-model:statuses="this.memberStatuses"
@@ -330,6 +390,20 @@
               : ''
         "
       >
+        <o-table-column
+          v-if="reminderAudience === 'members'"
+          v-slot="props"
+          field="reminderSelect"
+          width="40"
+          centered
+        >
+          <o-checkbox
+            :model-value="isReminderMemberSelected(props.row.uuid)"
+            @update:model-value="
+              (checked) => setReminderMemberSelected(props.row.uuid, checked)
+            "
+          />
+        </o-table-column>
         <o-table-column
           v-slot="props"
           field="name"
@@ -413,6 +487,7 @@ import Datepicker from "@vuepic/vue-datepicker";
 import { LMap, LTileLayer, LMarker } from "@vue-leaflet/vue-leaflet";
 import Castell from "./CastellsDrawing-Component.vue";
 import MemberFilter from "../components/MemberFilter-Component.vue";
+import ConfirmModal from "./modals/Confirm-Modal.vue";
 
 import "@vuepic/vue-datepicker/dist/main.css";
 
@@ -503,6 +578,9 @@ export default {
       participantSearchQuery: "",
       memberTypes: ["admin,member,canalla", "guest"],
       memberStatuses: ["active"],
+      reminderAudience: "default",
+      selectedReminderMemberUuids: {},
+      remindersLoading: false,
     };
   },
   watch: {
@@ -664,6 +742,50 @@ export default {
         );
       });
     },
+    selectedReminderCount() {
+      return Object.keys(this.selectedReminderMemberUuids).length;
+    },
+    hiddenSelectedReminderCount() {
+      const visible = new Set(
+        this.filteredParticipation.map((row) => row.uuid)
+      );
+      return Object.keys(this.selectedReminderMemberUuids).filter(
+        (uuid) => !visible.has(uuid)
+      ).length;
+    },
+    reminderRecipientCount() {
+      if (this.reminderAudience === "members") {
+        return this.selectedReminderCount;
+      }
+      if (this.reminderAudience === "no_answer_active") {
+        return this.participation.filter(
+          (m) =>
+            m.status === "active" &&
+            m.participation !== "yes" &&
+            m.participation !== "no" &&
+            m.participation !== "maybe"
+        ).length;
+      }
+      if (this.reminderAudience === "no_answer_active_paused") {
+        return this.participation.filter(
+          (m) =>
+            (m.status === "active" || m.status === "paused") &&
+            m.participation !== "yes" &&
+            m.participation !== "no" &&
+            m.participation !== "maybe"
+        ).length;
+      }
+      return null;
+    },
+    canSendReminders() {
+      if (this.remindersLoading) {
+        return false;
+      }
+      if (this.reminderAudience === "members") {
+        return this.selectedReminderCount > 0;
+      }
+      return true;
+    },
   },
   methods: {
     ...mapActions({
@@ -672,9 +794,58 @@ export default {
       editEvent: "events/editEvent",
       presenceEvent: "events/presenceEvent",
       participateEvent: "events/participateEvent",
+      sendEventReminders: "events/sendEventReminders",
       getPositions: "castells/getCastellTypePositions",
       getModel: "castells/getCastellModel",
     }),
+    isReminderMemberSelected(uuid) {
+      return Boolean(this.selectedReminderMemberUuids[uuid]);
+    },
+    setReminderMemberSelected(uuid, checked) {
+      const next = { ...this.selectedReminderMemberUuids };
+      if (checked) {
+        next[uuid] = true;
+      } else {
+        delete next[uuid];
+      }
+      this.selectedReminderMemberUuids = next;
+    },
+    async confirmSendReminders() {
+      const title =
+        this.reminderAudience === "default"
+          ? this.$t("events.remindersConfirmDefault")
+          : this.$t("events.remindersConfirmTitle", {
+              count: this.reminderRecipientCount,
+            });
+      const modalPromise = this.$oruga.modal.open({
+        component: ConfirmModal,
+        props: {
+          title,
+          confirm: this.$t("general.yes"),
+          cancel: this.$t("general.cancel"),
+        },
+      });
+      const result = await modalPromise.promise;
+      if (result.action !== "yes") {
+        return;
+      }
+      this.remindersLoading = true;
+      const payload = { audience: this.reminderAudience };
+      if (this.reminderAudience === "members") {
+        payload.memberUuids = Object.keys(this.selectedReminderMemberUuids);
+      }
+      try {
+        await this.sendEventReminders({
+          eventUuid: this.currentEvent.uuid,
+          ...payload,
+        });
+        this.$root.$notifyOK(this.$t("events.remindersQueued"));
+      } catch {
+        this.$root.$notifyNOK(this.$t("events.remindersFailed"));
+      } finally {
+        this.remindersLoading = false;
+      }
+    },
     checkAction() {
       // This page handles actions to participate to an event
       // if a is in query params, we also expect p and t
