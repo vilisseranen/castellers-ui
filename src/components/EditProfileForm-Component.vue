@@ -249,8 +249,21 @@
         </div>
       </div>
       <div class="column is-12" v-if="type === 'admin' && current_user.status">
-        <span style="margin-right: 10px">{{ $t("members.status") }}:</span
-        ><span
+        <label class="label">{{ $t("members.status") }}</label>
+        <o-switch
+          v-if="current_user.uuid && canToggleStatus"
+          v-model="statusActive"
+          variant="success"
+          :disabled="updating"
+        >
+          {{
+            statusActive
+              ? $t("members.activeStatus")
+              : $t("members.pausedStatus")
+          }}
+        </o-switch>
+        <span
+          v-else
           class="tag is-medium"
           v-bind:class="{
             'is-success': current_user.status === 'active',
@@ -335,6 +348,20 @@ export default {
     ...mapGetters(["uuid", "type"]),
     actionLabel: function () {
       return this.user.uuid ? "update" : "create";
+    },
+    canToggleStatus: function () {
+      return (
+        this.current_user.status === "active" ||
+        this.current_user.status === "paused"
+      );
+    },
+    statusActive: {
+      get: function () {
+        return this.current_user.status === "active";
+      },
+      set: function (value) {
+        this.toggleStatus(value ? "active" : "paused");
+      },
     },
     current_user: {
       get: function () {
@@ -438,7 +465,28 @@ export default {
     ...mapActions({
       resendEmaiCall: "members/resendEmail",
       getRoles: "members/getRoles",
+      setMemberStatusCall: "members/setMemberStatus",
     }),
+    toggleStatus(status) {
+      const self = this;
+      const previousStatus = this.current_user.status;
+      if (status === previousStatus) {
+        return;
+      }
+      self.updating = true;
+      self.current_user.status = status;
+      this.setMemberStatusCall({ uuid: this.current_user.uuid, status })
+        .then(function () {
+          self.updating = false;
+          self.$root.$notifyOK(self.$t("general.notifySuccess"));
+        })
+        .catch(function (error) {
+          self.updating = false;
+          self.current_user.status = previousStatus;
+          self.$root.$notifyNOK(self.$t("general.notifyFailure"));
+          console.log(error);
+        });
+    },
     heightExemple() {
       return this.height_unit === "cm"
         ? this.$t("members.exempleCM")

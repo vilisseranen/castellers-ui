@@ -45,6 +45,9 @@ const actions = {
       })
       .catch(function () {});
   },
+  async setMemberStatus(context, { uuid, status }) {
+    return api.setMemberStatus(uuid, status);
+  },
   async resendEmail(context, userUuid) {
     return api.resendEmail(userUuid);
   },

@@ -110,6 +110,9 @@ export default {
   async deleteMember(memberUuid) {
     return apiCall("DELETE", `/members/${memberUuid}`, {}, null);
   },
+  async setMemberStatus(memberUuid, status) {
+    return apiCall("PUT", `/members/${memberUuid}/status`, {}, { status });
+  },
   async getEvents(options) {
     let endpoint = "/events";
     if (options) {
