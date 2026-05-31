@@ -170,6 +170,12 @@ statuses and types as the filter:
 The user can then expand the visible statuses/types via the filter checkboxes
 of `MemberFilter-Component.vue`.
 
+Admins can also **change** a member's activity status from the profile editor
+([`src/components/EditProfileForm-Component.vue`](../src/components/EditProfileForm-Component.vue)):
+next to the status tag, a "Pause" button (when `active`) or "Reactivate" button
+(when `paused`) calls the `members/setMemberStatus` action, which issues
+`PUT /members/{uuid}/status`. Only `active` <-> `paused` toggling is exposed.
+
 The only place where the UI branches on a member's `status` value (besides
 rendering the colored tag) is in
 [`src/components/EventEdit-Component.vue:763-772`](../src/components/EventEdit-Component.vue),
@@ -193,6 +199,9 @@ m.status === "active" && ...           // line 763
 - Editing the `type` of an existing member is only possible from the
   admin profile editor and is enforced by the backend (a regular member
   cannot be demoted to guest).
+- `setMemberStatus(uuid, status)` issues `PUT /members/${uuid}/status`
+  with `{ status }`; the backend restricts it to admins and to the
+  `active`/`paused` values.
 - `deleteMember` (in
   [`src/mixins/members.js`](../src/mixins/members.js)) performs a soft
   delete server-side — the member ends up with `status === 'deleted'`.

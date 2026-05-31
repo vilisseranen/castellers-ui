@@ -139,6 +139,7 @@
   },
   "members": {
     "absent": "Missing",
+    "activeStatus": "Active",
     "activeStatusPlural": "Active",
     "addMember": "Add a new member",
     "adminType": "Administrator",
@@ -174,6 +175,7 @@
     "memberTypePlural": "Regulars",
     "canallaType": "Canalla",
     "participation": "Participation",
+    "pausedStatus": "Paused",
     "pausedStatusPlural": "Paused",
     "presence": "Presence",
     "present": "Present",
