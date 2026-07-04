@@ -88,6 +88,8 @@
     "lastName": "Cognom",
     "lb": "lb",
     "memberType": "Normal",
+    "clearSearch": "Esborrar",
+    "searchPlaceholder": "Cerca per nom o cognom",
     "roles": "Rols",
     "title": "Llista dels membres",
     "type": "Type",

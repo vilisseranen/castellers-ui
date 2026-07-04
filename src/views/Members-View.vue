@@ -16,8 +16,33 @@
       @filterMembers="filterMembers"
     ></member-filter>
 
+    <div class="field">
+      <div class="field has-addons">
+        <div class="control is-expanded">
+          <input
+            class="input"
+            type="search"
+            v-model="memberSearchQuery"
+            :placeholder="$t('members.searchPlaceholder')"
+            autocomplete="off"
+          />
+        </div>
+        <div class="control">
+          <button
+            type="button"
+            class="button is-light"
+            @click="memberSearchQuery = ''"
+            :disabled="!memberSearchQuery.trim()"
+            :aria-label="$t('members.clearSearch')"
+          >
+            {{ $t("members.clearSearch") }}
+          </button>
+        </div>
+      </div>
+    </div>
+
     <o-table
-      :data="members"
+      :data="filteredMembers"
       striped
       default-sort="firstName"
       sort-icon="arrow-up"
@@ -122,7 +147,7 @@ export default {
     return {
       memberTypes: ["admin,member,canalla"],
       memberStatuses: ["active"],
-      test: "toto",
+      memberSearchQuery: "",
     };
   },
   computed: {
@@ -130,6 +155,21 @@ export default {
     ...mapState({
       members: (state) => state.members.members,
     }),
+    filteredMembers() {
+      const q = this.memberSearchQuery.trim().toLowerCase();
+      if (!q) {
+        return this.members;
+      }
+      return this.members.filter((m) => {
+        const first = String(m.firstName || "").toLowerCase();
+        const last = String(m.lastName || "").toLowerCase();
+        return (
+          `${first} ${last}`.includes(q) ||
+          first.includes(q) ||
+          last.includes(q)
+        );
+      });
+    },
   },
   mounted() {
     this.getMembers({
