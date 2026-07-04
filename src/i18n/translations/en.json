@@ -179,6 +179,8 @@
     "pausedStatusPlural": "Paused",
     "presence": "Presence",
     "present": "Present",
+    "clearSearch": "Clear",
+    "searchPlaceholder": "Search by first or last name",
     "roles": "Roles",
     "setPresence": "Present?",
     "status": "Status",

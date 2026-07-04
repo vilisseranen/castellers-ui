@@ -180,6 +180,8 @@
     "pausedStatusPlural": "En pause",
     "presence": "Présence",
     "present": "Présent",
+    "clearSearch": "Effacer",
+    "searchPlaceholder": "Chercher par prénom ou nom",
     "roles": "Rôles",
     "setPresence": "Indiquer présence",
     "status": "Status",
