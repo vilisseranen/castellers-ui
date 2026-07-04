@@ -44,7 +44,7 @@
         </router-link>
         <router-link
           :to="{ name: 'Members' }"
-          v-if="this.type === 'admin'"
+          v-if="this.uuid"
           class="navbar-item"
         >
           <span class="icon">
@@ -52,6 +52,18 @@
           </span>
           <span>
             {{ $t("routes.members") }}
+          </span>
+        </router-link>
+        <router-link
+          :to="{ name: 'Badges' }"
+          v-if="this.type === 'admin'"
+          class="navbar-item"
+        >
+          <span class="icon">
+            <i class="fa fa-medal"></i>
+          </span>
+          <span>
+            {{ $t("routes.badges") }}
           </span>
         </router-link>
         <router-link

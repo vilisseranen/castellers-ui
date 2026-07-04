@@ -6,6 +6,7 @@ import members from "./modules/members";
 import castells from "./modules/castells";
 import auth from "./modules/auth";
 import initialization from "./modules/initialization";
+import badges from "./modules/badges";
 import api from "../api/castellers";
 
 const store = createStore({
@@ -15,6 +16,7 @@ const store = createStore({
     castells,
     auth,
     initialization,
+    badges,
   },
   state: {
     version: "",
@@ -28,6 +30,7 @@ const store = createStore({
     async reset(context) {
       context.commit("members/reset");
       context.commit("events/reset");
+      context.commit("badges/reset");
       context.commit("reset");
     },
     async version(context) {

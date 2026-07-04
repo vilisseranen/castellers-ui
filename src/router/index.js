@@ -11,6 +11,7 @@ import EventShow from "../views/EventShow-View.vue";
 import SummaryParticipation from "../views/SummaryParticipation-View.vue";
 import Castells from "../views/Castells-View.vue";
 import CastellsEdit from "../views/CastellsEdit-View.vue";
+import BadgesAdmin from "../views/BadgesAdmin-View.vue";
 
 const routes = [
   {
@@ -95,6 +96,14 @@ const routes = [
         path: "castells",
         name: "Castells",
         component: Castells,
+        meta: {
+          requiresAuth: true,
+        },
+      },
+      {
+        path: "badges",
+        name: "Badges",
+        component: BadgesAdmin,
         meta: {
           requiresAuth: true,
         },

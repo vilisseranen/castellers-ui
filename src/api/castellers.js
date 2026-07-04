@@ -208,4 +208,24 @@ export default {
       {}
     );
   },
+  async getBadges() {
+    return apiCall("GET", `/badges`, {}, null);
+  },
+  async getMemberBadges(memberUuid) {
+    return apiCall("GET", `/members/${memberUuid}/badges`, {}, null);
+  },
+  async getBadgeMembers(badgeUuid) {
+    return apiCall("GET", `/badges/${badgeUuid}/members`, {}, null);
+  },
+  async assignBadge(badgeUuid, memberUuids) {
+    return apiCall("POST", `/badges/${badgeUuid}/members`, {}, { memberUuids });
+  },
+  async removeBadge(badgeUuid, memberUuids) {
+    return apiCall(
+      "DELETE",
+      `/badges/${badgeUuid}/members`,
+      {},
+      { memberUuids }
+    );
+  },
 };
