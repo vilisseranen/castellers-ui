@@ -246,6 +246,7 @@
   "routes": {
     "events": "Présentations et pratiques",
     "members": "Les membres",
+    "myBadges": "Mes badges",
     "badges": "Badges",
     "summary": "Participation"
   },

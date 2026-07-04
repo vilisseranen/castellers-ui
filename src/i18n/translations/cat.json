@@ -150,6 +150,7 @@
   "routes": {
     "events": "Esdeveniments",
     "members": "Membres",
+    "myBadges": "Les meves insígnies",
     "badges": "Insígnies"
   }
 }
