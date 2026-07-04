@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 The UI version is defined in [`package.json`](package.json) (`version` field).
 
+## [1.4.0] - 2026-07-04
+
+### Added
+
+- Always-visible name search field on the members list page that filters by first name, last name, and full name. Works on mobile, where Oruga's card layout previously hid the per-column search inputs.
+
+### Changed
+
+- Removed an unused test variable from the members view.
+
 ## [1.3.0] - 2026-05-30
 
 ### Added
