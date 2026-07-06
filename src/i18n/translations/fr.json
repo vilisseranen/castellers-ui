@@ -201,9 +201,53 @@
     "selectGroupLabel": "Appuyer sur entrer pour sélectionner le groupe",
     "selectLabel": "Appuyer sur entrer pour sélectionner"
   },
+  "badges": {
+    "title": "Badges",
+    "adminTitle": "Gestion des badges",
+    "selectBadge": "Badge",
+    "selectBadgePlaceholder": "-- Choisir un badge --",
+    "saveButton": "Enregistrer",
+    "series": {
+      "welcome": {
+        "name": "Bienvenue"
+      }
+    },
+    "items": {
+      "casal": {
+        "name": "Casal Català",
+        "description": "Devenir membre du Cercle Culturel Catalan."
+      },
+      "camisa": {
+        "name": "La camisa",
+        "description": "Recevoir ta chemise officielle des Castellers de Montréal."
+      },
+      "uniformeCasteller": {
+        "name": "Uniforme casteller",
+        "description": "Porter l'uniforme complet : camisa, faixa et pantalon blanc."
+      },
+      "motxilla": {
+        "name": "Le sac à dos",
+        "description": "Obtenir le sac de la colla."
+      },
+      "amunt": {
+        "name": "Amunt!",
+        "description": "Se connecter et confirmer ta présence à un événement dans l'application."
+      },
+      "primeraDiada": {
+        "name": "Première diada",
+        "description": "Participer à ta première diada."
+      },
+      "primerCastell": {
+        "name": "Premier castell",
+        "description": "Faire partie d'un castell chargé et descendu pour la première fois."
+      }
+    }
+  },
   "routes": {
     "events": "Présentations et pratiques",
     "members": "Les membres",
+    "myBadges": "Mes badges",
+    "badges": "Badges",
     "summary": "Participation"
   },
   "summary": {

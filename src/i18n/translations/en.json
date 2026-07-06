@@ -200,9 +200,53 @@
     "selectGroupLabel": "Press enter to select the group",
     "selectLabel": "Press enter to select"
   },
+  "badges": {
+    "title": "Badges",
+    "adminTitle": "Badge management",
+    "selectBadge": "Badge",
+    "selectBadgePlaceholder": "-- Select a badge --",
+    "saveButton": "Save",
+    "series": {
+      "welcome": {
+        "name": "Welcome"
+      }
+    },
+    "items": {
+      "casal": {
+        "name": "Casal Català",
+        "description": "Become a member of the Catalan Cultural Circle (Cercle culturel catalan)."
+      },
+      "camisa": {
+        "name": "The camisa",
+        "description": "Receive your official Castellers de Montréal shirt."
+      },
+      "uniformeCasteller": {
+        "name": "Casteller uniform",
+        "description": "Wear the full uniform: camisa, faixa and white trousers."
+      },
+      "motxilla": {
+        "name": "The backpack",
+        "description": "Get the colla's backpack."
+      },
+      "amunt": {
+        "name": "Amunt!",
+        "description": "Log in and confirm your attendance to an event in the app."
+      },
+      "primeraDiada": {
+        "name": "First diada",
+        "description": "Take part in your first diada."
+      },
+      "primerCastell": {
+        "name": "First castell",
+        "description": "Be part of a castell loaded and unloaded for the first time."
+      }
+    }
+  },
   "routes": {
     "events": "Presentations and practices",
     "members": "Members",
+    "myBadges": "My badges",
+    "badges": "Badges",
     "summary": "Summary"
   },
   "summary": {

@@ -1,333 +1,345 @@
 <template>
   <div class="box">
-    <p
-      class="title is-3"
-      v-if="actionLabel === 'update' && current_user.uuid != uuid"
-    >
-      {{ $t("members.update") }}
-    </p>
-    <p
-      class="title is-3"
-      v-if="actionLabel === 'update' && current_user.uuid == uuid"
-    >
-      {{ $t("members.updateMyProfile") }}
-    </p>
-    <p class="title is-3" v-if="actionLabel === 'create'">
-      {{ $t("members.create") }}
-    </p>
-    <div class="columns is-multiline">
-      <div class="field column is-3">
-        <fieldset disabled>
-          <label class="label">{{ $t("general.id") }}</label>
+    <template v-if="canEdit">
+      <p
+        class="title is-3"
+        v-if="actionLabel === 'update' && current_user.uuid != uuid"
+      >
+        {{ $t("members.update") }}
+      </p>
+      <p
+        class="title is-3"
+        v-if="actionLabel === 'update' && current_user.uuid == uuid"
+      >
+        {{ $t("members.updateMyProfile") }}
+      </p>
+      <p class="title is-3" v-if="actionLabel === 'create'">
+        {{ $t("members.create") }}
+      </p>
+      <div class="columns is-multiline">
+        <div class="field column is-3">
+          <fieldset disabled>
+            <label class="label">{{ $t("general.id") }}</label>
+            <div class="control is-expanded">
+              <input class="input" type="text" v-model="current_user.uuid" />
+            </div>
+          </fieldset>
+        </div>
+        <div class="field column is-3">
+          <label class="label required">{{ $t("members.type") }}</label>
           <div class="control is-expanded">
-            <input class="input" type="text" v-model="current_user.uuid" />
-          </div>
-        </fieldset>
-      </div>
-      <div class="field column is-3">
-        <label class="label required">{{ $t("members.type") }}</label>
-        <div class="control is-expanded">
-          <div class="field">
-            <o-radio
-              name="type"
-              variant="warning"
-              nativeValue="guest"
-              v-model="current_user.type"
-              :disabled="type === 'admin' ? false : true"
-              >{{ $t("members.guestType") }}</o-radio
-            >
-          </div>
-          <div class="field">
-            <o-radio
-              name="type"
-              variant="info"
-              nativeValue="canalla"
-              v-model="current_user.type"
-              :disabled="type === 'admin' ? false : true"
-              >{{ $t("members.canallaType") }}</o-radio
-            >
-          </div>
-          <div class="field">
-            <o-radio
-              name="type"
-              variant="primary"
-              nativeValue="member"
-              v-model="current_user.type"
-              :disabled="type === 'admin' ? false : true"
-              >{{ $t("members.memberType") }}</o-radio
-            >
-          </div>
-          <div class="field">
-            <o-radio
-              name="type"
-              variant="success"
-              nativeValue="admin"
-              v-model="current_user.type"
-              :disabled="type === 'admin' ? false : true"
-              >{{ $t("members.adminType") }}</o-radio
-            >
+            <div class="field">
+              <o-radio
+                name="type"
+                variant="warning"
+                nativeValue="guest"
+                v-model="current_user.type"
+                :disabled="type === 'admin' ? false : true"
+                >{{ $t("members.guestType") }}</o-radio
+              >
+            </div>
+            <div class="field">
+              <o-radio
+                name="type"
+                variant="info"
+                nativeValue="canalla"
+                v-model="current_user.type"
+                :disabled="type === 'admin' ? false : true"
+                >{{ $t("members.canallaType") }}</o-radio
+              >
+            </div>
+            <div class="field">
+              <o-radio
+                name="type"
+                variant="primary"
+                nativeValue="member"
+                v-model="current_user.type"
+                :disabled="type === 'admin' ? false : true"
+                >{{ $t("members.memberType") }}</o-radio
+              >
+            </div>
+            <div class="field">
+              <o-radio
+                name="type"
+                variant="success"
+                nativeValue="admin"
+                v-model="current_user.type"
+                :disabled="type === 'admin' ? false : true"
+                >{{ $t("members.adminType") }}</o-radio
+              >
+            </div>
           </div>
         </div>
-      </div>
-      <div class="field column is-3">
-        <label class="label required">{{ $t("members.language") }}</label>
-        <div class="control is-expanded">
-          <div class="field">
-            <o-radio
-              name="language"
-              variant="undefined"
-              nativeValue="fr"
-              v-model="current_user.language"
-              >{{ $t("members.languageFR") }}</o-radio
-            >
-          </div>
-          <div class="field">
-            <o-radio
-              name="language"
-              variant="undefined"
-              nativeValue="en"
-              v-model="current_user.language"
-              >{{ $t("members.languageEN") }}</o-radio
-            >
-          </div>
-          <div class="field">
-            <o-radio
-              name="language"
-              variant="undefined"
-              nativeValue="cat"
-              v-model="current_user.language"
-              >{{ $t("members.languageCAT") }}</o-radio
-            >
-          </div>
-        </div>
-      </div>
-      <div
-        v-if="current_user.type !== 'guest' && current_user.type !== 'canalla'"
-        class="field column is-3"
-      >
-        <label class="label">{{ $t("members.subscribeEmails") }}</label>
-        <div class="control is-expanded">
-          <div class="field">
-            <o-radio
-              v-bind="{ disabled: !this.user.uuid }"
-              name="subscribed"
-              variant="undefined"
-              :nativeValue="0"
-              v-model="current_user.subscribed"
-              >{{ $t("general.no") }}</o-radio
-            >
-          </div>
-          <div class="field">
-            <o-radio
-              v-bind="{ disabled: !this.user.uuid }"
-              name="subscribed"
-              variant="undefined"
-              :nativeValue="1"
-              v-model="current_user.subscribed"
-              >{{ $t("general.yes") }}</o-radio
-            >
+        <div class="field column is-3">
+          <label class="label required">{{ $t("members.language") }}</label>
+          <div class="control is-expanded">
+            <div class="field">
+              <o-radio
+                name="language"
+                variant="undefined"
+                nativeValue="fr"
+                v-model="current_user.language"
+                >{{ $t("members.languageFR") }}</o-radio
+              >
+            </div>
+            <div class="field">
+              <o-radio
+                name="language"
+                variant="undefined"
+                nativeValue="en"
+                v-model="current_user.language"
+                >{{ $t("members.languageEN") }}</o-radio
+              >
+            </div>
+            <div class="field">
+              <o-radio
+                name="language"
+                variant="undefined"
+                nativeValue="cat"
+                v-model="current_user.language"
+                >{{ $t("members.languageCAT") }}</o-radio
+              >
+            </div>
           </div>
         </div>
-      </div>
-      <div class="field column is-3">
-        <label class="label required">{{ $t("members.firstName") }}</label>
-        <div class="control is-expanded">
-          <input class="input" type="text" v-model="current_user.firstName" />
-        </div>
-      </div>
-      <div class="field column is-3">
-        <label class="label required">{{ $t("members.lastName") }}</label>
-        <div class="control is-expanded">
-          <input class="input" type="text" v-model="current_user.lastName" />
-        </div>
-      </div>
-      <div
-        class="field column is-4"
-        v-if="current_user.type !== 'guest' && current_user.type !== 'canalla'"
-      >
-        <label class="label required">{{ $t("members.email") }}</label>
-        <div class="control is-expanded">
-          <input class="input" type="text" v-model="current_user.email" />
-        </div>
-      </div>
-      <div class="field column is-2">
-        <label class="label">{{ $t("members.contact") }}</label>
-        <div class="control is-expanded">
-          <input
-            class="input"
-            type="text"
-            v-model="current_user.contact"
-            :placeholder="$t('members.contactDescription')"
-          />
-        </div>
-      </div>
-      <div class="field column is-3">
-        <label class="label">{{ $t("members.height") }}</label>
-        <div class="control is-expanded">
-          <input
-            class="input"
-            type="text"
-            v-model.lazy="heightDisplayed"
-            :placeholder="heightExemple()"
-          />
-        </div>
-      </div>
-      <div class="field column is-3">
-        <label class="label">{{ $t("members.units") }}</label>
-        <div class="control is-expanded">
-          <div class="field">
-            <o-radio
-              name="height"
-              variant="primary"
-              nativeValue="cm"
-              v-model="height_unit"
-              >{{ $t("members.cm") }}</o-radio
-            >
-          </div>
-          <div class="field">
-            <o-radio
-              name="height"
-              variant="success"
-              nativeValue="ft"
-              v-model="height_unit"
-              >{{ $t("members.ft") }}</o-radio
-            >
-          </div>
-        </div>
-      </div>
-      <div class="field column is-3">
-        <label class="label">{{ $t("members.weight") }}</label>
-        <div class="control is-expanded">
-          <input
-            class="input"
-            type="text"
-            v-model.lazy="weightDisplayed"
-            :placeholder="weightExemple()"
-          />
-        </div>
-      </div>
-      <div class="field column is-3">
-        <label class="label">{{ $t("members.units") }}</label>
-        <div class="control is-expanded">
-          <div class="field">
-            <o-radio
-              name="weight"
-              variant="primary"
-              nativeValue="kg"
-              v-model="weight_unit"
-              >{{ $t("members.kg") }}</o-radio
-            >
-          </div>
-          <div class="field">
-            <o-radio
-              name="weight"
-              variant="success"
-              nativealue="lb"
-              v-model="weight_unit"
-              >{{ $t("members.lb") }}</o-radio
-            >
-          </div>
-        </div>
-      </div>
-      <div class="field column is-8" v-if="type === 'admin'">
-        <label class="label">{{ $t("members.roles") }}</label>
-        <div class="control is-expanded">
-          <Multiselect
-            v-model="current_user.roles"
-            mode="multiple"
-            :options="available_roles"
-            :closeOnSelect="false"
-            :multipleLabel="multiSelectLabel"
-            :hideSelected="false"
-          ></Multiselect>
-        </div>
-      </div>
-      <div class="field column is-4" v-if="type === 'admin'">
-        <label class="label">{{ $t("members.extra") }}</label>
-        <div class="control is-expanded">
-          <input class="input" type="text" v-model="current_user.extra" />
-        </div>
-      </div>
-      <div class="column is-12" v-if="type === 'admin' && current_user.status">
-        <label class="label">{{ $t("members.status") }}</label>
-        <o-switch
-          v-if="current_user.uuid && canToggleStatus"
-          v-model="statusActive"
-          variant="success"
-          :disabled="updating"
+        <div
+          v-if="
+            current_user.type !== 'guest' && current_user.type !== 'canalla'
+          "
+          class="field column is-3"
         >
-          {{
-            statusActive
-              ? $t("members.activeStatus")
-              : $t("members.pausedStatus")
-          }}
-        </o-switch>
-        <span
-          v-else
-          class="tag is-medium"
-          v-bind:class="{
-            'is-success': current_user.status === 'active',
-            'is-info': current_user.status === 'created',
-            'is-warning': current_user.status === 'paused',
-            'is-danger': current_user.status === 'deleted',
-          }"
-          v-t="`members.${current_user.status}Status`"
-        ></span>
-      </div>
-      <div class="field is-horizontal column">
-        <div class="field-body">
-          <div class="field">
-            <p class="control">
-              <button
-                type="submit"
-                class="button is-danger"
-                @click.prevent="memberDelete"
-                v-if="current_user.uuid"
+          <label class="label">{{ $t("members.subscribeEmails") }}</label>
+          <div class="control is-expanded">
+            <div class="field">
+              <o-radio
+                v-bind="{ disabled: !this.user.uuid }"
+                name="subscribed"
+                variant="undefined"
+                :nativeValue="0"
+                v-model="current_user.subscribed"
+                >{{ $t("general.no") }}</o-radio
               >
-                {{ $t("members.deleteButton") }}
-              </button>
-            </p>
+            </div>
+            <div class="field">
+              <o-radio
+                v-bind="{ disabled: !this.user.uuid }"
+                name="subscribed"
+                variant="undefined"
+                :nativeValue="1"
+                v-model="current_user.subscribed"
+                >{{ $t("general.yes") }}</o-radio
+              >
+            </div>
           </div>
-          <div class="field">
-            <p class="control">
-              <button
-                type="submit"
-                class="button is-info"
-                @click.prevent="memberEdit"
-                v-if="actionLabel === 'update'"
-              >
-                {{ $t("members.updateButton") }}
-              </button>
-              <button
-                type="submit"
-                class="button is-info"
-                @click.prevent="memberEdit"
-                v-if="actionLabel === 'create'"
-              >
-                {{ $t("members.createButton") }}
-              </button>
-            </p>
+        </div>
+        <div class="field column is-3">
+          <label class="label required">{{ $t("members.firstName") }}</label>
+          <div class="control is-expanded">
+            <input class="input" type="text" v-model="current_user.firstName" />
           </div>
-          <div class="field">
-            <p class="control">
-              <button
-                type="submit"
-                class="button is-warning"
-                @click.prevent="resendEmail"
-                v-if="current_user.uuid && this.type === 'admin'"
+        </div>
+        <div class="field column is-3">
+          <label class="label required">{{ $t("members.lastName") }}</label>
+          <div class="control is-expanded">
+            <input class="input" type="text" v-model="current_user.lastName" />
+          </div>
+        </div>
+        <div
+          class="field column is-4"
+          v-if="
+            current_user.type !== 'guest' && current_user.type !== 'canalla'
+          "
+        >
+          <label class="label required">{{ $t("members.email") }}</label>
+          <div class="control is-expanded">
+            <input class="input" type="text" v-model="current_user.email" />
+          </div>
+        </div>
+        <div class="field column is-2">
+          <label class="label">{{ $t("members.contact") }}</label>
+          <div class="control is-expanded">
+            <input
+              class="input"
+              type="text"
+              v-model="current_user.contact"
+              :placeholder="$t('members.contactDescription')"
+            />
+          </div>
+        </div>
+        <div class="field column is-3">
+          <label class="label">{{ $t("members.height") }}</label>
+          <div class="control is-expanded">
+            <input
+              class="input"
+              type="text"
+              v-model.lazy="heightDisplayed"
+              :placeholder="heightExemple()"
+            />
+          </div>
+        </div>
+        <div class="field column is-3">
+          <label class="label">{{ $t("members.units") }}</label>
+          <div class="control is-expanded">
+            <div class="field">
+              <o-radio
+                name="height"
+                variant="primary"
+                nativeValue="cm"
+                v-model="height_unit"
+                >{{ $t("members.cm") }}</o-radio
               >
-                {{ $t("members.emailButton") }}
-              </button>
-            </p>
+            </div>
+            <div class="field">
+              <o-radio
+                name="height"
+                variant="success"
+                nativeValue="ft"
+                v-model="height_unit"
+                >{{ $t("members.ft") }}</o-radio
+              >
+            </div>
+          </div>
+        </div>
+        <div class="field column is-3">
+          <label class="label">{{ $t("members.weight") }}</label>
+          <div class="control is-expanded">
+            <input
+              class="input"
+              type="text"
+              v-model.lazy="weightDisplayed"
+              :placeholder="weightExemple()"
+            />
+          </div>
+        </div>
+        <div class="field column is-3">
+          <label class="label">{{ $t("members.units") }}</label>
+          <div class="control is-expanded">
+            <div class="field">
+              <o-radio
+                name="weight"
+                variant="primary"
+                nativeValue="kg"
+                v-model="weight_unit"
+                >{{ $t("members.kg") }}</o-radio
+              >
+            </div>
+            <div class="field">
+              <o-radio
+                name="weight"
+                variant="success"
+                nativealue="lb"
+                v-model="weight_unit"
+                >{{ $t("members.lb") }}</o-radio
+              >
+            </div>
+          </div>
+        </div>
+        <div class="field column is-8" v-if="type === 'admin'">
+          <label class="label">{{ $t("members.roles") }}</label>
+          <div class="control is-expanded">
+            <Multiselect
+              v-model="current_user.roles"
+              mode="multiple"
+              :options="available_roles"
+              :closeOnSelect="false"
+              :multipleLabel="multiSelectLabel"
+              :hideSelected="false"
+            ></Multiselect>
+          </div>
+        </div>
+        <div class="field column is-4" v-if="type === 'admin'">
+          <label class="label">{{ $t("members.extra") }}</label>
+          <div class="control is-expanded">
+            <input class="input" type="text" v-model="current_user.extra" />
+          </div>
+        </div>
+        <div
+          class="column is-12"
+          v-if="type === 'admin' && current_user.status"
+        >
+          <label class="label">{{ $t("members.status") }}</label>
+          <o-switch
+            v-if="current_user.uuid && canToggleStatus"
+            v-model="statusActive"
+            variant="success"
+            :disabled="updating"
+          >
+            {{
+              statusActive
+                ? $t("members.activeStatus")
+                : $t("members.pausedStatus")
+            }}
+          </o-switch>
+          <span
+            v-else
+            class="tag is-medium"
+            v-bind:class="{
+              'is-success': current_user.status === 'active',
+              'is-info': current_user.status === 'created',
+              'is-warning': current_user.status === 'paused',
+              'is-danger': current_user.status === 'deleted',
+            }"
+            v-t="`members.${current_user.status}Status`"
+          ></span>
+        </div>
+        <div class="field is-horizontal column">
+          <div class="field-body">
+            <div class="field">
+              <p class="control">
+                <button
+                  type="submit"
+                  class="button is-danger"
+                  @click.prevent="memberDelete"
+                  v-if="current_user.uuid"
+                >
+                  {{ $t("members.deleteButton") }}
+                </button>
+              </p>
+            </div>
+            <div class="field">
+              <p class="control">
+                <button
+                  type="submit"
+                  class="button is-info"
+                  @click.prevent="memberEdit"
+                  v-if="actionLabel === 'update'"
+                >
+                  {{ $t("members.updateButton") }}
+                </button>
+                <button
+                  type="submit"
+                  class="button is-info"
+                  @click.prevent="memberEdit"
+                  v-if="actionLabel === 'create'"
+                >
+                  {{ $t("members.createButton") }}
+                </button>
+              </p>
+            </div>
+            <div class="field">
+              <p class="control">
+                <button
+                  type="submit"
+                  class="button is-warning"
+                  @click.prevent="resendEmail"
+                  v-if="current_user.uuid && this.type === 'admin'"
+                >
+                  {{ $t("members.emailButton") }}
+                </button>
+              </p>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <hr />
-    <div>
-      <span class="required"></span>
-      {{ $t("general.requiredFields") }}
-    </div>
+      <hr />
+      <div>
+        <span class="required"></span>
+        {{ $t("general.requiredFields") }}
+      </div>
+    </template>
+    <p class="title is-3" v-else>
+      {{ current_user.firstName }} {{ current_user.lastName }}
+    </p>
   </div>
 </template>
 
@@ -348,6 +360,9 @@ export default {
     ...mapGetters(["uuid", "type"]),
     actionLabel: function () {
       return this.user.uuid ? "update" : "create";
+    },
+    canEdit: function () {
+      return this.type === "admin" || this.current_user.uuid === this.uuid;
     },
     canToggleStatus: function () {
       return (

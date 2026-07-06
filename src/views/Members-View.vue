@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="title is-5">{{ $t("members.title") }}</p>
-    <o-field>
+    <o-field v-if="type === 'admin'">
       <button class="button field is-info" @click="addMember">
         <span class="icon">
           <i class="fa fa-user-plus"></i>
@@ -11,6 +11,7 @@
     </o-field>
 
     <member-filter
+      v-if="type === 'admin'"
       :types="this.memberTypes"
       :statuses="this.memberStatuses"
       @filterMembers="filterMembers"
@@ -67,6 +68,7 @@
         >{{ props.row.lastName }}</o-table-column
       >
       <o-table-column
+        v-if="type === 'admin'"
         key="roles"
         field="roles"
         :label="$t('members.roles')"
@@ -76,6 +78,7 @@
         >{{ props.row.roles }}</o-table-column
       >
       <o-table-column
+        v-if="type === 'admin'"
         key="extra"
         field="extra"
         :label="$t('members.extra')"
@@ -85,6 +88,7 @@
         >{{ props.row.extra }}</o-table-column
       >
       <o-table-column
+        v-if="type === 'admin'"
         key="type"
         field="type"
         :label="$t('members.type')"
@@ -95,6 +99,7 @@
         <span v-t="`members.` + props.row.type + `Type`"></span>
       </o-table-column>
       <o-table-column
+        v-if="type === 'admin'"
         key="status"
         field="status"
         :label="$t('members.status')"
@@ -122,10 +127,10 @@
           :to="{ name: 'MemberEdit', params: { uuid: props.row.uuid } }"
         >
           <span class="icon has-text-info">
-            <i class="fa fa-edit"></i>
+            <i class="fa" :class="type === 'admin' ? 'fa-edit' : 'fa-eye'"></i>
           </span>
         </router-link>
-        <a>
+        <a v-if="type === 'admin'">
           <span class="icon has-text-danger" @click="removeUser(props.row)">
             <i class="fa fa-user-slash"></i>
           </span>

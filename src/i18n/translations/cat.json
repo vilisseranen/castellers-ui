@@ -105,8 +105,52 @@
     "selectGroupLabel": "Prémer el botó 'Entrar' per a seleccionar el grup",
     "selectLabel": "Prémer el botó 'Entrar' per a seleccionar"
   },
+  "badges": {
+    "title": "Insígnies",
+    "adminTitle": "Gestió d'insígnies",
+    "selectBadge": "Insígnia",
+    "selectBadgePlaceholder": "-- Trieu una insígnia --",
+    "saveButton": "Desar",
+    "series": {
+      "welcome": {
+        "name": "Benvinguda"
+      }
+    },
+    "items": {
+      "casal": {
+        "name": "Casal Català",
+        "description": "Fer-se membre del Casal Català."
+      },
+      "camisa": {
+        "name": "La camisa",
+        "description": "Rebre la teva camisa oficial dels Castellers de Montréal."
+      },
+      "uniformeCasteller": {
+        "name": "Uniforme casteller",
+        "description": "Portar l'uniforme complet: camisa, faixa i pantalons blancs."
+      },
+      "motxilla": {
+        "name": "La motxilla",
+        "description": "Aconseguir la motxilla de la colla."
+      },
+      "amunt": {
+        "name": "Amunt!",
+        "description": "Iniciar sessió i confirmar la teva assistència a un esdeveniment a l'aplicació."
+      },
+      "primeraDiada": {
+        "name": "Primera diada",
+        "description": "Participar a la teva primera diada."
+      },
+      "primerCastell": {
+        "name": "Primer castell",
+        "description": "Formar part d'un castell carregat i descarregat per primera vegada."
+      }
+    }
+  },
   "routes": {
     "events": "Esdeveniments",
-    "members": "Membres"
+    "members": "Membres",
+    "myBadges": "Les meves insígnies",
+    "badges": "Insígnies"
   }
 }

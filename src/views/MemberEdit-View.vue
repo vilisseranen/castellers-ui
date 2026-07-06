@@ -5,6 +5,10 @@
       v-on:editUser="editUser"
       v-on:deleteUser="removeUser"
     ></edit-profile-form>
+    <badges-component
+      v-if="user.uuid"
+      :member-uuid="user.uuid"
+    ></badges-component>
     <div class="box" v-if="uuid === user.uuid">
       <p class="title is-3">
         {{ $t("members.changePassword") }}
@@ -52,6 +56,7 @@
 
 <script>
 import EditProfileForm from "../components/EditProfileForm-Component.vue";
+import BadgesComponent from "../components/Badges-Component.vue";
 import { mapActions, mapGetters } from "vuex";
 import { memberMixin } from "../mixins/members.js";
 
@@ -59,6 +64,7 @@ export default {
   mixins: [memberMixin],
   components: {
     EditProfileForm,
+    BadgesComponent,
   },
   data() {
     return {
