@@ -209,6 +209,9 @@
     "series": {
       "welcome": {
         "name": "Welcome"
+      },
+      "events": {
+        "name": "Events"
       }
     },
     "items": {
@@ -239,6 +242,10 @@
       "primerCastell": {
         "name": "First castell",
         "description": "Be part of a castell loaded and unloaded for the first time."
+      },
+      "mcc2026": {
+        "name": "Montréal Complètement Cirque 2026",
+        "description": "Take part in the castells workshops during the Montréal Complètement Cirque festival in 2026."
       }
     }
   },

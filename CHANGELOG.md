@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 The UI version is defined in [`package.json`](package.json) (`version` field).
 
+## [1.5.1] - 2026-07-06
+
+### Added
+
+- New "Events" badge series with its first badge, Montréal Complètement Cirque 2026 (requires API `0.22.0`): image plus names and descriptions in French, English and Catalan.
+
 ## [1.5.0] - 2026-07-04
 
 ### Added
