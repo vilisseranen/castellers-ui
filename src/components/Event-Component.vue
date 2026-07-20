@@ -45,6 +45,16 @@
                 <span class="tag is-social" v-if="event.type == 'social'">{{
                   $t("events.social")
                 }}</span>
+                <span
+                  class="tag is-uniform"
+                  v-if="event.uniformRequired == 1"
+                  :title="$t('events.uniformRequiredHelp')"
+                >
+                  <span class="icon is-small">
+                    <i class="fas fa-tshirt"></i>
+                  </span>
+                  <span>{{ $t("events.uniform") }}</span>
+                </span>
               </div>
             </div>
           </router-link>

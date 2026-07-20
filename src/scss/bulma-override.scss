@@ -34,6 +34,7 @@ $colors: map-merge($colors, (
     "presentation": ($warning, $warning-invert, $warning-light, $warning-dark),
     "practice": ($info, $info-invert, $info-light, $info-dark),
     "social": ($primary, $primary-invert, $primary-light, $primary-dark),
+    "uniform": ($link, $link-invert, $link-light, $link-dark),
     "undefined": ($grey, $grey-invert, $grey-light, $grey-dark),
 ));
 

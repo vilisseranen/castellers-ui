@@ -26,8 +26,8 @@ const actions = {
   async getBadgeMembers(context, badgeUuid) {
     return api.getBadgeMembers(badgeUuid);
   },
-  async assignBadge(context, { badgeUuid, memberUuids }) {
-    return api.assignBadge(badgeUuid, memberUuids);
+  async assignBadge(context, { badgeUuid, memberUuids, notifyByEmail }) {
+    return api.assignBadge(badgeUuid, memberUuids, notifyByEmail);
   },
   async removeBadge(context, { badgeUuid, memberUuids }) {
     return api.removeBadge(badgeUuid, memberUuids);
