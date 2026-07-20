@@ -160,8 +160,21 @@
             :transitions="false"
           />
         </div>
-        <div class="column is-12" v-if="currentEvent.uniformRequired === 1">
-          <p class="content">{{ $t("events.uniformRequiredHelp") }}</p>
+        <div
+          class="column is-12"
+          v-if="currentEvent.uniformRequired === 1"
+        >
+          <div class="uniform-notice media">
+            <div class="media-left">
+              <span class="icon is-large has-text-link" aria-hidden="true">
+                <i class="fas fa-tshirt fa-2x"></i>
+              </span>
+            </div>
+            <div class="media-content">
+              <p class="title is-6">{{ $t("events.uniformRequired") }}</p>
+              <p class="content">{{ $t("events.uniformRequiredHelp") }}</p>
+            </div>
+          </div>
         </div>
         <div class="column is-12">
           <div class="columns">
@@ -999,3 +1012,22 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.uniform-notice {
+  align-items: flex-start;
+  padding: 0.75rem 1rem;
+  background-color: #eff5fb;
+  border-left: 4px solid #3273dc;
+  border-radius: 4px;
+}
+.uniform-notice .media-left {
+  margin-right: 1rem;
+}
+.uniform-notice .title {
+  margin-bottom: 0.35rem;
+}
+.uniform-notice .content {
+  margin-bottom: 0;
+}
+</style>
