@@ -160,10 +160,7 @@
             :transitions="false"
           />
         </div>
-        <div
-          class="column is-12"
-          v-if="currentEvent.uniformRequired === 1"
-        >
+        <div class="column is-12" v-if="currentEvent.uniformRequired === 1">
           <div class="uniform-notice media">
             <div class="media-left">
               <span class="icon is-large has-text-link" aria-hidden="true">
