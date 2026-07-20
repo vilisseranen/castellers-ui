@@ -69,6 +69,13 @@
       </div>
 
       <div class="field mt-4">
+        <label class="checkbox">
+          <input type="checkbox" v-model="notifyByEmail" />
+          {{ $t("badges.notifyByEmail") }}
+        </label>
+      </div>
+
+      <div class="field mt-4">
         <button
           class="button is-info"
           :disabled="saving || !hasChanges"
@@ -92,6 +99,7 @@ export default {
       initialHolders: [],
       checked: {},
       memberSearchQuery: "",
+      notifyByEmail: false,
       saving: false,
     };
   },
@@ -184,7 +192,11 @@ export default {
       const toRemove = this.membersToRemove;
       try {
         if (toAdd.length > 0) {
-          await this.assignBadge({ badgeUuid, memberUuids: toAdd });
+          await this.assignBadge({
+            badgeUuid,
+            memberUuids: toAdd,
+            notifyByEmail: this.notifyByEmail,
+          });
         }
         if (toRemove.length > 0) {
           await this.removeBadge({ badgeUuid, memberUuids: toRemove });

@@ -94,6 +94,9 @@
     "today": "Aujourd'hui",
     "type": "Type",
     "until": "Jusqu'au",
+    "uniform": "Uniforme",
+    "uniformRequired": "Uniforme de mise",
+    "uniformRequiredHelp": "Pour cet évènement, le port de l'uniforme est de mise : chemise officielle et pantalons blancs. Si tu n'as pas encore la chemise officielle, porte des couleurs semblables aux nôtres. Nous avons quelques chemises de seconde main que l'on peut te prêter, au besoin.",
     "update": "Modifier les informations sur un évènement",
     "updateButton": "Modifier l'évènement"
   },
@@ -206,6 +209,7 @@
     "adminTitle": "Gestion des badges",
     "selectBadge": "Badge",
     "selectBadgePlaceholder": "-- Choisir un badge --",
+    "notifyByEmail": "Envoyer un courriel aux récipiendaires (membres abonnés aux courriels)",
     "saveButton": "Enregistrer",
     "series": {
       "welcome": {

@@ -115,6 +115,12 @@
             <o-switch v-model="recurring" variant="info"></o-switch>
           </o-field>
         </div>
+        <div class="field column is-2" v-if="!readonly">
+          <label class="label">{{ $t("events.uniformRequired") }}</label>
+          <o-field>
+            <o-switch v-model="uniformRequiredSwitch" variant="info"></o-switch>
+          </o-field>
+        </div>
         <div
           class="field column is-4"
           v-if="currentEvent.uuid === undefined && recurring"
@@ -153,6 +159,9 @@
             format="dd/MM/yyyy HH:mm"
             :transitions="false"
           />
+        </div>
+        <div class="column is-12" v-if="currentEvent.uniformRequired === 1">
+          <p class="content">{{ $t("events.uniformRequiredHelp") }}</p>
         </div>
         <div class="column is-12">
           <div class="columns">
@@ -542,6 +551,7 @@ export default {
         },
         locationName: "",
         description: "",
+        uniformRequired: 0,
       }, // defaults are set here
       isLoading: false,
       table,
@@ -677,6 +687,14 @@ export default {
       },
       set: function (newUuid) {
         this.currentEvent.uuid = newUuid;
+      },
+    },
+    uniformRequiredSwitch: {
+      get: function () {
+        return this.currentEvent.uniformRequired === 1;
+      },
+      set: function (value) {
+        this.currentEvent.uniformRequired = value ? 1 : 0;
       },
     },
     startDateForCalendar: {

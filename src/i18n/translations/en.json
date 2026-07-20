@@ -83,6 +83,9 @@
     "remindersSelectedHidden": "{total} selected ({hidden} not shown by search)",
     "remindersSelectedCount": "{count} selected",
     "recurringEvent": "Recurring event",
+    "uniform": "Uniform",
+    "uniformRequired": "Uniform required",
+    "uniformRequiredHelp": "For this event, the uniform is expected: official shirt and white trousers. If you do not have the official shirt yet, wear similar colours to ours. We have a few second-hand shirts we can lend if needed.",
     "registered": "registered",
     "registered_plural": "registered",
     "show": "Event details",
@@ -205,6 +208,7 @@
     "adminTitle": "Badge management",
     "selectBadge": "Badge",
     "selectBadgePlaceholder": "-- Select a badge --",
+    "notifyByEmail": "Send an email to recipients (members subscribed to emails)",
     "saveButton": "Save",
     "series": {
       "welcome": {

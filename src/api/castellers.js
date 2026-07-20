@@ -217,8 +217,13 @@ export default {
   async getBadgeMembers(badgeUuid) {
     return apiCall("GET", `/badges/${badgeUuid}/members`, {}, null);
   },
-  async assignBadge(badgeUuid, memberUuids) {
-    return apiCall("POST", `/badges/${badgeUuid}/members`, {}, { memberUuids });
+  async assignBadge(badgeUuid, memberUuids, notifyByEmail = false) {
+    return apiCall(
+      "POST",
+      `/badges/${badgeUuid}/members`,
+      {},
+      { memberUuids, notifyByEmail }
+    );
   },
   async removeBadge(badgeUuid, memberUuids) {
     return apiCall(

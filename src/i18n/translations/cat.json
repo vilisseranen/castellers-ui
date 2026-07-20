@@ -50,6 +50,9 @@
     "to": "a",
     "type": "Tipus",
     "until": "Fins el",
+    "uniform": "Uniforme",
+    "uniformRequired": "Uniforme requerit",
+    "uniformRequiredHelp": "Per a aquest esdeveniment, cal portar l'uniforme: camisa oficial i pantalons blancs. Si encara no tens la camisa oficial, porta colors semblants als nostres. Tenim algunes camises de segona mà que et podem deixar, si cal.",
     "update": "Modificar detalls esdeveniment",
     "updateButton": "Modificar l'esdeveniment"
   },
@@ -110,6 +113,7 @@
     "adminTitle": "Gestió d'insígnies",
     "selectBadge": "Insígnia",
     "selectBadgePlaceholder": "-- Trieu una insígnia --",
+    "notifyByEmail": "Enviar un correu als destinataris (membres subscrits als correus)",
     "saveButton": "Desar",
     "series": {
       "welcome": {
