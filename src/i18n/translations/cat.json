@@ -155,6 +155,10 @@
       "mcc2026": {
         "name": "Montréal Complètement Cirque 2026",
         "description": "Participar als tallers de castells durant el festival Montréal Complètement Cirque el 2026."
+      },
+      "castanyada2026": {
+        "name": "Castanyada 2026",
+        "description": "Participar a la Castanyada 2026."
       }
     }
   },

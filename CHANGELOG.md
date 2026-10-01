@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 The UI version is defined in [`package.json`](package.json) (`version` field).
 
+## [1.6.3] - 2026-09-30
+
+### Added
+
+- New "Castanyada 2026" badge in the "Events" series (requires API `0.24.0`): image plus names and descriptions in French, English and Catalan.
+
 ## [1.5.1] - 2026-07-06
 
 ### Added
