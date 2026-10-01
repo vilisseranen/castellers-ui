@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 The UI version is defined in [`package.json`](package.json) (`version` field).
 
+## [1.6.4] - 2026-09-30
+
+### Security
+
+- Bump `axios` 0.27.2 → 1.20.0.
+- Run `npm audit fix` on transitive dependencies (`form-data`, `http-proxy-middleware`, `lodash`, `vue-i18n`/`@intlify/*`, `js-yaml`, `compression`/`on-headers`, `qs`/`express`, `node-forge`, `webpack`, among others): 63 → 22 audit findings, no critical left. The remaining ones are in the Vue CLI build tooling.
+- Build with Node 24 instead of Node 16 (CI workflow and fly.io `Dockerfile`).
+
 ## [1.6.3] - 2026-09-30
 
 ### Added
