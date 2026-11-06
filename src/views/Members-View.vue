@@ -96,7 +96,7 @@
         sortable
         v-slot="props"
       >
-        <span v-t="`members.` + props.row.type + `Type`"></span>
+        <span v-text="$t(`members.` + props.row.type + `Type`)"></span>
       </o-table-column>
       <o-table-column
         v-if="type === 'admin'"

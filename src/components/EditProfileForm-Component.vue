@@ -279,7 +279,7 @@
               'is-warning': current_user.status === 'paused',
               'is-danger': current_user.status === 'deleted',
             }"
-            v-t="`members.${current_user.status}Status`"
+            v-text="$t(`members.${current_user.status}Status`)"
           ></span>
         </div>
         <div class="field is-horizontal column">
