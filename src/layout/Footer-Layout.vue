@@ -40,7 +40,7 @@ import { mapState } from "vuex";
 
 export default {
   data() {
-    const uiVersion = process.env.VUE_APP_VERSION;
+    const uiVersion = import.meta.env.VUE_APP_VERSION;
     return { uiVersion };
   },
   computed: {

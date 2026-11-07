@@ -1,5 +1,5 @@
 import api from "../api/castellers";
-import ConfirmModal from "../components/modals/Confirm-Modal";
+import ConfirmModal from "../components/modals/Confirm-Modal.vue";
 
 export const castellMixin = {
   methods: {
