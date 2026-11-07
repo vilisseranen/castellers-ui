@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 The UI version is defined in [`package.json`](package.json) (`version` field).
 
+## [1.6.5] - 2026-11-06
+
+### Security
+
+- Bump `vue` 3.2.45 → 3.5.45 and `@vue/compiler-sfc` to 3.5.45 (XSS in `@vue/server-renderer`; not reachable here since the app renders client-side only).
+- Bump `vue-i18n` 9.14.5 → 11.4.18 (XSS through `escapeParameter`, fixed only in 11.x). The app keeps using the legacy API (`$t`, `$i18n.locale`), which v11 still supports but deprecates (to be removed in v12).
+- Remove the unused `@intlify/vue-i18n-loader` dev dependency (it pulled a vulnerable `@intlify/message-compiler` 9.x).
+- Replace the deprecated `v-t` directive with `v-text="$t(...)"`.
+- Remove the unused `pluginOptions.i18n` block from `vue.config.js` (it configured a plugin that is not installed).
+- Run `npm audit fix` on transitive dependencies (`follow-redirects`, `source-map-js`, `proxy-addr`, `body-parser`, `qs`, `node-forge`, `joi`, `launch-editor`, `fast-uri`, `postcss-selector-parser`, among others): 42 → 25 audit findings, none critical. Only 2 low findings are left in the production bundle (`vuex-persistedstate`/`deepmerge`). The rest are in the Vue CLI build tooling, which is no longer maintained.
+
 ## [1.6.4] - 2026-09-30
 
 ### Security

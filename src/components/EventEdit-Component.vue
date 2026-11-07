@@ -2,7 +2,7 @@
   <div>
     <div class="box" id="eventCreate">
       <p class="title is-3">
-        <span v-t="'events.' + actionLabel"></span
+        <span v-text="$t('events.' + actionLabel)"></span
         ><span
           class="tag"
           style="margin-left: 10px"
@@ -12,7 +12,7 @@
             'is-danger': event.participation == 'no',
             'is-warning': event.participation == '',
           }"
-          v-t="'events.' + participationLabel"
+          v-text="$t('events.' + participationLabel)"
         >
         </span>
       </p>
