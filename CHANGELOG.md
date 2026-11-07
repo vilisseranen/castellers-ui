@@ -12,13 +12,13 @@ The UI version is defined in [`package.json`](package.json) (`version` field).
 
 - Build with [Vite](https://vite.dev) 8 instead of Vue CLI 5, which is no longer maintained. `npm run serve`, `npm run build` and `npm run lint` keep working; `npm run preview` serves the production build locally. The dev server now listens on port 5173 and still proxies `/api` to `localhost:8080`.
 - PWA: `vite-plugin-pwa` replaces `@vue/cli-plugin-pwa`. The service worker keeps the same name (`service-worker.js`) and manifest (`manifest.json`), so installed apps update in place. API calls (`/api/`) are excluded from the navigation fallback.
-- Lint with ESLint 9 (flat config in `eslint.config.js`) and `eslint-plugin-vue` 10; Babel is no longer used.
+- Lint with ESLint 9 (flat config in `eslint.config.js`) and `eslint-plugin-vue` 10; Babel is no longer used. App code is linted with browser globals only, so leftover `process`/`require` are reported; `npm run lint` also covers the config files.
 - Code: `process.env` → `import.meta.env` (the `VUE_APP_` prefix is still accepted), `require.context` → `import.meta.glob`, `require()` of Leaflet marker images → `import`.
 - No more Babel/core-js transpilation: the build targets browsers supported by Vite by default (Chrome/Edge 111+, Firefox 114+, Safari 16.4+).
 
 ### Security
 
-- Removing Vue CLI and webpack clears the remaining build-tool vulnerabilities (`webpack-dev-server`, `webpack-dev-middleware`, `serialize-javascript`, `workbox-build` 6, `postcss` 7, `cross-spawn`, `sockjs`, …). `workbox-build`'s `glob` is pinned to ^14.0.4 via `overrides`. `npm audit`: 25 → 5 findings, all low, all from `deepmerge` (no fix available; used by `vuex-persistedstate` and by the service worker build).
+- Removing Vue CLI and webpack clears the remaining build-tool vulnerabilities (`webpack-dev-server`, `webpack-dev-middleware`, `serialize-javascript`, `workbox-build` 6, `postcss` 7, `cross-spawn`, `sockjs`, …). `workbox-build`'s `glob` is pinned to ^14.0.4 via `overrides`. `npm audit`: 25 → 5 findings, all low, all from `deepmerge` (used by `vuex-persistedstate` and by the service worker build; the only fix npm offers is a breaking downgrade of `vuex-persistedstate`).
 
 ## [1.6.5] - 2026-11-06
 

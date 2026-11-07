@@ -15,6 +15,10 @@ export default defineConfig({
     // @oruga-ui/theme-bulma 0.2 ships a few invalid selectors (e.g. ".check:before:hover").
     // Drop them when minifying instead of failing the build.
     lightningcss: { errorRecovery: true },
+    preprocessorOptions: {
+      // Bulma 0.9 and the Oruga theme still use @import and legacy Sass functions.
+      scss: { quietDeps: true, silenceDeprecations: ["import"] },
+    },
   },
 
   resolve: {
@@ -36,10 +40,11 @@ export default defineConfig({
       filename: "service-worker.js",
       manifestFilename: "manifest.json",
       // Registration is done in src/registerServiceWorker.js.
+      // Like the former Vue CLI service worker, a new version activates once
+      // all tabs of the app are closed (no skipWaiting).
       injectRegister: false,
       // Icons are already precached through workbox.globPatterns.
       includeManifestIcons: false,
-      registerType: "autoUpdate",
       manifest: {
         name: "Castellers de Montréal",
         short_name: "castellers",
