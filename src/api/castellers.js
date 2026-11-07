@@ -2,8 +2,8 @@ import axios from "axios";
 
 let API_URL;
 
-if (process.env.NODE_ENV === "production" && process.env.VUE_APP_API_URL) {
-  API_URL = "https://" + process.env.VUE_APP_API_URL;
+if (import.meta.env.PROD && import.meta.env.VUE_APP_API_URL) {
+  API_URL = "https://" + import.meta.env.VUE_APP_API_URL;
 } else {
   API_URL = "";
 }

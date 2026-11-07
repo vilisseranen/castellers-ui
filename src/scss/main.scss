@@ -4,7 +4,7 @@
 @import "./bulma-override.scss";
 
 // Style oruga components
-@import '~@oruga-ui/theme-bulma/dist/scss/bulma';
+@import '@oruga-ui/theme-bulma/dist/scss/bulma';
 
 // custom style file that makes use of bulma variables
 @import "./castells.scss";
