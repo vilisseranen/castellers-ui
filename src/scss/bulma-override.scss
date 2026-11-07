@@ -1,5 +1,5 @@
-@import "../../node_modules/bulma/sass/utilities/initial-variables";
-@import "../../node_modules/bulma/sass/utilities/functions";
+@import "bulma/sass/utilities/initial-variables";
+@import "bulma/sass/utilities/functions";
 
 // Buefy initial variables
 $speed-slow: 150ms;
@@ -28,7 +28,7 @@ $grey-invert: findColorInvert($grey);
 $grey-light: findLightColor($grey);
 $grey-dark: findDarkColor($grey);
 
-@import "../../node_modules/bulma/sass/utilities/derived-variables";
+@import "bulma/sass/utilities/derived-variables";
 $colors: map-merge($colors, (
     "beige": ($beige, $beige-invert, $beige-light, $beige-dark),
     "presentation": ($warning, $warning-invert, $warning-light, $warning-dark),

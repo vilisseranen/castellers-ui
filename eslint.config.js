@@ -11,14 +11,19 @@ export default [
   prettierConfig,
   {
     files: ["**/*.{js,vue}"],
-    languageOptions: {
-      ecmaVersion: "latest",
-      sourceType: "module",
-      globals: { ...globals.browser, ...globals.node },
-    },
+    languageOptions: { ecmaVersion: "latest", sourceType: "module" },
     plugins: { prettier: prettierRecommended },
     rules: {
       "prettier/prettier": "error",
     },
+  },
+  {
+    // App code runs in the browser: flag leftover Node/webpack globals such as process or require.
+    files: ["src/**/*.{js,vue}"],
+    languageOptions: { globals: globals.browser },
+  },
+  {
+    files: ["*.config.js"],
+    languageOptions: { globals: globals.node },
   },
 ];
