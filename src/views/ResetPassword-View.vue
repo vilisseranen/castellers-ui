@@ -135,6 +135,10 @@ export default {
     if ("u" in this.$route.query) {
       this.credentials["username"] = this.$route.query.u;
     }
+    // Keep the link token out of the browser history.
+    if (Object.keys(this.$route.query).length > 0) {
+      this.$router.replace({ query: {} });
+    }
   },
   methods: {
     ...mapActions({
