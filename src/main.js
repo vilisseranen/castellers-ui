@@ -9,6 +9,9 @@ import { bulmaConfig } from "@oruga-ui/theme-bulma";
 import "./registerServiceWorker";
 
 import notifications from "./mixins/notifications";
+import { installAuthInterceptor } from "./api/authInterceptor";
+
+installAuthInterceptor(store, router);
 
 // Redirect if we need to log in
 router.beforeEach((to, from, next) => {

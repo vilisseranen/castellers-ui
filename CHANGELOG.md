@@ -6,6 +6,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 The UI version is defined in [`package.json`](package.json) (`version` field).
 
+## [1.7.1] - 2026-11-08
+
+Second step of the JWT hardening. Requires the API 0.24.4 or later (`token_expired` error code, working `/logout`).
+
+### Security
+
+- Logging out now also revokes the current refresh token on the server (`POST /logout`). Before, it stayed valid for 15 days after logout. Refresh tokens issued before the last refresh stay valid until they expire, until the API revokes whole sessions.
+- Tokens from email links (registration, password reset, participation) are removed from the address bar as soon as the page has read them, so they no longer stay in the browser history.
+- A request made with a token from an email link is no longer replayed with the logged-in user's session when that token has expired.
+
+### Fixed
+
+- The token refresh no longer loops: it now runs only when the API says the access token has expired (`code: "token_expired"`), not on every 403, and replays a request at most once.
+- When the API rejects the refresh token, the user is logged out and, on pages that need a login, sent to the login page with a link back. On public pages (e.g. events) the request is replayed anonymously. A network or server error during the refresh no longer ends the session. Before, every following request failed until the page was reloaded.
+- A persisted session whose refresh token has expired is cleared at startup, so public pages load anonymously instead of failing with an expired token.
+- `Authorization` header: `Bearer <token>` instead of `Bearer: <token>`.
+- The refresh token's expiry was read only when an access token was present, and logging out did not reset the language (`state.local` typo).
+
 ## [1.7.0] - 2026-11-07
 
 ### Changed

@@ -6,7 +6,7 @@
         ><span
           class="tag"
           style="margin-left: 10px"
-          v-if="(uuid || this.$route.query.t) && actionLabel !== 'create'"
+          v-if="(uuid || linkToken) && actionLabel !== 'create'"
           v-bind:class="{
             'is-success': event.participation == 'yes',
             'is-danger': event.participation == 'no',
@@ -549,6 +549,8 @@ export default {
       data: [],
     };
     return {
+      // Token of the participation link from an email, if any.
+      linkToken: null,
       event: {
         startDate: Math.trunc(s.valueOf() / 1000),
         endDate: Math.trunc(e.valueOf() / 1000),
@@ -652,12 +654,20 @@ export default {
     },
   },
   mounted() {
-    this.loadEvent(this.$route.params.uuid, this.$route.query.t);
+    const query = { ...this.$route.query };
+    this.linkToken = query.t || null;
+    if (query.t || query.a) {
+      // Keep the link token out of the browser history.
+      const rest = { ...query };
+      ["t", "a", "m", "p"].forEach((key) => delete rest[key]);
+      this.$router.replace({ query: rest });
+    }
+    this.loadEvent(this.$route.params.uuid, this.linkToken);
     this.listParticipants({
       statuses: this.memberStatuses,
       types: this.memberTypes,
     });
-    this.checkAction();
+    this.checkAction(query);
     if (this.uuid) {
       this.$store.dispatch(
         "castells/getCastellModels",
@@ -877,16 +887,11 @@ export default {
         this.remindersLoading = false;
       }
     },
-    checkAction() {
+    checkAction(query) {
       // This page handles actions to participate to an event
       // if a is in query params, we also expect p and t
-      if ("a" in this.$route.query && this.$route.query.a === "participate") {
-        this.participate(
-          this.$route.query.m,
-          this.$route.params.uuid,
-          this.$route.query.p,
-          this.$route.query.t
-        );
+      if (query.a === "participate") {
+        this.participate(query.m, this.$route.params.uuid, query.p, query.t);
       }
     },
     participate(memberUuid, eventUuid, participation, token) {

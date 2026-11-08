@@ -15,6 +15,8 @@ const apiCall = function (method, url, headers, data) {
       url: API_URL + "/api/v1" + url,
       headers: headers,
       data: data,
+      // A token given explicitly (email links) is not the session's token.
+      explicitToken: Boolean(headers && headers.Authorization),
     })
       .then(function (response) {
         resolve(response);
@@ -26,15 +28,24 @@ const apiCall = function (method, url, headers, data) {
 };
 
 export default {
-  async logout() {
+  // Revokes the session on the server. The access token may be expired.
+  async logout(accessToken) {
     delete axios.defaults.headers.common.Authorization;
+    if (!accessToken) {
+      return;
+    }
+    return apiCall("POST", `/logout`, {
+      Authorization: `Bearer ${accessToken}`,
+    }).catch(function () {
+      // The session is cleared locally anyway.
+    });
   },
   async login(username, password) {
     return apiCall("POST", `/login`, null, {
       username: username,
       password: password,
     }).then(function (response) {
-      axios.defaults.headers.common.Authorization = `Bearer: ${response.data.access_token}`;
+      axios.defaults.headers.common.Authorization = `Bearer ${response.data.access_token}`;
       return response;
     });
   },
@@ -42,7 +53,7 @@ export default {
     return apiCall("POST", `/refresh`, null, {
       refresh_token: token,
     }).then(function (response) {
-      axios.defaults.headers.common.Authorization = `Bearer: ${response.data.access_token}`;
+      axios.defaults.headers.common.Authorization = `Bearer ${response.data.access_token}`;
       return response;
     });
   },
@@ -52,7 +63,7 @@ export default {
   async getEvent(uuid, token) {
     let authorizationHeader = {};
     if (token != null) {
-      authorizationHeader = { Authorization: `Bearer: ${token}` };
+      authorizationHeader = { Authorization: `Bearer ${token}` };
     }
     return apiCall("GET", `/events/${uuid}`, authorizationHeader, null);
   },
@@ -76,7 +87,7 @@ export default {
   async participateEvent(memberUuid, eventUuid, participation, token) {
     let authorizationHeader = {};
     if (token != null) {
-      authorizationHeader = { Authorization: `Bearer: ${token}` };
+      authorizationHeader = { Authorization: `Bearer ${token}` };
     }
     return apiCall(
       "POST",
@@ -154,7 +165,7 @@ export default {
     return apiCall(
       "POST",
       `/reset_credentials`,
-      { Authorization: `Bearer: ${token}` },
+      { Authorization: `Bearer ${token}` },
       { username: username, password: password }
     );
   },

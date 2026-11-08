@@ -23,7 +23,7 @@ const getters = {
       ? JSON.parse(atob(getters.accessToken.split(".")[1]))
       : null,
   refreshTokenData: (state, getters) =>
-    getters.accessToken
+    getters.refreshToken
       ? JSON.parse(atob(getters.refreshToken.split(".")[1]))
       : null,
 
@@ -74,9 +74,12 @@ const actions = {
         return response;
       });
   },
-  logout(context) {
-    api.logout();
-    context.dispatch("reset");
+  async logout(context) {
+    // Clear the local session first, so that concurrent logouts (or a login
+    // happening meanwhile) are not affected by the API call.
+    const accessToken = context.getters.accessToken;
+    await context.dispatch("reset");
+    await api.logout(accessToken);
   },
 };
 
@@ -90,7 +93,7 @@ const mutations = {
     state.auth.accessToken = "";
     state.auth.refreshToken = "";
     state.action = {};
-    state.local = "";
+    state.locale = "";
   },
   setAction(state, payload) {
     state.action.type = payload.type;

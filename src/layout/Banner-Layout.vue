@@ -147,8 +147,8 @@ export default {
     ...mapActions({
       resetState: "logout",
     }),
-    logout() {
-      this.resetState();
+    async logout() {
+      await this.resetState();
       if (this.$route.name === "Events") {
         this.$router.go();
       } else {
