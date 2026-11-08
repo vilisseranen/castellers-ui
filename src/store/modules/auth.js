@@ -75,8 +75,11 @@ const actions = {
       });
   },
   async logout(context) {
-    await api.logout(context.getters.accessToken);
+    // Clear the local session first, so that concurrent logouts (or a login
+    // happening meanwhile) are not affected by the API call.
+    const accessToken = context.getters.accessToken;
     await context.dispatch("reset");
+    await api.logout(accessToken);
   },
 };
 
