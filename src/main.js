@@ -5,6 +5,7 @@ import store from "./store";
 import i18n from "./i18n";
 import Oruga from "@oruga-ui/oruga-next";
 import { bulmaConfig } from "@oruga-ui/theme-bulma";
+import "@fortawesome/fontawesome-free/css/all.css";
 
 import "./registerServiceWorker";
 
