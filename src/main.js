@@ -5,6 +5,9 @@ import store from "./store";
 import i18n from "./i18n";
 import Oruga from "@oruga-ui/oruga-next";
 import { bulmaConfig } from "@oruga-ui/theme-bulma";
+// Only the solid style is used (the "fa" and "fas" prefixes).
+import "@fortawesome/fontawesome-free/css/fontawesome.css";
+import "@fortawesome/fontawesome-free/css/solid.css";
 
 import "./registerServiceWorker";
 

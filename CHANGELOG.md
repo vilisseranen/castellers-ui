@@ -6,6 +6,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 The UI version is defined in [`package.json`](package.json) (`version` field).
 
+## [1.7.2] - 2026-11-08
+
+Third step of the JWT hardening: reduce what an injected script could do and where it could come from.
+
+### Security
+
+- FontAwesome is now bundled with the app (`@fortawesome/fontawesome-free` 7) instead of loading `all.js` 5.3.1 from `use.fontawesome.com` without integrity check. The page no longer loads any third-party script.
+- nginx sends security headers on every response (`deployment/fly.io/etc/security-headers.conf`, included in both locations):
+  - `Content-Security-Policy`: scripts, fonts and styles only from the app itself; API calls only to the app and the API host (`api.amunt.castellersdemontreal.info`); map tiles from OpenStreetMap; no framing, no plugins. Inline styles stay allowed;
+  - `Strict-Transport-Security` (1 year), `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy` (camera, microphone, geolocation, payment disabled).
+
+### Changed
+
+- Icons are rendered with the FontAwesome web font instead of SVG; the icon names are unchanged. FontAwesome 7 still accepts the version 5 names used by the app. Only the solid style is bundled.
+
+### Fixed
+
+- The close icon of confirmation dialogs used Oruga's default icon pack (Material Design Icons), which is not loaded, so it did not show.
+- If the API host changes, update `connect-src` in `security-headers.conf` as well as `VUE_APP_API_URL`.
+
 ## [1.7.1] - 2026-11-08
 
 Second step of the JWT hardening. Requires the API 0.24.4 or later (`token_expired` error code, working `/logout`).

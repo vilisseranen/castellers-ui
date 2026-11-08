@@ -6,6 +6,7 @@
         <o-icon
           clickable
           native-type="button"
+          pack="fa"
           icon="times"
           @click="$emit('close', { action: 'no', method: 'x' })"
         />
