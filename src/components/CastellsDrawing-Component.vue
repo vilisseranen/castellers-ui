@@ -34,6 +34,36 @@
       </div>
       <div class="column is-3" v-if="!readonly">
         <h1 class="subtitle is-3">{{ $t("castells.available_members") }}</h1>
+        <div class="field" v-if="hasParticipation">
+          <o-checkbox v-model="onlyPresent" variant="success">
+            <span>{{ $t("castells.onlyPresent") }}</span>
+          </o-checkbox>
+        </div>
+        <div class="field has-addons">
+          <div class="control is-expanded">
+            <input
+              class="input"
+              type="search"
+              v-model="memberSearchQuery"
+              :placeholder="$t('members.searchPlaceholder')"
+              autocomplete="off"
+            />
+          </div>
+          <div class="control">
+            <button
+              type="button"
+              class="button is-light"
+              @click="memberSearchQuery = ''"
+              :disabled="!memberSearchQuery.trim()"
+              :aria-label="$t('members.clearSearch')"
+            >
+              {{ $t("members.clearSearch") }}
+            </button>
+          </div>
+        </div>
+        <p class="help" v-if="availableMembers.length === 0">
+          {{ $t("castells.noAvailableMember") }}
+        </p>
         <p
           v-for="member in availableMembers"
           v-bind:key="member.uuid"
@@ -92,10 +122,23 @@ export default {
       }
       return membersIDs;
     },
+    // true when we know who comes to the event of the castell
+    hasParticipation: function () {
+      return Array.isArray(this.castell && this.castell.castellers);
+    },
     availableMembers: function () {
-      const allMembers = [...this.members].filter(
+      let allMembers = [...this.members].filter(
         (x) => !this.selectedMembersIDs.includes(x.uuid)
       );
+      const query = this.normalizeText(this.memberSearchQuery);
+      if (query) {
+        // A search looks in all the members of the filter, present or not
+        allMembers = allMembers.filter((x) =>
+          this.normalizeText(`${x.firstName} ${x.lastName}`).includes(query)
+        );
+      } else if (this.onlyPresent && this.hasParticipation) {
+        allMembers = allMembers.filter((x) => this.isPresent(x.uuid) === true);
+      }
       const availableMembers = allMembers.sort(function (a, b) {
         if (a.firstName.toUpperCase() < b.firstName.toUpperCase()) {
           return -1;
@@ -157,6 +200,9 @@ export default {
       memberTypes: ["admin,member,canalla", "guest"],
       memberStatuses: ["active"],
       allMembers: {},
+      // When the castell has an event, list only the members who come to it
+      onlyPresent: true,
+      memberSearchQuery: "",
     };
   },
   mounted() {
@@ -190,6 +236,15 @@ export default {
     },
     selectMember(uuid) {
       this.selectedMemberUuid = uuid;
+    },
+    // lower case, without accents and extra spaces: "  Éric " => "eric"
+    normalizeText(text) {
+      return String(text || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, " ");
     },
     resetPositions() {
       this.positionsMembers = [];

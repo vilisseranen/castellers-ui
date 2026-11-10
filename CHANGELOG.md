@@ -6,6 +6,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 The UI version is defined in [`package.json`](package.json) (`version` field).
 
+## [1.9.0] - 2026-11-10
+
+Castell editor: choose the event first, then pick among the people who come to it. No API change.
+
+### Added
+
+- The event of a castell is chosen in a list on the castell page, also for a castell that is not saved yet. The castell is attached to the selected event (or detached, with "no event") when it is saved.
+- As soon as an event is selected, the list of available members only shows the people who come to it (present, or registered as coming when presence is not taken yet). The checkbox "only people coming to the event" above the list shows everybody of the member filter again.
+- Search by first or last name above the list of available members, ignoring case and accents. A search looks in all the members of the filter, coming to the event or not, to add somebody in particular.
+
+### Changed
+
+- The colours of the drawing (coming or not) are refreshed as soon as the event changes, without reloading the page.
+
+### Removed
+
+- The "Add to event" button and its dialog, replaced by the list. A castell no longer has to be saved before an event can be chosen.
+
 ## [1.8.0] - 2026-11-10
 
 First step of pinya planning: the pinya of the pilar de 4. Needs API 0.25.0, which provides the pinya positions; with an older API nothing changes.
