@@ -58,6 +58,13 @@
 import Raphael from "raphael";
 import { mapActions, mapGetters, mapState } from "vuex";
 import MemberFilter from "./MemberFilter-Component.vue";
+import {
+  pinyaBaixCell,
+  pinyaCell,
+  pinyaLabel,
+  pinyaScale,
+  pinyaSize,
+} from "../api/pinyaLayout";
 
 export default {
   components: { MemberFilter },
@@ -317,15 +324,69 @@ export default {
       const s = l / 2; // short side of rectangle
       const spacing = l / 10;
 
-      const canvasWidth = this.castellWidth * l;
+      const troncWidth = this.castellWidth * l;
       const canvasTroncHeight = troncHeight * (l + spacing) - spacing;
       const canvasPomHeight =
         (this.pomHeight > 0 ? 1 : 0) * (2 * (s + spacing) + l + spacing);
 
+      // The pinya is drawn under the tronc, as a plan seen from above.
+      // Only the castells with pinya positions have one.
+      const pinyaPositions = this.castell.positions.filter(
+        (position) => position.part === "pinya" && pinyaCell(position)
+      );
+      const hasPinya = pinyaPositions.length > 0;
+      const pinyaZoom = pinyaScale(pinyaPositions, areaW);
+      const pinya = pinyaSize(pinyaPositions, pinyaZoom);
+      const pinyaMargin = 40; // space above and under the plan, for the captions
+      const canvasPinyaHeight = hasPinya ? pinya.height + 2 * pinyaMargin : 0;
+
+      const canvasWidth = Math.max(troncWidth, pinya.width);
+      const troncX = (canvasWidth - troncWidth) / 2; // the tronc is centered above the pinya
+      // position of the baix on the plan
+      const pinyaX = canvasWidth / 2;
+      const pinyaY =
+        canvasPomHeight + canvasTroncHeight + pinyaMargin + pinya.height / 2;
+
       const defaultColor = "gray";
 
       // Resize canvas for the current castell
-      this.paperTronc.setSize(canvasWidth, canvasTroncHeight + canvasPomHeight);
+      this.paperTronc.setSize(
+        canvasWidth,
+        canvasTroncHeight + canvasPomHeight + canvasPinyaHeight
+      );
+
+      if (hasPinya) {
+        // Captions and baix. They are not positions: nobody can be assigned there.
+        const caption = { fill: "#666666", "font-size": 12 };
+        this.paperTronc
+          .text(pinyaX, pinyaY - pinya.height / 2 - pinyaMargin / 2, "Pinya")
+          .attr({ fill: "#666666", "font-size": 14, "font-weight": "bold" });
+        this.paperTronc
+          .text(
+            pinyaX,
+            pinyaY + pinya.height / 2 + pinyaMargin / 2,
+            this.$t("castells.pinyaFront")
+          )
+          .attr(caption);
+        const baix = pinyaBaixCell(pinyaZoom);
+        this.paperTronc
+          .rect(pinyaX - baix.w / 2, pinyaY - baix.h / 2, baix.w, baix.h, 5)
+          .attr({ stroke: defaultColor, "stroke-dasharray": "- " });
+        // Show who is the baix, to see around whom the pinya is built
+        const baixMember = this.positionsMembers.find(
+          (member) =>
+            member.position.part === "tronc" &&
+            member.position.name === "baix" &&
+            this.allMembers[member.member_uuid]
+        );
+        const baixName = baixMember
+          ? [
+              this.allMembers[baixMember.member_uuid].firstName,
+              this.allMembers[baixMember.member_uuid].lastName[0],
+            ].join(" ")
+          : "baix";
+        this.paperTronc.text(pinyaX, pinyaY, baixName).attr(caption);
+      }
 
       // We draw the tronc in a grid pattern.
       // For each position of the castell, we draw the cell at (column,cordon)
@@ -338,25 +399,32 @@ export default {
         let dy = l;
         if (position.part === "tronc") {
           // calculate x, y tronc (with Y offset for the pom)
-          x =
-            ((position.column - 1) * canvasWidth) / self.castellWidth +
-            (l - s) / 2;
+          x = troncX + (position.column - 1) * l + (l - s) / 2;
           y = (troncHeight - position.cordon) * (l + spacing) + canvasPomHeight;
         } else if (position.part === "pom") {
           // calculate x, y pom
           if (position.cordon === 1) {
             // dosos (vertical)
-            x =
-              ((position.column - 1) * canvasWidth) / self.castellWidth +
-              (l - s) / 2;
+            x = troncX + (position.column - 1) * l + (l - s) / 2;
             y = (self.pomHeight - position.cordon) * (s + spacing);
           } else {
             // acotxador and enxaneta (horizontal)
-            x = ((position.column - 1) * canvasWidth) / self.castellWidth;
+            x = troncX + (position.column - 1) * l;
             y = (self.pomHeight - position.cordon) * (s + spacing);
             dx = l;
             dy = s;
           }
+        } else if (position.part === "pinya") {
+          const cell = pinyaCell(position, pinyaZoom);
+          if (!cell) {
+            continue; // pinya position that we do not know how to draw
+          }
+          x = pinyaX + cell.cx - cell.w / 2;
+          y = pinyaY + cell.cy - cell.h / 2;
+          dx = cell.w;
+          dy = cell.h;
+        } else {
+          continue; // unknown part of the castell
         }
         rect = self.paperTronc
           .rect(x, y, dx, dy, 5)
@@ -373,6 +441,12 @@ export default {
       // Write the name of castellers in the castell
       allCells.forEach(function (cell) {
         const rect = cell[0]; // data is set on the set but only accessible in the rectangle
+        const bbox = rect.getBBox();
+        const vertical = bbox.width < bbox.height;
+        const longSide = Math.max(bbox.width, bbox.height);
+        const centerX = bbox.x + bbox.width / 2;
+        const centerY = bbox.y + bbox.height / 2;
+        let assigned = false;
         // For each cell we will see if someone is assigned
         for (let i = 0; i < self.positionsMembers.length; i++) {
           // Write if current position matches current cell
@@ -383,13 +457,11 @@ export default {
             self.positionsMembers[i].position.name === rect.data("name") &&
             self.allMembers[self.positionsMembers[i].member_uuid]
           ) {
-            const bbox = rect.getBBox();
-            const vertical = bbox.width < bbox.height;
             // Write text and add to group
             const name = self.paperTronc
               .text(
-                bbox.x + (vertical ? s / 2 : l / 2),
-                bbox.y + (vertical ? l / 2 : s / 2),
+                centerX,
+                centerY,
                 [
                   self.allMembers[self.positionsMembers[i].member_uuid]
                     .firstName,
@@ -399,11 +471,27 @@ export default {
               )
               .attr({ fill: "#000000" })
               // rotate and scale text. If cell width = 100, s = 1.5. If cell width = 50, s = 1
-              .transform((vertical ? "R270s" : "R0s") + (l * 0.01 + 0.5))
+              .transform((vertical ? "R270s" : "R0s") + (longSide * 0.01 + 0.5))
               .toBack();
             cell.push(name);
             cell.data("uuid", self.positionsMembers[i].member_uuid);
+            assigned = true;
           }
+        }
+        // In the pinya, the cells look the same: write the name of the position in the free ones
+        if (!assigned && rect.data("part") === "pinya") {
+          self.paperTronc
+            .text(
+              centerX,
+              centerY,
+              pinyaLabel({
+                name: rect.data("name"),
+                cordon: rect.data("cordon"),
+              })
+            )
+            .attr({ fill: "#666666" })
+            .transform((vertical ? "R270s" : "R0s") + (longSide * 0.01 + 0.3))
+            .toBack();
         }
         // Change color of border if self
         if (rect.data("uuid") === self.uuid) {
@@ -459,7 +547,10 @@ export default {
                 if (
                   originEl &&
                   destinationEl &&
-                  originEl.id !== destinationEl.id
+                  originEl.id !== destinationEl.id &&
+                  // captions and the baix of the pinya are not positions
+                  originEl.data("part") &&
+                  destinationEl.data("part")
                 ) {
                   self.swapMemberPositions(
                     originEl.data("column"),
