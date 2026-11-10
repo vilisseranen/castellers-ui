@@ -6,6 +6,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 The UI version is defined in [`package.json`](package.json) (`version` field).
 
+## [1.8.0] - 2026-11-10
+
+First step of pinya planning: the pinya of the pilar de 4. Needs API 0.25.0, which provides the pinya positions; with an older API nothing changes.
+
+### Added
+
+- The castell drawing shows the pinya under the tronc, as a plan seen from above, for the castells that have pinya positions (only `1d4` for now). The baix is in the middle and faces the bottom of the plan: agulla in front, contrafort behind, a crossa on each side, then 8 rengles of 2 cordons (mans in front and behind, vents on the sides, laterals in the corners).
+- Members are assigned to the pinya like to the tronc: select a member then click a cell, or drag a cell onto another one to swap, including between tronc and pinya. A free cell shows the name of its position.
+- The same plan is shown read-only on the event page, with the usual presence colours.
+- `src/api/pinyaLayout.js` holds the geometry of the plan, separate from the drawing.
+
 ## [1.7.2] - 2026-11-08
 
 Third step of the JWT hardening: reduce what an injected script could do and where it could come from.
