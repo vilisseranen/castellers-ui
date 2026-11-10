@@ -471,9 +471,7 @@ export default {
               )
               .attr({ fill: "#000000" })
               // rotate and scale text. If cell width = 100, s = 1.5. If cell width = 50, s = 1
-              .transform(
-                (vertical ? "R270s" : "R0s") + (longSide * 0.01 + 0.5)
-              )
+              .transform((vertical ? "R270s" : "R0s") + (longSide * 0.01 + 0.5))
               .toBack();
             cell.push(name);
             cell.data("uuid", self.positionsMembers[i].member_uuid);
