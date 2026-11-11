@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 The UI version is defined in [`package.json`](package.json) (`version` field).
 
+## [1.9.2] - 2026-11-11
+
+The castell drawing no longer needs Raphael.js. It looks and behaves the same. No API change.
+
+### Changed
+
+- Castell drawing: drawn as a native SVG by the Vue template, with pointer events for the taps and the drags, instead of Raphael.js. Same cells, sizes, colours and texts as before.
+- The drawing follows the members and the positions by itself: a name is written as soon as the list of members is loaded, even when it arrives after the castell.
+
+### Removed
+
+- Dependency on `raphael` (and `eve-raphael`).
+
 ## [1.9.1] - 2026-11-10
 
 ### Fixed
