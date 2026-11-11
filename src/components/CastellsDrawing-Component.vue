@@ -307,9 +307,12 @@ export default {
       this.drawTronc();
     },
     getElementBycoordinates(paper, coordinatesArray) {
+      // The coordinates of a drag are relative to the page, and
+      // getElementByPoint wants them relative to the window: remove the scroll.
+      const page = document.documentElement;
       return paper.getElementByPoint(
-        coordinatesArray[0] - document.body.scrollLeft,
-        coordinatesArray[1] - document.body.scrollTop
+        coordinatesArray[0] - (page.scrollLeft || document.body.scrollLeft),
+        coordinatesArray[1] - (page.scrollTop || document.body.scrollTop)
       );
     },
     swapMemberPositions(
@@ -563,16 +566,21 @@ export default {
       // Attach events to elements
       if (!this.readonly) {
         allCells.forEach(function (cell) {
+          const assignSelectedMember = function (el) {
+            self.setMemberPosition(
+              el.data("column"),
+              el.data("cordon"),
+              el.data("part"),
+              el.data("name"),
+              self.selectedMemberUuid
+            );
+            self.selectedMemberUuid = "";
+          };
+          // A tap or a click on the cell. When the finger or the mouse moved,
+          // it is a drag and the end of the drag takes care of it.
           const setPosition = function () {
             if (!self.dragging) {
-              self.setMemberPosition(
-                rect.data("column"),
-                rect.data("cordon"),
-                rect.data("part"),
-                rect.data("name"),
-                self.selectedMemberUuid
-              );
-              self.selectedMemberUuid = "";
+              assignSelectedMember(rect);
             }
           };
           const rect = cell[0];
@@ -588,9 +596,21 @@ export default {
                 }
               },
               function () {
+                // A new press always starts as a tap, even if the end of the
+                // previous drag was never received (touch cancelled...)
+                self.dragging = false;
                 this.data("origin", [0, 0]).data("destination", [0, 0]);
               },
               function () {
+                if (!self.dragging) {
+                  return;
+                }
+                // The drag is over, whatever happens below. Without this, the
+                // cells would ignore all the next taps. Done after the current
+                // event, so that the tap ending this drag is still ignored.
+                setTimeout(function () {
+                  self.dragging = false;
+                }, 0);
                 const originEl = self.getElementBycoordinates(
                   self.paperTronc,
                   this.data("origin")
@@ -599,14 +619,19 @@ export default {
                   self.paperTronc,
                   this.data("destination")
                 );
+                // captions and the baix of the pinya are not positions
                 if (
-                  originEl &&
-                  destinationEl &&
-                  originEl.id !== destinationEl.id &&
-                  // captions and the baix of the pinya are not positions
-                  originEl.data("part") &&
-                  destinationEl.data("part")
+                  !originEl ||
+                  !destinationEl ||
+                  !originEl.data("part") ||
+                  !destinationEl.data("part")
                 ) {
+                  return;
+                }
+                if (originEl.id === destinationEl.id) {
+                  // The finger moved a bit but stayed in the cell: it is a tap
+                  assignSelectedMember(originEl);
+                } else {
                   self.swapMemberPositions(
                     originEl.data("column"),
                     originEl.data("cordon"),
@@ -617,7 +642,6 @@ export default {
                     destinationEl.data("part"),
                     destinationEl.data("name")
                   );
-                  self.dragging = false;
                 }
               }
             );

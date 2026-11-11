@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 The UI version is defined in [`package.json`](package.json) (`version` field).
 
+## [1.9.1] - 2026-11-10
+
+### Fixed
+
+- Castell drawing: after a few assignments, tapping a cell did nothing any more, until the page was reloaded. A tap during which the finger moved a little was taken for a drag that never ended, and all the next taps were ignored. Such a tap now assigns the selected member, and a drag always ends, wherever it is dropped.
+- Castell drawing: dragging a cell onto another one to swap two people did not find the cells when the page was scrolled, which is always the case on a phone.
+
 ## [1.9.0] - 2026-11-10
 
 Castell editor: choose the event first, then pick among the people who come to it. No API change.
