@@ -218,7 +218,7 @@ export default {
     getAllMembers() {
       const self = this;
       this.getMembers({
-        type: ["admin", "member", "guest"],
+        type: ["admin", "member", "canalla", "guest"],
         status: ["created", "active", "paused", "deleted"],
       }).then(function (response) {
         const members = {};
