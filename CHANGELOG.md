@@ -12,6 +12,7 @@ The UI version is defined in [`package.json`](package.json) (`version` field).
 
 - Castell drawing: after a few assignments, tapping a cell did nothing any more, until the page was reloaded. A tap during which the finger moved a little was taken for a drag that never ended, and all the next taps were ignored. Such a tap now assigns the selected member, and a drag always ends, wherever it is dropped.
 - Castell drawing: dragging a cell onto another one to swap two people did not find the cells when the page was scrolled, which is always the case on a phone.
+- Castell drawing: a member of the canalla could be selected and assigned to a cell, but the name was never written in the cell, as if nothing had happened.
 
 ## [1.9.0] - 2026-11-10
 
