@@ -79,13 +79,85 @@
           {{ member.firstName }} {{ member.lastName }}
         </p>
       </div>
-      <div class="column is-6" id="canvas_tronc" style="padding: 0"></div>
+      <div
+        class="column is-6"
+        id="canvas_tronc"
+        ref="canvas"
+        style="padding: 0"
+      >
+        <svg
+          v-if="drawing"
+          ref="svg"
+          xmlns="http://www.w3.org/2000/svg"
+          :width="drawing.width"
+          :height="drawing.height"
+          :viewBox="'0 0 ' + drawing.width + ' ' + drawing.height"
+          font-family="Arial"
+          font-size="10"
+          text-anchor="middle"
+          :style="
+            readonly ? null : 'user-select: none; -webkit-user-select: none'
+          "
+          @pointerdown="startPress"
+          @touchstart="preventScroll"
+        >
+          <!-- The texts are drawn first, under the cells: a cell is half
+               transparent and receives the taps and the drags -->
+          <text
+            v-for="label in drawing.labels"
+            :key="label.key"
+            :x="label.x"
+            :y="label.y"
+            :fill="label.fill"
+            :font-size="label.fontSize"
+            :font-weight="label.bold ? 'bold' : null"
+            :transform="
+              label.vertical
+                ? 'rotate(270 ' + label.x + ' ' + label.y + ')'
+                : null
+            "
+            dominant-baseline="central"
+            style="pointer-events: none"
+          >
+            {{ label.text }}
+          </text>
+          <!-- Landmark for the baix in the pinya. Not a position. -->
+          <rect
+            v-if="drawing.baix"
+            :x="drawing.baix.x"
+            :y="drawing.baix.y"
+            :width="drawing.baix.w"
+            :height="drawing.baix.h"
+            rx="5"
+            ry="5"
+            fill="none"
+            stroke="gray"
+            stroke-dasharray="4,3"
+            style="pointer-events: none"
+          />
+          <rect
+            v-for="cell in drawing.cells"
+            :key="cell.key"
+            :data-cell="cell.key"
+            :x="cell.x"
+            :y="cell.y"
+            :width="cell.w"
+            :height="cell.h"
+            rx="5"
+            ry="5"
+            :fill="cell.fill"
+            :stroke="cell.stroke"
+            :stroke-width="cell.strokeWidth"
+            opacity="0.3"
+            :style="readonly ? null : 'touch-action: none'"
+          />
+        </svg>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import Raphael from "raphael";
 import { mapActions, mapGetters, mapState } from "vuex";
 import MemberFilter from "./MemberFilter-Component.vue";
 import {
@@ -186,6 +258,218 @@ export default {
       }
       return w;
     },
+    // Everything to draw: size of the drawing, cells of the positions and texts.
+    // null as long as we do not know the positions of the castell.
+    drawing: function () {
+      if (!this.castell || !this.castell.positions) {
+        return null;
+      }
+      const positionsMembers = this.positionsMembers || [];
+      const troncHeight = this.castellHeight - this.pomHeight;
+
+      // Define size of cells
+      const areaW = this.areaWidth;
+      const l = Math.min(100, areaW / this.castellWidth); // long side of the rectangle. 100 or less if we don't have enough space
+      const s = l / 2; // short side of rectangle
+      const spacing = l / 10;
+
+      const troncWidth = this.castellWidth * l;
+      const canvasTroncHeight = troncHeight * (l + spacing) - spacing;
+      const canvasPomHeight =
+        (this.pomHeight > 0 ? 1 : 0) * (2 * (s + spacing) + l + spacing);
+
+      // The pinya is drawn under the tronc, as a plan seen from above.
+      // Only the castells with pinya positions have one.
+      const pinyaPositions = this.castell.positions.filter(
+        (position) => position.part === "pinya" && pinyaCell(position)
+      );
+      const hasPinya = pinyaPositions.length > 0;
+      const pinyaZoom = pinyaScale(pinyaPositions, areaW);
+      const pinya = pinyaSize(pinyaPositions, pinyaZoom);
+      const pinyaMargin = 40; // space above and under the plan, for the captions
+      const canvasPinyaHeight = hasPinya ? pinya.height + 2 * pinyaMargin : 0;
+
+      const canvasWidth = Math.max(troncWidth, pinya.width);
+      const troncX = (canvasWidth - troncWidth) / 2; // the tronc is centered above the pinya
+      // position of the baix on the plan
+      const pinyaX = canvasWidth / 2;
+      const pinyaY =
+        canvasPomHeight + canvasTroncHeight + pinyaMargin + pinya.height / 2;
+
+      const defaultColor = "gray";
+      const captionColor = "#666666";
+
+      const labels = [];
+      const cells = [];
+      let baix = null;
+
+      if (hasPinya) {
+        // Captions and baix. They are not positions: nobody can be assigned there.
+        labels.push({
+          key: "caption-pinya",
+          x: pinyaX,
+          y: pinyaY - pinya.height / 2 - pinyaMargin / 2,
+          text: "Pinya",
+          fill: captionColor,
+          fontSize: 14,
+          bold: true,
+        });
+        labels.push({
+          key: "caption-front",
+          x: pinyaX,
+          y: pinyaY + pinya.height / 2 + pinyaMargin / 2,
+          text: this.$t("castells.pinyaFront"),
+          fill: captionColor,
+          fontSize: 12,
+        });
+        const baixCell = pinyaBaixCell(pinyaZoom);
+        baix = {
+          x: pinyaX - baixCell.w / 2,
+          y: pinyaY - baixCell.h / 2,
+          w: baixCell.w,
+          h: baixCell.h,
+        };
+        // Show who is the baix, to see around whom the pinya is built
+        const baixMember = positionsMembers.find(
+          (member) =>
+            member.position.part === "tronc" &&
+            member.position.name === "baix" &&
+            this.allMembers[member.member_uuid]
+        );
+        labels.push({
+          key: "caption-baix",
+          x: pinyaX,
+          y: pinyaY,
+          text: baixMember
+            ? this.shortName(this.allMembers[baixMember.member_uuid])
+            : "baix",
+          fill: captionColor,
+          fontSize: 12,
+        });
+      }
+
+      // We draw the tronc in a grid pattern.
+      // For each position of the castell, we draw the cell at (column,cordon)
+      for (const position of this.castell.positions) {
+        let x, y;
+        let dx = s;
+        let dy = l;
+        if (position.part === "tronc") {
+          // calculate x, y tronc (with Y offset for the pom)
+          x = troncX + (position.column - 1) * l + (l - s) / 2;
+          y = (troncHeight - position.cordon) * (l + spacing) + canvasPomHeight;
+        } else if (position.part === "pom") {
+          // calculate x, y pom
+          if (position.cordon === 1) {
+            // dosos (vertical)
+            x = troncX + (position.column - 1) * l + (l - s) / 2;
+            y = (this.pomHeight - position.cordon) * (s + spacing);
+          } else {
+            // acotxador and enxaneta (horizontal)
+            x = troncX + (position.column - 1) * l;
+            y = (this.pomHeight - position.cordon) * (s + spacing);
+            dx = l;
+            dy = s;
+          }
+        } else if (position.part === "pinya") {
+          const cell = pinyaCell(position, pinyaZoom);
+          if (!cell) {
+            continue; // pinya position that we do not know how to draw
+          }
+          x = pinyaX + cell.cx - cell.w / 2;
+          y = pinyaY + cell.cy - cell.h / 2;
+          dx = cell.w;
+          dy = cell.h;
+        } else {
+          continue; // unknown part of the castell
+        }
+
+        const key = [
+          position.part,
+          position.name,
+          position.column,
+          position.cordon,
+        ].join("/");
+        const vertical = dx < dy;
+        const longSide = Math.max(dx, dy);
+        const centerX = x + dx / 2;
+        const centerY = y + dy / 2;
+
+        // Write the name of the casteller assigned to the cell
+        let uuid;
+        for (const positionMember of positionsMembers) {
+          if (
+            positionMember.position.column === position.column &&
+            positionMember.position.cordon === position.cordon &&
+            positionMember.position.part === position.part &&
+            positionMember.position.name === position.name &&
+            this.allMembers[positionMember.member_uuid]
+          ) {
+            uuid = positionMember.member_uuid;
+            labels.push({
+              key: "name/" + key + "/" + uuid,
+              x: centerX,
+              y: centerY,
+              text: this.shortName(this.allMembers[uuid]),
+              fill: "#000000",
+              // rotate and scale text. If cell width = 100, size = 15. If cell width = 50, size = 10
+              fontSize: 10 * (longSide * 0.01 + 0.5),
+              vertical: vertical,
+            });
+          }
+        }
+        // In the pinya, the cells look the same: write the name of the position in the free ones
+        if (uuid === undefined && position.part === "pinya") {
+          labels.push({
+            key: "position/" + key,
+            x: centerX,
+            y: centerY,
+            text: pinyaLabel({ name: position.name, cordon: position.cordon }),
+            fill: captionColor,
+            fontSize: 10 * (longSide * 0.01 + 0.3),
+            vertical: vertical,
+          });
+        }
+
+        // Change color of fill according to presence
+        const present = this.isPresent(uuid);
+        let fill = defaultColor;
+        if (present === true) {
+          fill = "green";
+        } else if (present === false) {
+          fill = "red";
+        }
+        // Change color of border if self
+        const isSelf = uuid === this.uuid;
+
+        cells.push({
+          key: key,
+          position: position,
+          uuid: uuid,
+          x: x,
+          y: y,
+          w: dx,
+          h: dy,
+          fill: fill,
+          stroke: isSelf ? "purple" : "#000000",
+          strokeWidth: isSelf ? 6 : 1,
+        });
+      }
+
+      const canvasHeight =
+        canvasTroncHeight + canvasPomHeight + canvasPinyaHeight;
+      if (!(canvasWidth >= 0) || !(canvasHeight >= 0)) {
+        return null; // castell without a known type: nothing to draw
+      }
+
+      return {
+        width: canvasWidth,
+        height: canvasHeight,
+        labels: labels,
+        cells: cells,
+        baix: baix,
+      };
+    },
     ...mapState({
       members: (state) => state.members.members,
     }),
@@ -193,10 +477,10 @@ export default {
   },
   data() {
     return {
-      paperTronc: null,
+      // width available for the drawing, measured in drawTronc()
+      areaWidth: 0,
       selectedMemberUuid: "",
       positionsMembers: [],
-      dragging: false,
       memberTypes: ["admin,member,canalla", "guest"],
       memberStatuses: ["active"],
       allMembers: {},
@@ -205,11 +489,17 @@ export default {
       memberSearchQuery: "",
     };
   },
+  created() {
+    // Press of a finger or of the mouse in progress on a cell, see startPress()
+    this.press = null;
+  },
   mounted() {
     this.getAllMembers(); // We need all members to be able to write the names even if we filter the member list
     this.getMembers({ type: this.memberTypes, status: this.memberStatuses }); // We refresh the member list with the current filters
-    this.paperTronc = new Raphael(document.getElementById("canvas_tronc"));
     this.drawTronc();
+  },
+  beforeUnmount() {
+    this.endPress();
   },
   methods: {
     ...mapActions({
@@ -233,6 +523,10 @@ export default {
         type: filters.types,
         status: filters.statuses,
       });
+    },
+    // "Maria Soler" => "Maria S"
+    shortName(member) {
+      return [member.firstName, member.lastName[0]].join(" ");
     },
     selectMember(uuid) {
       this.selectedMemberUuid = uuid;
@@ -306,15 +600,6 @@ export default {
       // redraw the tronc
       this.drawTronc();
     },
-    getElementBycoordinates(paper, coordinatesArray) {
-      // The coordinates of a drag are relative to the page, and
-      // getElementByPoint wants them relative to the window: remove the scroll.
-      const page = document.documentElement;
-      return paper.getElementByPoint(
-        coordinatesArray[0] - (page.scrollLeft || document.body.scrollLeft),
-        coordinatesArray[1] - (page.scrollTop || document.body.scrollTop)
-      );
-    },
     swapMemberPositions(
       originColumn,
       originCordon,
@@ -362,291 +647,130 @@ export default {
         destinationUuid
       );
     },
+    // The drawing itself is the computed property "drawing", refreshed when
+    // the castell or the members change. Here we only measure the room we have.
     drawTronc() {
-      if (!this.castell.positions) {
+      if (this.$refs.canvas) {
+        this.areaWidth = this.$refs.canvas.clientWidth;
+      }
+    },
+    // Cell of the drawing under this element of the page, if any
+    cellOfElement(element) {
+      const svg = this.$refs.svg;
+      if (!svg || !element || !svg.contains(element)) {
+        return null;
+      }
+      const key = element.getAttribute("data-cell");
+      if (!key || !this.drawing) {
+        return null; // captions and the baix of the pinya are not positions
+      }
+      return this.drawing.cells.find((cell) => cell.key === key) || null;
+    },
+    assignSelectedMember(cell) {
+      this.setMemberPosition(
+        cell.position.column,
+        cell.position.cordon,
+        cell.position.part,
+        cell.position.name,
+        this.selectedMemberUuid
+      );
+      this.selectedMemberUuid = "";
+    },
+    // A finger put on a cell must not scroll the page: the browser would take
+    // the move for itself and the drag would never reach another cell.
+    preventScroll(event) {
+      if (
+        !this.readonly &&
+        event.cancelable &&
+        this.cellOfElement(event.target)
+      ) {
+        event.preventDefault();
+      }
+    },
+    // A finger or the mouse is pressed on a cell. We follow it until it is
+    // released: on the same cell it is a tap, on another one it is a drag.
+    startPress(event) {
+      if (this.readonly || event.button > 0) {
         return;
       }
-      const self = this;
-
-      this.paperTronc.clear(); // Clear the canvas before starting
-
-      const allCells = this.paperTronc.set();
-
-      // const width = this.castellWidth;
-      const troncHeight = this.castellHeight - this.pomHeight;
-
-      // Define size of cells
-      const area = document.getElementById("canvas_tronc");
-      const areaW = area.clientWidth;
-      const l = Math.min(100, areaW / this.castellWidth); // long side of the rectangle. 100 or less if we don't have enough space
-      const s = l / 2; // short side of rectangle
-      const spacing = l / 10;
-
-      const troncWidth = this.castellWidth * l;
-      const canvasTroncHeight = troncHeight * (l + spacing) - spacing;
-      const canvasPomHeight =
-        (this.pomHeight > 0 ? 1 : 0) * (2 * (s + spacing) + l + spacing);
-
-      // The pinya is drawn under the tronc, as a plan seen from above.
-      // Only the castells with pinya positions have one.
-      const pinyaPositions = this.castell.positions.filter(
-        (position) => position.part === "pinya" && pinyaCell(position)
-      );
-      const hasPinya = pinyaPositions.length > 0;
-      const pinyaZoom = pinyaScale(pinyaPositions, areaW);
-      const pinya = pinyaSize(pinyaPositions, pinyaZoom);
-      const pinyaMargin = 40; // space above and under the plan, for the captions
-      const canvasPinyaHeight = hasPinya ? pinya.height + 2 * pinyaMargin : 0;
-
-      const canvasWidth = Math.max(troncWidth, pinya.width);
-      const troncX = (canvasWidth - troncWidth) / 2; // the tronc is centered above the pinya
-      // position of the baix on the plan
-      const pinyaX = canvasWidth / 2;
-      const pinyaY =
-        canvasPomHeight + canvasTroncHeight + pinyaMargin + pinya.height / 2;
-
-      const defaultColor = "gray";
-
-      // Resize canvas for the current castell
-      this.paperTronc.setSize(
-        canvasWidth,
-        canvasTroncHeight + canvasPomHeight + canvasPinyaHeight
-      );
-
-      if (hasPinya) {
-        // Captions and baix. They are not positions: nobody can be assigned there.
-        const caption = { fill: "#666666", "font-size": 12 };
-        this.paperTronc
-          .text(pinyaX, pinyaY - pinya.height / 2 - pinyaMargin / 2, "Pinya")
-          .attr({ fill: "#666666", "font-size": 14, "font-weight": "bold" });
-        this.paperTronc
-          .text(
-            pinyaX,
-            pinyaY + pinya.height / 2 + pinyaMargin / 2,
-            this.$t("castells.pinyaFront")
+      const cell = this.cellOfElement(event.target);
+      if (!cell) {
+        return;
+      }
+      // A new press always starts as a tap, even if the end of the previous
+      // one was never received
+      this.endPress();
+      this.press = {
+        pointerId: event.pointerId,
+        key: cell.key,
+        x: event.clientX,
+        y: event.clientY,
+        moved: false,
+      };
+      window.addEventListener("pointermove", this.movePress);
+      window.addEventListener("pointerup", this.releasePress);
+      window.addEventListener("pointercancel", this.cancelPress);
+    },
+    movePress(event) {
+      const press = this.press;
+      if (!press || event.pointerId !== press.pointerId) {
+        return;
+      }
+      if (
+        Math.abs(event.clientX - press.x) + Math.abs(event.clientY - press.y) >
+        10
+      ) {
+        press.moved = true;
+      }
+    },
+    releasePress(event) {
+      const press = this.press;
+      if (!press || event.pointerId !== press.pointerId) {
+        return;
+      }
+      // The press is over, whatever happens below
+      this.endPress();
+      const origin = this.drawing
+        ? this.drawing.cells.find((cell) => cell.key === press.key)
+        : null;
+      if (!origin) {
+        return;
+      }
+      // Without move, the cell under the finger is the one that was pressed
+      const destination = press.moved
+        ? this.cellOfElement(
+            document.elementFromPoint(event.clientX, event.clientY)
           )
-          .attr(caption);
-        const baix = pinyaBaixCell(pinyaZoom);
-        this.paperTronc
-          .rect(pinyaX - baix.w / 2, pinyaY - baix.h / 2, baix.w, baix.h, 5)
-          .attr({ stroke: defaultColor, "stroke-dasharray": "- " });
-        // Show who is the baix, to see around whom the pinya is built
-        const baixMember = this.positionsMembers.find(
-          (member) =>
-            member.position.part === "tronc" &&
-            member.position.name === "baix" &&
-            this.allMembers[member.member_uuid]
+        : origin;
+      if (!destination) {
+        return; // dropped outside of the cells
+      }
+      if (destination.key === origin.key) {
+        // The finger may have moved a bit but stayed in the cell: it is a tap
+        this.assignSelectedMember(origin);
+      } else {
+        this.swapMemberPositions(
+          origin.position.column,
+          origin.position.cordon,
+          origin.position.part,
+          origin.position.name,
+          destination.position.column,
+          destination.position.cordon,
+          destination.position.part,
+          destination.position.name
         );
-        const baixName = baixMember
-          ? [
-              this.allMembers[baixMember.member_uuid].firstName,
-              this.allMembers[baixMember.member_uuid].lastName[0],
-            ].join(" ")
-          : "baix";
-        this.paperTronc.text(pinyaX, pinyaY, baixName).attr(caption);
       }
-
-      // We draw the tronc in a grid pattern.
-      // For each position of the castell, we draw the cell at (column,cordon)
-      let posGroup;
-      let rect;
-      for (const position of this.castell.positions) {
-        posGroup = self.paperTronc.set();
-        let x, y;
-        let dx = s;
-        let dy = l;
-        if (position.part === "tronc") {
-          // calculate x, y tronc (with Y offset for the pom)
-          x = troncX + (position.column - 1) * l + (l - s) / 2;
-          y = (troncHeight - position.cordon) * (l + spacing) + canvasPomHeight;
-        } else if (position.part === "pom") {
-          // calculate x, y pom
-          if (position.cordon === 1) {
-            // dosos (vertical)
-            x = troncX + (position.column - 1) * l + (l - s) / 2;
-            y = (self.pomHeight - position.cordon) * (s + spacing);
-          } else {
-            // acotxador and enxaneta (horizontal)
-            x = troncX + (position.column - 1) * l;
-            y = (self.pomHeight - position.cordon) * (s + spacing);
-            dx = l;
-            dy = s;
-          }
-        } else if (position.part === "pinya") {
-          const cell = pinyaCell(position, pinyaZoom);
-          if (!cell) {
-            continue; // pinya position that we do not know how to draw
-          }
-          x = pinyaX + cell.cx - cell.w / 2;
-          y = pinyaY + cell.cy - cell.h / 2;
-          dx = cell.w;
-          dy = cell.h;
-        } else {
-          continue; // unknown part of the castell
-        }
-        rect = self.paperTronc
-          .rect(x, y, dx, dy, 5)
-          .attr({ fill: defaultColor, opacity: 0.3 });
-
-        posGroup.push(rect);
-        posGroup.data("column", position.column);
-        posGroup.data("cordon", position.cordon);
-        posGroup.data("part", position.part);
-        posGroup.data("name", position.name);
-        allCells.push(posGroup);
+    },
+    cancelPress(event) {
+      if (this.press && event.pointerId === this.press.pointerId) {
+        this.endPress();
       }
-
-      // Write the name of castellers in the castell
-      allCells.forEach(function (cell) {
-        const rect = cell[0]; // data is set on the set but only accessible in the rectangle
-        const bbox = rect.getBBox();
-        const vertical = bbox.width < bbox.height;
-        const longSide = Math.max(bbox.width, bbox.height);
-        const centerX = bbox.x + bbox.width / 2;
-        const centerY = bbox.y + bbox.height / 2;
-        let assigned = false;
-        // For each cell we will see if someone is assigned
-        for (let i = 0; i < self.positionsMembers.length; i++) {
-          // Write if current position matches current cell
-          if (
-            self.positionsMembers[i].position.column === rect.data("column") &&
-            self.positionsMembers[i].position.cordon === rect.data("cordon") &&
-            self.positionsMembers[i].position.part === rect.data("part") &&
-            self.positionsMembers[i].position.name === rect.data("name") &&
-            self.allMembers[self.positionsMembers[i].member_uuid]
-          ) {
-            // Write text and add to group
-            const name = self.paperTronc
-              .text(
-                centerX,
-                centerY,
-                [
-                  self.allMembers[self.positionsMembers[i].member_uuid]
-                    .firstName,
-                  self.allMembers[self.positionsMembers[i].member_uuid]
-                    .lastName[0],
-                ].join(" ")
-              )
-              .attr({ fill: "#000000" })
-              // rotate and scale text. If cell width = 100, s = 1.5. If cell width = 50, s = 1
-              .transform((vertical ? "R270s" : "R0s") + (longSide * 0.01 + 0.5))
-              .toBack();
-            cell.push(name);
-            cell.data("uuid", self.positionsMembers[i].member_uuid);
-            assigned = true;
-          }
-        }
-        // In the pinya, the cells look the same: write the name of the position in the free ones
-        if (!assigned && rect.data("part") === "pinya") {
-          self.paperTronc
-            .text(
-              centerX,
-              centerY,
-              pinyaLabel({
-                name: rect.data("name"),
-                cordon: rect.data("cordon"),
-              })
-            )
-            .attr({ fill: "#666666" })
-            .transform((vertical ? "R270s" : "R0s") + (longSide * 0.01 + 0.3))
-            .toBack();
-        }
-        // Change color of border if self
-        if (rect.data("uuid") === self.uuid) {
-          rect.attr({ stroke: "purple", "stroke-width": 6 });
-        }
-        // Change color of fill according to presence
-        if (self.isPresent(rect.data("uuid")) === true) {
-          rect.attr("fill", "green");
-        } else if (self.isPresent(rect.data("uuid")) === false) {
-          rect.attr("fill", "red");
-        }
-      });
-
-      // Attach events to elements
-      if (!this.readonly) {
-        allCells.forEach(function (cell) {
-          const assignSelectedMember = function (el) {
-            self.setMemberPosition(
-              el.data("column"),
-              el.data("cordon"),
-              el.data("part"),
-              el.data("name"),
-              self.selectedMemberUuid
-            );
-            self.selectedMemberUuid = "";
-          };
-          // A tap or a click on the cell. When the finger or the mouse moved,
-          // it is a drag and the end of the drag takes care of it.
-          const setPosition = function () {
-            if (!self.dragging) {
-              assignSelectedMember(rect);
-            }
-          };
-          const rect = cell[0];
-          cell
-            .mouseup(setPosition)
-            .touchend(setPosition)
-            .drag(
-              function (dx, dy, mx, my) {
-                if (Math.abs(dx) + Math.abs(dy) > 10) {
-                  self.dragging = true;
-                  this.data("origin", [mx - dx, my - dy]);
-                  this.data("destination", [mx, my]);
-                }
-              },
-              function () {
-                // A new press always starts as a tap, even if the end of the
-                // previous drag was never received (touch cancelled...)
-                self.dragging = false;
-                this.data("origin", [0, 0]).data("destination", [0, 0]);
-              },
-              function () {
-                if (!self.dragging) {
-                  return;
-                }
-                // The drag is over, whatever happens below. Without this, the
-                // cells would ignore all the next taps. Done after the current
-                // event, so that the tap ending this drag is still ignored.
-                setTimeout(function () {
-                  self.dragging = false;
-                }, 0);
-                const originEl = self.getElementBycoordinates(
-                  self.paperTronc,
-                  this.data("origin")
-                );
-                const destinationEl = self.getElementBycoordinates(
-                  self.paperTronc,
-                  this.data("destination")
-                );
-                // captions and the baix of the pinya are not positions
-                if (
-                  !originEl ||
-                  !destinationEl ||
-                  !originEl.data("part") ||
-                  !destinationEl.data("part")
-                ) {
-                  return;
-                }
-                if (originEl.id === destinationEl.id) {
-                  // The finger moved a bit but stayed in the cell: it is a tap
-                  assignSelectedMember(originEl);
-                } else {
-                  self.swapMemberPositions(
-                    originEl.data("column"),
-                    originEl.data("cordon"),
-                    originEl.data("part"),
-                    originEl.data("name"),
-                    destinationEl.data("column"),
-                    destinationEl.data("cordon"),
-                    destinationEl.data("part"),
-                    destinationEl.data("name")
-                  );
-                }
-              }
-            );
-        });
-      }
+    },
+    endPress() {
+      this.press = null;
+      window.removeEventListener("pointermove", this.movePress);
+      window.removeEventListener("pointerup", this.releasePress);
+      window.removeEventListener("pointercancel", this.cancelPress);
     },
     isPresent(uuid) {
       if (this.castell && this.castell.castellers) {
