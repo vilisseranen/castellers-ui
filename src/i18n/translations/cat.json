@@ -221,7 +221,9 @@
     "logAllMembers": "Tots els membres",
     "logAllCollections": "Totes les quotes",
     "logAllActors": "Tots els autors",
-    "logMore": "Mostrar-ne més"
+    "logMore": "Mostrar-ne més",
+    "notActivated": "Compte no activat",
+    "searchHelp": "Sense cerca: els membres actius i els comptes creats durant l'últim any. La cerca inclou tots els membres."
   },
   "routes": {
     "events": "Esdeveniments",

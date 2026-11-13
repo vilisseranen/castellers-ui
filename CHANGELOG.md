@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 The UI version is defined in [`package.json`](package.json) (`version` field).
 
+## [1.11.0] - 2026-11-13
+
+### Changed
+
+- Dues page: without a search, the list only holds the active members and the accounts created in the last year that were not activated yet (and the paused members when the box is ticked). Accounts created long ago and never activated are left out. The creation date comes from API 0.27.0; with an older API, only the active members are listed.
+- Dues page: a search by name looks through every regular member and admin, whatever their status. Guests and the canalla are never listed.
+- A member whose account was never activated is tagged as such.
+
 ## [1.10.0] - 2026-11-12
 
 Dues register (cotisations), first step. The app does not handle payments: an admin ticks which dues a member has settled. Needs API 0.26.0.

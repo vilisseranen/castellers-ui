@@ -104,6 +104,7 @@
               autocomplete="off"
             />
           </div>
+          <p class="help">{{ $t("dues.searchHelp") }}</p>
         </div>
         <div class="field">
           <label class="checkbox dues-filter">
@@ -134,6 +135,9 @@
               {{ member.firstName }} {{ member.lastName }}
               <span class="tag is-light" v-if="member.status === 'paused'">{{
                 $t("dues.paused")
+              }}</span>
+              <span class="tag is-light" v-if="member.status === 'created'">{{
+                $t("dues.notActivated")
               }}</span>
             </span>
             <span class="tags dues-member-tags">
@@ -315,15 +319,16 @@ export default {
       const self = this;
       const q = this.searchQuery.trim().toLowerCase();
       return this.members.filter(function (m) {
-        if (m.status === "paused" && !self.showPaused) {
-          return false;
-        }
         if (q) {
+          // A search looks through every member who pays dues, whatever
+          // their status.
           const first = String(m.firstName || "").toLowerCase();
           const last = String(m.lastName || "").toLowerCase();
           if (!`${first} ${last}`.includes(q)) {
             return false;
           }
+        } else if (!self.listedByDefault(m)) {
+          return false;
         }
         if (self.onlyToPay) {
           return self.collections.some(
@@ -474,6 +479,20 @@ export default {
       } finally {
         this.saving = false;
       }
+    },
+
+    // Without a search, the list holds the active members, the accounts
+    // created in the last year that were not activated yet and, on demand,
+    // the paused members. An account whose creation date is not known is
+    // treated as an old one.
+    listedByDefault(member) {
+      if (member.status === "active") {
+        return true;
+      }
+      if (member.status === "paused") {
+        return this.showPaused;
+      }
+      return duesHelper.isRecent(member.createdAt);
     },
 
     // States
