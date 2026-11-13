@@ -318,7 +318,9 @@
     "logAllMembers": "Tous les membres",
     "logAllCollections": "Toutes les cotisations",
     "logAllActors": "Tous les auteurs",
-    "logMore": "Afficher plus"
+    "logMore": "Afficher plus",
+    "notActivated": "Compte non activé",
+    "searchHelp": "Sans recherche : les membres actifs et les comptes créés depuis un an. La recherche porte sur tous les membres."
   },
   "routes": {
     "events": "Présentations et pratiques",

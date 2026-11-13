@@ -317,7 +317,9 @@
     "logAllMembers": "All members",
     "logAllCollections": "All dues",
     "logAllActors": "All authors",
-    "logMore": "Show more"
+    "logMore": "Show more",
+    "notActivated": "Account not activated",
+    "searchHelp": "Without a search: active members and accounts created in the last year. A search looks through all members."
   },
   "routes": {
     "events": "Presentations and practices",
