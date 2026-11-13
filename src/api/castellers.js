@@ -244,4 +244,38 @@ export default {
       { memberUuids }
     );
   },
+  async getDuesCollections(season) {
+    const query = season ? `?season=${season}` : "";
+    return apiCall("GET", `/dues/collections${query}`, {}, null);
+  },
+  async setDuesCollections(season, collections) {
+    return apiCall("PUT", `/dues/collections/${season}`, {}, { collections });
+  },
+  async getMemberDues(memberUuid) {
+    return apiCall("GET", `/members/${memberUuid}/dues`, {}, null);
+  },
+  async getDuesStates(season) {
+    const query = season ? `?season=${season}` : "";
+    return apiCall("GET", `/dues/states${query}`, {}, null);
+  },
+  async recordDues({ memberUuid, collectionUuids, action, note }) {
+    return apiCall(
+      "POST",
+      `/dues/entries`,
+      {},
+      { memberUuid, collectionUuids, action, note: note || "" }
+    );
+  },
+  async getDuesLog(filters) {
+    const queryParams = [];
+    ["member", "collection", "actor", "season", "limit", "offset"].forEach(
+      function (name) {
+        if (filters && filters[name]) {
+          queryParams.push(`${name}=${encodeURIComponent(filters[name])}`);
+        }
+      }
+    );
+    const query = queryParams.length > 0 ? `?${queryParams.join("&")}` : "";
+    return apiCall("GET", `/dues/log${query}`, {}, null);
+  },
 };

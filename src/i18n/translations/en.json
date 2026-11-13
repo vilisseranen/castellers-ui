@@ -258,12 +258,74 @@
       }
     }
   },
+  "dues": {
+    "title": "Dues",
+    "myTitle": "My dues",
+    "adminTitle": "Dues register",
+    "season": "Season",
+    "kinds": {
+      "cercle": "Cercle culturel catalan membership",
+      "winter": "Winter dues",
+      "spring": "Spring dues",
+      "summer": "Summer dues"
+    },
+    "kindsShort": {
+      "cercle": "Cercle",
+      "winter": "Winter",
+      "spring": "Spring",
+      "summer": "Summer"
+    },
+    "status": {
+      "paid": "Paid",
+      "paidAhead": "Paid in advance",
+      "toPay": "To pay",
+      "upcoming": "Upcoming",
+      "exempt": "Exempt"
+    },
+    "actions": {
+      "unpaid": "Not paid",
+      "paid": "Paid",
+      "exempt": "Exempt"
+    },
+    "logActions": {
+      "paid": "Ticked",
+      "unpaid": "Unticked",
+      "exempt": "Exempt"
+    },
+    "memberHelp": "Admins record the dues after receiving the payment. A mistake? Write to a member of the committee.",
+    "createCollections": "Create the collections of the season",
+    "editCollections": "Edit the amounts and dates",
+    "collectionsHelp": "Amount in dollars and date of the collection.",
+    "collectionsInvalid": "Check the amounts and the dates.",
+    "amount": "Amount",
+    "dueDate": "Date of the collection",
+    "saveButton": "Save",
+    "tabMembers": "Members",
+    "tabLog": "Journal",
+    "onlyToPay": "Only dues to pay",
+    "showPaused": "Show paused members",
+    "paused": "Paused",
+    "memberCount": "Members shown: {count}",
+    "wholeYear": "Whole year (winter, spring, summer)",
+    "cercleWarning": "The Cercle membership is not settled for this season. According to the rules, it comes first: for a new member, it replaces the dues of the current period, to be marked \"Exempt\".",
+    "note": "Note (optional)",
+    "notePlaceholder": "E.g. transfer received on February 3",
+    "history": "History",
+    "logEmpty": "No entry.",
+    "logBy": "by",
+    "unknownMember": "deleted member",
+    "logAllMembers": "All members",
+    "logAllCollections": "All dues",
+    "logAllActors": "All authors",
+    "logMore": "Show more"
+  },
   "routes": {
     "events": "Presentations and practices",
     "members": "Members",
     "myBadges": "My badges",
     "badges": "Badges",
-    "summary": "Summary"
+    "summary": "Summary",
+    "dues": "Dues"
   },
   "summary": {
     "title": "Participants for upcoming events",

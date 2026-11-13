@@ -6,6 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 The UI version is defined in [`package.json`](package.json) (`version` field).
 
+## [1.10.0] - 2026-11-12
+
+Dues register (cotisations), first step. The app does not handle payments: an admin ticks which dues a member has settled. Needs API 0.26.0.
+
+### Added
+
+- New admin page "Cotisations" (`/dues`), in the menu:
+  - Choose a season. A season follows the membership year of the Cercle culturel catalan (October 1st to September 30th): the Cercle in the autumn, then winter, spring and summer.
+  - Create the four collections of a season, with suggested amounts (35, 20, 20, 10 $) and dates, and edit them later.
+  - List of the regular members and admins, with one coloured tag per collection. Search by name, show only the members with dues to pay, show the paused members.
+  - Tap a member to set each collection to "not paid", "paid" or "exempt", with an optional note. "Whole year" ticks winter, spring and summer at once.
+  - A notice appears when a due of the colla is ticked while the Cercle is not settled for the season. It does not block anything.
+  - History of the member under the form, and a "Journal" tab with every change: who, for whom, what and when, filtered by member, collection or author.
+- Profile: "My dues" (or "Dues" when an admin looks at a member), with the collections of the current season, past and upcoming, the amount, the date and the state: paid, paid in advance, to pay, upcoming or exempt. Past seasons can be unfolded when something was recorded in them.
+  - A member only sees their own dues. The canalla and guests have none.
+- Texts in French, Catalan and English.
+
 ## [1.9.2] - 2026-11-11
 
 The castell drawing no longer needs Raphael.js. It looks and behaves the same. No API change.

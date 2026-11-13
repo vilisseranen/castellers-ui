@@ -259,12 +259,74 @@
       }
     }
   },
+  "dues": {
+    "title": "Cotisations",
+    "myTitle": "Mes cotisations",
+    "adminTitle": "Registre des cotisations",
+    "season": "Saison",
+    "kinds": {
+      "cercle": "Inscription au Cercle culturel catalan",
+      "winter": "Cotisation d'hiver",
+      "spring": "Cotisation du printemps",
+      "summer": "Cotisation d'été"
+    },
+    "kindsShort": {
+      "cercle": "Cercle",
+      "winter": "Hiver",
+      "spring": "Printemps",
+      "summer": "Été"
+    },
+    "status": {
+      "paid": "Payée",
+      "paidAhead": "Payée d'avance",
+      "toPay": "À régler",
+      "upcoming": "À venir",
+      "exempt": "Dispensée"
+    },
+    "actions": {
+      "unpaid": "Non payée",
+      "paid": "Payée",
+      "exempt": "Dispensée"
+    },
+    "logActions": {
+      "paid": "Cochée",
+      "unpaid": "Décochée",
+      "exempt": "Dispensée"
+    },
+    "memberHelp": "Les administrateurs notent les cotisations après avoir reçu le paiement. Une erreur ? Écris à un membre du comité.",
+    "createCollections": "Créer les cueillettes de la saison",
+    "editCollections": "Modifier les montants et les dates",
+    "collectionsHelp": "Montant en dollars et date de la cueillette.",
+    "collectionsInvalid": "Vérifie les montants et les dates.",
+    "amount": "Montant",
+    "dueDate": "Date de la cueillette",
+    "saveButton": "Enregistrer",
+    "tabMembers": "Membres",
+    "tabLog": "Journal",
+    "onlyToPay": "Seulement les cotisations à régler",
+    "showPaused": "Afficher les membres en pause",
+    "paused": "En pause",
+    "memberCount": "Membres affichés : {count}",
+    "wholeYear": "Toute l'année (hiver, printemps, été)",
+    "cercleWarning": "L'inscription au Cercle n'est pas réglée pour cette saison. Selon le règlement, elle se règle en premier : pour un nouveau membre, elle remplace la cotisation de la période, à marquer « Dispensée ».",
+    "note": "Note (facultative)",
+    "notePlaceholder": "Ex. : virement reçu le 3 février",
+    "history": "Historique",
+    "logEmpty": "Aucune entrée.",
+    "logBy": "par",
+    "unknownMember": "membre supprimé",
+    "logAllMembers": "Tous les membres",
+    "logAllCollections": "Toutes les cotisations",
+    "logAllActors": "Tous les auteurs",
+    "logMore": "Afficher plus"
+  },
   "routes": {
     "events": "Présentations et pratiques",
     "members": "Les membres",
     "myBadges": "Mes badges",
     "badges": "Badges",
-    "summary": "Participation"
+    "summary": "Participation",
+    "dues": "Cotisations"
   },
   "summary": {
     "title": "Participation pour les évènements à venir",

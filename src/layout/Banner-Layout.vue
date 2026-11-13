@@ -79,6 +79,18 @@
           </span>
         </router-link>
         <router-link
+          :to="{ name: 'Dues' }"
+          v-if="this.type === 'admin'"
+          class="navbar-item"
+        >
+          <span class="icon">
+            <i class="fa fa-coins"></i>
+          </span>
+          <span>
+            {{ $t("routes.dues") }}
+          </span>
+        </router-link>
+        <router-link
           :to="{ name: 'Summary' }"
           v-if="this.type === 'admin'"
           class="navbar-item"

@@ -13,6 +13,7 @@ import Castells from "../views/Castells-View.vue";
 import CastellsEdit from "../views/CastellsEdit-View.vue";
 import BadgesAdmin from "../views/BadgesAdmin-View.vue";
 import MyBadges from "../views/MyBadges-View.vue";
+import Dues from "../views/Dues-View.vue";
 
 const routes = [
   {
@@ -113,6 +114,14 @@ const routes = [
         path: "myBadges",
         name: "MyBadges",
         component: MyBadges,
+        meta: {
+          requiresAuth: true,
+        },
+      },
+      {
+        path: "dues",
+        name: "Dues",
+        component: Dues,
         meta: {
           requiresAuth: true,
         },
