@@ -115,6 +115,10 @@
             <input type="checkbox" v-model="showPaused" />
             {{ $t("dues.showPaused") }}
           </label>
+          <label class="checkbox dues-filter">
+            <input type="checkbox" v-model="showCreated" />
+            {{ $t("dues.showCreated") }}
+          </label>
         </div>
         <p class="is-size-7 has-text-grey mb-2">
           {{ $t("dues.memberCount", { count: listedMembers.length }) }}
@@ -287,6 +291,7 @@ export default {
       searchQuery: "",
       onlyToPay: false,
       showPaused: false,
+      showCreated: false,
       openMemberUuid: "",
       draft: {},
       note: "",
@@ -481,10 +486,8 @@ export default {
       }
     },
 
-    // Without a search, the list holds the active members, the accounts
-    // created in the last year that were not activated yet and, on demand,
-    // the paused members. An account whose creation date is not known is
-    // treated as an old one.
+    // Without a search, the list holds the active members and, on demand,
+    // the paused members and the accounts that were never activated.
     listedByDefault(member) {
       if (member.status === "active") {
         return true;
@@ -492,7 +495,7 @@ export default {
       if (member.status === "paused") {
         return this.showPaused;
       }
-      return duesHelper.isRecent(member.createdAt);
+      return this.showCreated;
     },
 
     // States

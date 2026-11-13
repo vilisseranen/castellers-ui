@@ -16,9 +16,6 @@ const DEFAULTS = {
   summer: { dollars: 10, month: 6, yearOffset: 1 },
 };
 
-// "Recent" means the last 365 days.
-const RECENT_SECONDS = 365 * 24 * 60 * 60;
-
 function intlLocale(locale) {
   if (locale === "en") {
     return "en-CA";
@@ -47,11 +44,6 @@ export default {
   // The season that contains a date: it starts on October 1st.
   currentSeason(date = new Date()) {
     return date.getMonth() >= 9 ? date.getFullYear() : date.getFullYear() - 1;
-  },
-  // Whether a timestamp is within the last year. An unknown date (0 or
-  // missing) is not.
-  isRecent(timestamp, now = Date.now() / 1000) {
-    return Boolean(timestamp) && timestamp >= now - RECENT_SECONDS;
   },
   seasonLabel(season) {
     return `${season}-${season + 1}`;

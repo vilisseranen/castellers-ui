@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 The UI version is defined in [`package.json`](package.json) (`version` field).
 
+## [1.11.1] - 2026-11-13
+
+### Changed
+
+- Dues page: without a search, the list only holds the active members. Accounts that were never activated are no longer listed by default, even recent ones: too many of them belong to people who came once or never. A new box, "Show accounts that were never activated", adds them, like the one for paused members. A search by name still looks through everybody.
+
 ## [1.11.0] - 2026-11-13
 
 ### Changed

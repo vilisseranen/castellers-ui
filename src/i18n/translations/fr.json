@@ -305,6 +305,7 @@
     "tabLog": "Journal",
     "onlyToPay": "Seulement les cotisations à régler",
     "showPaused": "Afficher les membres en pause",
+    "showCreated": "Afficher les comptes non activés",
     "paused": "En pause",
     "memberCount": "Membres affichés : {count}",
     "wholeYear": "Toute l'année (hiver, printemps, été)",
@@ -320,7 +321,7 @@
     "logAllActors": "Tous les auteurs",
     "logMore": "Afficher plus",
     "notActivated": "Compte non activé",
-    "searchHelp": "Sans recherche : les membres actifs et les comptes créés depuis un an. La recherche porte sur tous les membres."
+    "searchHelp": "Sans recherche : les membres actifs seulement. La recherche porte sur tous les membres."
   },
   "routes": {
     "events": "Présentations et pratiques",
