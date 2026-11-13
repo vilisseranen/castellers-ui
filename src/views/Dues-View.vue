@@ -116,12 +116,12 @@
           </label>
         </div>
         <p class="is-size-7 has-text-grey mb-2">
-          {{ $t("dues.memberCount", { count: filteredMembers.length }) }}
+          {{ $t("dues.memberCount", { count: listedMembers.length }) }}
         </p>
 
         <div
           class="dues-member"
-          v-for="member in filteredMembers"
+          v-for="member in listedMembers"
           :key="member.uuid"
         >
           <a
@@ -278,6 +278,7 @@ export default {
       members: [],
       // "memberUuid:collectionUuid" -> status
       states: {},
+      statesLoaded: false,
       tab: "members",
       searchQuery: "",
       onlyToPay: false,
@@ -331,6 +332,11 @@ export default {
         }
         return true;
       });
+    },
+    // Nothing is listed until the states are known: a member opened before
+    // that would look unpaid, and saving would untick what was paid.
+    listedMembers() {
+      return this.statesLoaded ? this.filteredMembers : [];
     },
     draftHasChanges() {
       return this.changedCollections().length > 0;
@@ -406,6 +412,7 @@ export default {
           states[`${s.memberUuid}:${s.collectionUuid}`] = s.status;
         });
         this.states = states;
+        this.statesLoaded = true;
       } catch (error) {
         this.fail(error);
       }
@@ -413,6 +420,7 @@ export default {
     onSeasonChange() {
       this.editing = false;
       this.states = {};
+      this.statesLoaded = false;
       this.closeMember();
       this.logFilters.collection = "";
       this.resetForm();
