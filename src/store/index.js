@@ -6,6 +6,7 @@ import castells from "./modules/castells";
 import auth from "./modules/auth";
 import initialization from "./modules/initialization";
 import badges from "./modules/badges";
+import dues from "./modules/dues";
 import api from "../api/castellers";
 
 const store = createStore({
@@ -16,6 +17,7 @@ const store = createStore({
     auth,
     initialization,
     badges,
+    dues,
   },
   state: {
     version: "",

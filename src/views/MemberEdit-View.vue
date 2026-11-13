@@ -9,6 +9,7 @@
       v-if="user.uuid"
       :member-uuid="user.uuid"
     ></badges-component>
+    <dues-component v-if="showDues" :member-uuid="user.uuid"></dues-component>
     <div class="box" v-if="uuid === user.uuid">
       <p class="title is-3">
         {{ $t("members.changePassword") }}
@@ -57,6 +58,7 @@
 <script>
 import EditProfileForm from "../components/EditProfileForm-Component.vue";
 import BadgesComponent from "../components/Badges-Component.vue";
+import DuesComponent from "../components/Dues-Component.vue";
 import { mapActions, mapGetters } from "vuex";
 import { memberMixin } from "../mixins/members.js";
 
@@ -65,6 +67,7 @@ export default {
   components: {
     EditProfileForm,
     BadgesComponent,
+    DuesComponent,
   },
   data() {
     return {
@@ -82,6 +85,17 @@ export default {
   },
   computed: {
     ...mapGetters(["uuid", "type"]),
+    // Dues are for regular members and admins. A member only sees their own,
+    // an admin sees anyone's.
+    showDues() {
+      if (!this.user.uuid) {
+        return false;
+      }
+      if (this.user.type !== "member" && this.user.type !== "admin") {
+        return false;
+      }
+      return this.type === "admin" || this.uuid === this.user.uuid;
+    },
     passwordConfirmDifferent() {
       if (
         this.credentials.passwordConfirm !== undefined &&

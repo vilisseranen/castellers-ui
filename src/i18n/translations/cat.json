@@ -162,10 +162,72 @@
       }
     }
   },
+  "dues": {
+    "title": "Quotes",
+    "myTitle": "Les meves quotes",
+    "adminTitle": "Registre de quotes",
+    "season": "Temporada",
+    "kinds": {
+      "cercle": "Inscripció al Cercle cultural català",
+      "winter": "Quota d'hivern",
+      "spring": "Quota de primavera",
+      "summer": "Quota d'estiu"
+    },
+    "kindsShort": {
+      "cercle": "Cercle",
+      "winter": "Hivern",
+      "spring": "Primavera",
+      "summer": "Estiu"
+    },
+    "status": {
+      "paid": "Pagada",
+      "paidAhead": "Pagada per avançat",
+      "toPay": "Per pagar",
+      "upcoming": "Propera",
+      "exempt": "Exempta"
+    },
+    "actions": {
+      "unpaid": "No pagada",
+      "paid": "Pagada",
+      "exempt": "Exempta"
+    },
+    "logActions": {
+      "paid": "Marcada",
+      "unpaid": "Desmarcada",
+      "exempt": "Exempta"
+    },
+    "memberHelp": "Els administradors anoten les quotes després de rebre el pagament. Hi ha un error? Escriu a un membre del comitè.",
+    "createCollections": "Crear les recaptacions de la temporada",
+    "editCollections": "Modificar els imports i les dates",
+    "collectionsHelp": "Import en dòlars i data de la recaptació.",
+    "collectionsInvalid": "Comprova els imports i les dates.",
+    "amount": "Import",
+    "dueDate": "Data de la recaptació",
+    "saveButton": "Desar",
+    "tabMembers": "Membres",
+    "tabLog": "Diari",
+    "onlyToPay": "Només les quotes per pagar",
+    "showPaused": "Mostrar els membres en pausa",
+    "paused": "En pausa",
+    "memberCount": "Membres mostrats: {count}",
+    "wholeYear": "Tot l'any (hivern, primavera, estiu)",
+    "cercleWarning": "La inscripció al Cercle no està pagada per a aquesta temporada. Segons el reglament, es paga primer: per a un membre nou, substitueix la quota del període, que cal marcar com a «Exempta».",
+    "note": "Nota (opcional)",
+    "notePlaceholder": "Ex.: transferència rebuda el 3 de febrer",
+    "history": "Historial",
+    "logEmpty": "Cap entrada.",
+    "logBy": "per",
+    "unknownMember": "membre eliminat",
+    "logAllMembers": "Tots els membres",
+    "logAllCollections": "Totes les quotes",
+    "logAllActors": "Tots els autors",
+    "logMore": "Mostrar-ne més"
+  },
   "routes": {
     "events": "Esdeveniments",
     "members": "Membres",
     "myBadges": "Les meves insígnies",
-    "badges": "Insígnies"
+    "badges": "Insígnies",
+    "dues": "Quotes"
   }
 }
