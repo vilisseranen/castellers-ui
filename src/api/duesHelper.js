@@ -49,19 +49,34 @@ export default {
     return `${season}-${season + 1}`;
   },
   // What is shown for a state. The API only knows paid, unpaid and exempt; the
-  // date of the collection tells the rest:
+  // date of the collection and the first visit of the member tell the rest:
   //   paid      -> paid, or paidAhead while the collection is still to come
-  //   unpaid    -> toPay, or upcoming while the collection is still to come
   //   exempt    -> exempt
-  displayStatus(status, dueDate, now = Date.now() / 1000) {
-    const upcoming = dueDate > now;
+  //   unpaid    -> upcoming while the collection is still to come,
+  //                notDue for dues of the colla collected before the member
+  //                first came (the Cercle is always due: it is what a new
+  //                member settles first),
+  //                toPay otherwise
+  // firstVisit is 0 when it is not known.
+  displayStatus(status, collection, firstVisit = 0, now = Date.now() / 1000) {
+    const upcoming = collection.dueDate > now;
     if (status === "paid") {
       return upcoming ? "paidAhead" : "paid";
     }
     if (status === "exempt") {
       return "exempt";
     }
-    return upcoming ? "upcoming" : "toPay";
+    if (upcoming) {
+      return "upcoming";
+    }
+    if (
+      firstVisit > 0 &&
+      COLLA_KINDS.includes(collection.kind) &&
+      toDateInput(collection.dueDate) < toDateInput(firstVisit)
+    ) {
+      return "notDue";
+    }
+    return "toPay";
   },
   statusClass(displayStatus) {
     switch (displayStatus) {
@@ -70,6 +85,7 @@ export default {
       case "paidAhead":
         return "is-success is-light";
       case "exempt":
+      case "notDue":
         return "is-light";
       case "toPay":
         return "is-warning";
@@ -117,6 +133,13 @@ export default {
       12
     );
     return Math.floor(date.getTime() / 1000);
+  },
+  // The total of the dues of the colla for a season, in cents: what a member
+  // pays when settling the whole year at once.
+  collaTotal(collections) {
+    return collections
+      .filter((c) => COLLA_KINDS.includes(c.kind))
+      .reduce((total, c) => total + c.amount, 0);
   },
   // Rows of the form that creates or edits the collections of a season:
   // existing collections, completed with suggestions for the missing kinds.

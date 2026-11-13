@@ -281,7 +281,8 @@
       "paidAhead": "Payée d'avance",
       "toPay": "À régler",
       "upcoming": "À venir",
-      "exempt": "Dispensée"
+      "exempt": "Dispensée",
+      "notDue": "Avant ton arrivée"
     },
     "actions": {
       "unpaid": "Non payée",
@@ -295,7 +296,7 @@
     },
     "memberHelp": "Les administrateurs notent les cotisations après avoir reçu le paiement. Une erreur ? Écris à un membre du comité.",
     "createCollections": "Créer les cueillettes de la saison",
-    "editCollections": "Modifier les montants et les dates",
+    "editCollections": "Modifier les montants, les dates et l'adresse Interac",
     "collectionsHelp": "Montant en dollars et date de la cueillette.",
     "collectionsInvalid": "Vérifie les montants et les dates.",
     "amount": "Montant",
@@ -321,7 +322,55 @@
     "logAllActors": "Tous les auteurs",
     "logMore": "Afficher plus",
     "notActivated": "Compte non activé",
-    "searchHelp": "Sans recherche : les membres actifs seulement. La recherche porte sur tous les membres."
+    "searchHelp": "Sans recherche : les membres actifs seulement. La recherche porte sur tous les membres.",
+    "attendanceOwn": "Présences confirmées depuis ta première visite, le {date} : {count}.",
+    "attendanceOther": "Présences confirmées depuis sa première visite, le {date} : {count}.",
+    "cercleFirst": "L'inscription au Cercle culturel catalan ({amount}) se règle en premier. Elle remplace la cotisation de la période en cours.",
+    "interacEmail": "Adresse pour les virements Interac",
+    "interacPlaceholder": "tresorerie{'@'}exemple.ca",
+    "interacHelp": "Affichée aux membres dans « Combien ça coûte » et dans les rappels. Laisse vide pour ne rien afficher.",
+    "interacShort": "Virement Interac :",
+    "interacMissing": "adresse non définie",
+    "cercleUrl": "Page d'inscription au Cercle culturel catalan",
+    "cercleUrlHelp": "Lien proposé aux nouveaux dans « Combien ça coûte » et dans leur profil. Laisse vide pour ne rien afficher.",
+    "cercleUrlShort": "Inscription au Cercle :",
+    "cercleUrlMissing": "lien non défini",
+    "cercleJoin": "S'inscrire au Cercle culturel catalan",
+    "settingsInvalid": "Les cueillettes sont enregistrées, mais l'adresse Interac ou le lien d'inscription n'est pas valide."
+  },
+  "duesInfo": {
+    "title": "Combien ça coûte",
+    "intro": "Faire partie des Castellers de Montréal, c'est au plus quatre cotisations par année : l'inscription au Cercle culturel catalan, dont la colla fait partie, et trois cotisations saisonnières à la colla.",
+    "total": "Total pour l'année",
+    "noCollections": "Les montants et les dates de cette saison ne sont pas encore publiés.",
+    "howTitle": "Comment payer",
+    "howInterac": "De préférence par virement Interac à",
+    "howMessage": "Indique dans le message la cotisation réglée, par exemple « Cotisation d'hiver ».",
+    "howInPerson": "Sinon, en personne lors de la cueillette.",
+    "howNoInterac": "Par virement Interac ou en personne lors de la cueillette. Demande l'adresse à un membre du comité.",
+    "yearTitle": "Tout régler d'un coup",
+    "yearText": "Tu peux régler les trois cotisations de la colla en une seule fois, en début d'année : {amount}.",
+    "newTitle": "Tu viens d'arriver ?",
+    "newText": "Tu commences par ton inscription au Cercle culturel catalan ({amount}). Elle remplace la cotisation de la période en cours : tu ne paies pas les deux.",
+    "newTextNoAmount": "Tu commences par ton inscription au Cercle culturel catalan. Elle remplace la cotisation de la période en cours : tu ne paies pas les deux.",
+    "newRenewal": "L'inscription au Cercle se renouvelle chaque automne, même si tu t'es inscrit durant l'été.",
+    "whoTitle": "Qui paie",
+    "whoText": "Les membres réguliers. La canalla et les invités ne paient pas de cotisation.",
+    "mineTitle": "Où j'en suis",
+    "mineText": "L'état de tes cotisations se trouve dans",
+    "mineLink": "ton profil"
+  },
+  "eventDues": {
+    "switch": "Cueillette de cotisation",
+    "help": "Le rappel de cet évènement mentionnera cette cotisation aux membres qui ne l'ont pas réglée.",
+    "noCollections": "Aucune cueillette n'est définie. Crée-les d'abord dans",
+    "recurringHelp": "Dans une série, seul le premier évènement garde la cueillette.",
+    "notice": "La cueillette de cette cotisation a lieu à cet évènement.",
+    "ownPaid": "Tu l'as déjà réglée, merci !",
+    "ownExempt": "Tu en es dispensé.",
+    "tick": "Marquer payée",
+    "untick": "Décocher",
+    "untickConfirm": "Décocher la cotisation de {name} ?"
   },
   "routes": {
     "events": "Présentations et pratiques",
@@ -329,7 +378,8 @@
     "myBadges": "Mes badges",
     "badges": "Badges",
     "summary": "Participation",
-    "dues": "Cotisations"
+    "dues": "Cotisations",
+    "duesInfo": "Combien ça coûte"
   },
   "summary": {
     "title": "Participation pour les évènements à venir",

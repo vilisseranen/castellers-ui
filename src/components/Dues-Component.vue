@@ -56,8 +56,31 @@
         </tbody>
       </table>
     </div>
+    <div class="notification is-info is-light" v-if="cercleDue">
+      <p v-if="attendance.count > 0">
+        {{
+          $t(own ? "dues.attendanceOwn" : "dues.attendanceOther", {
+            count: attendance.count,
+            date: formatDate(attendance.firstVisit),
+          })
+        }}
+      </p>
+      <p>
+        {{ $t("dues.cercleFirst", { amount: formatAmount(cercleDue.amount) }) }}
+      </p>
+      <p v-if="cercleUrl">
+        <a :href="cercleUrl" target="_blank" rel="noopener noreferrer">{{
+          $t("dues.cercleJoin")
+        }}</a>
+      </p>
+    </div>
     <p class="is-size-7 has-text-grey" v-if="own">
       {{ $t("dues.memberHelp") }}
+    </p>
+    <p class="mt-2">
+      <router-link :to="{ name: 'DuesInfo' }">{{
+        $t("routes.duesInfo")
+      }}</router-link>
     </p>
   </div>
 </template>
@@ -78,12 +101,27 @@ export default {
     return {
       dues: [],
       expanded: {},
+      attendance: { firstVisit: 0, count: 0 },
+      // Page where one joins the Cercle culturel catalan, when it is set.
+      cercleUrl: "",
     };
   },
   computed: {
     ...mapGetters(["uuid"]),
     own() {
       return this.memberUuid === this.uuid;
+    },
+    // The collection of the Cercle of the current season, when the member has
+    // not settled it and is not exempt.
+    cercleDue() {
+      const current = duesHelper.currentSeason();
+      const due = this.dues.find(
+        (d) =>
+          d.collection.season === current &&
+          d.collection.kind === "cercle" &&
+          d.status === "unpaid"
+      );
+      return due ? due.collection : null;
     },
     // The current season first, then the past seasons in which something was
     // recorded for this member. A past season with nothing recorded is left
@@ -124,19 +162,42 @@ export default {
     },
   },
   mounted() {
+    const self = this;
+    this.getSettings()
+      .then(function (response) {
+        self.cercleUrl = (response.data || {}).cercleUrl || "";
+      })
+      .catch(function () {
+        // Without it, the link is simply not shown.
+      });
     this.load(this.memberUuid);
   },
   methods: {
     ...mapActions({
       getMemberDues: "dues/getMemberDues",
+      getMemberAttendance: "dues/getMemberAttendance",
+      getSettings: "dues/getSettings",
     }),
     load(uuid) {
       this.dues = [];
       this.expanded = {};
+      this.attendance = { firstVisit: 0, count: 0 };
       if (!uuid) {
         return;
       }
       const self = this;
+      this.getMemberAttendance(uuid)
+        .then(function (response) {
+          if (uuid === self.memberUuid && response.data) {
+            self.attendance = {
+              firstVisit: response.data.firstVisit || 0,
+              count: response.data.count || 0,
+            };
+          }
+        })
+        .catch(function () {
+          // Without it, the dues are shown as if the first visit was unknown.
+        });
       this.getMemberDues(uuid)
         .then(function (response) {
           // The answer may arrive after another member was selected.
@@ -158,7 +219,11 @@ export default {
       return duesHelper.seasonLabel(season);
     },
     displayStatus(d) {
-      return duesHelper.displayStatus(d.status, d.collection.dueDate);
+      return duesHelper.displayStatus(
+        d.status,
+        d.collection,
+        this.attendance.firstVisit
+      );
     },
     statusClass(d) {
       return duesHelper.statusClass(this.displayStatus(d));

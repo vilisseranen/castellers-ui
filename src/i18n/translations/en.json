@@ -280,7 +280,8 @@
       "paidAhead": "Paid in advance",
       "toPay": "To pay",
       "upcoming": "Upcoming",
-      "exempt": "Exempt"
+      "exempt": "Exempt",
+      "notDue": "Before you joined"
     },
     "actions": {
       "unpaid": "Not paid",
@@ -294,7 +295,7 @@
     },
     "memberHelp": "Admins record the dues after receiving the payment. A mistake? Write to a member of the committee.",
     "createCollections": "Create the collections of the season",
-    "editCollections": "Edit the amounts and dates",
+    "editCollections": "Edit the amounts, the dates and the Interac address",
     "collectionsHelp": "Amount in dollars and date of the collection.",
     "collectionsInvalid": "Check the amounts and the dates.",
     "amount": "Amount",
@@ -320,7 +321,55 @@
     "logAllActors": "All authors",
     "logMore": "Show more",
     "notActivated": "Account not activated",
-    "searchHelp": "Without a search: active members only. A search looks through all members."
+    "searchHelp": "Without a search: active members only. A search looks through all members.",
+    "attendanceOwn": "Confirmed attendances since your first visit, on {date}: {count}.",
+    "attendanceOther": "Confirmed attendances since their first visit, on {date}: {count}.",
+    "cercleFirst": "The Cercle culturel catalan membership ({amount}) comes first. It replaces the dues of the current period.",
+    "interacEmail": "Address for Interac transfers",
+    "interacPlaceholder": "treasurer{'@'}example.ca",
+    "interacHelp": "Shown to members in \"How much does it cost\" and in reminders. Leave empty to show nothing.",
+    "interacShort": "Interac transfer:",
+    "interacMissing": "address not set",
+    "cercleUrl": "Cercle culturel catalan sign-up page",
+    "cercleUrlHelp": "Link offered to newcomers in \"How much does it cost\" and in their profile. Leave empty to show nothing.",
+    "cercleUrlShort": "Cercle sign-up:",
+    "cercleUrlMissing": "link not set",
+    "cercleJoin": "Join the Cercle culturel catalan",
+    "settingsInvalid": "The collections are saved, but the Interac address or the sign-up link is not valid."
+  },
+  "duesInfo": {
+    "title": "How much does it cost",
+    "intro": "Being part of the Castellers de Montréal means at most four dues a year: the membership of the Cercle culturel catalan, which the colla belongs to, and three seasonal dues to the colla.",
+    "total": "Total for the year",
+    "noCollections": "The amounts and dates of this season are not published yet.",
+    "howTitle": "How to pay",
+    "howInterac": "Preferably by Interac transfer to",
+    "howMessage": "Write in the message which dues you are paying, for example \"Winter dues\".",
+    "howInPerson": "Otherwise, in person at the collection.",
+    "howNoInterac": "By Interac transfer or in person at the collection. Ask a member of the committee for the address.",
+    "yearTitle": "Paying everything at once",
+    "yearText": "You can pay the three dues of the colla in one go, at the beginning of the year: {amount}.",
+    "newTitle": "New here?",
+    "newText": "You start with your membership of the Cercle culturel catalan ({amount}). It replaces the dues of the current period: you do not pay both.",
+    "newTextNoAmount": "You start with your membership of the Cercle culturel catalan. It replaces the dues of the current period: you do not pay both.",
+    "newRenewal": "The Cercle membership is renewed every autumn, even if you joined during the summer.",
+    "whoTitle": "Who pays",
+    "whoText": "Regular members. The canalla and guests do not pay dues.",
+    "mineTitle": "Where I stand",
+    "mineText": "The state of your dues is in",
+    "mineLink": "your profile"
+  },
+  "eventDues": {
+    "switch": "Dues collection",
+    "help": "The reminder of this event will mention these dues to the members who have not settled them.",
+    "noCollections": "No collection is defined. Create them first in",
+    "recurringHelp": "In a series, only the first event keeps the collection.",
+    "notice": "These dues are collected at this event.",
+    "ownPaid": "You have already paid, thank you!",
+    "ownExempt": "You are exempt.",
+    "tick": "Mark as paid",
+    "untick": "Untick",
+    "untickConfirm": "Untick the dues of {name}?"
   },
   "routes": {
     "events": "Presentations and practices",
@@ -328,7 +377,8 @@
     "myBadges": "My badges",
     "badges": "Badges",
     "summary": "Summary",
-    "dues": "Dues"
+    "dues": "Dues",
+    "duesInfo": "How much does it cost"
   },
   "summary": {
     "title": "Participants for upcoming events",

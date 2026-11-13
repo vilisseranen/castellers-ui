@@ -53,6 +53,32 @@
         </div>
       </div>
       <p class="help mb-3">{{ $t("dues.collectionsHelp") }}</p>
+      <div class="field">
+        <label class="label is-small">{{ $t("dues.interacEmail") }}</label>
+        <div class="control">
+          <input
+            class="input"
+            type="email"
+            autocomplete="off"
+            v-model="interacForm"
+            :placeholder="$t('dues.interacPlaceholder')"
+          />
+        </div>
+        <p class="help">{{ $t("dues.interacHelp") }}</p>
+      </div>
+      <div class="field">
+        <label class="label is-small">{{ $t("dues.cercleUrl") }}</label>
+        <div class="control">
+          <input
+            class="input"
+            type="url"
+            autocomplete="off"
+            v-model="cercleUrlForm"
+            placeholder="https://"
+          />
+        </div>
+        <p class="help">{{ $t("dues.cercleUrlHelp") }}</p>
+      </div>
       <div class="buttons">
         <button
           class="button is-info"
@@ -72,6 +98,22 @@
           <strong>{{ $t("dues.kindsShort." + c.kind) }}</strong>
           {{ formatAmount(c.amount) }} · {{ formatDate(c.dueDate) }}
         </span>
+      </p>
+      <p>
+        <strong>{{ $t("dues.interacShort") }}</strong>
+        {{ interacEmail || $t("dues.interacMissing") }}
+      </p>
+      <p>
+        <strong>{{ $t("dues.cercleUrlShort") }}</strong>
+        <a
+          v-if="cercleUrl"
+          :href="cercleUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="dues-link"
+          >{{ cercleUrl }}</a
+        >
+        <span v-else>{{ $t("dues.cercleUrlMissing") }}</span>
       </p>
       <p>
         <a role="button" @click="startEdit">{{ $t("dues.editCollections") }}</a>
@@ -283,6 +325,12 @@ export default {
       loaded: false,
       editing: false,
       form: [],
+      interacEmail: "",
+      interacForm: "",
+      cercleUrl: "",
+      cercleUrlForm: "",
+      // memberUuid -> start of the first event the member attended
+      firstVisits: {},
       members: [],
       // "memberUuid:collectionUuid" -> status
       states: {},
@@ -372,6 +420,8 @@ export default {
     this.loadCollections();
     this.loadMembers();
     this.loadStates();
+    this.loadSettings();
+    this.loadAttendance();
   },
   methods: {
     ...mapActions({
@@ -381,6 +431,9 @@ export default {
       record: "dues/record",
       getLog: "dues/getLog",
       getPayingMembers: "dues/getPayingMembers",
+      getSettings: "dues/getSettings",
+      setSettings: "dues/setSettings",
+      getAttendance: "dues/getAttendance",
     }),
     fail(error) {
       this.$root.$notifyNOK(this.$t("general.notifyFailure"));
@@ -394,6 +447,31 @@ export default {
         this.resetForm();
       } catch (error) {
         this.fail(error);
+      }
+    },
+    async loadSettings() {
+      try {
+        const response = await this.getSettings();
+        this.interacEmail = (response.data || {}).interacEmail || "";
+        this.interacForm = this.interacEmail;
+        this.cercleUrl = (response.data || {}).cercleUrl || "";
+        this.cercleUrlForm = this.cercleUrl;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // Used to tell apart dues collected before a member first came. Without
+    // it, they show as dues to pay.
+    async loadAttendance() {
+      try {
+        const response = await this.getAttendance();
+        const firstVisits = {};
+        (response.data || []).forEach(function (a) {
+          firstVisits[a.memberUuid] = a.firstVisit;
+        });
+        this.firstVisits = firstVisits;
+      } catch (error) {
+        console.log(error);
       }
     },
     async loadMembers() {
@@ -449,6 +527,8 @@ export default {
     // Collections
     resetForm() {
       this.form = duesHelper.collectionForm(this.season, this.collections);
+      this.interacForm = this.interacEmail;
+      this.cercleUrlForm = this.cercleUrl;
     },
     startEdit() {
       this.resetForm();
@@ -476,14 +556,31 @@ export default {
       this.saving = true;
       try {
         await this.setCollections({ season: this.season, collections });
-        this.editing = false;
-        await this.loadCollections();
-        this.$root.$notifyOK(this.$t("general.notifySuccess"));
       } catch (error) {
-        this.fail(error);
-      } finally {
         this.saving = false;
+        this.fail(error);
+        return;
       }
+      // The settings are saved after the collections: if they are refused,
+      // the form stays open with the collections already saved.
+      const interacEmail = this.interacForm.trim();
+      const cercleUrl = this.cercleUrlForm.trim();
+      if (interacEmail !== this.interacEmail || cercleUrl !== this.cercleUrl) {
+        try {
+          const response = await this.setSettings({ interacEmail, cercleUrl });
+          this.interacEmail = (response.data || {}).interacEmail || "";
+          this.cercleUrl = (response.data || {}).cercleUrl || "";
+        } catch (error) {
+          this.saving = false;
+          this.$root.$notifyNOK(this.$t("dues.settingsInvalid"));
+          console.log(error);
+          return;
+        }
+      }
+      this.saving = false;
+      this.editing = false;
+      await this.loadCollections();
+      this.$root.$notifyOK(this.$t("general.notifySuccess"));
     },
 
     // Without a search, the list holds the active members and, on demand,
@@ -505,7 +602,8 @@ export default {
     displayStatus(member, collection) {
       return duesHelper.displayStatus(
         this.status(member, collection),
-        collection.dueDate
+        collection,
+        this.firstVisits[member.uuid] || 0
       );
     },
     statusClass(member, collection) {
@@ -655,6 +753,9 @@ export default {
 }
 .dues-summary-item {
   display: block;
+}
+.dues-link {
+  word-break: break-all;
 }
 .dues-filter {
   display: block;
