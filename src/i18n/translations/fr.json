@@ -331,7 +331,12 @@
     "interacHelp": "Affichée aux membres dans « Combien ça coûte » et dans les rappels. Laisse vide pour ne rien afficher.",
     "interacShort": "Virement Interac :",
     "interacMissing": "adresse non définie",
-    "interacInvalid": "Les cueillettes sont enregistrées, mais l'adresse Interac n'est pas valide."
+    "cercleUrl": "Page d'inscription au Cercle culturel catalan",
+    "cercleUrlHelp": "Lien proposé aux nouveaux dans « Combien ça coûte » et dans leur profil. Laisse vide pour ne rien afficher.",
+    "cercleUrlShort": "Inscription au Cercle :",
+    "cercleUrlMissing": "lien non défini",
+    "cercleJoin": "S'inscrire au Cercle culturel catalan",
+    "settingsInvalid": "Les cueillettes sont enregistrées, mais l'adresse Interac ou le lien d'inscription n'est pas valide."
   },
   "duesInfo": {
     "title": "Combien ça coûte",

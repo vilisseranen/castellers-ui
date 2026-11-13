@@ -234,7 +234,12 @@
     "interacHelp": "Es mostra als membres a «Quant costa» i als recordatoris. Deixa-ho buit per no mostrar res.",
     "interacShort": "Transferència Interac:",
     "interacMissing": "adreça no definida",
-    "interacInvalid": "Les recaptacions s'han desat, però l'adreça Interac no és vàlida."
+    "cercleUrl": "Pàgina d'inscripció al Cercle cultural català",
+    "cercleUrlHelp": "Enllaç que es proposa als nous membres a «Quant costa» i al seu perfil. Deixa-ho buit per no mostrar res.",
+    "cercleUrlShort": "Inscripció al Cercle:",
+    "cercleUrlMissing": "enllaç no definit",
+    "cercleJoin": "Inscriure's al Cercle cultural català",
+    "settingsInvalid": "Les recaptacions s'han desat, però l'adreça Interac o l'enllaç d'inscripció no és vàlid."
   },
   "duesInfo": {
     "title": "Quant costa",

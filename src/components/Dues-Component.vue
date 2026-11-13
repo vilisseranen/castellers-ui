@@ -56,8 +56,8 @@
         </tbody>
       </table>
     </div>
-    <div class="notification is-info is-light" v-if="showAttendance">
-      <p>
+    <div class="notification is-info is-light" v-if="cercleDue">
+      <p v-if="attendance.count > 0">
         {{
           $t(own ? "dues.attendanceOwn" : "dues.attendanceOther", {
             count: attendance.count,
@@ -67,6 +67,11 @@
       </p>
       <p>
         {{ $t("dues.cercleFirst", { amount: formatAmount(cercleDue.amount) }) }}
+      </p>
+      <p v-if="cercleUrl">
+        <a :href="cercleUrl" target="_blank" rel="noopener noreferrer">{{
+          $t("dues.cercleJoin")
+        }}</a>
       </p>
     </div>
     <p class="is-size-7 has-text-grey" v-if="own">
@@ -97,6 +102,8 @@ export default {
       dues: [],
       expanded: {},
       attendance: { firstVisit: 0, count: 0 },
+      // Page where one joins the Cercle culturel catalan, when it is set.
+      cercleUrl: "",
     };
   },
   computed: {
@@ -115,10 +122,6 @@ export default {
           d.status === "unpaid"
       );
       return due ? due.collection : null;
-    },
-    // Members who have not joined the Cercle yet see how many times they came.
-    showAttendance() {
-      return Boolean(this.cercleDue) && this.attendance.count > 0;
     },
     // The current season first, then the past seasons in which something was
     // recorded for this member. A past season with nothing recorded is left
@@ -159,12 +162,21 @@ export default {
     },
   },
   mounted() {
+    const self = this;
+    this.getSettings()
+      .then(function (response) {
+        self.cercleUrl = (response.data || {}).cercleUrl || "";
+      })
+      .catch(function () {
+        // Without it, the link is simply not shown.
+      });
     this.load(this.memberUuid);
   },
   methods: {
     ...mapActions({
       getMemberDues: "dues/getMemberDues",
       getMemberAttendance: "dues/getMemberAttendance",
+      getSettings: "dues/getSettings",
     }),
     load(uuid) {
       this.dues = [];

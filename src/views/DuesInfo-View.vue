@@ -67,6 +67,15 @@
         }}
       </p>
       <p>{{ $t("duesInfo.newRenewal") }}</p>
+      <p v-if="cercleUrl">
+        <a
+          class="button is-info is-light"
+          :href="cercleUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          >{{ $t("dues.cercleJoin") }}</a
+        >
+      </p>
 
       <p class="title is-5">{{ $t("duesInfo.whoTitle") }}</p>
       <p>{{ $t("duesInfo.whoText") }}</p>
@@ -95,6 +104,7 @@ export default {
       season: duesHelper.currentSeason(),
       collections: [],
       interacEmail: "",
+      cercleUrl: "",
       loaded: false,
     };
   },
@@ -125,6 +135,7 @@ export default {
     this.getSettings()
       .then(function (response) {
         self.interacEmail = (response.data || {}).interacEmail || "";
+        self.cercleUrl = (response.data || {}).cercleUrl || "";
       })
       .catch((error) => console.log(error));
   },

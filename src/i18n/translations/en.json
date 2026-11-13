@@ -330,7 +330,12 @@
     "interacHelp": "Shown to members in \"How much does it cost\" and in reminders. Leave empty to show nothing.",
     "interacShort": "Interac transfer:",
     "interacMissing": "address not set",
-    "interacInvalid": "The collections are saved, but the Interac address is not valid."
+    "cercleUrl": "Cercle culturel catalan sign-up page",
+    "cercleUrlHelp": "Link offered to newcomers in \"How much does it cost\" and in their profile. Leave empty to show nothing.",
+    "cercleUrlShort": "Cercle sign-up:",
+    "cercleUrlMissing": "link not set",
+    "cercleJoin": "Join the Cercle culturel catalan",
+    "settingsInvalid": "The collections are saved, but the Interac address or the sign-up link is not valid."
   },
   "duesInfo": {
     "title": "How much does it cost",

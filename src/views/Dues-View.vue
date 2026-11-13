@@ -66,6 +66,19 @@
         </div>
         <p class="help">{{ $t("dues.interacHelp") }}</p>
       </div>
+      <div class="field">
+        <label class="label is-small">{{ $t("dues.cercleUrl") }}</label>
+        <div class="control">
+          <input
+            class="input"
+            type="url"
+            autocomplete="off"
+            v-model="cercleUrlForm"
+            placeholder="https://"
+          />
+        </div>
+        <p class="help">{{ $t("dues.cercleUrlHelp") }}</p>
+      </div>
       <div class="buttons">
         <button
           class="button is-info"
@@ -89,6 +102,18 @@
       <p>
         <strong>{{ $t("dues.interacShort") }}</strong>
         {{ interacEmail || $t("dues.interacMissing") }}
+      </p>
+      <p>
+        <strong>{{ $t("dues.cercleUrlShort") }}</strong>
+        <a
+          v-if="cercleUrl"
+          :href="cercleUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="dues-link"
+          >{{ cercleUrl }}</a
+        >
+        <span v-else>{{ $t("dues.cercleUrlMissing") }}</span>
       </p>
       <p>
         <a role="button" @click="startEdit">{{ $t("dues.editCollections") }}</a>
@@ -302,6 +327,8 @@ export default {
       form: [],
       interacEmail: "",
       interacForm: "",
+      cercleUrl: "",
+      cercleUrlForm: "",
       // memberUuid -> start of the first event the member attended
       firstVisits: {},
       members: [],
@@ -427,6 +454,8 @@ export default {
         const response = await this.getSettings();
         this.interacEmail = (response.data || {}).interacEmail || "";
         this.interacForm = this.interacEmail;
+        this.cercleUrl = (response.data || {}).cercleUrl || "";
+        this.cercleUrlForm = this.cercleUrl;
       } catch (error) {
         console.log(error);
       }
@@ -499,6 +528,7 @@ export default {
     resetForm() {
       this.form = duesHelper.collectionForm(this.season, this.collections);
       this.interacForm = this.interacEmail;
+      this.cercleUrlForm = this.cercleUrl;
     },
     startEdit() {
       this.resetForm();
@@ -531,16 +561,18 @@ export default {
         this.fail(error);
         return;
       }
-      // The address is saved after the collections: if it is refused, the
-      // form stays open with the collections already saved.
+      // The settings are saved after the collections: if they are refused,
+      // the form stays open with the collections already saved.
       const interacEmail = this.interacForm.trim();
-      if (interacEmail !== this.interacEmail) {
+      const cercleUrl = this.cercleUrlForm.trim();
+      if (interacEmail !== this.interacEmail || cercleUrl !== this.cercleUrl) {
         try {
-          const response = await this.setSettings({ interacEmail });
+          const response = await this.setSettings({ interacEmail, cercleUrl });
           this.interacEmail = (response.data || {}).interacEmail || "";
+          this.cercleUrl = (response.data || {}).cercleUrl || "";
         } catch (error) {
           this.saving = false;
-          this.$root.$notifyNOK(this.$t("dues.interacInvalid"));
+          this.$root.$notifyNOK(this.$t("dues.settingsInvalid"));
           console.log(error);
           return;
         }
@@ -721,6 +753,9 @@ export default {
 }
 .dues-summary-item {
   display: block;
+}
+.dues-link {
+  word-break: break-all;
 }
 .dues-filter {
   display: block;
