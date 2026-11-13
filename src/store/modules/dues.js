@@ -23,6 +23,18 @@ const actions = {
   async getLog(context, filters) {
     return api.getDuesLog(filters);
   },
+  async getSettings() {
+    return api.getDuesSettings();
+  },
+  async setSettings(context, settings) {
+    return api.setDuesSettings(settings);
+  },
+  async getMemberAttendance(context, memberUuid) {
+    return api.getMemberAttendance(memberUuid);
+  },
+  async getAttendance() {
+    return api.getDuesAttendance();
+  },
   // The members who pay dues: regular members and admins. The list is not
   // committed to the members module, whose list other pages filter differently.
   async getPayingMembers() {

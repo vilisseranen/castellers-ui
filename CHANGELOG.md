@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 The UI version is defined in [`package.json`](package.json) (`version` field).
 
+## [1.12.0] - 2026-11-13
+
+Dues, second step: making them visible. Needs API 0.28.0.
+
+### Added
+
+- New page "Combien ça coûte" (`/cost`), in the menu of every logged-in member: the collections of the current season with their amounts and dates, the total, how to pay (Interac address when it is set), paying the whole year at once, what a new member pays, who pays, and a link to the profile.
+- Events: when editing an event, admins can switch on "Cueillette de cotisation" and choose the collection. The event then shows a notice with the name and the amount of the dues, and tells the member whether they have already settled them. In a series of recurring events, only the first one keeps the collection.
+- Presence table of an event with a collection: one more column to tick the dues of the regular members and admins on the spot. Unticking asks for confirmation. Every change goes to the journal, as on the dues page.
+- Dues page: the address for Interac transfers is edited with the amounts and dates.
+- Profile, "My dues": a member who has not settled the Cercle for the current season sees the number of confirmed attendances since their first visit, and a reminder that the Cercle comes first. A link leads to "Combien ça coûte".
+
+### Changed
+
+- Dues of the colla collected before a member first came no longer show as "to pay" but as "before you joined", in the profile and on the dues page; "only dues to pay" leaves them out. The first visit is the first event with a confirmed presence; without one, nothing changes. The Cercle is always due, and a state recorded by an admin always wins.
+
 ## [1.11.1] - 2026-11-13
 
 ### Changed

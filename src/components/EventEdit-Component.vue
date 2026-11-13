@@ -121,6 +121,15 @@
             <o-switch v-model="uniformRequiredSwitch" variant="info"></o-switch>
           </o-field>
         </div>
+        <div class="field column is-4" v-if="!readonly && type === 'admin'">
+          <event-dues
+            editable
+            v-model="currentEvent.duesCollectionUuid"
+          ></event-dues>
+          <p class="help" v-if="recurring && currentEvent.duesCollectionUuid">
+            {{ $t("eventDues.recurringHelp") }}
+          </p>
+        </div>
         <div
           class="field column is-4"
           v-if="currentEvent.uuid === undefined && recurring"
@@ -172,6 +181,11 @@
               <p class="content">{{ $t("events.uniformRequiredHelp") }}</p>
             </div>
           </div>
+        </div>
+        <div class="column is-12" v-if="currentEvent.duesCollectionUuid">
+          <event-dues
+            :model-value="currentEvent.duesCollectionUuid"
+          ></event-dues>
         </div>
         <div class="column is-12">
           <div class="columns">
@@ -473,6 +487,42 @@
         </o-table-column>
 
         <o-table-column
+          v-if="duesCollection"
+          v-slot="props"
+          field="dues"
+          :label="$t('dues.kindsShort.' + duesCollection.kind)"
+        >
+          <div v-if="paysDues(props.row)">
+            <span
+              class="tag is-success"
+              v-if="duesStatus(props.row) === 'paid'"
+            >
+              {{ $t("dues.actions.paid") }}
+              <button
+                type="button"
+                class="delete is-small"
+                :aria-label="$t('eventDues.untick')"
+                @click="untickDues(props.row)"
+              ></button>
+            </span>
+            <span
+              class="tag is-light"
+              v-else-if="duesStatus(props.row) === 'exempt'"
+              >{{ $t("dues.actions.exempt") }}</span
+            >
+            <button
+              type="button"
+              class="button is-small is-warning is-light"
+              v-else
+              :disabled="duesSaving"
+              @click="tickDues(props.row)"
+            >
+              {{ $t("eventDues.tick") }}
+            </button>
+          </div>
+        </o-table-column>
+
+        <o-table-column
           v-slot="props"
           field="setPresence"
           :label="participationColumns['setPresence']"
@@ -506,6 +556,7 @@ import Datepicker from "@vuepic/vue-datepicker";
 import { LMap, LTileLayer, LMarker } from "@vue-leaflet/vue-leaflet";
 import Castell from "./CastellsDrawing-Component.vue";
 import MemberFilter from "../components/MemberFilter-Component.vue";
+import EventDues from "./EventDues-Component.vue";
 import ConfirmModal from "./modals/Confirm-Modal.vue";
 
 import "@vuepic/vue-datepicker/dist/main.css";
@@ -538,6 +589,7 @@ export default {
     LTileLayer,
     LMarker,
     MemberFilter,
+    EventDues,
   },
   data() {
     const s = new Date(Date.now());
@@ -567,6 +619,7 @@ export default {
         locationName: "",
         description: "",
         uniformRequired: 0,
+        duesCollectionUuid: "",
       }, // defaults are set here
       isLoading: false,
       table,
@@ -606,9 +659,17 @@ export default {
       reminderAudience: "default",
       selectedReminderMemberUuids: {},
       remindersLoading: false,
+      // Dues collected at this event, for the column of the presence table.
+      duesCollection: null,
+      // memberUuid -> state for that collection
+      duesStates: {},
+      duesSaving: false,
     };
   },
   watch: {
+    "event.duesCollectionUuid": function () {
+      this.loadDues();
+    },
     recurring: function (val) {
       if (val) {
         this.currentEvent.recurring.until = this.currentEvent.startDate;
@@ -838,7 +899,87 @@ export default {
       sendEventReminders: "events/sendEventReminders",
       getPositions: "castells/getCastellTypePositions",
       getModel: "castells/getCastellModel",
+      getDuesCollections: "dues/getCollections",
+      getDuesStates: "dues/getStates",
+      recordDues: "dues/record",
     }),
+    // Dues collected at this event: admins tick them in the presence table.
+    async loadDues() {
+      const collectionUuid = this.event.duesCollectionUuid;
+      // Keep what is shown while the same collection is read again.
+      if (!this.duesCollection || this.duesCollection.uuid !== collectionUuid) {
+        this.duesCollection = null;
+        this.duesStates = {};
+      }
+      if (!collectionUuid || this.type !== "admin" || !this.event.uuid) {
+        return;
+      }
+      try {
+        const collections = (await this.getDuesCollections()).data || [];
+        const collection = collections.find((c) => c.uuid === collectionUuid);
+        if (!collection || collectionUuid !== this.event.duesCollectionUuid) {
+          return;
+        }
+        const states = (await this.getDuesStates(collection.season)).data || [];
+        const byMember = {};
+        states.forEach(function (s) {
+          if (s.collectionUuid === collectionUuid) {
+            byMember[s.memberUuid] = s.status;
+          }
+        });
+        if (collectionUuid === this.event.duesCollectionUuid) {
+          this.duesStates = byMember;
+          this.duesCollection = collection;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    // The canalla and guests do not pay dues.
+    paysDues(member) {
+      return member.type === "member" || member.type === "admin";
+    },
+    duesStatus(member) {
+      return this.duesStates[member.uuid] || "unpaid";
+    },
+    async setDues(member, action) {
+      this.duesSaving = true;
+      try {
+        await this.recordDues({
+          memberUuid: member.uuid,
+          collectionUuids: [this.duesCollection.uuid],
+          action,
+          note: "",
+        });
+      } catch (error) {
+        this.$root.$notifyNOK(this.$t("general.notifyFailure"));
+        console.log(error);
+      } finally {
+        this.duesSaving = false;
+      }
+      // Whatever happened, show what is recorded now.
+      await this.loadDues();
+    },
+    tickDues(member) {
+      return this.setDues(member, "paid");
+    },
+    async untickDues(member) {
+      const modalPromise = this.$oruga.modal.open({
+        component: ConfirmModal,
+        props: {
+          title: this.$t("eventDues.untickConfirm", {
+            name: `${member.firstName} ${member.lastName}`,
+          }),
+          confirm: this.$t("general.yes"),
+          cancel: this.$t("general.cancel"),
+        },
+      });
+      const result = await modalPromise.promise;
+      if (result.action !== "yes") {
+        return;
+      }
+      return this.setDues(member, "unpaid");
+    },
     isReminderMemberSelected(uuid) {
       return Boolean(this.selectedReminderMemberUuids[uuid]);
     },

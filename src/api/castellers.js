@@ -266,6 +266,18 @@ export default {
       { memberUuid, collectionUuids, action, note: note || "" }
     );
   },
+  async getDuesSettings() {
+    return apiCall("GET", `/dues/settings`, {}, null);
+  },
+  async setDuesSettings(settings) {
+    return apiCall("PUT", `/dues/settings`, {}, settings);
+  },
+  async getMemberAttendance(memberUuid) {
+    return apiCall("GET", `/members/${memberUuid}/attendance`, {}, null);
+  },
+  async getDuesAttendance() {
+    return apiCall("GET", `/dues/attendance`, {}, null);
+  },
   async getDuesLog(filters) {
     const queryParams = [];
     ["member", "collection", "actor", "season", "limit", "offset"].forEach(

@@ -184,7 +184,8 @@
       "paidAhead": "Pagada per avançat",
       "toPay": "Per pagar",
       "upcoming": "Propera",
-      "exempt": "Exempta"
+      "exempt": "Exempta",
+      "notDue": "Abans de la teva arribada"
     },
     "actions": {
       "unpaid": "No pagada",
@@ -198,7 +199,7 @@
     },
     "memberHelp": "Els administradors anoten les quotes després de rebre el pagament. Hi ha un error? Escriu a un membre del comitè.",
     "createCollections": "Crear les recaptacions de la temporada",
-    "editCollections": "Modificar els imports i les dates",
+    "editCollections": "Modificar els imports, les dates i l'adreça Interac",
     "collectionsHelp": "Import en dòlars i data de la recaptació.",
     "collectionsInvalid": "Comprova els imports i les dates.",
     "amount": "Import",
@@ -224,13 +225,57 @@
     "logAllActors": "Tots els autors",
     "logMore": "Mostrar-ne més",
     "notActivated": "Compte no activat",
-    "searchHelp": "Sense cerca: només els membres actius. La cerca inclou tots els membres."
+    "searchHelp": "Sense cerca: només els membres actius. La cerca inclou tots els membres.",
+    "attendanceOwn": "Presències confirmades des de la teva primera visita, el {date}: {count}.",
+    "attendanceOther": "Presències confirmades des de la seva primera visita, el {date}: {count}.",
+    "cercleFirst": "La inscripció al Cercle cultural català ({amount}) es paga primer. Substitueix la quota del període en curs.",
+    "interacEmail": "Adreça per a les transferències Interac",
+    "interacPlaceholder": "tresoreria{'@'}exemple.ca",
+    "interacHelp": "Es mostra als membres a «Quant costa» i als recordatoris. Deixa-ho buit per no mostrar res.",
+    "interacShort": "Transferència Interac:",
+    "interacMissing": "adreça no definida",
+    "interacInvalid": "Les recaptacions s'han desat, però l'adreça Interac no és vàlida."
+  },
+  "duesInfo": {
+    "title": "Quant costa",
+    "intro": "Formar part dels Castellers de Montréal vol dir, com a màxim, quatre quotes l'any: la inscripció al Cercle cultural català, del qual forma part la colla, i tres quotes de temporada a la colla.",
+    "total": "Total de l'any",
+    "noCollections": "Els imports i les dates d'aquesta temporada encara no s'han publicat.",
+    "howTitle": "Com pagar",
+    "howInterac": "Preferentment per transferència Interac a",
+    "howMessage": "Indica al missatge quina quota pagues, per exemple «Quota d'hivern».",
+    "howInPerson": "Si no, en persona durant la recaptació.",
+    "howNoInterac": "Per transferència Interac o en persona durant la recaptació. Demana l'adreça a un membre del comitè.",
+    "yearTitle": "Pagar-ho tot de cop",
+    "yearText": "Pots pagar les tres quotes de la colla d'una sola vegada, a principi d'any: {amount}.",
+    "newTitle": "Acabes d'arribar?",
+    "newText": "Comences per la teva inscripció al Cercle cultural català ({amount}). Substitueix la quota del període en curs: no pagues totes dues.",
+    "newTextNoAmount": "Comences per la teva inscripció al Cercle cultural català. Substitueix la quota del període en curs: no pagues totes dues.",
+    "newRenewal": "La inscripció al Cercle es renova cada tardor, encara que t'hi hagis inscrit durant l'estiu.",
+    "whoTitle": "Qui paga",
+    "whoText": "Els membres regulars. La canalla i els convidats no paguen quota.",
+    "mineTitle": "Com ho tinc",
+    "mineText": "L'estat de les teves quotes és al",
+    "mineLink": "teu perfil"
+  },
+  "eventDues": {
+    "switch": "Recaptació de quota",
+    "help": "El recordatori d'aquest esdeveniment esmentarà aquesta quota als membres que no l'hagin pagada.",
+    "noCollections": "No hi ha cap recaptació definida. Crea-les primer a",
+    "recurringHelp": "En una sèrie, només el primer esdeveniment conserva la recaptació.",
+    "notice": "Aquesta quota es recull en aquest esdeveniment.",
+    "ownPaid": "Ja l'has pagada, gràcies!",
+    "ownExempt": "N'estàs exempt.",
+    "tick": "Marcar com a pagada",
+    "untick": "Desmarcar",
+    "untickConfirm": "Desmarcar la quota de {name}?"
   },
   "routes": {
     "events": "Esdeveniments",
     "members": "Membres",
     "myBadges": "Les meves insígnies",
     "badges": "Insígnies",
-    "dues": "Quotes"
+    "dues": "Quotes",
+    "duesInfo": "Quant costa"
   }
 }
