@@ -304,6 +304,7 @@
     "tabLog": "Journal",
     "onlyToPay": "Only dues to pay",
     "showPaused": "Show paused members",
+    "showCreated": "Show accounts that were never activated",
     "paused": "Paused",
     "memberCount": "Members shown: {count}",
     "wholeYear": "Whole year (winter, spring, summer)",
@@ -319,7 +320,7 @@
     "logAllActors": "All authors",
     "logMore": "Show more",
     "notActivated": "Account not activated",
-    "searchHelp": "Without a search: active members and accounts created in the last year. A search looks through all members."
+    "searchHelp": "Without a search: active members only. A search looks through all members."
   },
   "routes": {
     "events": "Presentations and practices",
