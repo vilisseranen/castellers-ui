@@ -17,6 +17,13 @@
         </span>
       </p>
 
+      <event-templates
+        v-if="!readonly && type === 'admin'"
+        :event="currentEvent"
+        :creating="currentEvent.uuid === undefined"
+        @apply="applyTemplate"
+      ></event-templates>
+
       <div class="columns is-multiline">
         <div class="field column is-3" v-if="!readonly">
           <fieldset disabled>
@@ -558,6 +565,8 @@ import Castell from "./CastellsDrawing-Component.vue";
 import MemberFilter from "../components/MemberFilter-Component.vue";
 import EventDues from "./EventDues-Component.vue";
 import ConfirmModal from "./modals/Confirm-Modal.vue";
+import EventTemplates from "./EventTemplatePicker-Component.vue";
+import { escapeHtml } from "../api/htmlHelper";
 
 import "@vuepic/vue-datepicker/dist/main.css";
 
@@ -590,6 +599,7 @@ export default {
     LMarker,
     MemberFilter,
     EventDues,
+    EventTemplates,
   },
   data() {
     const s = new Date(Date.now());
@@ -903,6 +913,10 @@ export default {
       getDuesStates: "dues/getStates",
       recordDues: "dues/record",
     }),
+    // Values of a template chosen by the admin.
+    applyTemplate(fields) {
+      Object.assign(this.event, fields);
+    },
     // Dues collected at this event: admins tick them in the presence table.
     async loadDues() {
       const collectionUuid = this.event.duesCollectionUuid;
@@ -967,8 +981,9 @@ export default {
       const modalPromise = this.$oruga.modal.open({
         component: ConfirmModal,
         props: {
+          // The modal renders its title as HTML.
           title: this.$t("eventDues.untickConfirm", {
-            name: `${member.firstName} ${member.lastName}`,
+            name: escapeHtml(`${member.firstName} ${member.lastName}`),
           }),
           confirm: this.$t("general.yes"),
           cancel: this.$t("general.cancel"),

@@ -266,6 +266,18 @@ export default {
       { memberUuid, collectionUuids, action, note: note || "" }
     );
   },
+  async getEventTemplates() {
+    return apiCall("GET", `/event-templates`, {}, null);
+  },
+  async createEventTemplate(template) {
+    return apiCall("POST", `/event-templates`, {}, template);
+  },
+  async updateEventTemplate(template) {
+    return apiCall("PUT", `/event-templates/${template.uuid}`, {}, template);
+  },
+  async deleteEventTemplate(uuid) {
+    return apiCall("DELETE", `/event-templates/${uuid}`, {}, null);
+  },
   async getDuesSettings() {
     return apiCall("GET", `/dues/settings`, {}, null);
   },
