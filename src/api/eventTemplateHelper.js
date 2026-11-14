@@ -98,10 +98,8 @@ export default {
   },
   // Whether applying a template would erase something the admin typed.
   hasTypedValues(event) {
-    return Boolean(
-      (event.name || "").trim() ||
-      (event.description || "").trim() ||
-      (event.locationName || "").trim()
+    return [event.name, event.description, event.locationName].some(
+      (value) => (value || "").trim() !== ""
     );
   },
   // The template that has this title, whatever the case.
