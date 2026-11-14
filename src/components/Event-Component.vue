@@ -55,6 +55,16 @@
                   </span>
                   <span>{{ $t("events.uniform") }}</span>
                 </span>
+                <span
+                  class="tag is-dues"
+                  v-if="event.duesCollectionUuid"
+                  :title="$t('eventDues.tagHelp')"
+                >
+                  <span class="icon is-small">
+                    <i class="fas fa-coins"></i>
+                  </span>
+                  <span>{{ $t("eventDues.tag") }}</span>
+                </span>
               </div>
             </div>
           </router-link>

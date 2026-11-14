@@ -369,7 +369,9 @@
     "ownExempt": "You are exempt.",
     "tick": "Mark as paid",
     "untick": "Untick",
-    "untickConfirm": "Untick the dues of {name}?"
+    "untickConfirm": "Untick the dues of {name}?",
+    "tag": "Dues",
+    "tagHelp": "Dues are collected at this event."
   },
   "routes": {
     "events": "Presentations and practices",

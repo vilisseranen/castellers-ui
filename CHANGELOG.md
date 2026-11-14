@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 The UI version is defined in [`package.json`](package.json) (`version` field).
 
+## [1.12.1] - 2026-11-14
+
+### Added
+
+- List of events: an event at which dues are collected carries a "Cotisation" tag with a coin icon, next to the type of the event and the uniform tag.
+
 ## [1.12.0] - 2026-11-13
 
 Dues, second step: making them visible. Needs API 0.28.0.

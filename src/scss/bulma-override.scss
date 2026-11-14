@@ -23,6 +23,10 @@ $link: hsl(217,71%, 53%);
 $link-invert: findColorInvert($link);
 $link-light: findLightColor($link);
 $link-dark: findDarkColor($link);
+$dues: hsl(171, 100%, 29%);
+$dues-invert: findColorInvert($dues);
+$dues-light: findLightColor($dues);
+$dues-dark: findDarkColor($dues);
 $grey: rgba(180,180,180,1);
 $grey-invert: findColorInvert($grey);
 $grey-light: findLightColor($grey);
@@ -35,6 +39,7 @@ $colors: map-merge($colors, (
     "practice": ($info, $info-invert, $info-light, $info-dark),
     "social": ($primary, $primary-invert, $primary-light, $primary-dark),
     "uniform": ($link, $link-invert, $link-light, $link-dark),
+    "dues": ($dues, $dues-invert, $dues-light, $dues-dark),
     "undefined": ($grey, $grey-invert, $grey-light, $grey-dark),
 ));
 

@@ -273,7 +273,9 @@
     "ownExempt": "N'estàs exempt.",
     "tick": "Marcar com a pagada",
     "untick": "Desmarcar",
-    "untickConfirm": "Desmarcar la quota de {name}?"
+    "untickConfirm": "Desmarcar la quota de {name}?",
+    "tag": "Quota",
+    "tagHelp": "En aquest esdeveniment es recull una quota."
   },
   "routes": {
     "events": "Esdeveniments",
