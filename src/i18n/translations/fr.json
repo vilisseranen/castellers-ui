@@ -370,7 +370,9 @@
     "ownExempt": "Tu en es dispensé.",
     "tick": "Marquer payée",
     "untick": "Décocher",
-    "untickConfirm": "Décocher la cotisation de {name} ?"
+    "untickConfirm": "Décocher la cotisation de {name} ?",
+    "tag": "Cotisation",
+    "tagHelp": "Une cueillette de cotisation a lieu à cet évènement."
   },
   "routes": {
     "events": "Présentations et pratiques",
