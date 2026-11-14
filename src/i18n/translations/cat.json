@@ -54,7 +54,9 @@
     "uniformRequired": "Uniforme requerit",
     "uniformRequiredHelp": "Per a aquest esdeveniment, cal portar l'uniforme: camisa oficial i pantalons blancs. Si encara no tens la camisa oficial, porta colors semblants als nostres. Tenim algunes camises de segona mà que et podem deixar, si cal.",
     "update": "Modificar detalls esdeveniment",
-    "updateButton": "Modificar l'esdeveniment"
+    "updateButton": "Modificar l'esdeveniment",
+    "deleteNotify": "Avisar els membres per correu",
+    "deleteNotifyHelp": "Desmarca-ho per eliminar sense enviar cap avís, per exemple per a un esdeveniment creat per error."
   },
   "general": {
     "cancel": "Cancel·lar",
