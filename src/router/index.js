@@ -15,6 +15,7 @@ import BadgesAdmin from "../views/BadgesAdmin-View.vue";
 import MyBadges from "../views/MyBadges-View.vue";
 import Dues from "../views/Dues-View.vue";
 import DuesInfo from "../views/DuesInfo-View.vue";
+import EventTemplates from "../views/EventTemplates-View.vue";
 
 const routes = [
   {
@@ -115,6 +116,14 @@ const routes = [
         path: "myBadges",
         name: "MyBadges",
         component: MyBadges,
+        meta: {
+          requiresAuth: true,
+        },
+      },
+      {
+        path: "eventTemplates",
+        name: "EventTemplates",
+        component: EventTemplates,
         meta: {
           requiresAuth: true,
         },

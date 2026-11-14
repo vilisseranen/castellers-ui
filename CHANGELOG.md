@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 The UI version is defined in [`package.json`](package.json) (`version` field).
 
+## [1.13.0] - 2026-11-14
+
+Event templates. Needs API 0.29.0.
+
+### Added
+
+- Event form, for admins: "Partir d'un modèle" when creating an event. Choosing a template fills in the name, the type, the times, the location and the description; everything can still be changed. The day, the recurrence and the dues are left as they are. If something was already typed, a confirmation is asked before it is replaced.
+- Event form: "Enregistrer comme modèle" saves the values of the form under a name. A template that already has that name is replaced, after confirmation.
+- New page "Modèles d'évènement" (`/eventTemplates`), reached from the event form: list of the templates, with a form to edit one (name, name of the event, type, times, location, description, uniform), create one or delete one.
+- Changing or deleting a template never changes the events already created.
+
+### Fixed
+
+- The confirmation asked before unticking dues in the presence table showed the name of the member as HTML. The name is now escaped, as are the names of the templates in their confirmations.
+
 ## [1.12.1] - 2026-11-14
 
 ### Added
