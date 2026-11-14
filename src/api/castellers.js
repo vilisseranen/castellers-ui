@@ -73,8 +73,10 @@ export default {
   async createEvent(event) {
     return apiCall("POST", `/events`, {}, event);
   },
-  async deleteEvent(eventUuid) {
-    return apiCall("DELETE", `/events/${eventUuid}`, {}, null);
+  // notify false: the members are not told that the event was deleted.
+  async deleteEvent(eventUuid, notify = true) {
+    const query = notify ? "" : "?notify=false";
+    return apiCall("DELETE", `/events/${eventUuid}${query}`, {}, null);
   },
   async presenceEvent(eventUuid, memberUuid, presence) {
     return apiCall(

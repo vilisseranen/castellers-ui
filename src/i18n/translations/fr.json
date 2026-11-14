@@ -99,7 +99,9 @@
     "uniformRequired": "Uniforme requis",
     "uniformRequiredHelp": "Pour cet évènement, le port de l'uniforme est de mise : chemise officielle et pantalons blancs. Si tu n'as pas encore la chemise officielle, porte des couleurs semblables aux nôtres. Nous avons quelques chemises de seconde main que l'on peut te prêter, au besoin.",
     "update": "Modifier les informations sur un évènement",
-    "updateButton": "Modifier l'évènement"
+    "updateButton": "Modifier l'évènement",
+    "deleteNotify": "Prévenir les membres par courriel",
+    "deleteNotifyHelp": "Décoche pour supprimer sans envoyer d'avis, par exemple pour un évènement créé par erreur."
   },
   "general": {
     "actions": "Actions",

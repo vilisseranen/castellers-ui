@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 The UI version is defined in [`package.json`](package.json) (`version` field).
 
+## [1.14.0] - 2026-11-14
+
+Needs API 0.30.0 for the new box to have an effect.
+
+### Added
+
+- Deleting an event that is still to come: the confirmation has a box "Prévenir les membres par courriel", ticked by default. Unticking it deletes the event without sending the notice, for example for an event created by mistake. Past events never send a notice, so the box is not shown for them.
+
+### Fixed
+
+- The confirmation shown before deleting an event put the name of the event in it as HTML. The name is now escaped.
+
 ## [1.13.0] - 2026-11-14
 
 Event templates. Needs API 0.29.0.
