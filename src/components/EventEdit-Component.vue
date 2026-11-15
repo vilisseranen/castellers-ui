@@ -240,6 +240,15 @@
           </div>
         </div>
         <div class="field is-12 column" v-if="!readonly">
+          <!-- Members are only told about changes to an event still to come:
+               the choice is only offered then, as for a deletion. -->
+          <div class="field" v-if="actionLabel === 'update' && upcoming">
+            <label class="checkbox">
+              <input type="checkbox" v-model="notifyMembers" />
+              {{ $t("events.updateNotify") }}
+            </label>
+            <p class="help">{{ $t("events.updateNotifyHelp") }}</p>
+          </div>
           <div class="field-body">
             <div class="field">
               <p class="control">
@@ -632,6 +641,8 @@ export default {
         duesCollectionUuid: "",
       }, // defaults are set here
       isLoading: false,
+      // Tell the members by email when an upcoming event is updated.
+      notifyMembers: true,
       table,
       displayAllMembers: false,
       recurring: false,
@@ -774,6 +785,9 @@ export default {
         label = "participationNo";
       }
       return label;
+    },
+    upcoming() {
+      return this.currentEvent.startDate * 1000 > Date.now();
     },
     currentEvent: {
       get: function () {
@@ -1090,9 +1104,12 @@ export default {
     eventEdit() {
       const self = this;
       self.isLoading = true;
-      this.editEvent(self.currentEvent)
+      const notify = !self.upcoming || self.notifyMembers;
+      this.editEvent({ event: self.currentEvent, notify })
         .then(function (response) {
           self.isLoading = false;
+          // Back to the default for the next change.
+          self.notifyMembers = true;
           if (!self.event.uuid) {
             self.$router.push({ path: `/eventEdit/${response.data.uuid}` });
             self.loadEvent(response.data.uuid);

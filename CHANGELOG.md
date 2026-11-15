@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 The UI version is defined in [`package.json`](package.json) (`version` field).
 
+## [1.15.0] - 2026-11-15
+
+Needs API 0.31.0 for the new box to have an effect.
+
+### Added
+
+- Updating an event that is still to come: above the "Mettre à jour" button, a box "Prévenir les membres par courriel", ticked by default. Unticking it saves the change without sending the notice, for example to fix a typo. The box is ticked again after each save. Past events never send a notice, so the box is not shown for them.
+
 ## [1.14.0] - 2026-11-14
 
 Needs API 0.30.0 for the new box to have an effect.

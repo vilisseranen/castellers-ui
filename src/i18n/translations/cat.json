@@ -56,7 +56,9 @@
     "update": "Modificar detalls esdeveniment",
     "updateButton": "Modificar l'esdeveniment",
     "deleteNotify": "Avisar els membres per correu",
-    "deleteNotifyHelp": "Desmarca-ho per eliminar sense enviar cap avís, per exemple per a un esdeveniment creat per error."
+    "deleteNotifyHelp": "Desmarca-ho per eliminar sense enviar cap avís, per exemple per a un esdeveniment creat per error.",
+    "updateNotify": "Avisar els membres per correu",
+    "updateNotifyHelp": "Desmarca-ho per desar sense enviar cap avís, per exemple per corregir una errada."
   },
   "general": {
     "cancel": "Cancel·lar",
