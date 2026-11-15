@@ -72,14 +72,15 @@ const actions = {
       return response;
     });
   },
-  async editEvent(context, event) {
+  // notify false: the members are not told that the event was updated.
+  async editEvent(context, { event, notify = true }) {
     if (event.uuid !== undefined) {
       for (let i = 0; i < context.state.events.length; i++) {
         if (context.state.events[i].uuid === event.uuid) {
           context.commit("setEvent", { event: event, index: i });
         }
       }
-      return api.editEvent(event);
+      return api.editEvent(event, notify);
     } else {
       return api.createEvent(event);
     }

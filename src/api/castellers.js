@@ -67,8 +67,10 @@ export default {
     }
     return apiCall("GET", `/events/${uuid}`, authorizationHeader, null);
   },
-  async editEvent(event) {
-    return apiCall("PUT", `/events/${event.uuid}`, {}, event);
+  // notify false: the members are not told that the event was updated.
+  async editEvent(event, notify = true) {
+    const query = notify ? "" : "?notify=false";
+    return apiCall("PUT", `/events/${event.uuid}${query}`, {}, event);
   },
   async createEvent(event) {
     return apiCall("POST", `/events`, {}, event);

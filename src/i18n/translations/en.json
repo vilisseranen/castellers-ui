@@ -101,7 +101,9 @@
     "update": "Change information about an event",
     "updateButton": "Update the event",
     "deleteNotify": "Tell the members by email",
-    "deleteNotifyHelp": "Untick to delete without sending a notice, for example for an event created by mistake."
+    "deleteNotifyHelp": "Untick to delete without sending a notice, for example for an event created by mistake.",
+    "updateNotify": "Tell the members by email",
+    "updateNotifyHelp": "Untick to save without sending a notice, for example to fix a typo."
   },
   "general": {
     "actions": "Actions",

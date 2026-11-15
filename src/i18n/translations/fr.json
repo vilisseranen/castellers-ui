@@ -101,7 +101,9 @@
     "update": "Modifier les informations sur un évènement",
     "updateButton": "Modifier l'évènement",
     "deleteNotify": "Prévenir les membres par courriel",
-    "deleteNotifyHelp": "Décoche pour supprimer sans envoyer d'avis, par exemple pour un évènement créé par erreur."
+    "deleteNotifyHelp": "Décoche pour supprimer sans envoyer d'avis, par exemple pour un évènement créé par erreur.",
+    "updateNotify": "Prévenir les membres par courriel",
+    "updateNotifyHelp": "Décoche pour enregistrer sans envoyer d'avis, par exemple pour corriger une coquille."
   },
   "general": {
     "actions": "Actions",
