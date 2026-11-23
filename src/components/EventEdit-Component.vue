@@ -459,6 +459,15 @@
           :label="participationColumns['name']"
         >
           {{ props.row.firstName }} {{ props.row.lastName }}
+          <span
+            class="tag is-canalla is-light is-rounded canalla-tag"
+            v-if="props.row.type === 'canalla'"
+          >
+            <span class="icon is-small">
+              <i class="fas fa-child-reaching"></i>
+            </span>
+            <span>{{ $t("members.canallaType") }}</span>
+          </span>
         </o-table-column>
         <o-table-column
           v-slot="props"
@@ -1192,6 +1201,10 @@ export default {
 </script>
 
 <style scoped>
+.canalla-tag {
+  margin-left: 0.4em;
+  vertical-align: middle;
+}
 .uniform-notice {
   align-items: flex-start;
   padding: 0.75rem 1rem;

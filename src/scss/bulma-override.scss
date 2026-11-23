@@ -27,6 +27,10 @@ $dues: hsl(171, 100%, 29%);
 $dues-invert: findColorInvert($dues);
 $dues-light: findLightColor($dues);
 $dues-dark: findDarkColor($dues);
+$canalla: hsl(15, 70%, 52%);
+$canalla-invert: findColorInvert($canalla);
+$canalla-light: findLightColor($canalla);
+$canalla-dark: findDarkColor($canalla);
 $grey: rgba(180,180,180,1);
 $grey-invert: findColorInvert($grey);
 $grey-light: findLightColor($grey);
@@ -40,6 +44,7 @@ $colors: map-merge($colors, (
     "social": ($primary, $primary-invert, $primary-light, $primary-dark),
     "uniform": ($link, $link-invert, $link-light, $link-dark),
     "dues": ($dues, $dues-invert, $dues-light, $dues-dark),
+    "canalla": ($canalla, $canalla-invert, $canalla-light, $canalla-dark),
     "undefined": ($grey, $grey-invert, $grey-light, $grey-dark),
 ));
 

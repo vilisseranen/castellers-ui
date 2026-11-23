@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 The UI version is defined in [`package.json`](package.json) (`version` field).
 
+## [1.16.0] - 2026-11-23
+
+### Added
+
+- List of participants of an event: the canalla now have a "Canalla" tag with a child icon next to their name, so they stand out in the list.
+
 ## [1.15.0] - 2026-11-15
 
 Needs API 0.31.0 for the new box to have an effect.

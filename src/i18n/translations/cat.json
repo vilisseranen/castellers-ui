@@ -95,6 +95,7 @@
     "lastName": "Cognom",
     "lb": "lb",
     "memberType": "Normal",
+    "canallaType": "Canalla",
     "clearSearch": "Esborrar",
     "searchPlaceholder": "Cerca per nom o cognom",
     "roles": "Rols",
