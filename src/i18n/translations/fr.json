@@ -179,6 +179,13 @@
   "members": {
     "musician": "Musicien·ne",
     "musicianHelp": "Joue avec les musiciens de la colla : voit par défaut leurs répétitions et en reçoit les courriels.",
+    "shirtSummary": "Chemise : {details}",
+    "shirtSize": "Taille de chemise",
+    "shirtSizeNone": "Aucune ou inconnue",
+    "shirtSince": "A une chemise depuis le",
+    "shirtHelp": "Facultatif : laisse vide si la personne n'a pas de chemise ou si la date n'est pas connue.",
+    "shirtSizeValue": "taille {size}",
+    "shirtSinceValue": "depuis le {date}",
     "absent": "Absent",
     "activeStatus": "Actif",
     "activeStatusPlural": "Actifs",

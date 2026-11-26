@@ -77,6 +77,8 @@ export default {
         language: "fr",
         subscribed: 0,
         musician: 0,
+        shirtSize: 0,
+        shirtSince: "",
       }, // defaults are set here
       credentials: {},
     };

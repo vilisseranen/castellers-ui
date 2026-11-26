@@ -103,6 +103,13 @@
   "members": {
     "musician": "Músic",
     "musicianHelp": "Toca amb els músics de la colla: veu els seus assajos per defecte i en rep els correus.",
+    "shirtSummary": "Camisa: {details}",
+    "shirtSize": "Talla de camisa",
+    "shirtSizeNone": "Cap o desconeguda",
+    "shirtSince": "Té camisa des del",
+    "shirtHelp": "Opcional: deixa-ho buit si la persona no té camisa o si no se sap la data.",
+    "shirtSizeValue": "talla {size}",
+    "shirtSinceValue": "des del {date}",
     "addMember": "Afegir un membre nou",
     "adminType": "Administrador",
     "cm": "cm",

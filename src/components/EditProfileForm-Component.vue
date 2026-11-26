@@ -268,6 +268,38 @@
             <span>{{ $t("members.musician") }}</span>
           </span>
         </div>
+        <!-- Shirt of the colla: not everybody has one. Only admins note it. -->
+        <div class="field column is-6" v-if="type === 'admin'">
+          <label class="label">{{ $t("members.shirtSize") }}</label>
+          <div class="control">
+            <div class="select is-fullwidth">
+              <select v-model.number="current_user.shirtSize">
+                <option :value="0">{{ $t("members.shirtSizeNone") }}</option>
+                <option v-for="size in shirtSizes" :key="size" :value="size">
+                  {{ size }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="field column is-6" v-if="type === 'admin'">
+          <label class="label">{{ $t("members.shirtSince") }}</label>
+          <div class="control">
+            <input
+              class="input"
+              type="date"
+              :max="today"
+              v-model="current_user.shirtSince"
+            />
+          </div>
+          <p class="help">{{ $t("members.shirtHelp") }}</p>
+        </div>
+        <div class="column is-12" v-else-if="shirtSummary">
+          <span class="icon is-small">
+            <i class="fas fa-tshirt"></i>
+          </span>
+          <span>{{ shirtSummary }}</span>
+        </div>
         <div
           class="column is-12"
           v-if="type === 'admin' && current_user.status"
@@ -392,6 +424,60 @@ export default {
       set: function (value) {
         this.toggleStatus(value ? "active" : "paused");
       },
+    },
+    // Sizes of the shirts of the colla: even numbers from 28 to 44.
+    shirtSizes: function () {
+      const sizes = [];
+      for (let size = 28; size <= 44; size += 2) {
+        sizes.push(size);
+      }
+      return sizes;
+    },
+    // Today as the value of an <input type="date">, in local time: a member
+    // cannot have their shirt since a day to come.
+    today: function () {
+      const now = new Date();
+      const pad = (n) => String(n).padStart(2, "0");
+      return (
+        now.getFullYear() +
+        "-" +
+        pad(now.getMonth() + 1) +
+        "-" +
+        pad(now.getDate())
+      );
+    },
+    // What a member reads about their own shirt, or "" when nothing is noted.
+    shirtSummary: function () {
+      const parts = [];
+      if (this.current_user.shirtSize) {
+        parts.push(
+          this.$t("members.shirtSizeValue", {
+            size: this.current_user.shirtSize,
+          })
+        );
+      }
+      const since = /^(\d{4})-(\d{2})-(\d{2})$/.exec(
+        this.current_user.shirtSince || ""
+      );
+      if (since) {
+        // Built from its parts: new Date("2019-06-24") is UTC midnight, which
+        // is the day before in Montréal.
+        const day = new Date(since[1], since[2] - 1, since[3]);
+        const locale = this.$i18n.locale === "cat" ? "ca" : this.$i18n.locale;
+        parts.push(
+          this.$t("members.shirtSinceValue", {
+            date: day.toLocaleDateString(locale, {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            }),
+          })
+        );
+      }
+      if (parts.length === 0) {
+        return "";
+      }
+      return this.$t("members.shirtSummary", { details: parts.join(", ") });
     },
     musicianSwitch: {
       get: function () {
