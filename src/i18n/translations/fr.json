@@ -110,7 +110,31 @@
     "deleteNotify": "Prévenir les membres par courriel",
     "deleteNotifyHelp": "Décoche pour supprimer sans envoyer d'avis, par exemple pour un évènement créé par erreur.",
     "updateNotify": "Prévenir les membres par courriel",
-    "updateNotifyHelp": "Décoche pour enregistrer sans envoyer d'avis, par exemple pour corriger une coquille."
+    "updateNotifyHelp": "Décoche pour enregistrer sans envoyer d'avis, par exemple pour corriger une coquille.",
+    "cancelled": "Annulé",
+    "cancelledNotice": "Cet évènement est annulé",
+    "cancelledReason": "Raison : {reason}",
+    "cancelReason": "Raison",
+    "cancelReasons": {
+      "weather": "Météo",
+      "technical": "Difficultés techniques",
+      "other": "Autre"
+    },
+    "cancelNote": "Précision (facultatif)",
+    "cancelNotePlaceholder": "Ex. : orage prévu à 18 h",
+    "cancelHelp": "L'évènement reste dans la liste, affiché comme annulé. Plus personne ne peut s'y inscrire et aucun rappel n'est envoyé.",
+    "cancelNotifyHelp": "Décoche pour annuler sans envoyer d'avis.",
+    "cancelBack": "Retour",
+    "cancelConfirm": "Annuler l'évènement",
+    "confirmCancel": "Annuler l'évènement",
+    "confirmRestore": "Veux-tu vraiment rétablir cet évènement ?",
+    "restoreNotifyHelp": "Décoche pour rétablir sans envoyer d'avis, par exemple si personne n'avait été prévenu de l'annulation.",
+    "cancelEvent": "Annuler l'évènement",
+    "restoreEvent": "Rétablir l'évènement",
+    "cancelChangeReason": "Modifier la raison",
+    "cancelOK": "L'évènement est annulé.",
+    "restoreOK": "L'évènement est rétabli.",
+    "cancelledNoReminders": "Aucun rappel n'est envoyé pour un évènement annulé."
   },
   "general": {
     "actions": "Actions",

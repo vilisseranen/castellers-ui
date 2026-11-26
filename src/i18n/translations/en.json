@@ -110,7 +110,31 @@
     "deleteNotify": "Tell the members by email",
     "deleteNotifyHelp": "Untick to delete without sending a notice, for example for an event created by mistake.",
     "updateNotify": "Tell the members by email",
-    "updateNotifyHelp": "Untick to save without sending a notice, for example to fix a typo."
+    "updateNotifyHelp": "Untick to save without sending a notice, for example to fix a typo.",
+    "cancelled": "Cancelled",
+    "cancelledNotice": "This event is cancelled",
+    "cancelledReason": "Reason: {reason}",
+    "cancelReason": "Reason",
+    "cancelReasons": {
+      "weather": "Weather",
+      "technical": "Technical difficulties",
+      "other": "Other"
+    },
+    "cancelNote": "Details (optional)",
+    "cancelNotePlaceholder": "E.g. storm expected at 6 PM",
+    "cancelHelp": "The event stays in the list, shown as cancelled. Nobody can answer anymore and no reminder is sent.",
+    "cancelNotifyHelp": "Untick to cancel without sending a notice.",
+    "cancelBack": "Back",
+    "cancelConfirm": "Cancel the event",
+    "confirmCancel": "Cancel the event",
+    "confirmRestore": "Do you really want to restore this event?",
+    "restoreNotifyHelp": "Untick to restore without sending a notice, for example if nobody was told about the cancellation.",
+    "cancelEvent": "Cancel the event",
+    "restoreEvent": "Restore the event",
+    "cancelChangeReason": "Change the reason",
+    "cancelOK": "The event is cancelled.",
+    "restoreOK": "The event is restored.",
+    "cancelledNoReminders": "No reminder is sent for a cancelled event."
   },
   "general": {
     "actions": "Actions",

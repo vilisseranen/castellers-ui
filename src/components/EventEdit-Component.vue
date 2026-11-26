@@ -6,7 +6,7 @@
         ><span
           class="tag"
           style="margin-left: 10px"
-          v-if="(uuid || linkToken) && actionLabel !== 'create'"
+          v-if="(uuid || linkToken) && actionLabel !== 'create' && !cancelled"
           v-bind:class="{
             'is-success': event.participation == 'yes',
             'is-danger': event.participation == 'no',
@@ -16,6 +16,25 @@
         >
         </span>
       </p>
+
+      <div class="notification is-danger cancelled-notice" v-if="cancelled">
+        <p class="title is-5">
+          <span class="icon">
+            <i class="fas fa-ban"></i>
+          </span>
+          {{ $t("events.cancelledNotice") }}
+        </p>
+        <p v-if="event.cancelReason">
+          {{
+            $t("events.cancelledReason", {
+              reason: $t("events.cancelReasons." + event.cancelReason),
+            })
+          }}
+        </p>
+        <p class="cancelled-note" v-if="event.cancelNote">
+          {{ event.cancelNote }}
+        </p>
+      </div>
 
       <event-templates
         v-if="!readonly && type === 'admin'"
@@ -281,6 +300,39 @@
               </p>
             </div>
           </div>
+          <!-- Cancelling keeps the event in the list, shown as cancelled. -->
+          <div class="buttons mt-4" v-if="actionLabel === 'update'">
+            <button
+              type="button"
+              class="button is-danger is-light"
+              v-if="!cancelled"
+              @click="cancelThisEvent"
+            >
+              <span class="icon">
+                <i class="fas fa-ban"></i>
+              </span>
+              <span>{{ $t("events.cancelEvent") }}</span>
+            </button>
+            <button
+              type="button"
+              class="button is-success is-light"
+              v-if="cancelled"
+              @click="restoreThisEvent"
+            >
+              <span class="icon">
+                <i class="fas fa-undo"></i>
+              </span>
+              <span>{{ $t("events.restoreEvent") }}</span>
+            </button>
+            <button
+              type="button"
+              class="button is-light"
+              v-if="cancelled"
+              @click="cancelThisEvent"
+            >
+              {{ $t("events.cancelChangeReason") }}
+            </button>
+          </div>
         </div>
       </div>
       <div v-if="!readonly">
@@ -394,6 +446,9 @@
         >
           {{ $t("events.remindersSend") }}
         </o-button>
+        <p class="help" v-if="cancelled">
+          {{ $t("events.cancelledNoReminders") }}
+        </p>
       </div>
 
       <member-filter
@@ -583,21 +638,24 @@
           centered
           width="50"
         >
-          <a v-on:click="presence(currentEvent.uuid, props.row.uuid, 'yes')">
-            <span class="icon">
-              <i class="fas fa-check has-text-success"></i>
-            </span>
-          </a>
-          <a v-on:click="presence(currentEvent.uuid, props.row.uuid, 'no')">
-            <span class="icon">
-              <i class="fas fa-times has-text-danger"></i>
-            </span>
-          </a>
-          <a v-on:click="presence(currentEvent.uuid, props.row.uuid, '')">
-            <span class="icon">
-              <i class="fas fa-minus has-text-info"></i>
-            </span>
-          </a>
+          <!-- Nobody was present at a cancelled event. -->
+          <template v-if="!cancelled">
+            <a v-on:click="presence(currentEvent.uuid, props.row.uuid, 'yes')">
+              <span class="icon">
+                <i class="fas fa-check has-text-success"></i>
+              </span>
+            </a>
+            <a v-on:click="presence(currentEvent.uuid, props.row.uuid, 'no')">
+              <span class="icon">
+                <i class="fas fa-times has-text-danger"></i>
+              </span>
+            </a>
+            <a v-on:click="presence(currentEvent.uuid, props.row.uuid, '')">
+              <span class="icon">
+                <i class="fas fa-minus has-text-info"></i>
+              </span>
+            </a>
+          </template>
         </o-table-column>
       </o-table>
     </div>
@@ -614,6 +672,7 @@ import EventDues from "./EventDues-Component.vue";
 import ConfirmModal from "./modals/Confirm-Modal.vue";
 import EventTemplates from "./EventTemplatePicker-Component.vue";
 import { escapeHtml } from "../api/htmlHelper";
+import { eventMixin } from "../mixins/events.js";
 
 import "@vuepic/vue-datepicker/dist/main.css";
 
@@ -635,6 +694,7 @@ Icon.Default.mergeOptions({
 const L = window.L;
 
 export default {
+  mixins: [eventMixin],
   props: {
     readonly: Boolean,
   },
@@ -830,6 +890,11 @@ export default {
     upcoming() {
       return this.currentEvent.startDate * 1000 > Date.now();
     },
+    // A cancelled event is still shown, but nobody answers for it anymore
+    // and no reminder is sent.
+    cancelled() {
+      return this.event.cancelled === 1;
+    },
     currentEvent: {
       get: function () {
         return this.event;
@@ -966,7 +1031,7 @@ export default {
       return null;
     },
     canSendReminders() {
-      if (this.remindersLoading) {
+      if (this.remindersLoading || this.cancelled) {
         return false;
       }
       if (this.reminderAudience === "members") {
@@ -1136,7 +1201,9 @@ export default {
         .then(function () {
           self.loadEvent(eventUuid, token);
         })
-        .then(self.$root.$notifyOK(self.$t("events.participationOK")))
+        .then(function () {
+          self.$root.$notifyOK(self.$t("events.participationOK"));
+        })
         .catch(function () {
           self.$root.$notifyNOK(self.$t("events.participationNOK"));
         });
@@ -1186,6 +1253,38 @@ export default {
           self.isLoading = false;
           self.$root.$notifyNOK(self.$t("general.notifyFailure"));
           console.log(error);
+        });
+    },
+    cancelThisEvent() {
+      this.changeCancellation(this.cancelEvent(this.event), "events.cancelOK");
+    },
+    restoreThisEvent() {
+      this.changeCancellation(
+        this.restoreEvent(this.event),
+        "events.restoreOK"
+      );
+    },
+    // Shows the event as it is once cancelled or restored. Only the state of
+    // the cancellation is read back: the changes being typed in the form stay.
+    changeCancellation(change, message) {
+      const self = this;
+      change
+        .then(function (changed) {
+          if (!changed) {
+            return;
+          }
+          return self
+            .getEvent({ uuid: self.event.uuid })
+            .then(function (response) {
+              self.event.cancelled = response.data.cancelled;
+              self.event.cancelReason = response.data.cancelReason;
+              self.event.cancelNote = response.data.cancelNote;
+              self.$root.$notifyOK(self.$t(message));
+            });
+        })
+        .catch(function (error) {
+          console.log(error);
+          self.$root.$notifyNOK(self.$t("general.notifyFailure"));
         });
     },
     loadEvent(uuid, token) {
@@ -1261,6 +1360,13 @@ export default {
 .canalla-tag {
   margin-left: 0.4em;
   vertical-align: middle;
+}
+.cancelled-notice .title {
+  margin-bottom: 0.5rem;
+}
+.cancelled-notice .cancelled-note {
+  white-space: pre-line;
+  margin-top: 0.25rem;
 }
 .uniform-notice {
   align-items: flex-start;
