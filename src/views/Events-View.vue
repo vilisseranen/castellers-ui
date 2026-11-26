@@ -48,6 +48,8 @@
         v-bind:memberType="type"
         v-on:participate="participate"
         v-on:remove="removeEvent"
+        v-on:cancel="cancelListedEvent"
+        v-on:restore="restoreListedEvent"
         v-on:edit="editEvent"
       ></event>
     </div>
@@ -139,6 +141,27 @@ export default {
         })
         .catch(function (error) {
           console.log(error);
+        });
+    },
+    cancelListedEvent(event) {
+      this.changeCancellation(this.cancelEvent(event), "events.cancelOK");
+    },
+    restoreListedEvent(event) {
+      this.changeCancellation(this.restoreEvent(event), "events.restoreOK");
+    },
+    // Reloads the list once an event is cancelled or restored.
+    changeCancellation(change, message) {
+      const self = this;
+      change
+        .then(function (changed) {
+          if (changed) {
+            self.$store.dispatch("events/getEvents");
+            self.$root.$notifyOK(self.$t(message));
+          }
+        })
+        .catch(function (error) {
+          console.log(error);
+          self.$root.$notifyNOK(self.$t("general.notifyFailure"));
         });
     },
     previousPage() {

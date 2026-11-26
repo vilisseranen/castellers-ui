@@ -65,7 +65,31 @@
     "deleteNotify": "Avisar els membres per correu",
     "deleteNotifyHelp": "Desmarca-ho per eliminar sense enviar cap avís, per exemple per a un esdeveniment creat per error.",
     "updateNotify": "Avisar els membres per correu",
-    "updateNotifyHelp": "Desmarca-ho per desar sense enviar cap avís, per exemple per corregir una errada."
+    "updateNotifyHelp": "Desmarca-ho per desar sense enviar cap avís, per exemple per corregir una errada.",
+    "cancelled": "Anul·lat",
+    "cancelledNotice": "Aquest esdeveniment s'ha anul·lat",
+    "cancelledReason": "Motiu: {reason}",
+    "cancelReason": "Motiu",
+    "cancelReasons": {
+      "weather": "Meteorologia",
+      "technical": "Dificultats tècniques",
+      "other": "Altres"
+    },
+    "cancelNote": "Detall (opcional)",
+    "cancelNotePlaceholder": "P. ex.: tempesta prevista a les 18 h",
+    "cancelHelp": "L'esdeveniment es manté a la llista, marcat com a anul·lat. Ningú més s'hi pot apuntar i no s'envia cap recordatori.",
+    "cancelNotifyHelp": "Desmarca-ho per anul·lar sense enviar cap avís.",
+    "cancelBack": "Enrere",
+    "cancelConfirm": "Anul·lar l'esdeveniment",
+    "confirmCancel": "Anul·lar l'esdeveniment",
+    "confirmRestore": "Segur que vols restablir aquest esdeveniment?",
+    "restoreNotifyHelp": "Desmarca-ho per restablir sense enviar cap avís, per exemple si no s'havia avisat ningú de l'anul·lació.",
+    "cancelEvent": "Anul·lar l'esdeveniment",
+    "restoreEvent": "Restablir l'esdeveniment",
+    "cancelChangeReason": "Canviar el motiu",
+    "cancelOK": "L'esdeveniment s'ha anul·lat.",
+    "restoreOK": "L'esdeveniment s'ha restablert.",
+    "cancelledNoReminders": "No s'envia cap recordatori per a un esdeveniment anul·lat."
   },
   "general": {
     "cancel": "Cancel·lar",

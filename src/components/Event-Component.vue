@@ -1,6 +1,15 @@
 <template>
   <div class="column is-3">
-    <div class="card">
+    <div class="card" :class="{ 'is-cancelled': cancelled }">
+      <header class="event-cancelled-banner" v-if="cancelled">
+        <span class="icon is-small">
+          <i class="fas fa-ban"></i>
+        </span>
+        <span class="event-cancelled-label">{{ $t("events.cancelled") }}</span>
+        <span v-if="event.cancelReason">
+          · {{ $t("events.cancelReasons." + event.cancelReason) }}</span
+        >
+      </header>
       <article class="card-content">
         <div class="content">
           <router-link
@@ -11,7 +20,7 @@
             "
           >
             <div>
-              <strong>{{ event.name }}</strong>
+              <strong class="event-name">{{ event.name }}</strong>
               <span v-if="memberType === 'admin'">
                 ({{ event.attendance }} {{ registeredLabel }})</span
               >
@@ -22,6 +31,12 @@
                 {{ event.end }}</small
               >
               <br />
+              <small
+                class="event-cancel-note"
+                v-if="cancelled && event.cancelNote"
+              >
+                {{ event.cancelNote }}
+              </small>
               <br />
               <div class="tags">
                 <span
@@ -82,6 +97,28 @@
                 <i class="fas fa-edit"></i>
               </span>
             </a>
+            <a
+              class="level-item"
+              v-if="!cancelled"
+              v-on:click="$emit('cancel', event)"
+              :title="$t('events.cancelEvent')"
+              :aria-label="$t('events.cancelEvent')"
+            >
+              <span class="icon has-text-warning-dark">
+                <i class="fas fa-ban"></i>
+              </span>
+            </a>
+            <a
+              class="level-item"
+              v-if="cancelled"
+              v-on:click="$emit('restore', event)"
+              :title="$t('events.restoreEvent')"
+              :aria-label="$t('events.restoreEvent')"
+            >
+              <span class="icon has-text-success">
+                <i class="fas fa-undo"></i>
+              </span>
+            </a>
             <a class="level-item" v-on:click="remove(event)">
               <span class="icon has-text-danger">
                 <i class="fas fa-trash"></i>
@@ -92,7 +129,7 @@
       </article>
       <footer
         class="card-footer"
-        v-if="memberType === 'admin' || memberType === 'member'"
+        v-if="!cancelled && (memberType === 'admin' || memberType === 'member')"
       >
         <a class="card-footer-item" v-on:click="participate(event.uuid, 'yes')">
           <span class="icon">
@@ -115,7 +152,13 @@ export default {
     event: Object,
     memberType: String,
   },
+  emits: ["participate", "edit", "remove", "cancel", "restore"],
   computed: {
+    // A cancelled event stays in the list: it must be obvious that it does
+    // not take place, and nobody answers for it anymore.
+    cancelled() {
+      return this.event.cancelled === 1;
+    },
     registeredLabel() {
       if (this.event.attendance >= 2) {
         return this.$t("events.registered_plural");
@@ -137,3 +180,35 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.event-cancelled-banner {
+  background-color: hsl(348, 86%, 43%);
+  color: #fff;
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.25rem 0.25rem 0 0;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.event-cancelled-label {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.card.is-cancelled {
+  box-shadow: 0 0 0 2px hsl(348, 86%, 43%);
+}
+.card.is-cancelled .event-name {
+  text-decoration: line-through;
+}
+.card.is-cancelled .card-content .content {
+  opacity: 0.7;
+}
+.event-cancel-note {
+  display: block;
+  margin-top: 0.25rem;
+  font-style: italic;
+}
+</style>

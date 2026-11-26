@@ -80,6 +80,22 @@ export default {
     const query = notify ? "" : "?notify=false";
     return apiCall("DELETE", `/events/${eventUuid}${query}`, {}, null);
   },
+  // reason: "weather", "technical" or "other". notify false: the members are
+  // not told that the event is cancelled.
+  async cancelEvent(eventUuid, { reason, note }, notify = true) {
+    const query = notify ? "" : "?notify=false";
+    return apiCall(
+      "POST",
+      `/events/${eventUuid}/cancel${query}`,
+      {},
+      { reason, note }
+    );
+  },
+  // notify false: the members are not told that the event takes place after all.
+  async restoreEvent(eventUuid, notify = true) {
+    const query = notify ? "" : "?notify=false";
+    return apiCall("POST", `/events/${eventUuid}/restore${query}`, {}, null);
+  },
   async presenceEvent(eventUuid, memberUuid, presence) {
     return apiCall(
       "POST",

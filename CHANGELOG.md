@@ -6,6 +6,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 The UI version is defined in [`package.json`](package.json) (`version` field).
 
+## [1.18.0] - 2026-11-26
+
+An event can be cancelled rather than deleted: it stays in the list, clearly shown as cancelled. Needs API 0.34.0.
+
+### Added
+
+- Admins can cancel an event, from its card in the list (ban icon) or from its page ("Annuler l'évènement"). They pick a reason — "Météo", "Difficultés techniques" or "Autre" — and may add a short note. For an event still to come, a box, ticked by default, tells the members by email; untick it to cancel quietly.
+- List of events: a cancelled event has a red "Annulé" banner with the reason, a red outline, its name struck through and the note under the date. The buttons to answer are gone.
+- Event page: a red notice says the event is cancelled, with the reason and the note. Admins can change the reason, or restore the event with "Rétablir l'évènement"; members are told by email unless the box is unticked.
+
+### Changed
+
+- Event page of a cancelled event: reminders cannot be sent, and the presence of the members cannot be set.
+
+### Fixed
+
+- Answering from a link in an email no longer shows "success" when the answer could not be saved.
+
 ## [1.17.0] - 2026-11-25
 
 Musicians of the colla: some members are musicians and rehearse every week. Needs API 0.33.0.
