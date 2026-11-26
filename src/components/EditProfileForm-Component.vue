@@ -253,6 +253,21 @@
             <input class="input" type="text" v-model="current_user.extra" />
           </div>
         </div>
+        <div class="field column is-12" v-if="type === 'admin'">
+          <label class="label">{{ $t("members.musician") }}</label>
+          <o-switch v-model="musicianSwitch" variant="music">
+            {{ musicianSwitch ? $t("general.yes") : $t("general.no") }}
+          </o-switch>
+          <p class="help">{{ $t("members.musicianHelp") }}</p>
+        </div>
+        <div class="column is-12" v-else-if="current_user.musician === 1">
+          <span class="tag is-music is-medium">
+            <span class="icon is-small">
+              <i class="fas fa-music"></i>
+            </span>
+            <span>{{ $t("members.musician") }}</span>
+          </span>
+        </div>
         <div
           class="column is-12"
           v-if="type === 'admin' && current_user.status"
@@ -376,6 +391,14 @@ export default {
       },
       set: function (value) {
         this.toggleStatus(value ? "active" : "paused");
+      },
+    },
+    musicianSwitch: {
+      get: function () {
+        return this.current_user.musician === 1;
+      },
+      set: function (value) {
+        this.current_user.musician = value ? 1 : 0;
       },
     },
     current_user: {

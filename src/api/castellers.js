@@ -132,6 +132,10 @@ export default {
     let endpoint = "/events";
     if (options) {
       endpoint = `${endpoint}?page=${options.page}&limit=${options.limit}`;
+      // Types of events to list; without it the API lists them all.
+      if (options.type && options.type.length > 0) {
+        endpoint = `${endpoint}&type=${options.type.join(",")}`;
+      }
     }
     return apiCall("GET", endpoint, {}, null);
   },

@@ -35,6 +35,13 @@
     "updateModelButton": "Save"
   },
   "events": {
+    "music": "Music",
+    "musicType": "Musicians' rehearsal",
+    "filterShow": "Show:",
+    "filterPractice": "Castells practices",
+    "filterMusic": "Musicians' rehearsals",
+    "filterMusiciansOnly": "Musicians only",
+    "remindersMusiciansOnly": "For a musicians' rehearsal, reminders and notices are only sent to the musicians.",
     "1d": "Daily",
     "1w": "Weekly",
     "confirmDelete": "Do you really want to delete this practice?",
@@ -146,6 +153,8 @@
     "usernamePlaceholder": "Your username"
   },
   "members": {
+    "musician": "Musician",
+    "musicianHelp": "Plays with the musicians of the colla: sees their rehearsals by default and gets their emails.",
     "absent": "Missing",
     "activeStatus": "Active",
     "activeStatusPlural": "Active",

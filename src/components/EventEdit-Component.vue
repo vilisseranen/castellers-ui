@@ -82,6 +82,16 @@
                 >{{ $t("events.socialType") }}</o-radio
               >
             </div>
+            <div class="field">
+              <o-radio
+                name="type"
+                variant="music"
+                nativeValue="music"
+                :disabled="readonly ? true : false"
+                v-model="event.type"
+                >{{ $t("events.musicType") }}</o-radio
+              >
+            </div>
           </div>
         </div>
         <div class="field column is-6">
@@ -346,6 +356,10 @@
         <p v-if="reminderAudience === 'default'" class="help mb-3">
           {{ $t("events.remindersAudienceDefaultHelp") }}
         </p>
+        <p v-if="isMusic && reminderAudience !== 'members'" class="help mb-3">
+          <span class="icon is-small"><i class="fas fa-music"></i></span>
+          {{ $t("events.remindersMusiciansOnly") }}
+        </p>
         <p
           v-if="reminderAudience === 'members' && selectedReminderCount === 0"
           class="help has-text-warning mb-3"
@@ -414,6 +428,12 @@
         </div>
       </div>
 
+      <div class="field" v-if="isMusic">
+        <o-checkbox v-model="musiciansOnly" variant="music">
+          {{ $t("events.filterMusiciansOnly") }}
+        </o-checkbox>
+      </div>
+
       <span class="has-text-weight-bold">{{ $t("events.filterMembers") }}</span>
       <o-field grouped group-multiline>
         <div v-for="(column, index) in filters" :key="index" class="control">
@@ -467,6 +487,15 @@
               <i class="fas fa-child-reaching"></i>
             </span>
             <span>{{ $t("members.canallaType") }}</span>
+          </span>
+          <span
+            class="tag is-music is-light is-rounded canalla-tag"
+            v-if="props.row.musician === 1"
+            :title="$t('members.musician')"
+          >
+            <span class="icon is-small">
+              <i class="fas fa-music"></i>
+            </span>
           </span>
         </o-table-column>
         <o-table-column
@@ -684,6 +713,9 @@ export default {
       activeCastell: 0,
       participation: [],
       participantSearchQuery: "",
+      // For a rehearsal of the musicians: only list the musicians. null: the
+      // admin has not chosen, the musicians only.
+      musiciansOnlyChoice: null,
       memberTypes: ["admin,member,canalla", "guest"],
       memberStatuses: ["active"],
       reminderAudience: "default",
@@ -859,12 +891,31 @@ export default {
         this.currentEvent.recurring.until = this.dateFromCalendar(newDate);
       },
     },
+    // A rehearsal of the musicians: it concerns the musicians only.
+    isMusic() {
+      return this.event.type === "music";
+    },
+    musiciansOnly: {
+      get: function () {
+        return this.musiciansOnlyChoice !== false;
+      },
+      set: function (value) {
+        this.musiciansOnlyChoice = value;
+      },
+    },
     filteredParticipation: function () {
       const q = this.participantSearchQuery.trim().toLowerCase();
-      if (!q) {
-        return this.participation;
+      let participation = this.participation;
+      if (this.isMusic && this.musiciansOnly) {
+        // Someone who answered or came stays listed, musician or not.
+        participation = participation.filter(
+          (row) => row.musician === 1 || row.participation || row.presence
+        );
       }
-      return this.participation.filter((row) => {
+      if (!q) {
+        return participation;
+      }
+      return participation.filter((row) => {
         const first = String(row.firstName || "").toLowerCase();
         const last = String(row.lastName || "").toLowerCase();
         const email = String(row.email || "").toLowerCase();
@@ -895,6 +946,7 @@ export default {
       if (this.reminderAudience === "no_answer_active") {
         return this.participation.filter(
           (m) =>
+            this.getsReminders(m) &&
             m.status === "active" &&
             m.participation !== "yes" &&
             m.participation !== "no" &&
@@ -904,6 +956,7 @@ export default {
       if (this.reminderAudience === "no_answer_active_paused") {
         return this.participation.filter(
           (m) =>
+            this.getsReminders(m) &&
             (m.status === "active" || m.status === "paused") &&
             m.participation !== "yes" &&
             m.participation !== "no" &&
@@ -936,6 +989,10 @@ export default {
       getDuesStates: "dues/getStates",
       recordDues: "dues/record",
     }),
+    // The reminders of a rehearsal of the musicians only go to the musicians.
+    getsReminders(member) {
+      return !this.isMusic || member.musician === 1;
+    },
     // Values of a template chosen by the admin.
     applyTemplate(fields) {
       Object.assign(this.event, fields);

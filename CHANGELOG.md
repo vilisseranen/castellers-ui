@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 The UI version is defined in [`package.json`](package.json) (`version` field).
 
+## [1.17.0] - 2026-11-25
+
+Musicians of the colla: some members are musicians and rehearse every week. Needs API 0.33.0.
+
+### Added
+
+- Profile of a member: admins have a "Musicien·ne" switch, whatever the type of the member. A musician sees a "Musicien·ne" tag on their own profile.
+- New type of event, "Répétition des musiciens", in the event form and in the event templates. These events have a "Musique" tag in the list.
+- List of events: two boxes, "Pratiques de castells" and "Répétitions des musiciens", say what the list shows. Practices are shown to everyone by default; rehearsals are shown by default to the musicians and to the admins only. Anyone can tick or untick either box, and the choice is kept on the device until the member logs out. Presentations and social events are always listed.
+- Event page of a rehearsal, for admins: the list of participants only shows the musicians, and anyone who answered or came. Unticking "Musiciens seulement" shows everyone. A note under the reminders recalls that they only go to the musicians.
+- List of participants of any event: the musicians have a small music tag next to their name, to see at a glance whether the music is covered.
+
 ## [1.16.0] - 2026-11-23
 
 ### Added

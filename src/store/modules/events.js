@@ -9,16 +9,47 @@ const state = () => ({
     page: 0,
     limit: 12,
   },
+  // Kinds of events shown in the list. null: the member has not chosen, the
+  // default applies (see the filter getter).
+  filter: {
+    practice: null,
+    music: null,
+  },
 });
 
 // getters
-const getters = {};
+const getters = {
+  // What the list shows: the choice of the member or, without one, castells
+  // practices for everyone and the rehearsals of the musicians for the
+  // musicians and the admins.
+  filter: (state, getters, rootState, rootGetters) => ({
+    practice: state.filter.practice !== null ? state.filter.practice : true,
+    music:
+      state.filter.music !== null
+        ? state.filter.music
+        : rootGetters.type === "admin" || rootGetters.musician === true,
+  }),
+  // Presentations and social events are always listed.
+  shownTypes: (state, getters) => {
+    const types = ["presentation", "social"];
+    if (getters.filter.practice) {
+      types.push("practice");
+    }
+    if (getters.filter.music) {
+      types.push("music");
+    }
+    return types;
+  },
+};
 
 // actions
 const actions = {
   async getEvents(context) {
     api
-      .getEvents(context.state.pagination)
+      .getEvents({
+        ...context.state.pagination,
+        type: context.getters.shownTypes,
+      })
       .then(function (response) {
         const events = [];
         for (let i = 0; i < response.data.length; i++) {
@@ -95,6 +126,11 @@ const actions = {
     context.commit("setPagination", pagination);
     context.dispatch("getEvents");
   },
+  // kind: "practice" or "music". shown: true or false.
+  setFilter(context, { kind, shown }) {
+    context.commit("setFilter", { kind, shown });
+    context.dispatch("getEvents");
+  },
 };
 
 // mutations
@@ -113,8 +149,12 @@ const mutations = {
   setPagination(state, pagination) {
     state.pagination = pagination;
   },
+  setFilter(state, { kind, shown }) {
+    state.filter[kind] = shown;
+  },
   reset(state) {
     state.events = [];
+    state.filter = { practice: null, music: null };
   },
 };
 

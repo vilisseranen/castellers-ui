@@ -45,6 +45,12 @@
                 <span class="tag is-social" v-if="event.type == 'social'">{{
                   $t("events.social")
                 }}</span>
+                <span class="tag is-music" v-if="event.type == 'music'">
+                  <span class="icon is-small">
+                    <i class="fas fa-music"></i>
+                  </span>
+                  <span>{{ $t("events.music") }}</span>
+                </span>
                 <span
                   class="tag is-uniform"
                   v-if="event.uniformRequired == 1"

@@ -6,6 +6,13 @@
     "title": "Castellers de Mont-real"
   },
   "events": {
+    "music": "Música",
+    "musicType": "Assaig dels músics",
+    "filterShow": "Mostra:",
+    "filterPractice": "Assajos de castells",
+    "filterMusic": "Assajos dels músics",
+    "filterMusiciansOnly": "Només els músics",
+    "remindersMusiciansOnly": "Per a un assaig dels músics, els recordatoris i els avisos només s'envien als músics.",
     "1d": "Diaria",
     "1w": "Setmanal",
     "confirmDelete": "Estàs segur que vols esborrar l'assaig?",
@@ -70,6 +77,8 @@
     "loginButton": "Inicia sessió"
   },
   "members": {
+    "musician": "Músic",
+    "musicianHelp": "Toca amb els músics de la colla: veu els seus assajos per defecte i en rep els correus.",
     "addMember": "Afegir un membre nou",
     "adminType": "Administrador",
     "cm": "cm",
