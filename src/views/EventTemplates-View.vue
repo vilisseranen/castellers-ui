@@ -160,7 +160,7 @@ export default {
       // The template being edited or created, or null.
       form: null,
       busy: false,
-      types: ["practice", "presentation", "social"],
+      types: ["practice", "presentation", "social", "music"],
     };
   },
   computed: {

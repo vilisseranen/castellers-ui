@@ -49,7 +49,7 @@ const store = createStore({
   getters: {},
   plugins: [
     createPersistedState({
-      paths: ["auth", "events.events", "members.members"],
+      paths: ["auth", "events.events", "events.filter", "members.members"],
     }),
   ],
 });

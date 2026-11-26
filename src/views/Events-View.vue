@@ -23,6 +23,23 @@
         <a class="pagination-next" v-on:click="nextPage()">&#xbb;</a>
       </nav>
     </div>
+    <div class="field is-grouped is-grouped-multiline events-filter">
+      <span class="has-text-weight-bold">{{ $t("events.filterShow") }}</span>
+      <o-checkbox
+        variant="practice"
+        :model-value="filter.practice"
+        @update:model-value="(shown) => setFilter({ kind: 'practice', shown })"
+      >
+        {{ $t("events.filterPractice") }}
+      </o-checkbox>
+      <o-checkbox
+        variant="music"
+        :model-value="filter.music"
+        @update:model-value="(shown) => setFilter({ kind: 'music', shown })"
+      >
+        {{ $t("events.filterMusic") }}
+      </o-checkbox>
+    </div>
     <div class="columns is-multiline">
       <event
         v-for="event in events"
@@ -65,15 +82,30 @@ export default {
       pagination: (state) => state.events.pagination,
     }),
     ...mapGetters(["uuid", "type", "action"]),
+    ...mapGetters({ filter: "events/filter" }),
   },
   mounted() {
+    const self = this;
     this.$store.dispatch("events/getEvents");
+    // The rehearsals of the musicians are shown by default to the musicians:
+    // an admin may have made the member a musician since they logged in.
+    if (this.uuid) {
+      this.$store
+        .dispatch("refreshMusician")
+        .then(function (changed) {
+          if (changed) {
+            self.$store.dispatch("events/getEvents");
+          }
+        })
+        .catch(function () {});
+    }
   },
   methods: {
     ...mapMutations(["setAction"]),
     ...mapActions({
       participateEvent: "events/participateEvent",
       changePagination: "events/changePagination",
+      setFilter: "events/setFilter",
     }),
     participate(eventUuid, participation, token, userUuid) {
       const self = this;
@@ -139,3 +171,12 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.events-filter {
+  align-items: center;
+  column-gap: 1rem;
+  row-gap: 0.25rem;
+  margin-bottom: 1.5rem;
+}
+</style>

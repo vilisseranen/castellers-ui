@@ -12,6 +12,8 @@ const state = () => ({
     payload: "",
   },
   locale: "",
+  // Whether the member is a musician of the colla, as read on their profile.
+  musician: false,
 });
 
 // getters
@@ -42,6 +44,7 @@ const getters = {
     }
   },
   language: (state) => state.locale,
+  musician: (state) => state.musician === true,
   action: (state) => state.action,
   isLoggedIn: (state, getters) => {
     if (
@@ -64,7 +67,22 @@ const actions = {
         context.getters.uuid
       );
       context.commit("setLanguage", response.data.language);
+      context.commit("setMusician", response.data.musician === 1);
     });
+  },
+  // Reads again whether the member is a musician: an admin may have changed
+  // it since the login. Resolves to true when it changed.
+  async refreshMusician(context) {
+    if (!context.getters.uuid) {
+      return false;
+    }
+    const before = context.getters.musician;
+    const response = await context.dispatch(
+      "members/getMember",
+      context.getters.uuid
+    );
+    context.commit("setMusician", response.data.musician === 1);
+    return context.getters.musician !== before;
   },
   async refreshToken(context) {
     return api
@@ -94,6 +112,7 @@ const mutations = {
     state.auth.refreshToken = "";
     state.action = {};
     state.locale = "";
+    state.musician = false;
   },
   setAction(state, payload) {
     state.action.type = payload.type;
@@ -102,6 +121,9 @@ const mutations = {
   },
   setLanguage(state, locale) {
     state.locale = locale;
+  },
+  setMusician(state, musician) {
+    state.musician = musician;
   },
 };
 

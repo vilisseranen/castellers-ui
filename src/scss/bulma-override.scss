@@ -31,6 +31,10 @@ $canalla: hsl(15, 70%, 52%);
 $canalla-invert: findColorInvert($canalla);
 $canalla-light: findLightColor($canalla);
 $canalla-dark: findDarkColor($canalla);
+$music: hsl(330, 62%, 47%);
+$music-invert: findColorInvert($music);
+$music-light: findLightColor($music);
+$music-dark: findDarkColor($music);
 $grey: rgba(180,180,180,1);
 $grey-invert: findColorInvert($grey);
 $grey-light: findLightColor($grey);
@@ -45,6 +49,7 @@ $colors: map-merge($colors, (
     "uniform": ($link, $link-invert, $link-light, $link-dark),
     "dues": ($dues, $dues-invert, $dues-light, $dues-dark),
     "canalla": ($canalla, $canalla-invert, $canalla-light, $canalla-dark),
+    "music": ($music, $music-invert, $music-light, $music-dark),
     "undefined": ($grey, $grey-invert, $grey-light, $grey-dark),
 ));
 

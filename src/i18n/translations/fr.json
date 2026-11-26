@@ -35,6 +35,13 @@
     "updateModelButton": "Sauvegarder"
   },
   "events": {
+    "music": "Musique",
+    "musicType": "Répétition des musiciens",
+    "filterShow": "Afficher :",
+    "filterPractice": "Pratiques de castells",
+    "filterMusic": "Répétitions des musiciens",
+    "filterMusiciansOnly": "Musiciens seulement",
+    "remindersMusiciansOnly": "Pour une répétition des musiciens, les rappels et les avis ne sont envoyés qu'aux musiciens.",
     "1d": "Quotidien",
     "1w": "Hebdomadaire",
     "confirmDelete": "Veux-tu vraiment supprimer cet évènement ?",
@@ -146,6 +153,8 @@
     "usernamePlaceholder": "Votre identifiant"
   },
   "members": {
+    "musician": "Musicien·ne",
+    "musicianHelp": "Joue avec les musiciens de la colla : voit par défaut leurs répétitions et en reçoit les courriels.",
     "absent": "Absent",
     "activeStatus": "Actif",
     "activeStatusPlural": "Actifs",
