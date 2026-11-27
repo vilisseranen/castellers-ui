@@ -32,7 +32,8 @@
     "title": "Liste de castells",
     "type": "Type de castell",
     "update": "Modifier un castell",
-    "updateModelButton": "Sauvegarder"
+    "updateModelButton": "Sauvegarder",
+    "formerMember": "Ancien membre"
   },
   "events": {
     "music": "Musique",
@@ -240,7 +241,14 @@
     "update": "Modifier le profil d'un membre existant",
     "updateButton": "Mettre à jour le profil",
     "updateMyProfile": "Modifier mon profil",
-    "weight": "Poids"
+    "weight": "Poids",
+    "confirmDeleteHelp": "Ses données seront effacées pour de bon dans 90 jours. D'ici là, un administrateur peut rétablir le membre.",
+    "deletedStatus": "Supprimé",
+    "deletedStatusPlural": "Supprimés",
+    "purgeOn": "Données effacées le {date}",
+    "restore": "Rétablir",
+    "restoreOK": "{name} est de retour dans la liste des membres.",
+    "restoreEmailTaken": "Impossible de rétablir ce membre : son courriel est maintenant utilisé par un autre membre."
   },
   "multiselect": {
     "deselectGroupLabel": "Appuyer sur entrer pour déselectionner le groupe",

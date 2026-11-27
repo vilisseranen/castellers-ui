@@ -144,7 +144,14 @@
     "units": "Unitats",
     "update": "Editar el perfil d'un membre",
     "updateButton": "Actualitzar el perfil",
-    "weight": "Pes"
+    "weight": "Pes",
+    "confirmDeleteHelp": "Les seves dades s'esborraran definitivament d'aquí a 90 dies. Fins aleshores, un administrador pot restablir el membre.",
+    "deletedStatus": "Suprimit",
+    "deletedStatusPlural": "Suprimits",
+    "purgeOn": "Dades esborrades el {date}",
+    "restore": "Restablir",
+    "restoreOK": "{name} torna a ser a la llista de membres.",
+    "restoreEmailTaken": "No es pot restablir aquest membre: el seu correu ara l'utilitza un altre membre."
   },
   "multiselect": {
     "deselectGroupLabel": "Prémer el botó 'Entrar' per a deseleccionar el grup",

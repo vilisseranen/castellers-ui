@@ -6,6 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 The UI version is defined in [`package.json`](package.json) (`version` field).
 
+## [1.20.0] - 2026-11-27
+
+The personal data of a deleted member is erased after 90 days; until then an admin can restore them. Needs API 0.36.0.
+
+### Added
+
+- List of members, for admins: a "Supprimés" filter lists the deleted members whose data is not erased yet, with the day it will be ("Données effacées le…") and a "Rétablir" action to bring them back. If their email was given to another member in the meantime, a message says so.
+- The confirmation asked before deleting a member says that their data will be erased in 90 days and that they can be restored until then.
+
+### Changed
+
+- Castells: somebody who left the colla stays in the castells they were part of, in gray and italics. Their name is written as long as their data is kept, then "Ancien membre". Before, their cell looked free as soon as they were deleted. In the pinya, the caption of the baix follows the same rule.
+
+### Fixed
+
+- Castell editor: loading the names of all the members could replace the list of available members, depending on which answer came first.
+
 ## [1.19.0] - 2026-11-26
 
 The admins can note which members have a shirt of the colla. Needs API 0.35.0.

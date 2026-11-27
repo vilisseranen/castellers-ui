@@ -13,7 +13,10 @@ export const memberMixin = {
             member.firstName +
             " " +
             member.lastName +
-            "</b> ?",
+            "</b> ?" +
+            '<br /><span class="is-size-6">' +
+            this.$t("members.confirmDeleteHelp") +
+            "</span>",
           confirm: this.$t("general.yes"),
           cancel: this.$t("general.cancel"),
         },

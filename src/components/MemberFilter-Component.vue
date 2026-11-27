@@ -44,6 +44,15 @@
       >
         <span>{{ $t("members.pausedStatusPlural") }}</span>
       </o-checkbox>
+      <o-checkbox
+        v-if="withDeleted"
+        @change="filterMembers"
+        v-model="memberStatuses"
+        native-value="deleted"
+        variant="danger"
+      >
+        <span>{{ $t("members.deletedStatusPlural") }}</span>
+      </o-checkbox>
     </div>
   </div>
 </template>
@@ -59,6 +68,11 @@ export default {
     statuses: {
       type: Array,
       required: true,
+    },
+    // Also offer the deleted members, whose data is not erased yet
+    withDeleted: {
+      type: Boolean,
+      default: false,
     },
   },
   data: function () {
