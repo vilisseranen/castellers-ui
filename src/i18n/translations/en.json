@@ -179,6 +179,13 @@
   "members": {
     "musician": "Musician",
     "musicianHelp": "Plays with the musicians of the colla: sees their rehearsals by default and gets their emails.",
+    "shirtSummary": "Shirt: {details}",
+    "shirtSize": "Shirt size",
+    "shirtSizeNone": "None or unknown",
+    "shirtSince": "Has a shirt since",
+    "shirtHelp": "Optional: leave empty if the person has no shirt or if the date is not known.",
+    "shirtSizeValue": "size {size}",
+    "shirtSinceValue": "since {date}",
     "absent": "Missing",
     "activeStatus": "Active",
     "activeStatusPlural": "Active",

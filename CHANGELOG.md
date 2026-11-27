@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 The UI version is defined in [`package.json`](package.json) (`version` field).
 
+## [1.19.0] - 2026-11-26
+
+The admins can note which members have a shirt of the colla. Needs API 0.35.0.
+
+### Added
+
+- Member page, for admins: "Taille de chemise" (an even number from 28 to 44, or "Aucune ou inconnue") and "A une chemise depuis le" (a day, not in the future). Both are optional: not everybody has a shirt.
+- A member reads their own shirt on their profile, when something is noted, but cannot change it.
+
 ## [1.18.0] - 2026-11-26
 
 An event can be cancelled rather than deleted: it stays in the list, clearly shown as cancelled. Needs API 0.34.0.
