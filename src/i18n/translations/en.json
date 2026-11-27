@@ -247,7 +247,12 @@
     "purgeOn": "Data erased on {date}",
     "restore": "Restore",
     "restoreOK": "{name} is back in the list of members.",
-    "restoreEmailTaken": "This member cannot be restored: their email is now used by another member."
+    "restoreEmailTaken": "This member cannot be restored: their email is now used by another member.",
+    "upcomingDeletions": "Upcoming deletions",
+    "upcomingDeletionsHelp": "The accounts that will be deleted for inactivity, and the deleted members whose data is not erased yet. You can keep the former and restore the latter.",
+    "deletionOn": "Deletion planned on {date}",
+    "keep": "Keep",
+    "keepOK": "{name} stays in the list. Their inactivity delay starts again."
   },
   "multiselect": {
     "deselectGroupLabel": "Press enter to deselect the group",

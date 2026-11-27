@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 The UI version is defined in [`package.json`](package.json) (`version` field).
 
+## [1.21.0] - 2026-11-27
+
+Members inactive for too long are deleted automatically, after a notice: the admins see who and can keep them. Needs API 0.37.0.
+
+### Added
+
+- List of members, for admins: "Suppressions à venir" lists the members who will be deleted for inactivity, with the day ("Suppression prévue le…") and a "Garder" action that cancels the deletion and starts their inactivity delay again, together with the deleted members whose data is not erased yet, who can be restored. The link of the weekly email sent to the admins opens the list this way (`/members?upcoming=1`).
+- The planned deletion and "Garder" also show in the usual list, on the members concerned.
+
 ## [1.20.0] - 2026-11-27
 
 The personal data of a deleted member is erased after 90 days; until then an admin can restore them. Needs API 0.36.0.

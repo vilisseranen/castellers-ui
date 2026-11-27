@@ -151,7 +151,12 @@
     "purgeOn": "Dades esborrades el {date}",
     "restore": "Restablir",
     "restoreOK": "{name} torna a ser a la llista de membres.",
-    "restoreEmailTaken": "No es pot restablir aquest membre: el seu correu ara l'utilitza un altre membre."
+    "restoreEmailTaken": "No es pot restablir aquest membre: el seu correu ara l'utilitza un altre membre.",
+    "upcomingDeletions": "Supressions previstes",
+    "upcomingDeletionsHelp": "Els comptes que se suprimiran per inactivitat, i els membres suprimits amb dades encara no esborrades. Pots conservar els primers i restablir els segons.",
+    "deletionOn": "Supressió prevista el {date}",
+    "keep": "Conservar",
+    "keepOK": "{name} es queda a la llista. El seu termini d'inactivitat torna a començar."
   },
   "multiselect": {
     "deselectGroupLabel": "Prémer el botó 'Entrar' per a deseleccionar el grup",

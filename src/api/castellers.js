@@ -141,6 +141,10 @@ export default {
   async deleteMember(memberUuid) {
     return apiCall("DELETE", `/members/${memberUuid}`, {}, null);
   },
+  // Keeps a member who would be deleted for inactivity: their delay starts again.
+  async keepMember(memberUuid) {
+    return apiCall("POST", `/members/${memberUuid}/keep`, {}, null);
+  },
   // Brings back a deleted member, as long as their data is not erased.
   async restoreMember(memberUuid) {
     return apiCall("POST", `/members/${memberUuid}/restore`, {}, null);

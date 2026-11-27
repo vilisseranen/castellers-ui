@@ -248,7 +248,12 @@
     "purgeOn": "Données effacées le {date}",
     "restore": "Rétablir",
     "restoreOK": "{name} est de retour dans la liste des membres.",
-    "restoreEmailTaken": "Impossible de rétablir ce membre : son courriel est maintenant utilisé par un autre membre."
+    "restoreEmailTaken": "Impossible de rétablir ce membre : son courriel est maintenant utilisé par un autre membre.",
+    "upcomingDeletions": "Suppressions à venir",
+    "upcomingDeletionsHelp": "Les comptes qui seront supprimés pour inactivité, et les membres supprimés dont les données ne sont pas encore effacées. Tu peux garder les premiers et rétablir les seconds.",
+    "deletionOn": "Suppression prévue le {date}",
+    "keep": "Garder",
+    "keepOK": "{name} reste dans la liste. Son délai d'inactivité repart de zéro."
   },
   "multiselect": {
     "deselectGroupLabel": "Appuyer sur entrer pour déselectionner le groupe",
