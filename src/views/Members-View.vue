@@ -10,8 +10,17 @@
       </button>
     </o-field>
 
+    <div class="field" v-if="type === 'admin'">
+      <o-checkbox v-model="upcomingOnly" variant="danger">
+        <span>{{ $t("members.upcomingDeletions") }}</span>
+      </o-checkbox>
+      <p class="help" v-if="showUpcoming">
+        {{ $t("members.upcomingDeletionsHelp") }}
+      </p>
+    </div>
+
     <member-filter
-      v-if="type === 'admin'"
+      v-if="type === 'admin' && !showUpcoming"
       :types="this.memberTypes"
       :statuses="this.memberStatuses"
       :withDeleted="true"
@@ -124,6 +133,9 @@
         >
           {{ $t("members.purgeOn", { date: purgeDate(props.row) }) }}
         </p>
+        <p class="help has-text-danger" v-if="props.row.deletionAt">
+          {{ $t("members.deletionOn", { date: deletionDate(props.row) }) }}
+        </p>
       </o-table-column>
       <o-table-column
         key="actions"
@@ -158,6 +170,18 @@
               <i class="fa fa-user-slash"></i>
             </span>
           </a>
+          <!-- Somebody who will be deleted for inactivity can be kept -->
+          <a
+            v-if="type === 'admin' && props.row.deletionAt"
+            :title="$t('members.keep')"
+            :aria-label="$t('members.keep')"
+            @click="keepUser(props.row)"
+          >
+            <span class="icon has-text-success">
+              <i class="fa fa-user-check"></i>
+            </span>
+            <span>{{ $t("members.keep") }}</span>
+          </a>
         </template>
       </o-table-column>
     </o-table>
@@ -181,6 +205,9 @@ export default {
       // Filters in use, to list the same members again after a change
       currentTypes: "admin,member,canalla",
       currentStatuses: "active",
+      // Only the members who will be deleted or erased soon. The link of the
+      // email sent to the admins asks for it with ?upcoming=1
+      upcomingOnly: this.$route.query.upcoming === "1",
       memberSearchQuery: "",
     };
   },
@@ -189,12 +216,26 @@ export default {
     ...mapState({
       members: (state) => state.members.members,
     }),
+    // Members of the list: all those of the filter, or only those who will be
+    // deleted for inactivity and the deleted ones not erased yet
+    // Only the admins know who will be deleted
+    showUpcoming() {
+      return this.upcomingOnly && this.type === "admin";
+    },
+    listedMembers() {
+      if (!this.showUpcoming) {
+        return this.members;
+      }
+      return this.members.filter(
+        (m) => m.deletionAt > 0 || m.status === "deleted"
+      );
+    },
     filteredMembers() {
       const q = this.memberSearchQuery.trim().toLowerCase();
       if (!q) {
-        return this.members;
+        return this.listedMembers;
       }
-      return this.members.filter((m) => {
+      return this.listedMembers.filter((m) => {
         const first = String(m.firstName || "").toLowerCase();
         const last = String(m.lastName || "").toLowerCase();
         return (
@@ -205,11 +246,16 @@ export default {
       });
     },
   },
+  watch: {
+    upcomingOnly() {
+      // The filter comes back as it was first shown: so do its members
+      this.currentTypes = this.memberTypes.join(",");
+      this.currentStatuses = this.memberStatuses.join(",");
+      this.refreshMembers();
+    },
+  },
   mounted() {
-    this.getMembers({
-      type: this.memberTypes.join(","),
-      status: this.memberStatuses.join(","),
-    });
+    this.refreshMembers();
   },
   methods: {
     filterMembers(filters) {
@@ -218,6 +264,13 @@ export default {
       this.refreshMembers();
     },
     refreshMembers() {
+      if (this.showUpcoming) {
+        // Anybody can be concerned, except the active members
+        return this.getMembers({
+          type: "admin,member,canalla,guest",
+          status: "created,paused,deleted",
+        });
+      }
       return this.getMembers({
         type: this.currentTypes,
         status: this.currentStatuses,
@@ -226,6 +279,26 @@ export default {
     ...mapActions({
       getMembers: "members/getMembers",
     }),
+    // Day when an inactive member will be deleted
+    deletionDate(member) {
+      return helper.extractDate(member.deletionAt);
+    },
+    keepUser(member) {
+      const self = this;
+      api
+        .keepMember(member.uuid)
+        .then(function () {
+          self.$root.$notifyOK(
+            self.$t("members.keepOK", {
+              name: [member.firstName, member.lastName].join(" "),
+            })
+          );
+          self.refreshMembers();
+        })
+        .catch(function () {
+          self.$root.$notifyNOK(self.$t("general.notifyFailure"));
+        });
+    },
     // Day when the data of a deleted member will be erased
     purgeDate(member) {
       return helper.extractDate(member.purgeAt);
