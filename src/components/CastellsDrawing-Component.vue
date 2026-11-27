@@ -111,6 +111,7 @@
             :fill="label.fill"
             :font-size="label.fontSize"
             :font-weight="label.bold ? 'bold' : null"
+            :font-style="label.italic ? 'italic' : null"
             :transform="
               label.vertical
                 ? 'rotate(270 ' + label.x + ' ' + label.y + ')'
@@ -159,6 +160,7 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
+import api from "../api/castellers";
 import MemberFilter from "./MemberFilter-Component.vue";
 import {
   pinyaBaixCell,
@@ -298,6 +300,7 @@ export default {
 
       const defaultColor = "gray";
       const captionColor = "#666666";
+      const formerColor = "#777777";
 
       const labels = [];
       const cells = [];
@@ -341,7 +344,7 @@ export default {
           x: pinyaX,
           y: pinyaY,
           text: baixMember
-            ? this.shortName(this.allMembers[baixMember.member_uuid])
+            ? this.memberLabel(this.allMembers[baixMember.member_uuid])
             : "baix",
           fill: captionColor,
           fontSize: 12,
@@ -406,14 +409,20 @@ export default {
             this.allMembers[positionMember.member_uuid]
           ) {
             uuid = positionMember.member_uuid;
+            // Somebody who left the colla stays in the castell, in gray:
+            // with their name until their data is erased, anonymous after.
+            const former = this.isFormer(this.allMembers[uuid]);
+            const anonymous = this.isAnonymous(this.allMembers[uuid]);
             labels.push({
               key: "name/" + key + "/" + uuid,
               x: centerX,
               y: centerY,
-              text: this.shortName(this.allMembers[uuid]),
-              fill: "#000000",
+              text: this.memberLabel(this.allMembers[uuid]),
+              fill: former ? formerColor : "#000000",
+              italic: former,
               // rotate and scale text. If cell width = 100, size = 15. If cell width = 50, size = 10
-              fontSize: 10 * (longSide * 0.01 + 0.5),
+              // "Ancien membre" is longer than a name: written smaller
+              fontSize: 10 * (longSide * 0.01 + 0.5) * (anonymous ? 0.75 : 1),
               vertical: vertical,
             });
           }
@@ -505,18 +514,24 @@ export default {
     ...mapActions({
       getMembers: "members/getMembers",
     }),
+    // Everybody who can be in a castell, former members included: a past
+    // castell keeps the people who left since. We do not go through the store:
+    // its list is the one of the filter, where former members have no place.
     getAllMembers() {
       const self = this;
-      this.getMembers({
-        type: ["admin", "member", "canalla", "guest"],
-        status: ["created", "active", "paused", "deleted"],
-      }).then(function (response) {
-        const members = {};
-        for (let i = 0; i < response.data.length; i++) {
-          members[response.data[i].uuid] = response.data[i];
-        }
-        self.allMembers = members;
-      });
+      api
+        .getMembers({
+          type: ["admin", "member", "canalla", "guest"],
+          status: ["created", "active", "paused", "deleted", "purged"],
+        })
+        .then(function (response) {
+          const members = {};
+          for (let i = 0; i < response.data.length; i++) {
+            members[response.data[i].uuid] = response.data[i];
+          }
+          self.allMembers = members;
+        })
+        .catch(function () {});
     },
     filterMembers(filters) {
       this.getMembers({
@@ -526,7 +541,27 @@ export default {
     },
     // "Maria Soler" => "Maria S"
     shortName(member) {
-      return [member.firstName, member.lastName[0]].join(" ");
+      return [member.firstName, (member.lastName || "")[0]].join(" ").trim();
+    },
+    // Deleted from the colla, with or without their data
+    isFormer(member) {
+      return (
+        !!member && (member.status === "deleted" || member.status === "purged")
+      );
+    },
+    // Former member whose data was erased: we do not know their name anymore
+    isAnonymous(member) {
+      return (
+        !!member &&
+        (member.status === "purged" || !this.shortName(member)) &&
+        this.isFormer(member)
+      );
+    },
+    // What to write in the cell of a member
+    memberLabel(member) {
+      return this.isAnonymous(member)
+        ? this.$t("castells.formerMember")
+        : this.shortName(member);
     },
     selectMember(uuid) {
       this.selectedMemberUuid = uuid;

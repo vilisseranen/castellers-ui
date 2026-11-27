@@ -141,6 +141,10 @@ export default {
   async deleteMember(memberUuid) {
     return apiCall("DELETE", `/members/${memberUuid}`, {}, null);
   },
+  // Brings back a deleted member, as long as their data is not erased.
+  async restoreMember(memberUuid) {
+    return apiCall("POST", `/members/${memberUuid}/restore`, {}, null);
+  },
   async setMemberStatus(memberUuid, status) {
     return apiCall("PUT", `/members/${memberUuid}/status`, {}, { status });
   },

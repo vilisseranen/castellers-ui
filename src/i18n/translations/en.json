@@ -32,7 +32,8 @@
     "title": "Castells list",
     "type": "Type of castell",
     "update": "Update an existing castell",
-    "updateModelButton": "Save"
+    "updateModelButton": "Save",
+    "formerMember": "Former member"
   },
   "events": {
     "music": "Music",
@@ -239,7 +240,14 @@
     "update": "Edit the profile of an existing member",
     "updateButton": "Update profile",
     "updateMyProfile": "Update my profile",
-    "weight": "Weight"
+    "weight": "Weight",
+    "confirmDeleteHelp": "Their data will be erased for good in 90 days. Until then, an admin can restore the member.",
+    "deletedStatus": "Deleted",
+    "deletedStatusPlural": "Deleted",
+    "purgeOn": "Data erased on {date}",
+    "restore": "Restore",
+    "restoreOK": "{name} is back in the list of members.",
+    "restoreEmailTaken": "This member cannot be restored: their email is now used by another member."
   },
   "multiselect": {
     "deselectGroupLabel": "Press enter to deselect the group",
